@@ -1,0 +1,18 @@
+:where(.css-dev-only-do-not-override-17sses9)[class^="ant-input"]
+  [class^="ant-input"],
+:where(.css-dev-only-do-not-override-17sses9)[class*=" ant-input"]
+  [class^="ant-input"],
+:where(.css-dev-only-do-not-override-17sses9)[class^="ant-input"]
+  [class*=" ant-input"],
+:where(.css-dev-only-do-not-override-17sses9)[class*=" ant-input"]
+  [class*=" ant-input"] {
+  border-color: #398726;
+}
+
+:where(.css-dev-only-do-not-override-17sses9).ant-input-search
+  > .ant-input-group
+  > .ant-input-group-addon:last-child
+  .ant-input-search-button:not(.ant-btn-primary) {
+  background-color: #398726;
+  color: white;
+}
