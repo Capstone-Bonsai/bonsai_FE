@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 function NavBar() {
   const location = useLocation();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -19,9 +20,7 @@ function NavBar() {
         setDropdownOpen(false);
       }
     };
-
     document.addEventListener("click", handleClickOutside);
-
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
@@ -60,6 +59,18 @@ function NavBar() {
             <li>
               <a>Item 2</a>
             </li>
+            <li>
+              <a>Item 1</a>
+            </li>
+            <li>
+              <a>Item 2</a>
+            </li>
+            <li>
+              <a>Item 1</a>
+            </li>
+            <li>
+              <a>Item 2</a>
+            </li>
           </ul>
         </div>
         <Link to="/">Trang chủ</Link>
@@ -68,7 +79,12 @@ function NavBar() {
         <Link to="">Bán sỉ & nhượng quyền</Link>
         <Link to="">Tuyển dụng</Link>
         <Link to="">Địa chỉ</Link>
-        <Link to="">Giỏ hàng</Link>
+        <Link to="" className="flex justify-center items-center text-[#00B214]">
+          Giỏ hàng{" "}
+          <div className="border-solid border-[#00B214] ml-2 border-2 rounded-full w-7 h-7 flex justify-center items-center">
+            <ShoppingCartOutlined />
+          </div>
+        </Link>
       </div>
     </div>
   );
