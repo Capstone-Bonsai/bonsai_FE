@@ -3,4 +3,16 @@
 @tailwind base;
 body {
   margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@font-face {
+  font-family: montserrat;
+  src: url(./fonts/Montserrat-VariableFont_wght.ttf);
+}
+.montserrat{
+  font-family: montserrat;
 }

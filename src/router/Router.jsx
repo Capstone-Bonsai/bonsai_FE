@@ -3,6 +3,8 @@ import { AnimatePresence } from "framer-motion";
 import React from "react";
 import Home from "../pages/HomePage/Home";
 import Product from "../pages/Product/Product";
+import ProductDetail from "../pages/Product/ProductDetail";
+import ShoppingCart from "../pages/Product/ShoppingCart";
 function Router() {
   const element = useRoutes([
     {
@@ -11,8 +13,16 @@ function Router() {
     },
     {
       path: "/product",
-      element: <Product />
-    }
+      element: <Product />,
+    },
+    {
+      path: "/productDetail",
+      element: <ProductDetail />,
+    },
+    {
+      path: "/shoppingCart",
+      element: <ShoppingCart />,
+    },
   ]);
   if (!element) return null;
   return (

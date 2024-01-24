@@ -6,6 +6,25 @@ function NavBar() {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  const categories = [
+    "Cây Trồng Trong Nhà",
+    "Cây Cảnh Văn Phòng",
+    "Tiểu cảnh Terrarium",
+    "Chậu Cây Cảnh",
+    "Sen Đá",
+    "Xương Rồng",
+    "Phụ Kiện Terrarium",
+  ];
+
+  const navLinks = [
+    { text: "Trang chủ", to: "/" },
+    { text: "Sản phẩm", to: "/product" },
+    { text: "Kiến thức cây cảnh", to: "/knowledge" },
+    { text: "Bán sỉ & nhượng quyền", to: "/wholesale" },
+    { text: "Tuyển dụng", to: "/recruitment" },
+    { text: "Địa chỉ", to: "/address" },
+  ];
+
   useEffect(() => {
     setDropdownOpen(location.pathname === "/");
   }, [location.pathname]);
@@ -51,34 +70,22 @@ function NavBar() {
           </div>
           <ul
             tabIndex={0}
-            className="dropdown-content z-[1] menu p-2 mt-4 shadow bg-base-100 w-52"
+            className="dropdown-content z-[1] menu p-2 mt-4 shadow bg-base-100 w-[300px]"
           >
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <a>Item 2</a>
-            </li>
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <a>Item 2</a>
-            </li>
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <a>Item 2</a>
-            </li>
+            {categories.map((category, index) => (
+              <li className="text-[18px] border-b " key={index}>
+                <Link to={`/${category.replace(/\s+/g, "-").toLowerCase()}`}>
+                  {category}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
-        <Link to="/">Trang chủ</Link>
-        <Link to="/product">Sản phẩm</Link>
-        <Link to="">Kiến thức cây cảnh</Link>
-        <Link to="">Bán sỉ & nhượng quyền</Link>
-        <Link to="">Tuyển dụng</Link>
-        <Link to="">Địa chỉ</Link>
+        {navLinks.map((link, index) => (
+          <div key={index}>
+            <Link to={link.to}>{link.text}</Link>
+          </div>
+        ))}
         <Link to="" className="flex justify-center items-center text-[#00B214]">
           Giỏ hàng{" "}
           <div className="border-solid border-[#00B214] ml-2 border-2 rounded-full w-7 h-7 flex justify-center items-center">
