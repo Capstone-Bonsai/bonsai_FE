@@ -1,6 +1,7 @@
 import React from "react";
 import logo_final from "../assets/logo_footer_final.png";
 function Footer() {
+  
   const linksFooter = [
     { id: 1, text: "Hướng dẫn đặt hàng & thanh toán", href: "#" },
     { id: 2, text: "Chính sách giao hàng & đổi trả", href: "#" },
@@ -10,13 +11,13 @@ function Footer() {
   ];
 
   return (
-    <div className="h-[400px] bg-[#028711] mt-auto">
-      <div className="w-[70%] m-auto pt-4 mt-10 flex justify-between">
+    <div className="min-h-[400px] bg-[#028711] mt-auto w-full">
+      <div className="w-[70%] h-full m-auto pt-4 mb-5 flex justify-between">
         <div className="w-[400px]">
           <div className="font-bold text-[#000000] text-[20px]">
             Về chúng tôi
           </div>
-          <img src={logo_final} alt="" className="ml-[-10px] mt-10" />
+          <img src={logo_final} alt="" className="ml-[-10px] mt-5" />
           <div className="text-[#FFFFFF]">
             Thanh Sơn Garden là thương hiệu dẫn đầu trong lĩnh vực cung cấp các
             loại Cây phong thủy, cây văn phòng, sen đá, xương rồng & tiểu cảnh
@@ -31,7 +32,7 @@ function Footer() {
           <div className="font-bold text-[#000000] text-[20px]">
             Hỗ trợ khách hàng
           </div>
-          <div className="text-[#FFFFFF] mt-10">
+          <div className="text-[#FFFFFF] mt-5">
             <ul>
               {linksFooter.map((link) => (
                 <li key={link.id}>
@@ -43,7 +44,7 @@ function Footer() {
         </div>
         <div className="w-[400px]">
           <div className="font-bold text-[#000000] text-[20px]">Địa chỉ</div>
-          <div className="text-[#FFFFFF] mt-10">
+          <div className="text-[#FFFFFF] mt-5">
             372 Quốc lộ 20, Liên Nghĩa, Đức Trọng, Lâm Đồng
           </div>
         </div>

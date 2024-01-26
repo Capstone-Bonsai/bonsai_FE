@@ -1,6 +1,5 @@
 import React from "react";
 import Carousel from "./Carousel";
-import HomeSearch from "./HomeSearch";
 import Banner from '../../assets/banner.png'
 import { PhoneOutlined } from "@ant-design/icons";
 import NavBar from "./NavBar";
@@ -10,7 +9,6 @@ function Home() {
     <>
       <div className="">
         <div className="">
-          <HomeSearch />
           <div className="flex items-center">
             {/* <div className="bg-[#50b737] w-8 h-8 flex justify-center items-center rounded-full">
               <PhoneOutlined />

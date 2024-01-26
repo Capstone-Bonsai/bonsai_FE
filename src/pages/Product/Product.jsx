@@ -3,11 +3,9 @@ import Navbar from "../HomePage/NavBar";
 import { Pagination } from "antd";
 import { Link } from "react-router-dom";
 import CayTung from "../../assets/cay-tung.png";
-import HomeSearch from "../HomePage/HomeSearch";
 function Product() {
   return (
     <div>
-      <HomeSearch />
       <Navbar />
       <div className="m-auto w-[70%] mt-10">
         <div>

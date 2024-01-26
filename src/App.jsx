@@ -7,7 +7,9 @@ function App() {
   return (
     <>
       <Banner />
+      <div className="min-h-screen">
       <Router />
+      </div>
       <Footer />
     </>
   );
