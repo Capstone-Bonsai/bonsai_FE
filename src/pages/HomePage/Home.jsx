@@ -1,16 +1,14 @@
 import React from "react";
-import logo from "../../assets/logo.jpg";
 import Carousel from "./Carousel";
-import HomeSearch from "./HomeSearch";
+import Banner from '../../assets/banner.png'
 import { PhoneOutlined } from "@ant-design/icons";
 import NavBar from "./NavBar";
+import SellProducts from "./SellProducts";
 function Home() {
   return (
     <>
       <div className="">
-        <div className="flex items-center justify-between w-[70%] m-auto">
-          <img src={logo} width={100} />
-          <HomeSearch />
+        <div className="">
           <div className="flex items-center">
             {/* <div className="bg-[#50b737] w-8 h-8 flex justify-center items-center rounded-full">
               <PhoneOutlined />
@@ -19,7 +17,11 @@ function Home() {
           </div>
         </div>
         <NavBar />
-        <Carousel />
+        {/* <Carousel /> */}
+        <div className="w-[70%] m-auto flex justify-end mt-5">
+        <img src={Banner} alt="" />
+        </div>
+        <SellProducts />
       </div>
     </>
   );
