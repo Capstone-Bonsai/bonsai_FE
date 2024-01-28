@@ -1,45 +1,74 @@
-import React from "react";
-import Navbar from "../HomePage/NavBar";
-import { Pagination } from "antd";
+import React, { useState } from "react";
+import { Pagination, Slider } from "antd";
+import "../HomePage/styleHome.css";
 import { Link } from "react-router-dom";
 import CayTung from "../../assets/cay-tung.png";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 function Product() {
+  const [priceRange, setPriceRange] = useState([20, 50]);
+
+  const handleSliderChange = (value) => {
+    setPriceRange(value);
+  };
   return (
     <div>
-      <Navbar />
-      <div className="m-auto w-[70%] mt-10">
-        <div>
-          <div className="flex items-center justify-between">
-            <div className="text-[#0A0A0A] font-bold text-[24px]">
-              Tất cả sản phẩm
-            </div>
-            <div className="flex items-center">
-              <div className="mr-5">Showing 1-20 of 614 results</div>
-              <div className="border p-2">Thứ tự theo giá: cao xuống thấp</div>
-            </div>
-          </div>
-          <div className="flex">
-            <Link className="pr-2 text-[#666666] opacity-50  hover:opacity-100">
-              Trang chủ
-            </Link>
-            <div>/ Sản phẩm</div>
-          </div>
-        </div>
-        <div className="w-[195px] text-center drop-shadow-lg bg-[#ffffff]">
-          <div>
-            <img className="m-auto" src={CayTung} alt="" />
-          </div>
-          <div className="text-[18px] text-[#1E7100] mt-5">
-            Cây Tùng Xương Cá
-          </div>
-          <div className="text-[#E04C78] py-5">1.200.000 ₫</div>
-        </div>
+      <div className="border-b py-2">
+        <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
       </div>
-      <div className="text-center">
-        <Pagination defaultCurrent={1} total={50} />
+      <div className="m-auto w-[70%] mt-2 flex">
+        <div className="bg-[#f8f8f8] h-[500px] pt-5 pl-3 pr-3 w-[25%]">
+          <div>
+            <div className="uppercase text-[#333] font-semibold text-[16px]">
+              Loại cây
+            </div>
+            <div className="border-b">Bonsai</div>
+          </div>
+          <div>
+            <div className="uppercase text-[#333] font-semibold text-[16px]">
+              Mức giá
+            </div>
+            <div>
+              <Slider
+                range
+                defaultValue={[20, 50]}
+                handl
+                className="rangeCostProduct"
+                value={priceRange}
+                onChange={handleSliderChange}
+              />
+            </div>
+            <div className="border-b">
+              <div>Giá từ: {priceRange[0]}</div>
+              <div>Giá đến: {priceRange[1]}</div>
+            </div>
+          </div>
+          <div>
+            <div className="uppercase text-[#333] font-semibold text-[16px]">
+              Chọn màu
+            </div>
+            <div>
+              <input type="checkbox" />
+            </div>
+          </div>
+        </div>
+        <div className="w-[75%] pl-10 ">
+          <div className="w-[255px] h-[355px] border">
+            <img className="w-full" src={CayTung} alt="" height={255} />
+            <div className="flex items-center justify-evenly">
+              <div className=" py-5 text-[20px]">
+                <div>Cây Tùng</div>
+                <div className="text-[#3a9943]">150.000đ</div>
+              </div>
+              <button className="bg-[#f2f2f2] w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]">
+                <ShoppingCartOutlined />
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
+
 
 export default Product;

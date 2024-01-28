@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import NavBar from "../HomePage/NavBar";
 import TestProduct from "../../assets/testProduct.png";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { InputNumber, Space } from "antd";
@@ -10,51 +9,76 @@ function ShoppingCart() {
   };
   return (
     <div>
-      <NavBar /> 
-      <div className="m-auto w-[70%] mt-10">
-        <div className="font-bold text-[25px]">Giỏ Hàng</div>
-        <div className="flex">
-          <div className="w-[65%] border-b mr-5">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="border-b ">
-                  <th className="uppercase ">Sản phẩm</th>
-                  <th className="uppercase ">Giá</th>
-                  <th className="uppercase">Số lượng</th>
-                  <th className="uppercase ">Tổng</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b ml-5 text-center">
-                  <td className="">
-                    <Space>
-                      <CloseCircleOutlined size={40} />
-                      <img src={TestProduct} alt="" width={73} height={73} />
-                      <div>Cây Mộc Hương</div>
-                    </Space>
-                  </td>
-                  <td className="">850.000 ₫</td>
-                  <td>
-                    <InputNumber
-                      min={1}
-                      max={20}
-                      style={{ margin: "0", fontSize: "20px" }}
-                      value={inputValue}
-                      onChange={onChange}
-                    />
-                  </td>
-                  <td>1.700.000 ₫</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div className="w-[35%] border-l border-l-4 pl-5">
-            <div className="uppercase border-b">Cộng giỏ hảng</div>
-            <div className="border-b">Tạm tính</div>
-            <div className="border-b">Tổng</div>
-            <div className="text-center text-[#ffffff] bg-[#028711]">tiến hành thanh toán</div>
-          </div>
-        </div>
+      <div className="border-b py-2">
+        <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
+      </div>
+      <div className="m-auto w-[70%] mt-10 drop-shadow-lg bg-[#ffffff]">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="border-b bg-[#f2f2f2] h-[50px]">
+              <th className="uppercase ">Hình Ảnh</th>
+              <th className="uppercase ">Sản phẩm</th>
+              <th className="uppercase ">Giá</th>
+              <th className="uppercase">Số lượng</th>
+              <th className="uppercase ">Tổng</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b ml-5 text-center h-[170px]">
+              <td className="flex justify-center items-center h-[170px]">
+                <div>
+                  <img src={TestProduct} alt="" width={120} height={120} />
+                </div>
+              </td>
+              <td className="">
+                <div className="text-[16px] font-medium">Cây Mộc Hương</div>
+              </td>
+              <td className="font-medium">850.000 ₫</td>
+              <td>
+                <InputNumber
+                  min={1}
+                  max={20}
+                  style={{ margin: "0", fontSize: "20px" }}
+                  value={inputValue}
+                  onChange={onChange}
+                />
+              </td>
+              <td className="font-medium">1.700.000 ₫</td>
+              <td className="text-[20px] pr-5">
+                <button>
+                <CloseCircleOutlined />
+                </button>
+              </td>
+            </tr>
+            <tr className="border-b ml-5 text-center h-[170px]">
+              <td className="flex justify-center items-center h-[170px]">
+                <div>
+                  <img src={TestProduct} alt="" width={120} height={120} />
+                </div>
+              </td>
+              <td className="">
+                <div className="text-[16px] font-medium">Cây Mộc Hương</div>
+              </td>
+              <td className="font-medium">850.000 ₫</td>
+              <td>
+                <InputNumber
+                  min={1}
+                  max={20}
+                  style={{ margin: "0", fontSize: "20px" }}
+                  value={inputValue}
+                  onChange={onChange}
+                />
+              </td>
+              <td className="font-medium">1.700.000 ₫</td>
+              <td className="text-[20px] pr-5">
+                <button>
+                <CloseCircleOutlined />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -4,7 +4,6 @@ import Banner from "../../assets/banner.png";
 import BannerMuaBan from "../../assets/mua-ban.png";
 import BannerDichVu from "../../assets/dich-vu.png";
 import { PhoneOutlined } from "@ant-design/icons";
-import NavBar from "./NavBar";
 import SellProducts from "./SellProducts";
 import { Link } from "react-router-dom";
 function Home() {
@@ -19,7 +18,6 @@ function Home() {
             SĐT:  */}
           </div>
         </div>
-        <NavBar />
         {/* <Carousel /> */}
         <div className="w-[70%] m-auto flex justify-center">
           <img src={Banner} alt="" className="w-[100%]" />
