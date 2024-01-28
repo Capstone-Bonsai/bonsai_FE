@@ -12,7 +12,7 @@ function Footer() {
 
   return (
     <div className="min-h-[400px] bg-[#028711] mt-auto w-full">
-      <div className="w-[70%] h-full m-auto pt-4 mb-5 flex justify-between">
+      <div className="w-[70%] h-full m-auto pt-4 flex justify-between">
         <div className="w-[400px]">
           <div className="font-bold text-[#000000] text-[20px]">
             Về chúng tôi

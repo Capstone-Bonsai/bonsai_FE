@@ -1,5 +1,13 @@
+.rangeCostProduct:where(.css-dev-only-do-not-override-17sses9).ant-slider
+  .ant-slider-track {
+  background-color: #3a9943;
+}
 
-
-
-
-
+:where(.css-dev-only-do-not-override-17sses9).ant-slider
+  .ant-slider-handle:hover::before,
+:where(.css-dev-only-do-not-override-17sses9).ant-slider
+  .ant-slider-handle:active::before,
+:where(.css-dev-only-do-not-override-17sses9).ant-slider
+  .ant-slider-handle:focus::before {
+    box-shadow: #3a9943;
+}

@@ -2,7 +2,6 @@ import React from "react";
 import Carousel from "./Carousel";
 import Banner from '../../assets/banner.png'
 import { PhoneOutlined } from "@ant-design/icons";
-import NavBar from "./NavBar";
 import SellProducts from "./SellProducts";
 function Home() {
   return (
@@ -16,7 +15,6 @@ function Home() {
             SĐT:  */}
           </div>
         </div>
-        <NavBar />
         {/* <Carousel /> */}
         <div className="w-[70%] m-auto flex justify-end mt-5">
         <img src={Banner} alt="" />
