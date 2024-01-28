@@ -10,6 +10,22 @@ function Product() {
   const handleSliderChange = (value) => {
     setPriceRange(value);
   };
+
+  const productList = [
+    {
+      id: 1,
+      name: "Cây Tùng",
+      price: 150000,
+      image: CayTung,
+    },
+    {
+      id: 1,
+      name: "Cây Tùng",
+      price: 150000,
+      image: CayTung,
+    },
+  ];
+
   return (
     <div>
       <div className="border-b py-2">
