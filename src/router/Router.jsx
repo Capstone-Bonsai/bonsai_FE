@@ -5,6 +5,7 @@ import Home from "../pages/HomePage/Home";
 import Product from "../pages/Product/Product";
 import ProductDetail from "../pages/Product/ProductDetail";
 import ShoppingCart from "../pages/Product/ShoppingCart";
+import ServiceListPage from "../pages/ServicePage/ServiceListPage";
 function Router() {
   const element = useRoutes([
     {
@@ -22,6 +23,10 @@ function Router() {
     {
       path: "/shoppingCart",
       element: <ShoppingCart />,
+    },
+    {
+      path: "/service",
+      element: <ServiceListPage />,
     },
   ]);
   if (!element) return null;
