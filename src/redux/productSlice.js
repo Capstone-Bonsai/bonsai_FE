@@ -14,7 +14,6 @@ export const fetchProductById = createAsyncThunk(
   async (productId) => {
     try {
       const product = productList.find((p) => p.productId == productId);
-      console.log(product);
       if (product) {
         return product;
       } else {

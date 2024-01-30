@@ -12,6 +12,7 @@ function ProductDetail() {
 
   const dispatch = useDispatch();
   const { productId } = useParams();
+  
   useEffect(() => {
     dispatch(fetchProductById(productId));
   }, [productId]);
@@ -31,8 +32,11 @@ function ProductDetail() {
 
   const addToCart = () => {
     const cookies = new Cookies();
-    const cartItems = cookies.get("cartItems") || [];
-    console.log("Current cart items:", cartItems);
+    let cartItems = cookies.get("cartItems") || [];
+    if (!Array.isArray(cartItems)) {
+      cartItems = [];
+    }
+
     const existingItem = cartItems.find((item) => item.productId === productId);
 
     if (existingItem) {
@@ -47,8 +51,7 @@ function ProductDetail() {
       });
     }
 
-    cookies.set("cartItems", cartItems);
-    console.log("Added to cart:", cartItems);
+    cookies.set("cartItems", cartItems, { path: "/", maxAge: 3600 * 24 * 7 });
   };
 
   return (
