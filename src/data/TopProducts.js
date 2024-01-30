@@ -1,6 +1,7 @@
 import testProduct from "../assets/testProduct.png";
 import bonsaiOfficeImage from "../assets/bonsai_office.png";
-import cayTung from "../assets/cay-tung.png";
+import CayTung from "../assets/cay-tung.png";
+
 const topProducts = [
   {
     id: 1,
@@ -89,9 +90,38 @@ const productDetailImage = {
       image: testProduct,
     },
     { id: 2, image: bonsaiOfficeImage },
-    { id: 3, image: cayTung },
-    { id: 4, image: cayTung },
+    { id: 3, image: CayTung },
+    { id: 4, image: CayTung },
   ],
 };
 
-export { topProducts, bonsaiOffice, productDetailImage };
+
+const productList = [
+  {
+    productId: 1,
+    name: "Cây Tùng 1",
+    price: 150000,
+    image: CayTung,
+  },
+  {
+    productId: 2,
+    name: "Cây Tùng 2",
+    price: 150000,
+    image: CayTung,
+  },
+  {
+    productId: 3,
+    name: "Cây Tùng 3",
+    price: 150000,
+    image: CayTung,
+  },
+  {
+    productId: 4,
+    name: "Cây Tùng 4",
+    price: 150000,
+    image: CayTung,
+  },
+];
+
+
+export { topProducts, bonsaiOffice, productDetailImage, productList };

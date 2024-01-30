@@ -17,7 +17,7 @@ function Router() {
       element: <Product />,
     },
     {
-      path: "/productDetail",
+      path: "/productDetail/:productId",
       element: <ProductDetail />,
     },
     {

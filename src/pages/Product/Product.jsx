@@ -3,6 +3,7 @@ import { Pagination, Slider } from "antd";
 import "../HomePage/styleHome.css";
 import { Link } from "react-router-dom";
 import CayTung from "../../assets/cay-tung.png";
+import {productList} from '../../data/TopProducts'
 import { ShoppingCartOutlined } from "@ant-design/icons";
 function Product() {
   const [priceRange, setPriceRange] = useState([20, 50]);
@@ -10,8 +11,9 @@ function Product() {
   const handleSliderChange = (value) => {
     setPriceRange(value);
   };
+
   return (
-    <div>
+    <div className="mb-5">
       <div className="border-b py-2">
         <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
       </div>
@@ -51,24 +53,32 @@ function Product() {
             </div>
           </div>
         </div>
-        <div className="w-[75%] pl-10 ">
-          <div className="w-[255px] h-[355px] border">
-            <img className="w-full" src={CayTung} alt="" height={255} />
-            <div className="flex items-center justify-evenly">
-              <div className=" py-5 text-[20px]">
-                <div>Cây Tùng</div>
-                <div className="text-[#3a9943]">150.000đ</div>
+        <div className="w-[75%] pl-10 flex flex-wrap justify-between">
+          {productList.map((product) => (
+            <Link
+              to={`/productDetail/${product.productId}`}
+              key={product.productId}
+              className="w-[255px] h-[355px] border mt-5"
+            >
+              <img
+                className="bg-cover bg-no-repeat w-full h-[250px]"
+                src={product.image}
+              />
+              <div className="flex items-center justify-evenly">
+                <div className="py-5 text-[20px]">
+                  <div>{product.name}</div>
+                  <div className="text-[#3a9943]">{product.price}đ</div>
+                </div>
+                <button className="bg-[#f2f2f2] w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]">
+                  <ShoppingCartOutlined />
+                </button>
               </div>
-              <button className="bg-[#f2f2f2] w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]">
-                <ShoppingCartOutlined />
-              </button>
-            </div>
-          </div>
+            </Link>
+          ))}
         </div>
       </div>
     </div>
   );
 }
-
 
 export default Product;

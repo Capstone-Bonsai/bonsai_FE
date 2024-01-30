@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/logo_footer_final.png";
 import SPCus from "../assets/img-sp.webp";
 import { Input, Space } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import Cookies from "universal-cookie";
 function Banner() {
   const { Search } = Input;
   const navLinks = [
@@ -13,6 +14,17 @@ function Banner() {
     { text: "Chăm sóc cây cảnh", to: "/knowledge" },
     { text: "Địa chỉ", to: "/address" },
   ];
+
+  const cookies = new Cookies();
+  const [cartItemCount, setCartItemCount] =  useState(cookies.get("cartItems")?.length);
+
+
+  // useEffect(() => {
+  //   if (storedCartItems) {
+  //     setCartItemCount(storedCartItems?.length);
+  //   }
+  // }, []);
+
   // const onSearch = (value, _e, info) => console.log(info?.source, value);
   return (
     <>
@@ -51,17 +63,19 @@ function Banner() {
               </div>
             </div>
             <Link
+              to="/shoppingCart"
               className="text-[30px] w-[70px] h-[50px] text-[#ffffff] flex items-center border pl-2 rounded-[5px] 
           border-[#ffffff]-500 border-opacity-50 border-opacity-50 hover:bg-[#ffffff] hover:text-black"
             >
               <ShoppingCartOutlined />
+              <div className="w-[20px] h-[20px] bg-[red] flex text-[15px] justify-center items-center rounded-full">
+                {cartItemCount}
+              </div>
             </Link>
           </div>
         </div>
       </div>
-      <div
-        className="drop-shadow-md bg-[#ffffff]"
-      >
+      <div className="drop-shadow-md bg-[#ffffff]">
         <div className="flex w-[70%] h-[50px] items-center font-medium m-auto uppercase ">
           {navLinks.map((link, index) => (
             <div key={index} className="pr-10 montserrat hover:text-[#54a65b]">
