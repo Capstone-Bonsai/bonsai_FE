@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { Col, InputNumber, Row, Slider, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductById } from "../../redux/productSlice";
+import Cookies from "universal-cookie";
 
 function ProductDetail() {
   const [currentImage, setCurrentImage] = useState(1);
@@ -26,6 +27,28 @@ function ProductDetail() {
   const [inputValue, setInputValue] = useState(1);
   const onChange = (newValue) => {
     setInputValue(newValue);
+  };
+
+  const addToCart = () => {
+    const cookies = new Cookies();
+    const cartItems = cookies.get("cartItems") || [];
+    console.log("Current cart items:", cartItems);
+    const existingItem = cartItems.find((item) => item.productId === productId);
+
+    if (existingItem) {
+      existingItem.quantity += inputValue;
+    } else {
+      cartItems.push({
+        productId,
+        name: productDetail.name,
+        price: productDetail.price,
+        image: productDetail.image,
+        quantity: inputValue,
+      });
+    }
+
+    cookies.set("cartItems", cartItems);
+    console.log("Added to cart:", cartItems);
   };
 
   return (
@@ -88,7 +111,10 @@ function ProductDetail() {
                 onChange={onChange}
               />
             </div>
-            <button className="bg-[#3a9943] w-[200px] h-[45px] rounded-[10px] text-[#ffffff] text-[16px]">
+            <button
+              className="bg-[#3a9943] w-[200px] h-[45px] rounded-[10px] text-[#ffffff] text-[16px]"
+              onClick={addToCart}
+            >
               + Thêm vào Giỏ Hàng
             </button>
           </div>

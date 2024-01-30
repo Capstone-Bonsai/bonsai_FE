@@ -50,7 +50,7 @@ function Banner() {
                 <div className="text-[#ffdd20]">0912345667</div>
               </div>
             </div>
-            <Link
+            <Link to="/shoppingCart"
               className="text-[30px] w-[70px] h-[50px] text-[#ffffff] flex items-center border pl-2 rounded-[5px] 
           border-[#ffffff]-500 border-opacity-50 border-opacity-50 hover:bg-[#ffffff] hover:text-black"
             >
