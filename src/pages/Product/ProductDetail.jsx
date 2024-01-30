@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CayTung from "../../assets/cay-tung.png";
 import { productDetailImage } from "../../data/TopProducts";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Col, InputNumber, Row, Slider, Space } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductById } from "../../redux/productSlice";
 
 function ProductDetail() {
   const [currentImage, setCurrentImage] = useState(1);
+
+  const dispatch = useDispatch();
+  const { productId } = useParams();
+  useEffect(() => {
+    dispatch(fetchProductById(productId));
+  }, [productId]);
+  const productDetail = useSelector((state) => state.product.productById);
+
   const imageDetail = productDetailImage.image.find(
     (img) => img.id === currentImage
   );
-  console.log(imageDetail);
   const handleImageClick = (newImageId) => {
     setCurrentImage(newImageId);
   };
@@ -18,6 +27,7 @@ function ProductDetail() {
   const onChange = (newValue) => {
     setInputValue(newValue);
   };
+
   return (
     <div>
       <div className="border-b py-2">
@@ -58,7 +68,7 @@ function ProductDetail() {
               Tags: <Link>Cây, Hạt ,...</Link>
             </div>
             <div className="text-[24px] text-[#333333]">
-              Lorem ipsum indoor plants
+              {productDetail.name}
             </div>
             <div className="text-[#3a9943] text-[32px] font-bold">150.000đ</div>
           </div>

@@ -1,11 +1,28 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { topProducts, bonsaiOffice } from "../data/TopProducts";
-
+import { productList } from "../data/TopProducts";
 export const fetchTopProducts = createAsyncThunk(
   "product/fetchTopProducts",
   async () => {
     return topProducts;
+  }
+);
+
+export const fetchProductById = createAsyncThunk(
+  "product/fetchProductById",
+  async (productId) => {
+    try {
+      const product = productList.find((p) => p.productId == productId);
+      console.log(product);
+      if (product) {
+        return product;
+      } else {
+        throw new Error("Product not found");
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 );
 
@@ -19,6 +36,7 @@ export const fetchBonsaiOffice = createAsyncThunk(
 const initialState = {
   topProductDTO: [],
   bonsaiOfficeDTO: [],
+  productById: [],
   msg: "",
   token: null,
 };
@@ -36,33 +54,27 @@ const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchTopProducts.pending, (state) => {
-      // Xử lý khi đang chờ
       state.msg = "Loading...";
     });
 
     builder.addCase(fetchTopProducts.fulfilled, (state, action) => {
-      // Xử lý khi thành công
       state.topProductDTO = action.payload;
       state.msg = "Data loaded successfully";
     });
 
     builder.addCase(fetchTopProducts.rejected, (state) => {
-      // Xử lý khi bị từ chối
       state.msg = "Error loading data";
     });
-    builder.addCase(fetchBonsaiOffice.pending, (state) => {
-      // Xử lý khi đang chờ
+    builder.addCase(fetchProductById.pending, (state) => {
       state.msg = "Loading...";
     });
 
-    builder.addCase(fetchBonsaiOffice.fulfilled, (state, action) => {
-      // Xử lý khi thành công
-      state.bonsaiOfficeDTO = action.payload;
+    builder.addCase(fetchProductById.fulfilled, (state, action) => {
+      state.productById = action.payload;
       state.msg = "Data loaded successfully";
     });
 
-    builder.addCase(fetchBonsaiOffice.rejected, (state) => {
-      // Xử lý khi bị từ chối
+    builder.addCase(fetchProductById.rejected, (state) => {
       state.msg = "Error loading data";
     });
   },
