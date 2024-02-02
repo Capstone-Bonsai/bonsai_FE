@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pagination, Slider } from "antd";
 import "../HomePage/styleHome.css";
 import { Link } from "react-router-dom";
 import CayTung from "../../assets/cay-tung.png";
-import {productList} from '../../data/TopProducts'
+import { productList } from "../../data/TopProducts";
 import { ShoppingCartOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllProduct } from "../../redux/productSlice";
 function Product() {
   const [priceRange, setPriceRange] = useState([20, 50]);
-
+const allProduct = useSelector((state) => state.product.allProductDTO.items)
   const handleSliderChange = (value) => {
     setPriceRange(value);
   };
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchAllProduct());
+  }, []);
 
   return (
     <div className="mb-5">
@@ -54,20 +60,20 @@ function Product() {
           </div>
         </div>
         <div className="w-[75%] pl-10 flex flex-wrap justify-between">
-          {productList.map((product) => (
+          {allProduct?.map((product) => (
             <Link
-              to={`/productDetail/${product.productId}`}
-              key={product.productId}
+              to={`/productDetail/${product.id}`}
+              key={product.id}
               className="w-[255px] h-[355px] border mt-5"
             >
               <img
                 className="bg-cover bg-no-repeat w-full h-[250px]"
-                src={product.image}
+                src={product.productImages[0]?.imageUrl}
               />
               <div className="flex items-center justify-evenly">
                 <div className="py-5 text-[20px]">
-                  <div>{product.name}</div>
-                  <div className="text-[#3a9943]">{product.price}đ</div>
+                  <div>{product.nameUnsign}</div>
+                  <div className="text-[#3a9943]">{product.unitPrice}đ</div>
                 </div>
                 <button className="bg-[#f2f2f2] w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]">
                   <ShoppingCartOutlined />
