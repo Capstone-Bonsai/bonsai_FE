@@ -11,14 +11,14 @@ function Footer() {
   ];
 
   return (
-    <div className="min-h-[400px] bg-[#028711] mt-auto w-full">
-      <div className="w-[70%] h-full m-auto pt-4 flex justify-between">
+    <div className="min-h-[400px] mt-auto w-full">
+      <div className="w-[70%] h-full m-auto pt-4 flex justify-between border-t border-t-[2px]">
         <div className="w-[400px]">
           <div className="font-bold text-[#000000] text-[20px]">
             Về chúng tôi
           </div>
           <img src={logo_final} alt="" className="ml-[-10px] mt-5" />
-          <div className="text-[#FFFFFF]">
+          <div className="text-[14px]">
             Thanh Sơn Garden là thương hiệu dẫn đầu trong lĩnh vực cung cấp các
             loại Cây phong thủy, cây văn phòng, sen đá, xương rồng & tiểu cảnh
             cao cấp trang trí nội thất. <br />
@@ -32,7 +32,7 @@ function Footer() {
           <div className="font-bold text-[#000000] text-[20px]">
             Hỗ trợ khách hàng
           </div>
-          <div className="text-[#FFFFFF] mt-5">
+          <div className=" mt-5 text-[14px]">
             <ul>
               {linksFooter.map((link) => (
                 <li key={link.id}>
@@ -44,7 +44,7 @@ function Footer() {
         </div>
         <div className="w-[400px]">
           <div className="font-bold text-[#000000] text-[20px]">Địa chỉ</div>
-          <div className="text-[#FFFFFF] mt-5">
+          <div className=" mt-5 text-[14px]">
             372 Quốc lộ 20, Liên Nghĩa, Đức Trọng, Lâm Đồng
           </div>
         </div>
