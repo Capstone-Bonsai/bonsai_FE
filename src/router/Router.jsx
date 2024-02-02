@@ -6,6 +6,7 @@ import Product from "../pages/Product/Product";
 import ProductDetail from "../pages/Product/ProductDetail";
 import ShoppingCart from "../pages/Product/ShoppingCart";
 import ServiceListPage from "../pages/ServicePage/ServiceListPage";
+import ProductManage from "../pages/AdminPage/ProductManage";
 function Router() {
   const element = useRoutes([
     {
@@ -28,6 +29,11 @@ function Router() {
       path: "/service",
       element: <ServiceListPage />,
     },
+    //test
+    {
+      path: "/admin/product",
+      element: <ProductManage />,
+    }
   ]);
   if (!element) return null;
   return (

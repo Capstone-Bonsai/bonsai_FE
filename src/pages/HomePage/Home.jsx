@@ -25,7 +25,7 @@ function Home() {
 
         <div className="w-[70%] m-auto mt-6 grid grid-cols-1 lg:grid-cols-2 gap-3">
           <Link
-            class="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
+            className="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
             style={{ backgroundImage: `url(${BannerMuaBan})` }}
             to='/service'
           >
@@ -34,7 +34,7 @@ function Home() {
             </div>
           </Link>
           <Link
-            class="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
+            className="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
             style={{ backgroundImage: `url(${BannerDichVu})` }}
             to='/service'
           >
