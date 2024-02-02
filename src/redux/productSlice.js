@@ -1,11 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import { topProducts, bonsaiOffice } from "../data/TopProducts";
 import { productList } from "../data/TopProducts";
-export const fetchTopProducts = createAsyncThunk(
+import axios from "axios";
+
+const axiosCus = axios.create({
+  baseURL: "https://capstoneb.azurewebsites.net/api/",
+});
+
+export const fetchAllProduct = createAsyncThunk(
   "product/fetchTopProducts",
   async () => {
-    return topProducts;
+    try {
+      const response = await axiosCus.get("/Product");
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 );
 
@@ -13,12 +23,8 @@ export const fetchProductById = createAsyncThunk(
   "product/fetchProductById",
   async (productId) => {
     try {
-      const product = productList.find((p) => p.productId == productId);
-      if (product) {
-        return product;
-      } else {
-        throw new Error("Product not found");
-      }
+      const response = await axiosCus.get(`/Product/${productId}`);
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -34,8 +40,12 @@ export const fetchBonsaiOffice = createAsyncThunk(
 
 const initialState = {
   topProductDTO: [],
+  allProductDTO: [],
   bonsaiOfficeDTO: [],
   productById: [],
+  cart: [],
+  itemCount: 0,
+  loading: false,
   msg: "",
   token: null,
 };
@@ -44,41 +54,58 @@ const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    setTopProducts: (state, action) => {
-      state.topProductDTO = action.payload;
+    setAllProducts: (state, action) => {
+      state.allProductDTO = action.payload;
     },
     setBonsaiOffice: (state, action) => {
       state.bonsaiOfficeDTO = action.payload;
     },
+    setCartFromCookie: (state, action) => {
+      const { cartItems, itemCount } = action.payload;
+      state.cart = cartItems;
+      state.itemCount = itemCount;
+    },
+    setProdctById: (state, action) => {
+      state.productById = action.payload;
+    },
   },
+
   extraReducers: (builder) => {
-    builder.addCase(fetchTopProducts.pending, (state) => {
+    builder.addCase(fetchAllProduct.pending, (state) => {
       state.msg = "Loading...";
+      state.loading = true;
     });
 
-    builder.addCase(fetchTopProducts.fulfilled, (state, action) => {
-      state.topProductDTO = action.payload;
+    builder.addCase(fetchAllProduct.fulfilled, (state, action) => {
+      state.allProductDTO = action.payload;
       state.msg = "Data loaded successfully";
+      state.loading = false;
     });
-
-    builder.addCase(fetchTopProducts.rejected, (state) => {
+    builder.addCase(fetchAllProduct.rejected, (state) => {
       state.msg = "Error loading data";
+      state.loading = false;
     });
     builder.addCase(fetchProductById.pending, (state) => {
       state.msg = "Loading...";
+      state.loading = true;
     });
-
     builder.addCase(fetchProductById.fulfilled, (state, action) => {
       state.productById = action.payload;
       state.msg = "Data loaded successfully";
+      state.loading = false;
     });
-
     builder.addCase(fetchProductById.rejected, (state) => {
       state.msg = "Error loading data";
+      state.loading = false;
     });
   },
 });
 
 const { reducer: productReducer, actions } = productSlice;
-export const { setTopProducts, setBonsaiOffice } = actions;
+export const {
+  setAllProducts,
+  setBonsaiOffice,
+  setCartFromCookie,
+  setProdctById,
+} = actions;
 export { productReducer as default };

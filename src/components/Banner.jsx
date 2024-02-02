@@ -3,9 +3,16 @@ import logo from "../assets/logo_footer_final.png";
 import SPCus from "../assets/img-sp.webp";
 import { Input, Space } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import {
+  ShoppingCartOutlined,
+  FacebookOutlined,
+  InstagramOutlined,
+  TwitterOutlined,
+} from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import Cookies from "universal-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { setCartFromCookie } from "../redux/productSlice";
 function Banner() {
   const { Search } = Input;
   const navLinks = [
@@ -14,16 +21,21 @@ function Banner() {
     { text: "Chăm sóc cây cảnh", to: "/knowledge" },
     { text: "Địa chỉ", to: "/address" },
   ];
-
   const cookies = new Cookies();
-  const [cartItemCount, setCartItemCount] =  useState(cookies.get("cartItems")?.length);
+  const [cartItemCount, setCartItemCount] = useState(0);
+  const countCart = useSelector((state) => state.product.itemCount);
+  const dispatch = useDispatch();
 
+  const fetchCartFromCookie = () => {
+    const cartItems = cookies.get("cartItems") || [];
+    const itemCount = cartItems.length;
+    console.log(itemCount);
+    dispatch(setCartFromCookie({ cartItems, itemCount }));
+  };
 
-  // useEffect(() => {
-  //   if (storedCartItems) {
-  //     setCartItemCount(storedCartItems?.length);
-  //   }
-  // }, []);
+  useEffect(() => {
+    fetchCartFromCookie();
+  }, []);
 
   // const onSearch = (value, _e, info) => console.log(info?.source, value);
   return (
@@ -31,7 +43,18 @@ function Banner() {
       <div className="bg-[#3a9943] py-5">
         <div className="w-[70%] h-[100%] m-auto">
           <div className="flex justify-between items-center border-b border-gray-200 border-opacity-50 pb-3">
-            <div className="text-[#ffffff]">Theo dõi chúng tôi</div>
+            <div className="flex w-[220px] justify-between items-center text-[#ffffff]">
+              <div className="">Theo dõi chúng tôi</div>
+              <Link className="hover:text-[#ffdd20] ">
+                <FacebookOutlined />
+              </Link>
+              <Link className="hover:text-[#ffdd20]">
+                <InstagramOutlined />
+              </Link>
+              <Link className="hover:text-[#ffdd20]">
+                <TwitterOutlined />
+              </Link>
+            </div>
             <div className="flex items-center justify-center">
               <a href="" className="text-white no-underline pr-2">
                 Đăng nhập
@@ -69,7 +92,7 @@ function Banner() {
             >
               <ShoppingCartOutlined />
               <div className="w-[20px] h-[20px] bg-[red] flex text-[15px] justify-center items-center rounded-full">
-                {cartItemCount}
+                {countCart}
               </div>
             </Link>
           </div>

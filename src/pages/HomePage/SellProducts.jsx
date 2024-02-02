@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setTopProducts, setBonsaiOffice } from "../../redux/productSlice";
-import { topProducts, bonsaiOffice } from "../../data/TopProducts";
+import { setBonsaiOffice } from "../../redux/productSlice";
+import { bonsaiOffice } from "../../data/TopProducts";
 import { categoryList } from "../../data/AllCategory";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -12,7 +12,6 @@ function SellProducts() {
 
   useEffect(() => {
     // Dispatch action để cập nhật state trong Redux
-    dispatch(setTopProducts(topProducts));
     dispatch(setBonsaiOffice(bonsaiOffice));
   }, [dispatch]);
 
@@ -30,7 +29,9 @@ function SellProducts() {
           >
             <img src={product.image} width={145} height={145} alt="" />
             <div className="ml-2">
-              <div className="text-[#333333] text-lg hover:text-[#1E7100]">{product.name}</div>
+              <div className="text-[#333333] text-lg hover:text-[#1E7100]">
+                {product.name}
+              </div>
               <div className="text-[#3A994A]">{product.price}</div>
             </div>
           </a>
@@ -54,11 +55,15 @@ function SellProducts() {
               <img src={office.image} alt="" />
               <div className="pt-3 px-3">
                 <div className="mb-3">
-                  <Link className="text-[#333333] text-lg hover:text-[#1E7100]">{office.name}</Link>
+                  <Link className="text-[#333333] text-lg hover:text-[#1E7100]">
+                    {office.name}
+                  </Link>
                 </div>
                 <div className="grid grid-cols-3">
                   <div class="flex items-center">
-                    <div className="text-[#3A994A] text-xl font-semibold">{office.price}</div>
+                    <div className="text-[#3A994A] text-xl font-semibold">
+                      {office.price}
+                    </div>
                   </div>
                   <div class="col-end-4 flex justify-end">
                     <Link
@@ -92,11 +97,15 @@ function SellProducts() {
               <img src={office.image} alt="" />
               <div className="pt-3 px-3">
                 <div className="mb-3">
-                  <Link className="text-[#333333] text-lg hover:text-[#1E7100]">{office.name}</Link>
+                  <Link className="text-[#333333] text-lg hover:text-[#1E7100]">
+                    {office.name}
+                  </Link>
                 </div>
                 <div className="grid grid-cols-3">
                   <div class="flex items-center">
-                    <div className="text-[#3A994A] text-xl font-semibold">{office.price}</div>
+                    <div className="text-[#3A994A] text-xl font-semibold">
+                      {office.price}
+                    </div>
                   </div>
                   <div class="col-end-4 flex justify-end">
                     <Link

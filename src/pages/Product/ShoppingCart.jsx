@@ -3,25 +3,36 @@ import TestProduct from "../../assets/testProduct.png";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { InputNumber, Space } from "antd";
 import Cookies from "universal-cookie";
+import { useDispatch } from "react-redux";
+import { setCartFromCookie } from "../../redux/productSlice";
 
 function ShoppingCart() {
   const cookies = new Cookies();
-  const [cartItems, setCartItems] = useState(cookies.get("cartItems"));
+  const [cartItems, setCartItems] = useState(
+    () => cookies.get("cartItems") || []
+  );
+  const dispatch = useDispatch();
+
+  const updateCartItems = (newCartItems) => {
+    setCartItems(newCartItems);
+    cookies.set("cartItems", JSON.stringify(newCartItems), { path: "/" });
+  };
 
   const handleQuantityChange = (itemId, newQuantity) => {
     const updatedCartItems = cartItems.map((item) =>
       item.productId === itemId ? { ...item, quantity: newQuantity } : item
     );
-    setCartItems(updatedCartItems);
-    cookies.set("cartItems", JSON.stringify(updatedCartItems));
+    updateCartItems(updatedCartItems);
   };
 
-  const handleRemoveItem = (product) => {
+  const handleRemoveItem = async (product) => {
     const updatedCartItems = cartItems.filter(
       (item) => item.productId !== product.productId
     );
-    cookies.set("cartItems", JSON.stringify(updatedCartItems));
-    setCartItems(updatedCartItems);
+    await updateCartItems(updatedCartItems);
+    const itemCount = updatedCartItems.length;
+    console.log(updatedCartItems);
+    dispatch(setCartFromCookie({ updatedCartItems, itemCount }));
   };
 
   return (
