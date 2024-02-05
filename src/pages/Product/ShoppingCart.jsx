@@ -5,6 +5,7 @@ import { InputNumber, Space } from "antd";
 import Cookies from "universal-cookie";
 import { useDispatch } from "react-redux";
 import { setCartFromCookie } from "../../redux/productSlice";
+import MinHeight from "./MinHeight";
 
 function ShoppingCart() {
   const cookies = new Cookies();
@@ -36,7 +37,7 @@ function ShoppingCart() {
   };
 
   return (
-    <div>
+    <MinHeight>
       <div className="border-b py-2">
         <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
       </div>
@@ -89,7 +90,7 @@ function ShoppingCart() {
           </tbody>
         </table>
       </div>
-    </div>
+    </MinHeight>
   );
 }
 
