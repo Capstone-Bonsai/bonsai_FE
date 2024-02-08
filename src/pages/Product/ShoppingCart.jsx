@@ -5,7 +5,7 @@ import { InputNumber, Space } from "antd";
 import Cookies from "universal-cookie";
 import { useDispatch } from "react-redux";
 import { setCartFromCookie } from "../../redux/productSlice";
-import MinHeight from "./MinHeight";
+//import MinHeight from "./MinHeight";
 
 function ShoppingCart() {
   const cookies = new Cookies();
