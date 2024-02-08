@@ -74,9 +74,9 @@ function ProductDetail() {
       ) : (
         <div className="">
           <ToastContainer />
-          <div className="border-b py-2">
+          {/* <div className="border-b py-2">
             <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
-          </div>
+          </div> */}
           <div className="m-auto w-[70%] flex justify-between my-10">
             <div className=" w-[450px] ">
               <div className="flex">

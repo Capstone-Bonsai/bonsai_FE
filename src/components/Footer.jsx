@@ -11,7 +11,7 @@ function Footer() {
   ];
 
   return (
-    <div className="min-h-[400px] mt-auto w-full">
+    <div className="min-h-[400vh] mt-auto w-full">
       <div className="w-[70%] h-full m-auto pt-4 flex justify-between border-t border-t-[2px]">
         <div className="w-[400px]">
           <div className="font-bold text-[#000000] text-[20px]">
