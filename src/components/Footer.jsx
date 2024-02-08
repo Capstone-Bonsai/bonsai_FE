@@ -1,7 +1,6 @@
 import React from "react";
 import logo_final from "../assets/logo_footer_final.png";
 function Footer() {
-  
   const linksFooter = [
     { id: 1, text: "Hướng dẫn đặt hàng & thanh toán", href: "#" },
     { id: 2, text: "Chính sách giao hàng & đổi trả", href: "#" },
@@ -11,7 +10,7 @@ function Footer() {
   ];
 
   return (
-    <div className="min-h-[400vh] mt-auto w-full">
+    <div className="min-h-[400px] mt-auto w-full">
       <div className="w-[70%] h-full m-auto pt-4 flex justify-between border-t border-t-[2px]">
         <div className="w-[400px]">
           <div className="font-bold text-[#000000] text-[20px]">
