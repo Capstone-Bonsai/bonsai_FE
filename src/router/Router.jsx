@@ -7,7 +7,7 @@ import ProductDetail from "../pages/Product/ProductDetail";
 import ShoppingCart from "../pages/Product/ShoppingCart";
 import ServiceListPage from "../pages/ServicePage/ServiceListPage";
 import ProductManage from "../pages/AdminPage/ProductManage";
-import UserManage from "../pages/AdminPage/UserManage";
+import UserManage from "../pages/AdminPage/UserManagement/UserManage";
 function Router() {
   const element = useRoutes([
     {

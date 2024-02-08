@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export const fetchAllUsers = createAsyncThunk(
   "user/fetchAllUsers",
-  async ({ pageIndex, pageSize }) => {
+  async ({ pageIndex = 0, pageSize = 20 }) => {
     try {
       const response = await axios.get(
         `/User?pageIndex=${pageIndex}&pageSize=${pageSize}`

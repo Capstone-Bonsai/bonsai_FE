@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
+  LockOutlined,
+  UnlockOutlined,
   PlusCircleOutlined,
   PlusOutlined,
   DeleteOutlined,
   EyeOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import {
   Tooltip,
@@ -27,22 +30,30 @@ import {
   Upload,
 } from "antd";
 const { Search } = Input;
-
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllUsers } from "../../redux/userSlice";
+import { fetchAllUsers } from "../../../redux/userSlice";
+import ModalCreateUser from "./ModalCreateUser";
 
-// const normFile = (e) => {
-//   if (Array.isArray(e)) {
-//     return e;
-//   }
-//   return e?.fileList;
-// };
+const normFile = (e) => {
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return [e.file];
+};
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
 function UserManage() {
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
+  const [fileList, setFileList] = useState([]);
 
   const allUsers = useSelector((state) => state.user?.listUser);
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,17 +64,18 @@ function UserManage() {
     const index = currentPage - 1;
     dispatch(fetchAllUsers({ pageIndex: currentPage - 1, pageSize: pageSize }));
   }, []);
-  // const showModal = () => {
-  //   setOpen(true);
-  // };
 
-  // const handleOk = () => {
-  //   setConfirmLoading(true);
-  //   setTimeout(() => {
-  //     setOpen(false);
-  //     setConfirmLoading(false);
-  //   }, 2000);
-  // };
+  const showCreateModal = () => {
+    setOpenCreateModal(true);
+  };
+
+  const handleOk = () => {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpenCreateModal(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
 
   // const showModalDelete = () => {
   //   setOpenDelete(true);
@@ -77,11 +89,9 @@ function UserManage() {
   //   }, 2000);
   // };
 
-  // const handleCancel = () => {
-  //   console.log("Clicked cancel button");
-  //   setOpen(false);
-  // };
-
+  const handleCancelCreate = () => {
+    setOpenCreateModal(false);
+  };
   // const handleCancelDelete = () => {
   //   console.log("Clicked cancel button");
   //   setOpenDelete(false);
@@ -150,7 +160,7 @@ function UserManage() {
       key: "fullname",
     },
     {
-      title: "Quyền",
+      title: "Vai trò",
       dataIndex: "role",
       key: "role",
       render: (_, record) => (
@@ -177,10 +187,28 @@ function UserManage() {
       key: "hanhdong",
       render: (_, record) => (
         <Space size="small">
-          <Tooltip title="Xóa">
+          {record.isLockout == false ? (
+            <Tooltip title="Khóa">
+              <Button
+                type="text"
+                icon={<LockOutlined style={{ color: "red" }} />}
+                //onClick={showModalDelete}
+              />
+            </Tooltip>
+          ) : (
+            <Tooltip title="Mở khóa">
+              <Button
+                type="text"
+                icon={<UnlockOutlined style={{ color: "green" }} />}
+                //onClick={showModalDelete}
+              />
+            </Tooltip>
+          )}
+
+          <Tooltip title="Mở khóa">
             <Button
               type="text"
-              icon={<DeleteOutlined style={{ color: "red" }} />}
+              icon={<EditOutlined style={{ color: "orange" }} />}
               //onClick={showModalDelete}
             />
           </Tooltip>
@@ -201,13 +229,13 @@ function UserManage() {
     <>
       <div className="flex justify-center mt-12">
         <div className="w-[70%]">
-          <div className="font-semibold mb-6">Sản phẩm</div>
+          <div className="font-semibold mb-6">Quản lý người dùng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
               <div>
                 <button
                   className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
-                  // onClick={showModal}
+                  onClick={showCreateModal}
                 >
                   <PlusCircleOutlined /> Thêm người dùng
                 </button>
@@ -234,59 +262,7 @@ function UserManage() {
             </div>
           </div>
         </div>
-        {/* <Modal
-          title="Thêm sản phẩm"
-          open={open}
-          onOk={handleOk}
-          okButtonProps={{ type: "default" }}
-          confirmLoading={confirmLoading}
-          onCancel={handleCancel}
-        >
-          <div className="">
-            <Form
-              layout="horizontal"
-              labelCol={{ span: 5 }}
-              wrapperCol={{ span: 10 }}
-            >
-              <Form.Item label="Trạng thái">
-                <Radio.Group>
-                  <Radio value="apple"> Apple </Radio>
-                  <Radio value="pear"> Pear </Radio>
-                </Radio.Group>
-              </Form.Item>
-              <Form.Item label="Tên sản phẩm">
-                <Input />
-              </Form.Item>
-              <Form.Item label="Kho sẵn">
-                <InputNumber />
-              </Form.Item>
-              <Form.Item label="Giá tiền">
-                <InputNumber />
-              </Form.Item>
-              <Form.Item label="Chiều cao">
-                <InputNumber />
-              </Form.Item>
-              <Form.Item label="Đơn vị">
-                <InputNumber />
-              </Form.Item>
-              <Form.Item
-                label="Upload ảnh"
-                valuePropName="fileList"
-                getValueFromEvent={normFile}
-              >
-                <Upload action="/upload.do" listType="picture-card">
-                  <button
-                    style={{ border: 0, background: "none" }}
-                    type="button"
-                  >
-                    <PlusOutlined />
-                    <div style={{ marginTop: 8 }}>Upload</div>
-                  </button>
-                </Upload>
-              </Form.Item>
-            </Form>
-          </div>
-        </Modal> */}
+        <ModalCreateUser show={openCreateModal} setShow={handleCancelCreate} />
         {/* <Modal
           title="Xóa sản phẩm"
           open={openDelete}
