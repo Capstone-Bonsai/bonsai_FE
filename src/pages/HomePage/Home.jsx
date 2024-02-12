@@ -27,23 +27,27 @@ function Home() {
           <Link
             className="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
             style={{ backgroundImage: `url(${BannerMuaBan})` }}
-            to='/service'
+            to="/service"
           >
             <div className="h-[70%] flex items-center">
-              <div className="text-2xl pl-6 font-semibold uppercase">Mua sắm</div>
+              <div className="text-2xl pl-6 font-semibold uppercase">
+                Mua sắm
+              </div>
             </div>
           </Link>
           <Link
             className="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
             style={{ backgroundImage: `url(${BannerDichVu})` }}
-            to='/service'
+            to="/service"
           >
             <div className="w-[50%] h-[70%] flex items-center">
-              <div className="text-2xl pl-6 font-semibold uppercase">Dịch vụ chăm sóc</div>
+              <div className="text-2xl pl-6 font-semibold uppercase">
+                Dịch vụ chăm sóc
+              </div>
             </div>
           </Link>
         </div>
-        
+
         <SellProducts />
       </div>
     </>

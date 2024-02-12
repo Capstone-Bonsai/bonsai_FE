@@ -56,15 +56,15 @@ function Banner() {
               </Link>
             </div>
             <div className="flex items-center justify-center">
-              <a href="" className="text-white no-underline pr-2">
+              <Link to="/Login" className="text-white no-underline pr-2">
                 Đăng nhập
-              </a>
-              <a
-                href=""
+              </Link>
+              <Link
+                
                 className="pl-2 pr-2 text-white no-underline border-l-2 border-white"
               >
                 Đăng ký
-              </a>
+              </Link>
             </div>
           </div>
           <div className="flex items-center justify-between">

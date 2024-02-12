@@ -7,6 +7,8 @@ import ProductDetail from "../pages/Product/ProductDetail";
 import ShoppingCart from "../pages/Product/ShoppingCart";
 import ServiceListPage from "../pages/ServicePage/ServiceListPage";
 import ProductManage from "../pages/AdminPage/ProductManage";
+import CustomerRoute from "./CustomerRoute";
+import Login from "../pages/AdminPage/Login";
 import UserManage from "../pages/AdminPage/UserManagement/UserManage";
 function Router() {
   const element = useRoutes([
@@ -34,11 +36,7 @@ function Router() {
     {
       path: "/admin/product",
       element: <ProductManage />,
-    },
-    {
-      path: "/admin/user",
-      element: <UserManage />,
-    },
+    }
   ]);
   if (!element) return null;
   return (
