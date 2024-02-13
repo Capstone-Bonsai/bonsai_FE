@@ -9,9 +9,9 @@ const axiosCus = axios.create({
 
 export const fetchAllProduct = createAsyncThunk(
   "product/fetchTopProducts",
-  async () => {
+  async (pageIndex) => {
     try {
-      const response = await axiosCus.get("/Product");
+      const response = await axiosCus.get(`/Product/Pagination?pageIndex=${pageIndex}&pageSize=6`);
       return response.data;
     } catch (error) {
       throw error;

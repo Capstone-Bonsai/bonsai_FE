@@ -38,9 +38,6 @@ function ShoppingCart() {
 
   return (
     <MinHeight>
-      <div className="border-b py-2">
-        <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
-      </div>
       <div className="m-auto w-[70%] mt-10 drop-shadow-lg bg-[#ffffff]">
         <table className="w-full border-collapse">
           <thead>
