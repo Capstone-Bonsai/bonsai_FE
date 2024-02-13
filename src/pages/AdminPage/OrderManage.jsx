@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Space,
@@ -21,7 +20,7 @@ import {
   TreeSelect,
   Upload,
 } from "antd";
-const { Search, TextArea } = Input;
+const { Search } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProduct } from "../../redux/productSlice";
@@ -32,27 +31,15 @@ const normFile = (e) => {
   }
   return e?.fileList;
 };
-
-const normInput = (e) => {
-  console.log(e);
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return e?.fileList;
-};
-
-function ProductManage() {
+function OrderManage() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
 
-  const { register, handleSubmit } = useForm();
-
   const allProduct = useSelector((state) => state.product.allProductDTO.items);
   console.log(allProduct);
-
   useEffect(() => {
     dispatch(fetchAllProduct());
   }, []);
@@ -91,9 +78,21 @@ function ProductManage() {
     setOpenDelete(false);
   };
 
-  const onSubmit = (input) => {
-    console.log(input);
-  }
+  const dataSource = [
+    {
+      key: "1",
+      sanpham: "Mike",
+      khosan: 32,
+      giatien: 100.0,
+    },
+    {
+      key: "2",
+      sanpham: "John",
+      khosan: 42,
+      giatien: 100.0,
+    },
+  ];
+
   const columns = [
     {
       title: "Sản phẩm",
@@ -188,10 +187,10 @@ function ProductManage() {
         <Modal
           title="Thêm sản phẩm"
           open={open}
+          onOk={handleOk}
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoading}
           onCancel={handleCancel}
-          onOk={handleSubmit(onSubmit)}
         >
           <div className="">
             <Form
@@ -199,41 +198,33 @@ function ProductManage() {
               labelCol={{ span: 5 }}
               wrapperCol={{ span: 10 }}
             >
-              <Form.Item label="Phân loại">
-                <Select {...register("Sub")}>
-                  <Select.Option value="demo">Demo</Select.Option>
-                </Select>
+              <Form.Item label="Trạng thái">
+                <Radio.Group>
+                  <Radio value="apple"> Apple </Radio>
+                  <Radio value="pear"> Pear </Radio>
+                </Radio.Group>
               </Form.Item>
-              <Form.Item label="Tên sản phẩm" >
-                <Input {...register("Name")} type="text" isRequired/>
-              </Form.Item>
-              <Form.Item label="Mô tả">
-                <TextArea {...register("Description")} rows={4} />
-              </Form.Item>
-              <Form.Item label="Dáng cây">
-                <Input {...register("TreeShape")}/>
-              </Form.Item>
-              <Form.Item label="Số tuổi">
-                <InputNumber {...register("AgeRange")} />
-              </Form.Item>
-              <Form.Item label="Chiều cao">
-                <InputNumber {...register("Height")} />
-              </Form.Item>
-              <Form.Item label="Đơn vị">
-                <InputNumber {...register("Unit")}/>
+              <Form.Item label="Tên sản phẩm">
+                <Input />
               </Form.Item>
               <Form.Item label="Kho sẵn">
-                <InputNumber {...register("Quantity")}/>
+                <InputNumber />
               </Form.Item>
               <Form.Item label="Giá tiền">
-                <InputNumber {...register("UnitPrice")}/>
+                <InputNumber />
               </Form.Item>
-              {/* <Form.Item
+              <Form.Item label="Chiều cao">
+                <InputNumber />
+              </Form.Item>
+              <Form.Item label="Đơn vị">
+                <InputNumber />
+              </Form.Item>
+              <Form.Item
                 label="Upload ảnh"
                 valuePropName="fileList"
                 getValueFromEvent={normFile}
               >
-                <Upload {...register("Image")} action="/" listType="picture-card">
+                <Upload action="/upload.do" listType="picture-card">
                   <button
                     style={{ border: 0, background: "none" }}
                     type="button"
@@ -242,17 +233,7 @@ function ProductManage() {
                     <div style={{ marginTop: 8 }}>Upload</div>
                   </button>
                 </Upload>
-              </Form.Item> */}
-              {/* <Form.Item
-                label="Tag"
-                valuePropName="text"
-                getValueFromEvent={normInput}
-              >
-                <Input action="" listType="text" />
-                <button style={{ border: 0, background: "none" }} type="button">
-                  <PlusOutlined />
-                </button>
-              </Form.Item> */}
+              </Form.Item>
             </Form>
           </div>
         </Modal>
@@ -271,4 +252,4 @@ function ProductManage() {
   );
 }
 
-export default ProductManage;
+export default OrderManage;

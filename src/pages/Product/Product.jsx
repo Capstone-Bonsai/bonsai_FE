@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProduct } from "../../redux/productSlice";
 function Product() {
   const [priceRange, setPriceRange] = useState([20, 50]);
-const allProduct = useSelector((state) => state.product.allProductDTO.items)
+  const allProduct = useSelector((state) => state.product.allProductDTO.items);
   const handleSliderChange = (value) => {
     setPriceRange(value);
   };
@@ -19,10 +19,10 @@ const allProduct = useSelector((state) => state.product.allProductDTO.items)
   }, []);
 
   return (
-    <div className="my-5">
-      {/* <div className="border-b py-2">
+    <div className="mb-5">
+      <div className="border-b py-2">
         <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
-      </div> */}
+      </div>
       <div className="m-auto w-[70%] mt-2 flex">
         <div className="bg-[#f8f8f8] h-[500px] pt-5 pl-3 pr-3 w-[25%]">
           <div>
