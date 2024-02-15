@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setBonsaiOffice } from "../../redux/productSlice";
+import { setBonsaiOffice } from "../../redux/slice/productSlice";
 import { bonsaiOffice } from "../../data/TopProducts";
 import { categoryList } from "../../data/AllCategory";
 import { ShoppingCartOutlined } from "@ant-design/icons";

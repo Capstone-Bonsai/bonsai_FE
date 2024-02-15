@@ -12,7 +12,7 @@ import {
 import { Link } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { setCartFromCookie } from "../redux/productSlice";
+import { setCartFromCookie } from "../redux/slice/productSlice";
 function Banner() {
   const { Search } = Input;
   const navLinks = [

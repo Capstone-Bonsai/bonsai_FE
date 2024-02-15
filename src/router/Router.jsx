@@ -8,7 +8,8 @@ import ShoppingCart from "../pages/Product/ShoppingCart";
 import ServiceListPage from "../pages/ServicePage/ServiceListPage";
 import ProductManage from "../pages/AdminPage/ProductManage";
 import CustomerRoute from "./CustomerRoute";
-import Login from "../pages/AdminPage/Login";
+import Login from "../pages/Auth/Login";
+import Register from "../pages/Auth/Register";
 function Router() {
   const element = useRoutes([
     //test
@@ -19,6 +20,10 @@ function Router() {
     {
       path: "/Login",
       element: <Login />,
+    },
+    {
+      path: "/Register",
+      element: <Register />,
     },
     {
       element: <CustomerRoute />,

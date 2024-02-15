@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { topProducts, bonsaiOffice } from "../data/TopProducts";
-import { productList } from "../data/TopProducts";
+import { topProducts, bonsaiOffice } from "../../data/TopProducts";
+import { productList } from "../../data/TopProducts";
 import axios from "axios";
 
 const axiosCus = axios.create({
@@ -9,9 +9,12 @@ const axiosCus = axios.create({
 
 export const fetchAllProduct = createAsyncThunk(
   "product/fetchTopProducts",
-  async (pageIndex) => {
+  async ({ pageIndex, pageSize }) => {
     try {
-      const response = await axiosCus.get(`/Product/Pagination?pageIndex=${pageIndex}&pageSize=6`);
+      const response = await axiosCus.post(
+        `/Product/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
+        {}
+      );
       return response.data;
     } catch (error) {
       throw error;

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Pagination, Slider } from "antd";
 import "../HomePage/styleHome.css";
 import { Link } from "react-router-dom";
 import CayTung from "../../assets/cay-tung.png";
 import { productList } from "../../data/TopProducts";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProduct } from "../../redux/productSlice";
+import { fetchAllProduct } from "../../redux/slice/productSlice";
 import Loading from "../../components/Loading";
+import CustomPagination from "./FilterAndPagination";
+import { InputNumber } from "antd";
 
 function Product() {
   const [priceRange, setPriceRange] = useState([20, 50]);
@@ -15,22 +16,17 @@ function Product() {
   const loading = useSelector((state) => state.product.loading);
 
   const [pageIndex, setPageIndex] = useState(0);
-  console.log(pageIndex);
-  const countProduct = useSelector(
-    (state) => state.product.allProductDTO.totalItemsCount
+  const [pageSize, setPageSize] = useState(6);
+
+  const countPageProduct = useSelector(
+    (state) => state.product.allProductDTO.totalPagesCount
   );
-  const handleSliderChange = (value) => {
-    setPriceRange(value);
-  };
+
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchAllProduct(pageIndex));
-  }, []);
-
-  const handlePageChange = (pageIndex) => {
-    setPageIndex(pageIndex);
-    dispatch(fetchAllProduct(pageIndex - 1));
-  };
+    console.log(pageIndex, pageSize);
+    dispatch(fetchAllProduct({ pageIndex, pageSize }));
+  }, [pageIndex, pageSize]);
 
   return (
     <>
@@ -38,9 +34,6 @@ function Product() {
         <Loading loading={loading} />
       ) : (
         <div className="my-5 m-auto w-[70%]">
-          {/* <div className="border-b py-2">
-        <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
-      </div> */}
           <div className="mt-2 flex">
             <div className="bg-[#f8f8f8] h-[500px] pt-5 pl-3 pr-3 w-[25%]">
               <div>
@@ -53,20 +46,11 @@ function Product() {
                 <div className="uppercase text-[#333] font-semibold text-[16px]">
                   Mức giá
                 </div>
-                <div>
-                  <Slider
-                    range
-                    defaultValue={[20, 50]}
-                    handl
-                    className="rangeCostProduct"
-                    value={priceRange}
-                    onChange={handleSliderChange}
-                  />
+                <div className="border-b w-full flex justify-between">
+                  <InputNumber min={1} defaultValue={1} className="w-[40%]" />
+                  <InputNumber min={1} defaultValue={2} className="w-[40%]" />
                 </div>
-                <div className="border-b">
-                  <div>Giá từ: {priceRange[0]}</div>
-                  <div>Giá đến: {priceRange[1]}</div>
-                </div>
+                <button>Áp dụng</button>
               </div>
               <div>
                 <div className="uppercase text-[#333] font-semibold text-[16px]">
@@ -101,11 +85,13 @@ function Product() {
               ))}
             </div>
           </div>
-          <Pagination
-            current={pageIndex}
-            total={countProduct + 6}
-            className="flex justify-center mt-5"
-            onChange={handlePageChange}
+          <CustomPagination
+            pageIndex={pageIndex}
+            setPageIndex={setPageIndex}
+            countPageProduct={countPageProduct}
+            setPageSize={setPageSize}
+            fetchAllProduct={fetchAllProduct}
+            pageSize={pageSize}
           />
         </div>
       )}

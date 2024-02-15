@@ -23,7 +23,7 @@ import {
 const { Search } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProduct } from "../../redux/productSlice";
+import { fetchAllProduct } from "../../redux/slice/productSlice";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
