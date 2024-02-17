@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "../HomePage/styleHome.css";
 import { Link } from "react-router-dom";
-import CayTung from "../../assets/cay-tung.png";
-import { productList } from "../../data/TopProducts";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProduct } from "../../redux/slice/productSlice";
 import Loading from "../../components/Loading";
-import CustomPagination from "./FilterAndPagination";
+import CustomPagination from "./Pagination";
 import { InputNumber } from "antd";
+import Filter from "./Filter";
 
 function Product() {
-  const [priceRange, setPriceRange] = useState([20, 50]);
+  const [priceRange, setPriceRange] = useState([]);
   const allProduct = useSelector((state) => state.product.allProductDTO.items);
   const loading = useSelector((state) => state.product.loading);
-
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(6);
 
@@ -25,8 +23,18 @@ function Product() {
   const dispatch = useDispatch();
   useEffect(() => {
     console.log(pageIndex, pageSize);
-    dispatch(fetchAllProduct({ pageIndex, pageSize }));
-  }, [pageIndex, pageSize]);
+    dispatch(
+      fetchAllProduct({
+        pageIndex,
+        pageSize,
+        minPrice: priceRange[0],
+        maxPrice: priceRange[1],
+      })
+    );
+    console.log(priceRange[0]);
+  }, [pageIndex, pageSize, priceRange[0], priceRange[1]]);
+
+ 
 
   return (
     <>
@@ -42,25 +50,16 @@ function Product() {
                 </div>
                 <div className="border-b">Bonsai</div>
               </div>
-              <div>
-                <div className="uppercase text-[#333] font-semibold text-[16px]">
-                  Mức giá
-                </div>
-                <div className="border-b w-full flex justify-between">
-                  <InputNumber min={1} defaultValue={1} className="w-[40%]" />
-                  <InputNumber min={1} defaultValue={2} className="w-[40%]" />
-                </div>
-                <button>Áp dụng</button>
+              <Filter
+                priceRange={priceRange}
+                setPriceRange={setPriceRange}
+              />
+              <div className="uppercase text-[#333] font-semibold text-[16px]  border-t">
+                Dáng cây
               </div>
-              <div>
-                <div className="uppercase text-[#333] font-semibold text-[16px]">
-                  Chọn màu
-                </div>
-                <div>
-                  <input type="checkbox" />
-                </div>
-              </div>
+              <div className="border-b">Bonsai</div>
             </div>
+
             <div className="w-[75%] pl-10 flex flex-wrap">
               {allProduct?.map((product) => (
                 <Link

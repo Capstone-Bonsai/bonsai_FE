@@ -9,11 +9,10 @@ const axiosCus = axios.create({
 
 export const fetchAllProduct = createAsyncThunk(
   "product/fetchTopProducts",
-  async ({ pageIndex, pageSize }) => {
+  async ({ pageIndex, pageSize, minPrice, maxPrice}) => {
     try {
       const response = await axiosCus.post(
-        `/Product/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
-        {}
+        `/Product/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,{minPrice, maxPrice}
       );
       return response.data;
     } catch (error) {
