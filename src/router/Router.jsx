@@ -6,10 +6,12 @@ import Product from "../pages/Product/Product";
 import ProductDetail from "../pages/Product/ProductDetail";
 import ShoppingCart from "../pages/Product/ShoppingCart";
 import ServiceListPage from "../pages/ServicePage/ServiceListPage";
-import ProductManage from "../pages/AdminPage/ProductManage";
+import ProductManage from "../pages/AdminPage/ProductManagement/ProductManage";
 import CustomerRoute from "./CustomerRoute";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
+import UserManage from "../pages/AdminPage/UserManagement/UserManage";
+import ProductDetailManage from "../pages/AdminPage/ProductManagement/ProductDetailManage";
 function Router() {
   const element = useRoutes([
     //test
@@ -20,10 +22,6 @@ function Router() {
     {
       path: "/Login",
       element: <Login />,
-    },
-    {
-      path: "/Register",
-      element: <Register />,
     },
     {
       element: <CustomerRoute />,
