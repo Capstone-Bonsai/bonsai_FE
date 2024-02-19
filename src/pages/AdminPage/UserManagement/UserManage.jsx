@@ -31,7 +31,7 @@ import {
 } from "antd";
 const { Search } = Input;
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllUsers } from "../../../redux/userSlice";
+import { fetchAllUsers } from "../../../redux/slice/userSlice";
 import ModalCreateUser from "./ModalCreateUser";
 const UserManage = () => {
   const dispatch = useDispatch();
@@ -49,6 +49,7 @@ const UserManage = () => {
   useEffect(() => {
     const index = currentPage - 1;
     dispatch(fetchAllUsers({ pageIndex: currentPage - 1, pageSize: pageSize }));
+    console.log(allUsers);
   }, []);
 
   const showCreateModal = () => {
