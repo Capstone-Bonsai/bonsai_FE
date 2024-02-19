@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 function CustomerRoute() {
   return (
     <>
-          <ToastContainer />
+      <ToastContainer />
 
       <Banner />
       <Outlet />
