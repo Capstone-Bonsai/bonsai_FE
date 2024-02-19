@@ -5,23 +5,50 @@ import Home from "../pages/HomePage/Home";
 import Product from "../pages/Product/Product";
 import ProductDetail from "../pages/Product/ProductDetail";
 import ShoppingCart from "../pages/Product/ShoppingCart";
+import ServiceListPage from "../pages/ServicePage/ServiceListPage";
+import ProductManage from "../pages/AdminPage/ProductManage";
+import CustomerRoute from "./CustomerRoute";
+import Login from "../pages/Auth/Login";
+import Register from "../pages/Auth/Register";
 function Router() {
   const element = useRoutes([
+    //test
     {
-      path: "/",
-      element: <Home />,
+      path: "/admin/product",
+      element: <ProductManage />,
     },
     {
-      path: "/product",
-      element: <Product />,
+      path: "/Login",
+      element: <Login />,
     },
     {
-      path: "/productDetail/:productId",
-      element: <ProductDetail />,
+      path: "/Register",
+      element: <Register />,
     },
     {
-      path: "/shoppingCart",
-      element: <ShoppingCart />,
+      element: <CustomerRoute />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/product",
+          element: <Product />,
+        },
+        {
+          path: "/productDetail/:productId",
+          element: <ProductDetail />,
+        },
+        {
+          path: "/shoppingCart",
+          element: <ShoppingCart />,
+        },
+        {
+          path: "/service",
+          element: <ServiceListPage />,
+        },
+      ],
     },
   ]);
   if (!element) return null;

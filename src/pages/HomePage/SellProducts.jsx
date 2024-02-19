@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setBonsaiOffice } from "../../redux/productSlice";
+import { setBonsaiOffice } from "../../redux/slice/productSlice";
 import { bonsaiOffice } from "../../data/TopProducts";
 import { categoryList } from "../../data/AllCategory";
 import { ShoppingCartOutlined } from "@ant-design/icons";
@@ -60,12 +60,12 @@ function SellProducts() {
                   </Link>
                 </div>
                 <div className="grid grid-cols-3">
-                  <div class="flex items-center">
+                  <div className="flex items-center">
                     <div className="text-[#3A994A] text-xl font-semibold">
                       {office.price}
                     </div>
                   </div>
-                  <div class="col-end-4 flex justify-end">
+                  <div className="col-end-4 flex justify-end">
                     <Link
                       className="text-[20px] w-[40px] h-[40px] bg-[#f2f2f2] flex items-center border pl-2 rounded-[100%] 
           border-[#ffffff]-500 border-opacity-50 border-opacity-50 hover:bg-[#3A994A] hover:text-[#ffffff]"
@@ -102,12 +102,12 @@ function SellProducts() {
                   </Link>
                 </div>
                 <div className="grid grid-cols-3">
-                  <div class="flex items-center">
+                  <div className="flex items-center">
                     <div className="text-[#3A994A] text-xl font-semibold">
                       {office.price}
                     </div>
                   </div>
-                  <div class="col-end-4 flex justify-end">
+                  <div className="col-end-4 flex justify-end">
                     <Link
                       className="text-[20px] w-[40px] h-[40px] bg-[#f2f2f2] flex items-center border pl-2 rounded-[100%] 
           border-[#ffffff]-500 border-opacity-50 border-opacity-50 hover:bg-[#3A994A] hover:text-[#ffffff]"

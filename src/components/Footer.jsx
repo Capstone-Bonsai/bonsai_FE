@@ -1,7 +1,6 @@
 import React from "react";
 import logo_final from "../assets/logo_footer_final.png";
 function Footer() {
-  
   const linksFooter = [
     { id: 1, text: "Hướng dẫn đặt hàng & thanh toán", href: "#" },
     { id: 2, text: "Chính sách giao hàng & đổi trả", href: "#" },

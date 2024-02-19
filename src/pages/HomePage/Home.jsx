@@ -25,23 +25,29 @@ function Home() {
 
         <div className="w-[70%] m-auto mt-6 grid grid-cols-1 lg:grid-cols-2 gap-3">
           <Link
-            class="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
+            className="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
             style={{ backgroundImage: `url(${BannerMuaBan})` }}
+            to="/service"
           >
             <div className="h-[70%] flex items-center">
-              <div className="text-2xl pl-6 font-semibold uppercase">Mua sắm</div>
+              <div className="text-2xl pl-6 font-semibold uppercase">
+                Mua sắm
+              </div>
             </div>
           </Link>
           <Link
-            class="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
+            className="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
             style={{ backgroundImage: `url(${BannerDichVu})` }}
+            to="/service"
           >
             <div className="w-[50%] h-[70%] flex items-center">
-              <div className="text-2xl pl-6 font-semibold uppercase">Dịch vụ chăm sóc cây</div>
+              <div className="text-2xl pl-6 font-semibold uppercase">
+                Dịch vụ chăm sóc
+              </div>
             </div>
           </Link>
         </div>
-        
+
         <SellProducts />
       </div>
     </>
