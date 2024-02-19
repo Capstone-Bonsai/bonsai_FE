@@ -38,17 +38,6 @@ export const fetchBonsaiOffice = createAsyncThunk(
   }
 );
 
-export const postProduct = createAsyncThunk(
-  "product/fetchProductById",
-  async (productId) => {
-    try {
-      const response = await axiosCus.post(`/Product`);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  }
-);
 const initialState = {
   topProductDTO: [],
   allProductDTO: [],

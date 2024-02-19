@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Space,
@@ -45,10 +45,27 @@ function ProductManage() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
 
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      Sub: "",
+      Name: "",
+      Description: "",
+      TreeShape: "",
+      AgeRange: "",
+      Height: "",
+      Unit: "",
+      Quantity: "",
+      UnitPrice: "",
+    },
+  });
 
   const allProduct = useSelector((state) => state.product.allProductDTO.items);
   console.log(allProduct);
@@ -93,7 +110,7 @@ function ProductManage() {
 
   const onSubmit = (input) => {
     console.log(input);
-  }
+  };
   const columns = [
     {
       title: "Sản phẩm",
@@ -188,8 +205,9 @@ function ProductManage() {
         <Modal
           title="Thêm sản phẩm"
           open={open}
+          okText={uploading ? 'Uploading' : 'Start Upload'}
           okButtonProps={{ type: "default" }}
-          confirmLoading={confirmLoading}
+          confirmLoading={uploading}
           onCancel={handleCancel}
           onOk={handleSubmit(onSubmit)}
         >
@@ -200,18 +218,36 @@ function ProductManage() {
               wrapperCol={{ span: 10 }}
             >
               <Form.Item label="Phân loại">
-                <Select {...register("Sub")}>
-                  <Select.Option value="demo">Demo</Select.Option>
-                </Select>
+                <Controller
+                  name="Sub"
+                  control={control}
+                  render={({ field }) => (
+                    <Select {...field}>
+                      <Select.Option value="demo">Demo</Select.Option>
+                    </Select>
+                  )}
+                />
               </Form.Item>
-              <Form.Item label="Tên sản phẩm" >
-                <Input {...register("Name")} type="text" isRequired/>
+              <Form.Item label="Tên sản phẩm">
+                <Controller
+                  name="Name"
+                  control={control}
+                  render={({ field }) => <Input {...field} />}
+                />
               </Form.Item>
               <Form.Item label="Mô tả">
-                <TextArea {...register("Description")} rows={4} />
+                <Controller
+                  name="Description"
+                  control={control}
+                  render={({ field }) => <TextArea {...field} rows={4} />}
+                />
               </Form.Item>
               <Form.Item label="Dáng cây">
-                <Input {...register("TreeShape")}/>
+                <Controller
+                  name="TreeShape"
+                  control={control}
+                  render={({ field }) => <Input {...field} />}
+                />
               </Form.Item>
               <Form.Item label="Số tuổi">
                 <InputNumber {...register("AgeRange")} />
@@ -220,20 +256,20 @@ function ProductManage() {
                 <InputNumber {...register("Height")} />
               </Form.Item>
               <Form.Item label="Đơn vị">
-                <InputNumber {...register("Unit")}/>
+                <InputNumber {...register("Unit")} />
               </Form.Item>
               <Form.Item label="Kho sẵn">
-                <InputNumber {...register("Quantity")}/>
+                <InputNumber {...register("Quantity")} />
               </Form.Item>
               <Form.Item label="Giá tiền">
-                <InputNumber {...register("UnitPrice")}/>
+                <InputNumber {...register("UnitPrice")} />
               </Form.Item>
-              {/* <Form.Item
+              <Form.Item
                 label="Upload ảnh"
                 valuePropName="fileList"
                 getValueFromEvent={normFile}
               >
-                <Upload {...register("Image")} action="/" listType="picture-card">
+                <Upload {...register("Image")} listType="picture-card">
                   <button
                     style={{ border: 0, background: "none" }}
                     type="button"
@@ -242,7 +278,7 @@ function ProductManage() {
                     <div style={{ marginTop: 8 }}>Upload</div>
                   </button>
                 </Upload>
-              </Form.Item> */}
+              </Form.Item>
               {/* <Form.Item
                 label="Tag"
                 valuePropName="text"
