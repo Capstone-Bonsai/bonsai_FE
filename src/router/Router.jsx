@@ -42,6 +42,10 @@ function Router() {
       path: "/admin/order",
       element: <OrderManage />,
     },
+    {
+      path: "/admin/user",
+      element: <UserManage />,
+    },
   ]);
   if (!element) return null;
   return (

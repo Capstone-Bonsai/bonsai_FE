@@ -33,27 +33,13 @@ const { Search } = Input;
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUsers } from "../../../redux/userSlice";
 import ModalCreateUser from "./ModalCreateUser";
-
-const normFile = (e) => {
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return [e.file];
-};
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-
-function UserManage() {
+const UserManage = () => {
   const dispatch = useDispatch();
   const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
+  const [openUnlock, setOpenUnlock] = useState(false);
+  const [openLock, setOpenLock] = useState(false);
+
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
-  const [fileList, setFileList] = useState([]);
 
   const allUsers = useSelector((state) => state.user?.listUser);
   const [currentPage, setCurrentPage] = useState(1);
@@ -77,9 +63,12 @@ function UserManage() {
     }, 2000);
   };
 
-  // const showModalDelete = () => {
-  //   setOpenDelete(true);
-  // };
+  const showModalLock = () => {
+    setOpenLock(true);
+  };
+  const showModalUnlock = () => {
+    setOpenUnlock(true);
+  };
 
   // const handleDelete = () => {
   //   setConfirmLoadingDelete(true);
@@ -92,10 +81,14 @@ function UserManage() {
   const handleCancelCreate = () => {
     setOpenCreateModal(false);
   };
-  // const handleCancelDelete = () => {
-  //   console.log("Clicked cancel button");
-  //   setOpenDelete(false);
-  // };
+  const handleCancelLock = () => {
+    console.log("Clicked cancel button");
+    setOpenLock(false);
+  };
+  const handleCancelUnLock = () => {
+    console.log("Clicked cancel button");
+    setOpenUnlock(false);
+  };
   const getColor = (role) => {
     switch (role) {
       case "Manager":
@@ -192,7 +185,7 @@ function UserManage() {
               <Button
                 type="text"
                 icon={<LockOutlined style={{ color: "red" }} />}
-                //onClick={showModalDelete}
+                onClick={setOpenLock}
               />
             </Tooltip>
           ) : (
@@ -200,12 +193,12 @@ function UserManage() {
               <Button
                 type="text"
                 icon={<UnlockOutlined style={{ color: "green" }} />}
-                //onClick={showModalDelete}
+                onClick={setOpenUnlock}
               />
             </Tooltip>
           )}
 
-          <Tooltip title="Mở khóa">
+          <Tooltip title="Chỉnh sửa">
             <Button
               type="text"
               icon={<EditOutlined style={{ color: "orange" }} />}
@@ -263,19 +256,29 @@ function UserManage() {
           </div>
         </div>
         <ModalCreateUser show={openCreateModal} setShow={handleCancelCreate} />
-        {/* <Modal
-          title="Xóa sản phẩm"
-          open={openDelete}
-          onOk={handleDelete}
+        <Modal
+          title="Khóa tài khoản người dùng"
+          open={openLock}
+          //onOk={handleDelete}
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
-          onCancel={handleCancelDelete}
+          onCancel={handleCancelLock}
         >
-          <div>Bạn có muốn xóa sản phẩm này không?</div>
-        </Modal> */}
+          <div>Bạn có muốn khóa tài khoản người dùng này không?</div>
+        </Modal>
+        <Modal
+          title="Mỏ khóa tài khoản người dùng"
+          open={openUnlock}
+          //onOk={handleDelete}
+          okButtonProps={{ type: "default" }}
+          confirmLoading={confirmLoadingDelete}
+          onCancel={handleCancelUnLock}
+        >
+          <div>Bạn có muốn mở khóa tài khoản người dùng này không?</div>
+        </Modal>
       </div>
     </>
   );
-}
+};
 
 export default UserManage;
