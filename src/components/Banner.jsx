@@ -12,7 +12,7 @@ import {
 import { Link } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { setCartFromCookie } from "../redux/productSlice";
+import { setCartFromCookie } from "../redux/slice/productSlice";
 function Banner() {
   const { Search } = Input;
   const navLinks = [
@@ -43,15 +43,15 @@ function Banner() {
       <div className="bg-[#3a9943] py-5">
         <div className="w-[70%] h-[100%] m-auto">
           <div className="flex justify-between items-center border-b border-gray-200 border-opacity-50 pb-3">
-            <div className="flex w-[220px] justify-between items-center text-[#ffffff]">
+            <div className=" w-[220px] flex justify-between items-center text-[#ffffff]">
               <div className="">Theo dõi chúng tôi</div>
-              <Link className="hover:text-[#ffdd20] ">
-                <FacebookOutlined />
+              <Link className="hover:text-[#ffdd20] flex items-center">
+                <FacebookOutlined className="hover:text-[#ffdd20]" />
               </Link>
-              <Link className="hover:text-[#ffdd20]">
+              <Link className="hover:text-[#ffdd20] flex items-center">
                 <InstagramOutlined />
               </Link>
-              <Link className="hover:text-[#ffdd20]">
+              <Link className="hover:text-[#ffdd20] flex items-center">
                 <TwitterOutlined />
               </Link>
             </div>
@@ -59,10 +59,7 @@ function Banner() {
               <Link to="/Login" className="text-white no-underline pr-2">
                 Đăng nhập
               </Link>
-              <Link
-                
-                className="pl-2 pr-2 text-white no-underline border-l-2 border-white"
-              >
+              <Link className="pl-2 pr-2 text-white no-underline border-l-2 border-white">
                 Đăng ký
               </Link>
             </div>

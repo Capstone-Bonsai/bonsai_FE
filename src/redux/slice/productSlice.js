@@ -1,17 +1,32 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { topProducts, bonsaiOffice } from "../data/TopProducts";
-import { productList } from "../data/TopProducts";
+import { topProducts, bonsaiOffice } from "../../data/TopProducts";
+import { productList } from "../../data/TopProducts";
 import axios from "axios";
 
 const axiosCus = axios.create({
   baseURL: "https://capstoneb.azurewebsites.net/api/",
 });
 
-export const fetchAllProduct = createAsyncThunk(
-  "product/fetchTopProducts",
+export const fetchAllProductNoPagination = createAsyncThunk(
+  "product/fetchTopProductsNoPagination",
   async () => {
     try {
-      const response = await axiosCus.get("/Product");
+      const response = await axiosCus.get(`/Product`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const fetchAllProduct = createAsyncThunk(
+  "product/fetchTopProducts",
+  async ({ pageIndex, pageSize, minPrice, maxPrice }) => {
+    try {
+      const response = await axiosCus.post(
+        `/Product/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
+        { minPrice, maxPrice }
+      );
       return response.data;
     } catch (error) {
       throw error;
@@ -38,19 +53,9 @@ export const fetchBonsaiOffice = createAsyncThunk(
   }
 );
 
-export const postProduct = createAsyncThunk(
-  "product/fetchProductById",
-  async (productId) => {
-    try {
-      const response = await axiosCus.post(`/Product`);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  }
-);
 const initialState = {
   topProductDTO: [],
+  allProductNoPaginationDTO: [],
   allProductDTO: [],
   bonsaiOfficeDTO: [],
   productById: [],
@@ -65,6 +70,9 @@ const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
+    setAllProductsNoPagintion: (state, action) => {
+      state.allProductNoPagintionDTO = action.payload;
+    },
     setAllProducts: (state, action) => {
       state.allProductDTO = action.payload;
     },
@@ -82,6 +90,20 @@ const productSlice = createSlice({
   },
 
   extraReducers: (builder) => {
+    builder.addCase(fetchAllProductNoPagination.pending, (state) => {
+      state.msg = "Loading...";
+      state.loading = true;
+    });
+
+    builder.addCase(fetchAllProductNoPagination.fulfilled, (state, action) => {
+      state.allProductNoPaginationDTO = action.payload;
+      state.msg = "Data loaded successfully";
+      state.loading = false;
+    });
+    builder.addCase(fetchAllProductNoPagination.rejected, (state) => {
+      state.msg = "Error loading data";
+      state.loading = false;
+    });
     builder.addCase(fetchAllProduct.pending, (state) => {
       state.msg = "Loading...";
       state.loading = true;
@@ -114,6 +136,7 @@ const productSlice = createSlice({
 
 const { reducer: productReducer, actions } = productSlice;
 export const {
+  setAllProductsNoPagintion,
   setAllProducts,
   setBonsaiOffice,
   setCartFromCookie,

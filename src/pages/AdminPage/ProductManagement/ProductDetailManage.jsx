@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
-import CayTung from "../../assets/cay-tung.png";
-import { productDetailImage } from "../../data/TopProducts";
 import { Link, useParams } from "react-router-dom";
 import { Col, InputNumber, Row, Slider, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductById, setCartFromCookie } from "../../redux/slice/productSlice";
+import { fetchProductById, setCartFromCookie } from "../../../redux/slice/productSlice";
 import Cookies from "universal-cookie";
-import {  toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BeatLoader } from "react-spinners";
-import Loading from "../../components/Loading";
+import Loading from "../../../components/Loading";
 
-function ProductDetail() {
+function ProductDetailManage() {
   const dispatch = useDispatch();
   const { productId } = useParams();
 
@@ -73,6 +70,7 @@ function ProductDetail() {
         <Loading loading={loading} />
       ) : (
         <div className="">
+          <ToastContainer />
           {/* <div className="border-b py-2">
             <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
           </div> */}
@@ -146,4 +144,4 @@ function ProductDetail() {
   );
 }
 
-export default ProductDetail;
+export default ProductDetailManage;
