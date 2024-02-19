@@ -33,8 +33,7 @@ const { CheckableTag } = Tag;
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { postProduct } from "../../../utils/productApi";
-import { fetchAllProduct } from "../../../redux/productSlice";
-import { getListTag } from "../../../utils/tagApi";
+import { fetchAllProduct, fetchAllProductNoPagination } from "../../../redux/slice/productSlice";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -67,7 +66,7 @@ const ModalCreateProduct = (props) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      Sub: "",
+      SubCategoryId: "",
       Name: "",
       Description: "",
       TreeShape: "",
@@ -95,7 +94,7 @@ const ModalCreateProduct = (props) => {
       : selectedTags.filter((t) => t !== tag);
     console.log("You are interested in: ", nextSelectedTags);
     setSelectedTags(nextSelectedTags);
-    setValue("Tag", nextSelectedTags);
+    setValue("TagId", nextSelectedTags);
   };
   const handleCancelPreview = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
@@ -133,7 +132,7 @@ const ModalCreateProduct = (props) => {
         .then((data) => {
           setConfirmLoading(false);
           toast.success(data.data);
-          dispatch(fetchAllProduct());
+          dispatch(fetchAllProductNoPagination());
           handleClose();
         })
         .catch((err) => {
@@ -193,7 +192,7 @@ const ModalCreateProduct = (props) => {
           >
             <Form.Item label="Phân loại">
               <Controller
-                name="Sub"
+                name="SubCategoryId"
                 control={control}
                 render={({ field }) => (
                   <Select {...field}>
@@ -283,7 +282,7 @@ const ModalCreateProduct = (props) => {
                         {tag}
                       </CheckableTag>
                     )}
-                    name={`Tag[${index}]`}
+                    name={`TagId[${index}]`}
                     control={control}
                   />
                 ))}

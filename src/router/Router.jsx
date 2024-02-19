@@ -7,7 +7,6 @@ import ProductDetail from "../pages/Product/ProductDetail";
 import ShoppingCart from "../pages/Product/ShoppingCart";
 import ServiceListPage from "../pages/ServicePage/ServiceListPage";
 import ProductManage from "../pages/AdminPage/ProductManagement/ProductManage";
-import OrderManage from "../pages/AdminPage/OrderManage";
 import CustomerRoute from "./CustomerRoute";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";

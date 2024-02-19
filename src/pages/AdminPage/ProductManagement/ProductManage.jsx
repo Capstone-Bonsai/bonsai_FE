@@ -25,7 +25,7 @@ const { Search, TextArea } = Input;
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProduct } from "../../../redux/productSlice";
+import { fetchAllProduct, fetchAllProductNoPagination } from "../../../redux/slice/productSlice";
 import { deleteProduct } from "../../../utils/productApi";
 import ModalCreateProduct from "../ProductManagement/ModalCreateProduct";
 import { Link } from "react-router-dom";
@@ -35,7 +35,6 @@ import { getListTag } from "../../../utils/tagApi";
 
 function ProductManage() {
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
 
@@ -46,11 +45,11 @@ function ProductManage() {
 
   const [listSubCategory, setListSubCategory] = useState();
   const [listTag, setListTag] = useState();
-  const allProduct = useSelector((state) => state.product.allProductDTO.items);
+  const allProduct = useSelector((state) => state.product.allProductNoPaginationDTO.items);
   console.log(allProduct);
 
   useEffect(() => {
-    dispatch(fetchAllProduct());
+    dispatch(fetchAllProductNoPagination());
   }, []);
 
   useEffect(() => {
