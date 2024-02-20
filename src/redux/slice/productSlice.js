@@ -27,8 +27,10 @@ export const fetchAllProduct = createAsyncThunk(
         `/Product/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
         { minPrice, maxPrice }
       );
+      
       return response.data;
     } catch (error) {
+      
       throw error;
     }
   }
@@ -71,7 +73,7 @@ const productSlice = createSlice({
   initialState,
   reducers: {
     setAllProductsNoPagintion: (state, action) => {
-      state.allProductNoPagintionDTO = action.payload;
+      state.allProductNoPaginationDTO = action.payload;
     },
     setAllProducts: (state, action) => {
       state.allProductDTO = action.payload;

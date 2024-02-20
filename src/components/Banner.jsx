@@ -9,7 +9,7 @@ import {
   InstagramOutlined,
   TwitterOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { setCartFromCookie } from "../redux/slice/productSlice";
@@ -22,15 +22,29 @@ function Banner() {
     { text: "Địa chỉ", to: "/address" },
   ];
   const cookies = new Cookies();
-  const [cartItemCount, setCartItemCount] = useState(0);
   const countCart = useSelector((state) => state.product.itemCount);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userInfo = cookies.get("user");
+  const idUser = userInfo?.id;
+  const handleLogout = () => {
+    cookies.remove("user");
+    navigate("/");
+  };
 
   const fetchCartFromCookie = () => {
-    const cartItems = cookies.get("cartItems") || [];
-    const itemCount = cartItems.length;
-    console.log(itemCount);
-    dispatch(setCartFromCookie({ cartItems, itemCount }));
+    if (userInfo != null) {
+      const cartIdUser = `cartId ${idUser}`;
+      const cartItems = cookies.get(cartIdUser) || [];
+      const itemCount = cartItems.length;
+      console.log(itemCount);
+      dispatch(setCartFromCookie({ cartItems, itemCount }));
+    } else {
+      const cartItems = cookies.get("cartItems") || [];
+      const itemCount = cartItems.length;
+      console.log(itemCount);
+      dispatch(setCartFromCookie({ cartItems, itemCount }));
+    }
   };
 
   useEffect(() => {
@@ -55,14 +69,32 @@ function Banner() {
                 <TwitterOutlined />
               </Link>
             </div>
-            <div className="flex items-center justify-center">
-              <Link to="/Login" className="text-white no-underline pr-2">
-                Đăng nhập
-              </Link>
-              <Link className="pl-2 pr-2 text-white no-underline border-l-2 border-white">
-                Đăng ký
-              </Link>
-            </div>
+            {userInfo != null ? (
+              <div className="text-white pr-2">
+                <details className="dropdown">
+                  <summary className="m-1 btn"> Hi {userInfo.fullName}</summary>
+                  <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                    <li>
+                      <a className="text-black" onClick={handleLogout}>
+                        Đăng xuất
+                      </a>
+                    </li>
+                    <li>
+                      <a className="text-black">Item 2</a>
+                    </li>
+                  </ul>
+                </details>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center">
+                <Link to="/Login" className="text-white no-underline pr-2">
+                  Đăng nhập
+                </Link>
+                <Link to="/Register" className="pl-2 pr-2 text-white no-underline border-l-2 border-white">
+                  Đăng ký
+                </Link>
+              </div>
+            )}
           </div>
           <div className="flex items-center justify-between">
             <img src={logo} width={200} height={200} />

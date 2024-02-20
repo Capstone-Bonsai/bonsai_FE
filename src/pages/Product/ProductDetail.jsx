@@ -4,9 +4,12 @@ import { productDetailImage } from "../../data/TopProducts";
 import { Link, useParams } from "react-router-dom";
 import { Col, InputNumber, Row, Slider, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductById, setCartFromCookie } from "../../redux/slice/productSlice";
+import {
+  fetchProductById,
+  setCartFromCookie,
+} from "../../redux/slice/productSlice";
 import Cookies from "universal-cookie";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BeatLoader } from "react-spinners";
 import Loading from "../../components/Loading";
@@ -42,29 +45,59 @@ function ProductDetail() {
   const onChange = (newValue) => {
     setInputValue(newValue);
   };
-
+  const cookies = new Cookies();
+  const userInfo = cookies.get("user");
+  const idUser = userInfo?.id;
+  
   const addToCart = async () => {
-    const cookies = new Cookies();
-    let cartItems = cookies.get("cartItems") || [];
-    if (!Array.isArray(cartItems)) {
-      cartItems = [];
-    }
-    const existingItem = cartItems.find((item) => item.productId === productId);
-    if (existingItem) {
-      existingItem.quantity += inputValue;
+    if (userInfo != null) {
+      const cartIdUser = `cartId ${idUser}`;
+      let cartItems = cookies.get(cartIdUser) || [];
+      if (!Array.isArray(cartItems)) {
+        cartItems = [];
+      }
+      const existingItem = cartItems.find(
+        (item) => item.productId === productId
+      );
+      if (existingItem) {
+        existingItem.quantity += inputValue;
+      } else {
+        cartItems.push({
+          productId,
+          name: productDetail.name,
+          price: productDetail.unitPrice,
+          image: productDetail.image,
+          quantity: inputValue,
+        });
+        toast.success("Item added to cart!");
+      }
+      await cookies.set(cartIdUser, cartItems, { path: "/" });
+      const itemCount = cartItems.length;
+      dispatch(setCartFromCookie({ cartItems, itemCount }));
     } else {
-      cartItems.push({
-        productId,
-        name: productDetail.name,
-        price: productDetail.unitPrice,
-        image: productDetail.image,
-        quantity: inputValue,
-      });
-      toast.success("Item added to cart!");
+      let cartItems = cookies.get("cartItems") || [];
+      if (!Array.isArray(cartItems)) {
+        cartItems = [];
+      }
+      const existingItem = cartItems.find(
+        (item) => item.productId === productId
+      );
+      if (existingItem) {
+        existingItem.quantity += inputValue;
+      } else {
+        cartItems.push({
+          productId,
+          name: productDetail.name,
+          price: productDetail.unitPrice,
+          image: productDetail.image,
+          quantity: inputValue,
+        });
+        toast.success("Item added to cart!");
+      }
+      await cookies.set("cartItems", cartItems, { path: "/" });
+      const itemCount = cartItems.length;
+      dispatch(setCartFromCookie({ cartItems, itemCount }));
     }
-    await cookies.set("cartItems", cartItems, { path: "/" });
-    const itemCount = cartItems.length;
-    dispatch(setCartFromCookie({ cartItems, itemCount }));
   };
 
   return (

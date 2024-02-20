@@ -31,7 +31,7 @@ function Filter({ priceRange, setPriceRange }) {
       <div className="uppercase text-[#333] font-semibold text-[16px]">
         Mức giá
       </div>
-      <div className="border-b w-full flex justify-between">
+      <div className=" w-full flex justify-between">
         <InputNumber
           min={1}
           defaultValue={tempPriceRange[0]}
@@ -46,7 +46,10 @@ function Filter({ priceRange, setPriceRange }) {
         />
       </div>
       <div className="flex justify-center">
-        <button className="bg-[red] " onClick={handleApplyFilterClick}>
+        <button
+          className="bg-[#3a9943] w-[90%] rounded-lg my-5 text-[#fff] py-1"
+          onClick={handleApplyFilterClick}
+        >
           Áp dụng
         </button>
       </div>

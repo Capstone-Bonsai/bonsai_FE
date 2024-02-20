@@ -12,6 +12,7 @@ import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import UserManage from "../pages/AdminPage/UserManagement/UserManage";
 import ProductDetailManage from "../pages/AdminPage/ProductManagement/ProductDetailManage";
+import ForgotPassword from "../pages/Auth/ForgotPassword";
 function Router() {
   const element = useRoutes([
     //test
@@ -22,6 +23,14 @@ function Router() {
     {
       path: "/Login",
       element: <Login />,
+    },
+    {
+      path: "/ForgotPassword",
+      element: <ForgotPassword />,
+    },
+    {
+      path: "/Register",
+      element: <Register />,
     },
     {
       element: <CustomerRoute />,

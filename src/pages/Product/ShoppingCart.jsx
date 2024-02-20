@@ -9,14 +9,28 @@ import MinHeight from "../../components/MinHeight";
 
 function ShoppingCart() {
   const cookies = new Cookies();
-  const [cartItems, setCartItems] = useState(
-    () => cookies.get("cartItems") || []
-  );
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+  const userInfo = cookies.get("user");
+  const idUser = userInfo?.id;
+  const [cartItems, setCartItems] = useState(() => {
+    if (userInfo != null) {
+      const cartIdUser = `cartId ${idUser}`;
+      return cookies.get(cartIdUser) || [];
+    } else {
+      return cookies.get("cartItems") || [];
+    }
+  });
   const updateCartItems = (newCartItems) => {
-    setCartItems(newCartItems);
-    cookies.set("cartItems", JSON.stringify(newCartItems), { path: "/" });
+    if (userInfo != null) {
+      setCartItems(newCartItems);
+      cookies.set(`cartId ${idUser}`, JSON.stringify(newCartItems), {
+        path: "/",
+      });
+    } else {
+      setCartItems(newCartItems);
+      cookies.set("cartItems", JSON.stringify(newCartItems), { path: "/" });
+    }
   };
 
   const handleQuantityChange = (itemId, newQuantity) => {
@@ -32,8 +46,14 @@ function ShoppingCart() {
     );
     await updateCartItems(updatedCartItems);
     const itemCount = updatedCartItems.length;
-    console.log(updatedCartItems);
     dispatch(setCartFromCookie({ updatedCartItems, itemCount }));
+  };
+  const subTotal = () => {
+    let totalPrice = 0;
+    cartItems.forEach((item) => {
+      totalPrice += item.price * item.quantity;
+    });
+    return totalPrice;
   };
 
   return (
@@ -112,6 +132,57 @@ function ShoppingCart() {
           </table>
         </div>
       )}
+      <div className="m-auto w-[70%] mt-10">
+        <div className="flex w-full">
+          <div className=" w-[70%]">
+            {userInfo == null ? (
+              <>
+                <div className="text-[20px] leading-6 font-bold mb-[30px] underline">
+                  Thông tin người nhận
+                </div>
+                <div className="flex w-[60%] justify-between ">
+                  <div>
+                    <div>Họ và tên</div>
+                    <input className=" h-[36px] outline-none p-5 border border-black" />
+                  </div>
+                  <div>
+                    <div>Số điện thoại</div>
+                    <input className=" h-[36px] outline-none p-5 border border-black" />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className="flex justify-end w-[30%]">
+            <div className="w-full bg-[#f2f2f2] h-[254px] flex justify-center items-center">
+              <div className="w-[70%] h-[70%]">
+                <div className="text-[20px] underline capitalize leading-6 font-bold mb-[30px]">
+                  Cart Summary
+                </div>
+                <div className="flex justify-between mb-4">
+                  <div>Sub Total</div>
+                  <div>{subTotal()} ₫</div>
+                </div>
+                <div className="flex justify-between mb-4">
+                  <div>Shipping Cost</div>
+                  <div>00.00</div>
+                </div>
+                <div className="flex justify-between border-t border-t-1 border-black font-bold text-[18px] pt-[9px]">
+                  <div className="">Grand Total</div>
+                  <div>{subTotal()} ₫</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-end ">
+          <button className="uppercase bg-black p-2 rounded-[3px] text-[#fff] my-5 hover:bg-[#3a9943]">
+            Checkout
+          </button>
+        </div>
+      </div>
     </MinHeight>
   );
 }
