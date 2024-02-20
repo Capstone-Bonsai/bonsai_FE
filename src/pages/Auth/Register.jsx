@@ -41,7 +41,7 @@ function Register() {
       {isLoading ? (
         <Loading loading={isLoading} />
       ) : (
-        <div className=" fixed top-0 left-0 right-0 bottom-0 w-full h-full flex justify-center items-center">
+        <div className=" top-0 left-0 right-0 bottom-0 w-full h-full flex justify-center items-center my-10">
           <ToastContainer />
           <div className="bg-[#ffffff] w-[30%] drop-shadow-lg">
             <div className="w-[90%] m-auto h-full mb-5 ">

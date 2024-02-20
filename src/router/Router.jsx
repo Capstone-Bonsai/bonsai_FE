@@ -13,6 +13,7 @@ import Register from "../pages/Auth/Register";
 import UserManage from "../pages/AdminPage/UserManagement/UserManage";
 import ProductDetailManage from "../pages/AdminPage/ProductManagement/ProductDetailManage";
 import ForgotPassword from "../pages/Auth/ForgotPassword";
+import Order from "../pages/OrderProduct/Order";
 function Router() {
   const element = useRoutes([
     //test
@@ -20,24 +21,21 @@ function Router() {
       path: "/admin/product",
       element: <ProductManage />,
     },
-    {
-      path: "/Login",
-      element: <Login />,
-    },
-    {
-      path: "/ForgotPassword",
-      element: <ForgotPassword />,
-    },
-    {
-      path: "/Register",
-      element: <Register />,
-    },
+
     {
       element: <CustomerRoute />,
       children: [
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/Login",
+          element: <Login />,
+        },
+        {
+          path: "/Register",
+          element: <Register />,
         },
         {
           path: "/product",
@@ -52,8 +50,16 @@ function Router() {
           element: <ShoppingCart />,
         },
         {
+          path: "/Order",
+          element: <Order />,
+        },
+        {
           path: "/service",
           element: <ServiceListPage />,
+        },
+        {
+          path: "/ForgotPassword",
+          element: <ForgotPassword />,
         },
       ],
     },

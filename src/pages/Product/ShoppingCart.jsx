@@ -6,6 +6,7 @@ import Cookies from "universal-cookie";
 import { useDispatch } from "react-redux";
 import { setCartFromCookie } from "../../redux/slice/productSlice";
 import MinHeight from "../../components/MinHeight";
+import { Link } from "react-router-dom";
 
 function ShoppingCart() {
   const cookies = new Cookies();
@@ -159,28 +160,24 @@ function ShoppingCart() {
             <div className="w-full bg-[#f2f2f2] h-[254px] flex justify-center items-center">
               <div className="w-[70%] h-[70%]">
                 <div className="text-[20px] underline capitalize leading-6 font-bold mb-[30px]">
-                  Cart Summary
+                  Tổng Giỏ Hàng
                 </div>
                 <div className="flex justify-between mb-4">
-                  <div>Sub Total</div>
+                  <div>Tổng giá trị:</div>
                   <div>{subTotal()} ₫</div>
                 </div>
-                <div className="flex justify-between mb-4">
-                  <div>Shipping Cost</div>
-                  <div>00.00</div>
-                </div>
-                <div className="flex justify-between border-t border-t-1 border-black font-bold text-[18px] pt-[9px]">
+                {/* <div className="flex justify-between border-t border-t-1 border-black font-bold text-[18px] pt-[9px]">
                   <div className="">Grand Total</div>
                   <div>{subTotal()} ₫</div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
         </div>
         <div className="flex justify-end ">
-          <button className="uppercase bg-black p-2 rounded-[3px] text-[#fff] my-5 hover:bg-[#3a9943]">
+          <Link to="/Order" className="uppercase bg-black p-2 rounded-[3px] text-[#fff] my-5 hover:bg-[#3a9943]">
             Checkout
-          </button>
+          </Link>
         </div>
       </div>
     </MinHeight>
