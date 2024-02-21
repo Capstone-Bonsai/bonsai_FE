@@ -12,16 +12,20 @@ import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import UserManage from "../pages/AdminPage/UserManagement/UserManage";
 import ProductDetailManage from "../pages/AdminPage/ProductManagement/ProductDetailManage";
+import PrivateRoute from "./PrivateRoute";
 function Router() {
   const element = useRoutes([
-    //test
-    {
-      path: "/admin/product",
-      element: <ProductManage />,
-    },
     {
       path: "/Login",
       element: <Login />,
+    },
+    {
+      path: "/admin/user",
+      element: <UserManage />,
+    },
+    {
+      path: "/admin/product",
+      element: <ProductManage />,
     },
     {
       element: <CustomerRoute />,
@@ -49,8 +53,8 @@ function Router() {
       ],
     },
     {
-      path: "/admin/user",
-      element: <UserManage />,
+      element: <PrivateRoute />,
+      children: [],
     },
   ]);
   if (!element) return null;

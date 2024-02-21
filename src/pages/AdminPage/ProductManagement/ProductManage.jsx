@@ -25,16 +25,21 @@ const { Search, TextArea } = Input;
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProduct, fetchAllProductNoPagination } from "../../../redux/slice/productSlice";
+import {
+  fetchAllProduct,
+  fetchAllProductNoPagination,
+} from "../../../redux/slice/productSlice";
 import { deleteProduct } from "../../../utils/productApi";
 import ModalCreateProduct from "../ProductManagement/ModalCreateProduct";
 import { Link } from "react-router-dom";
 import ModalUpdateProduct from "./ModalUpdateProduct";
 import { getListSubCategory } from "../../../utils/subCategoryApi";
 import { getListTag } from "../../../utils/tagApi";
+import Loading from "../../../components/Loading";
 
 function ProductManage() {
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.product.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
 
@@ -45,7 +50,9 @@ function ProductManage() {
 
   const [listSubCategory, setListSubCategory] = useState();
   const [listTag, setListTag] = useState();
-  const allProduct = useSelector((state) => state.product.allProductNoPaginationDTO.items);
+  const allProduct = useSelector(
+    (state) => state.product.allProductNoPaginationDTO.items
+  );
   console.log(allProduct);
 
   useEffect(() => {
@@ -94,6 +101,7 @@ function ProductManage() {
   };
 
   const handleCancelUpdate = () => {
+    setSelectedUpdateProduct(undefined)
     setOpenUpdateModal(false);
   };
 
@@ -224,62 +232,66 @@ function ProductManage() {
 
   return (
     <>
-      <div className="flex justify-center mt-12">
-        <div className="w-[70%]">
-          <div className="font-semibold mb-6">Sản phẩm</div>
-          <div className="bg-[#ffffff] drop-shadow-2xl">
-            <div className="flex justify-between p-6">
-              <div>
-                <button
-                  className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
-                  onClick={showCreateModal}
-                >
-                  <PlusCircleOutlined /> Thêm sản phẩm
-                </button>
+      {loading ? (
+        <Loading loading={loading} />
+      ) : (
+        <div className="flex justify-center mt-12">
+          <div className="w-[70%]">
+            <div className="font-semibold mb-6">Sản phẩm</div>
+            <div className="bg-[#ffffff] drop-shadow-2xl">
+              <div className="flex justify-between p-6">
+                <div>
+                  <button
+                    className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
+                    onClick={showCreateModal}
+                  >
+                    <PlusCircleOutlined /> Thêm sản phẩm
+                  </button>
+                </div>
+                <div className="pr-0">
+                  <Search
+                    placeholder="input search text"
+                    onSearch={onSearch}
+                    className="w-[300px]"
+                    allowClear
+                  />
+                </div>
               </div>
-              <div className="pr-0">
-                <Search
-                  placeholder="input search text"
-                  onSearch={onSearch}
-                  className="w-[300px]"
-                  allowClear
+              <div className="mb-12">
+                <Table
+                  className="w-[100%]"
+                  dataSource={allProduct}
+                  columns={columns}
+                  rowKey="id"
                 />
               </div>
             </div>
-            <div className="mb-12">
-              <Table
-                className="w-[100%]"
-                dataSource={allProduct}
-                columns={columns}
-                rowKey="id"
-              />
-            </div>
           </div>
+          <ModalCreateProduct
+            show={openCreateModal}
+            setShow={handleCancelCreate}
+            listSubCategory={listSubCategory}
+            listTag={listTag}
+          />
+          <ModalUpdateProduct
+            show={openUpdateModal}
+            setShow={handleCancelUpdate}
+            product={selectedUpdateProduct}
+            listSubCategory={listSubCategory}
+            listTag={listTag}
+          />
+          <Modal
+            title="Xóa sản phẩm"
+            open={openDelete}
+            onOk={handleDelete}
+            okButtonProps={{ type: "default" }}
+            confirmLoading={confirmLoadingDelete}
+            onCancel={handleCancelDelete}
+          >
+            <div>Bạn có muốn xóa sản phẩm này không?</div>
+          </Modal>
         </div>
-        <ModalCreateProduct
-          show={openCreateModal}
-          setShow={handleCancelCreate}
-          listSubCategory={listSubCategory}
-          listTag={listTag}
-        />
-        <ModalUpdateProduct
-          show={openUpdateModal}
-          setShow={handleCancelUpdate}
-          product={selectedUpdateProduct}
-          listSubCategory={listSubCategory}
-          listTag={listTag}
-        />
-        <Modal
-          title="Xóa sản phẩm"
-          open={openDelete}
-          onOk={handleDelete}
-          okButtonProps={{ type: "default" }}
-          confirmLoading={confirmLoadingDelete}
-          onCancel={handleCancelDelete}
-        >
-          <div>Bạn có muốn xóa sản phẩm này không?</div>
-        </Modal>
-      </div>
+      )}
     </>
   );
 }

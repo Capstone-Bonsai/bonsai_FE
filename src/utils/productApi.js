@@ -10,12 +10,8 @@ const postProduct = (postData) => {
 };
 
 const putProduct = (productId, postData) => {
-  console.log(postData);
-  return axios.put(`/Product/${productId}`, postData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  console.log(postData, productId);
+  return axios.put(`/Product/${productId}`, postData);
 };
 
 const deleteProduct = (productId) => {
@@ -27,4 +23,4 @@ const deleteProduct = (productId) => {
   }
 };
 
-export { deleteProduct, postProduct };
+export { deleteProduct, postProduct, putProduct };

@@ -1,11 +1,15 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
-import FullMain from "../components/navigation";
-const PrivateRoute = () => {
-  return;
-  <>
-    <FullMain />;
-  </>;
-};
+import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+function PrivateRoute() {
+  return (
+    <>
+      <ToastContainer />
+      <Banner />
+      <Outlet />
+      <Footer />
+    </>
+  );
+}
 
 export default PrivateRoute;

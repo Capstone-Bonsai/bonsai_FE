@@ -33,7 +33,10 @@ const { CheckableTag } = Tag;
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { postProduct } from "../../../utils/productApi";
-import { fetchAllProduct, fetchAllProductNoPagination } from "../../../redux/slice/productSlice";
+import {
+  fetchAllProduct,
+  fetchAllProductNoPagination,
+} from "../../../redux/slice/productSlice";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -61,6 +64,7 @@ const ModalCreateProduct = (props) => {
   const {
     setValue,
     register,
+    reset,
     handleSubmit,
     control,
     formState: { errors },
@@ -70,14 +74,19 @@ const ModalCreateProduct = (props) => {
       Name: "",
       Description: "",
       TreeShape: "",
-      AgeRange: "",
-      Height: "",
+      AgeRange: 0,
+      Height: 0,
       Unit: "",
-      Quantity: "",
-      UnitPrice: "",
+      Quantity: 0,
+      UnitPrice: 0,
+      Image: "",
+      TagId: [],
     },
   });
   const handleClose = () => {
+    setListImage([]);
+    setSelectedTags([]);
+    reset();
     setShow(false);
   };
   const [selectedTags, setSelectedTags] = useState([]);
@@ -86,6 +95,7 @@ const ModalCreateProduct = (props) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+  const [listImage, setListImage] = useState([]);
   const formRef = useRef(null);
 
   const handleChangeTagList = (tag, checked) => {
@@ -107,6 +117,9 @@ const ModalCreateProduct = (props) => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
+
+  const handleChange = (i) => setListImage(i);
+
   const uploadButton = (
     <button
       style={{
@@ -227,10 +240,30 @@ const ModalCreateProduct = (props) => {
               />
             </Form.Item>
             <Form.Item label="Số tuổi">
-              <InputNumber {...register("AgeRange")} />
+              <Controller
+                name="AgeRange"
+                control={control}
+                render={({ field: { value, onChange, ...field } }) => (
+                  <InputNumber
+                    {...register("AgeRange")}
+                    value={value}
+                    onChange={(e) => onChange(e)}
+                  />
+                )}
+              />
             </Form.Item>
             <Form.Item label="Chiều cao" name="Height">
-              <InputNumber {...register("Height")} />
+              <Controller
+                name="Height"
+                control={control}
+                render={({ field: { value, onChange, ...field } }) => (
+                  <InputNumber
+                    {...register("Height")}
+                    value={value}
+                    onChange={(e) => onChange(e)}
+                  />
+                )}
+              />
             </Form.Item>
             <Form.Item label="Đơn vị">
               <Controller
@@ -240,10 +273,30 @@ const ModalCreateProduct = (props) => {
               />
             </Form.Item>
             <Form.Item label="Kho sẵn">
-              <InputNumber {...register("Quantity")} />
+              <Controller
+                name="Quantity"
+                control={control}
+                render={({ field: { value, onChange, ...field } }) => (
+                  <InputNumber
+                    {...register("Quantity")}
+                    value={value}
+                    onChange={(e) => onChange(e)}
+                  />
+                )}
+              />
             </Form.Item>
             <Form.Item label="Giá tiền">
-              <InputNumber {...register("UnitPrice")} />
+              <Controller
+                name="UnitPrice"
+                control={control}
+                render={({ field: { value, onChange, ...field } }) => (
+                  <InputNumber
+                    {...register("UnitPrice")}
+                    value={value}
+                    onChange={(e) => onChange(e)}
+                  />
+                )}
+              />
             </Form.Item>
             <Form.Item
               action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
@@ -254,12 +307,17 @@ const ModalCreateProduct = (props) => {
               <Controller
                 name="Image"
                 control={control}
-                render={({ field }) => (
+                render={({ field:{ onChange, value, ...field }}) => (
                   <Upload
                     {...field}
                     listType="picture-card"
+                    fileList={listImage}
                     onPreview={handlePreview}
                     beforeUpload={beforeUpload}
+                    onChange={(e) => {
+                      onChange(e.fileList);
+                      handleChange(e.fileList);
+                    }}
                   >
                     {uploadButton}
                   </Upload>
@@ -268,21 +326,21 @@ const ModalCreateProduct = (props) => {
             </Form.Item>
             <Form.Item label="Tag" valuePropName="text">
               <Space size={[0, 8]} wrap>
-                {listTag?.map((tag, index) => (
+                {listTag?.items?.map((tag, index) => (
                   <Controller
                     render={({ field: { onChange, value } }) => (
                       <CheckableTag
-                        key={tag}
-                        value={tag}
-                        checked={selectedTags.includes(tag)}
+                        key={index}
+                        value={value}
+                        checked={selectedTags.includes(tag.name)}
                         onChange={(checked) => {
-                          handleChangeTagList(tag, checked);
+                          handleChangeTagList(tag.name, checked);
                         }}
                       >
-                        {tag}
+                        {tag.name}
                       </CheckableTag>
                     )}
-                    name={`TagId[${index}]`}
+                    name={`TagId`}
                     control={control}
                   />
                 ))}

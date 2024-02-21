@@ -32,8 +32,13 @@ const { Search, TextArea } = Input;
 const { CheckableTag } = Tag;
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { postProduct } from "../../../utils/productApi";
-import { fetchAllProduct, fetchAllProductNoPagination, fetchProductById } from "../../../redux/slice/productSlice";
+import { putProduct } from "../../../utils/productApi";
+import {
+  fetchAllProduct,
+  fetchAllProductNoPagination,
+  fetchProductById,
+} from "../../../redux/slice/productSlice";
+import { setInitForm } from "../../../utils/setInitForm";
 const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
@@ -61,23 +66,18 @@ const ModalUpdateProduct = (props) => {
     setValue,
     register,
     handleSubmit,
+    reset,
     control,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      SubCategoryId: "",
-      Name: "",
-      Description: "",
-      TreeShape: "",
-      AgeRange: "",
-      Height: "",
-      Unit: "",
-      Quantity: "",
-      UnitPrice: "",
-    },
+    // defaultValues: {
+    //   ...formValue
+    // },
   });
   const handleClose = () => {
+    setSelectedTags([]);
     setListImage([]);
+    reset();
     setShow(false);
   };
   const [selectedTags, setSelectedTags] = useState([]);
@@ -91,7 +91,18 @@ const ModalUpdateProduct = (props) => {
   const formRef = useRef(null);
   useEffect(() => {
     if (product != undefined) {
-      fetchListImage();
+      console.log(product);
+      setValue("SubCategoryId", product.subCategoryId);
+      setValue("Name", product.name);
+      setValue("Description", product.description);
+      setValue("TreeShape", product.treeShape);
+      setValue("AgeRange", product.ageRange);
+      setValue("Height", product.height);
+      setValue("Unit", product.unit);
+      setValue("Quantity", product.quantity);
+      setValue("UnitPrice", product.unitPrice);
+      setValue("Image", fetchListImage());
+      ;
     }
   }, [product]);
 
@@ -115,7 +126,7 @@ const ModalUpdateProduct = (props) => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-  const handleChange = ({ fileList: newFileList }) => setListImage(newFileList);
+  const handleChange = (i) => setListImage(i);
   const uploadButton = (
     <button
       style={{
@@ -135,17 +146,15 @@ const ModalUpdateProduct = (props) => {
     </button>
   );
   const fetchListImage = () => {
-    const image = product?.productImages.map((data) => ({
+    return product?.productImages.map((data) => ({
       url: data.imageUrl,
       uid: "",
     }));
-    setListImage([...listImage, ...image]);
   };
 
-  const updateProduct = () => {
+  const updateProduct = (data) => {
     try {
-      const postData = new FormData();
-      postProduct(postData)
+      putProduct(product.id,data)
         .then((data) => {
           setConfirmLoading(false);
           toast.success(data.data);
@@ -165,7 +174,7 @@ const ModalUpdateProduct = (props) => {
       .validateFields()
       .then(() => {
         setConfirmLoading(true);
-        updateProduct();
+        updateProduct(i);
         setConfirmLoading(false);
       })
       .catch((errorInfo) => {
@@ -191,9 +200,9 @@ const ModalUpdateProduct = (props) => {
   return (
     <>
       <Modal
-        title="Thêm sản phẩm"
+        title="Cập nhật sản phẩm"
         open={show}
-        okText={confirmLoading ? "Uploading" : "Start Upload"}
+        okText={confirmLoading ? "Đang cập nhật" : "Cập nhật"}
         okButtonProps={{ type: "default" }}
         confirmLoading={confirmLoading}
         onCancel={handleClose}
@@ -211,11 +220,18 @@ const ModalUpdateProduct = (props) => {
               <Controller
                 name="SubCategoryId"
                 control={control}
-                render={({ field }) => (
-                  <Select {...field}>
+                render={({ field: { value, onChange, ...field } }) => (
+                  <Select
+                    {...field}
+                    value={value}
+                    onChange={(e) => onChange(e)}
+                  >
                     {listSubCategory?.map((subCategory, index) => (
-                      <Select.Option value={subCategory.categoryId} key = {index}>{subCategory.name}</Select.Option>
+                      <Select.Option value={subCategory.id} key={index}>
+                        {subCategory.name}
+                      </Select.Option>
                     ))}
+                    <Select.Option value={1}>1</Select.Option>
                   </Select>
                 )}
               />
@@ -224,8 +240,14 @@ const ModalUpdateProduct = (props) => {
               <Controller
                 name="Name"
                 control={control}
-                render={({ field }) => (
-                  <Input {...field} rows={4} value={product?.name} />
+                render={({ field: { value, onChange, ...field } }) => (
+                  <Input
+                    {...field}
+                    rows={4}
+                    defaultValue={product?.name}
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                  />
                 )}
               />
             </Form.Item>
@@ -233,8 +255,14 @@ const ModalUpdateProduct = (props) => {
               <Controller
                 name="Description"
                 control={control}
-                render={({ field }) => (
-                  <TextArea {...field} rows={4} value={product?.description} />
+                render={({ field: { value, onChange, ...field } }) => (
+                  <TextArea
+                    {...field}
+                    rows={4}
+                    defaultValue={product?.description}
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                  />
                 )}
               />
             </Form.Item>
@@ -242,39 +270,84 @@ const ModalUpdateProduct = (props) => {
               <Controller
                 name="TreeShape"
                 control={control}
-                render={({ field }) => (
-                  <Input {...field} value={product?.treeShape} />
+                render={({ field: { value, onChange, ...field } }) => (
+                  <Input
+                    {...field}
+                    defaultValue={product?.treeShape}
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                  />
                 )}
               />
             </Form.Item>
             <Form.Item label="Số tuổi">
-              <InputNumber
-                {...register("AgeRange")}
-                value={product?.ageRange}
+              <Controller
+                name="AgeRange"
+                control={control}
+                render={({ field: { value, onChange, ...field } }) => (
+                  <InputNumber
+                    {...register("AgeRange")}
+                    defaultValue={product?.ageRange}
+                    value={value}
+                    onChange={(e) => onChange(e)}
+                  />
+                )}
               />
             </Form.Item>
             <Form.Item label="Chiều cao" name="Height">
-              <InputNumber {...register("Height")} value={product?.height} />
+              <Controller
+                name="Height"
+                control={control}
+                render={({ field: { value, onChange, ...field } }) => (
+                  <InputNumber
+                    {...register("Height")}
+                    defaultValue={product?.height}
+                    value={value}
+                    onChange={(e) => onChange(e)}
+                  />
+                )}
+              />
             </Form.Item>
             <Form.Item label="Đơn vị">
               <Controller
                 name="Unit"
                 control={control}
-                render={({ field }) => (
-                  <Input {...field} value={product?.unit} />
+                render={({ field: { value, onChange, ...field } }) => (
+                  <Input
+                    {...field}
+                    defaultValue={product?.unit}
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                  />
                 )}
               />
             </Form.Item>
             <Form.Item label="Kho sẵn">
-              <InputNumber
-                {...register("Quantity")}
-                value={product?.quantity}
+              <Controller
+                name="Quantity"
+                control={control}
+                render={({ field: { value, onChange, ...field } }) => (
+                  <InputNumber
+                    {...register("Quantity")}
+                    defaultValue={product?.quantity}
+                    value={value}
+                    onChange={(e) => onChange(e)}
+                  />
+                )}
               />
             </Form.Item>
             <Form.Item label="Giá tiền">
-              <InputNumber
-                {...register("UnitPrice")}
-                value={product?.unitPrice}
+              <Controller
+                name="UnitPrice"
+                control={control}
+                render={({ field: { value, onChange, ...field } }) => (
+                  <InputNumber
+                    {...register("UnitPrice")}
+                    defaultValue={product?.unitPrice}
+                    value={value}
+                    onChange={(e) => onChange(e)}
+                  />
+                )}
               />
             </Form.Item>
             <Form.Item
@@ -286,14 +359,18 @@ const ModalUpdateProduct = (props) => {
               <Controller
                 name="Image"
                 control={control}
-                render={({ field }) => (
+                render={({ field: { value, onChange, ...field } }) => (
                   <Upload
                     {...field}
                     listType="picture-card"
                     onPreview={handlePreview}
                     beforeUpload={beforeUpload}
-                    onChange={handleChange}
-                    fileList={listImage}
+                    onChange={(e) => {
+                      onChange(e.fileList);
+                      handleChange(e.fileList);
+                    }}
+                    fileList={value}
+                    defaultFileList={listImage}
                   >
                     {uploadButton}
                   </Upload>
@@ -302,21 +379,21 @@ const ModalUpdateProduct = (props) => {
             </Form.Item>
             <Form.Item label="Tag" valuePropName="text">
               <Space size={[0, 8]} wrap>
-                {listTag?.map((tag, index) => (
+                {listTag?.items?.map((tag, index) => (
                   <Controller
                     render={({ field: { onChange, value } }) => (
                       <CheckableTag
-                        key={tag}
-                        value={tag}
-                        checked={selectedTags.includes(tag)}
+                        key={index}
+                        value={value}
+                        checked={selectedTags.includes(tag.name)}
                         onChange={(checked) => {
-                          handleChangeTagList(tag, checked);
+                          handleChangeTagList(tag.name, checked);
                         }}
                       >
-                        {tag}
+                        {tag.name}
                       </CheckableTag>
                     )}
-                    name={`TagId[${index}]`}
+                    name={`TagId`}
                     control={control}
                   />
                 ))}
