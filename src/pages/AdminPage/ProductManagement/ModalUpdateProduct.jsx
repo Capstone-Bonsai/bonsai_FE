@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 import {
   PlusCircleOutlined,
   PlusOutlined,
@@ -33,12 +34,8 @@ const { CheckableTag } = Tag;
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { putProduct } from "../../../utils/productApi";
-import {
-  fetchAllProduct,
-  fetchAllProductNoPagination,
-  fetchProductById,
-} from "../../../redux/slice/productSlice";
-import { setInitForm } from "../../../utils/setInitForm";
+import { fetchAllProductPagination } from "../../../redux/slice/productSlice";
+
 const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
@@ -61,58 +58,78 @@ const ALLOWED_FILE_TYPES = [
 ];
 
 const ModalUpdateProduct = (props) => {
+  const [form1] = Form.useForm();
   const { show, setShow, product, listSubCategory, listTag } = props;
-  const {
-    setValue,
-    register,
-    handleSubmit,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm({
-    // defaultValues: {
-    //   ...formValue
-    // },
-  });
   const handleClose = () => {
-    setSelectedTags([]);
+    setFormData({
+      SubCategoryId: "",
+      Name: "",
+      Description: "",
+      TreeShape: "",
+      AgeRange: 0,
+      Height: 0,
+      Unit: "",
+      Quantity: 0,
+      UnitPrice: 0,
+      Image: "",
+      TagId: [],
+    });
+    form1.resetFields();
     setListImage([]);
-    reset();
+    setSelectedTags([]);
     setShow(false);
   };
   const [selectedTags, setSelectedTags] = useState([]);
+  const [formData, setFormData] = useState({
+    SubCategoryId: "",
+    Name: "",
+    Description: "",
+    TreeShape: "",
+    AgeRange: 0,
+    Height: 0,
+    Unit: "",
+    Quantity: 0,
+    UnitPrice: 0,
+    Image: [],
+    TagId: [],
+  });
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-
   const [listImage, setListImage] = useState([]);
   const formRef = useRef(null);
+
   useEffect(() => {
     if (product != undefined) {
       console.log(product);
-      setValue("SubCategoryId", product.subCategoryId);
-      setValue("Name", product.name);
-      setValue("Description", product.description);
-      setValue("TreeShape", product.treeShape);
-      setValue("AgeRange", product.ageRange);
-      setValue("Height", product.height);
-      setValue("Unit", product.unit);
-      setValue("Quantity", product.quantity);
-      setValue("UnitPrice", product.unitPrice);
-      setValue("Image", fetchListImage());
+      setFormData({
+        SubCategoryId: product.subCategoryId,
+        Name: product.name,
+        Description: product.description,
+        TreeShape: product.treeShape,
+        AgeRange: product.ageRange,
+        Height: product.height,
+        Unit: product.unit,
+        Quantity: product.quantity,
+        UnitPrice: product.unitPrice,
+        Image: fetchListImage(),
+        TagId: [],
+      });
     }
   }, [product]);
 
-  // let productDetail = useSelector((state) => state.product.productById);
+  useEffect(() => {
+    form1.setFieldsValue(formData);
+  }, [form1, formData]);
+
   const handleChangeTagList = (tag, checked) => {
     const nextSelectedTags = checked
       ? [...selectedTags, tag]
       : selectedTags.filter((t) => t !== tag);
     console.log("You are interested in: ", nextSelectedTags);
     setSelectedTags(nextSelectedTags);
-    setValue("TagId", nextSelectedTags);
   };
   const handleCancelPreview = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
@@ -125,7 +142,9 @@ const ModalUpdateProduct = (props) => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
+
   const handleChange = (i) => setListImage(i);
+
   const uploadButton = (
     <button
       style={{
@@ -144,41 +163,52 @@ const ModalUpdateProduct = (props) => {
       </div>
     </button>
   );
+
   const fetchListImage = () => {
-    return product?.productImages.map((data) => ({
+    const image=product?.productImages.map((data) => ({
       url: data.imageUrl,
       uid: "",
     }));
+    setListImage(image);
+    return image;
   };
-
   const updateProduct = (data) => {
     try {
+      console.log(data);
       putProduct(product.id, data)
         .then((data) => {
           setConfirmLoading(false);
           toast.success(data.data);
-          dispatch(fetchAllProductNoPagination());
+          dispatch(fetchAllProductPagination(0, 5));
           handleClose();
         })
         .catch((err) => {
           toast.error(err.response.statusText);
         });
-    } catch (error) {
-      toast.error(error.response.statusText);
+    } catch (err) {
+      toast.error(err.response.statusText);
     }
   };
   const onSubmit = (i) => {
-    console.log(i);
+    formData.Image = listImage;
+    formData.TagId = selectedTags;
+    console.log(formData);
     formRef.current
       .validateFields()
       .then(() => {
         setConfirmLoading(true);
-        updateProduct(i);
-        setConfirmLoading(false);
+        updateProduct(formData);
       })
       .catch((errorInfo) => {
+        console.log(errorInfo);
         toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
+      })
+      .finally(() => {
+        setConfirmLoading(false);
       });
+  };
+  const handleFormChange = (changedValues, allValues) => {
+    setFormData(allValues);
   };
   const beforeUpload = (file) => {
     const isFileSizeValid = file.size <= MAX_FILE_SIZE;
@@ -199,202 +229,173 @@ const ModalUpdateProduct = (props) => {
   return (
     <>
       <Modal
-        title="Cập nhật sản phẩm"
+        title="Thêm sản phẩm"
         open={show}
-        okText={confirmLoading ? "Đang cập nhật" : "Cập nhật"}
+        onOk={onSubmit}
         okButtonProps={{ type: "default" }}
         confirmLoading={confirmLoading}
         onCancel={handleClose}
-        onOk={handleSubmit(onSubmit)}
         maskClosable={false}
       >
         <div className="">
           <Form
+            form={form1}
             ref={formRef}
             layout="horizontal"
             labelCol={{ span: 5 }}
-            wrapperCol={{ span: 10 }}
+            wrapperCol={{ span: 18 }}
+            onValuesChange={handleFormChange}
+            initialValues={formData}
           >
-            <Form.Item label="Phân loại">
-              <Controller
-                name="SubCategoryId"
-                control={control}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Select
-                    {...field}
-                    value={value}
-                    onChange={(e) => onChange(e)}
-                  >
-                    {listSubCategory?.map((subCategory, index) => (
-                      <Select.Option value={subCategory.id} key={index}>
-                        {subCategory.name}
-                      </Select.Option>
-                    ))}
-                    <Select.Option value={1}>1</Select.Option>
-                  </Select>
-                )}
-              />
+            <Form.Item
+              label="Phân loại"
+              name="SubCategoryId"
+              rules={[
+                { required: true, message: "Phân loại không được để trống!" },
+              ]}
+            >
+              <Select>
+                {listSubCategory?.map((subCategory, index) => (
+                  <Select.Option value={subCategory.id} key={index}>
+                    {subCategory.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
-            <Form.Item label="Tên sản phẩm">
-              <Controller
-                name="Name"
-                control={control}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Input
-                    {...field}
-                    rows={4}
-                    defaultValue={product?.name}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                  />
-                )}
-              />
+            <Form.Item
+              label="Tên sản phẩm"
+              name="Name"
+              rules={[
+                { required: true, message: "Phân loại không được để trống!" },
+              ]}
+            >
+              <Input />
             </Form.Item>
-            <Form.Item label="Mô tả">
-              <Controller
-                name="Description"
-                control={control}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <TextArea
-                    {...field}
-                    rows={4}
-                    defaultValue={product?.description}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                  />
-                )}
-              />
+            <Form.Item
+              label="Mô tả"
+              name="Description"
+              rules={[
+                { required: true, message: "Mô tả không được để trống!" },
+              ]}
+            >
+              <TextArea />
             </Form.Item>
-            <Form.Item label="Dáng cây">
-              <Controller
-                name="TreeShape"
-                control={control}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Input
-                    {...field}
-                    defaultValue={product?.treeShape}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                  />
-                )}
-              />
+
+            <Form.Item
+              label="Dáng cây"
+              name="TreeShape"
+              rules={[
+                { required: true, message: "Dáng cây không được để trống!" },
+              ]}
+            >
+              <Input />
             </Form.Item>
-            <Form.Item label="Số tuổi">
-              <Controller
-                name="AgeRange"
-                control={control}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <InputNumber
-                    {...register("AgeRange")}
-                    defaultValue={product?.ageRange}
-                    value={value}
-                    onChange={(e) => onChange(e)}
-                  />
-                )}
-              />
+            <Form.Item
+              label="Số tuổi"
+              name="AgeRange"
+              rules={[
+                { required: true, message: "Số tuổi không được để trống!" },
+                {
+                  type: "number",
+                  message: "Tuổi cây phải là một số!",
+                },
+              ]}
+            >
+              <InputNumber min={0} className="w-[100%]" />
             </Form.Item>
-            <Form.Item label="Chiều cao" name="Height">
-              <Controller
-                name="Height"
-                control={control}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <InputNumber
-                    {...register("Height")}
-                    defaultValue={product?.height}
-                    value={value}
-                    onChange={(e) => onChange(e)}
-                  />
-                )}
-              />
-            </Form.Item>
-            <Form.Item label="Đơn vị">
-              <Controller
-                name="Unit"
-                control={control}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Input
-                    {...field}
-                    defaultValue={product?.unit}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                  />
-                )}
-              />
-            </Form.Item>
-            <Form.Item label="Kho sẵn">
-              <Controller
-                name="Quantity"
-                control={control}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <InputNumber
-                    {...register("Quantity")}
-                    defaultValue={product?.quantity}
-                    value={value}
-                    onChange={(e) => onChange(e)}
-                  />
-                )}
-              />
-            </Form.Item>
-            <Form.Item label="Giá tiền">
-              <Controller
-                name="UnitPrice"
-                control={control}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <InputNumber
-                    {...register("UnitPrice")}
-                    defaultValue={product?.unitPrice}
-                    value={value}
-                    onChange={(e) => onChange(e)}
-                  />
-                )}
+            <Form.Item
+              label="Chiều cao"
+              name="Height"
+              rules={[
+                { required: true, message: "Chiều cao không được để trống!" },
+                {
+                  type: "number",
+                  message: "Chiều cao phải là một số!",
+                },
+              ]}
+            >
+              <InputNumber
+                min={0}
+                step={0.1}
+                prefix="(m)"
+                className="w-[100%]"
               />
             </Form.Item>
             <Form.Item
-              action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+              label="Đơn vị"
+              name="Unit"
+              rules={[
+                { required: true, message: "Đơn vị không được để trống!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Kho sẵn"
+              name="Quantity"
+              rules={[
+                { required: true, message: "Kho sẵn không được để trống!" },
+                {
+                  type: "number",
+                  min: 1,
+                  max: 999,
+                  message:
+                    "Kho sẵn phải có ít nhất 1 sản phẩm và nhiều nhất 1000 sản phẩm!",
+                },
+              ]}
+            >
+              <InputNumber min={0} className="w-[100%]" />
+            </Form.Item>
+            <Form.Item
+              label="Giá tiền"
+              name="UnitPrice"
+              rules={[
+                { required: true, message: "Giá tiền không được để trống!" },
+                {
+                  type: "number",
+                  min: 0,
+                  max: 10000000,
+                  message:
+                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 10000000 Vnd!",
+                },
+              ]}
+            >
+              <InputNumber
+                min={0}
+                step={1000}
+                prefix="(Vnd)"
+                className="w-[100%]"
+              />
+            </Form.Item>
+            <Form.Item
               label="Upload ảnh"
               valuePropName="fileList"
               getValueFromEvent={normFile}
             >
-              <Controller
-                name="Image"
-                control={control}
-                render={({ field: { value, onChange, ...field } }) => (
-                  <Upload
-                    {...field}
-                    listType="picture-card"
-                    onPreview={handlePreview}
-                    beforeUpload={beforeUpload}
-                    onChange={(e) => {
-                      onChange(e.fileList);
-                      handleChange(e.fileList);
-                    }}
-                    fileList={value}
-                    defaultFileList={listImage}
-                  >
-                    {uploadButton}
-                  </Upload>
-                )}
-              />
+              <Upload
+                listType="picture-card"
+                fileList={listImage}
+                onPreview={handlePreview}
+                beforeUpload={beforeUpload}
+                onChange={(e) => {
+                  handleChange(e.fileList);
+                }}
+              >
+                {uploadButton}
+              </Upload>
             </Form.Item>
             <Form.Item label="Tag" valuePropName="text">
               <Space size={[0, 8]} wrap>
                 {listTag?.items?.map((tag, index) => (
-                  <Controller
+                  <CheckableTag
                     key={index}
-                    render={({ field: { onChange, value } }) => (
-                      <CheckableTag
-                        value={value}
-                        checked={selectedTags.includes(tag.name)}
-                        onChange={(checked) => {
-                          handleChangeTagList(tag.name, checked);
-                        }}
-                      >
-                        {tag.name}
-                      </CheckableTag>
-                    )}
-                    name={`TagId`}
-                    control={control}
-                  />
+                    checked={selectedTags.includes(tag.id)}
+                    onChange={(checked) => {
+                      handleChangeTagList(tag.id, checked);
+                    }}
+                  >
+                    {tag.name}
+                  </CheckableTag>
                 ))}
               </Space>
             </Form.Item>

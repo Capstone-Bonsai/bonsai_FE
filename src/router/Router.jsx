@@ -19,14 +19,7 @@ function Router() {
       path: "/Login",
       element: <Login />,
     },
-    {
-      path: "/admin/user",
-      element: <UserManage />,
-    },
-    {
-      path: "/admin/product",
-      element: <ProductManage />,
-    },
+
     {
       element: <CustomerRoute />,
       children: [
@@ -54,7 +47,16 @@ function Router() {
     },
     {
       element: <PrivateRoute />,
-      children: [],
+      children: [
+        {
+          path: "/admin/user",
+          element: <UserManage />,
+        },
+        {
+          path: "/admin/product",
+          element: <ProductManage />,
+        },
+      ],
     },
   ]);
   if (!element) return null;

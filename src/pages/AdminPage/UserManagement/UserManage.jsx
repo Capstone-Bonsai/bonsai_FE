@@ -45,11 +45,10 @@ const UserManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const paging = useSelector((state) => state.user?.pagination);
-
+  console.log(allUsers);
   useEffect(() => {
     const index = currentPage - 1;
     dispatch(fetchAllUsers({ pageIndex: currentPage - 1, pageSize: pageSize }));
-    console.log(allUsers);
   }, []);
 
   const showCreateModal = () => {
@@ -222,7 +221,7 @@ const UserManage = () => {
   return (
     <>
       <div className="flex justify-center mt-12">
-        <div className="w-[70%]">
+        <div className="w-[100%]">
           <div className="font-semibold mb-6">Quản lý người dùng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">

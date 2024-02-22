@@ -28,6 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllProduct,
   fetchAllProductNoPagination,
+  fetchAllProductPagination,
 } from "../../../redux/slice/productSlice";
 import { deleteProduct } from "../../../utils/productApi";
 import ModalCreateProduct from "../ProductManagement/ModalCreateProduct";
@@ -42,7 +43,6 @@ function ProductManage() {
   const loading = useSelector((state) => state.product.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
-
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState();
@@ -51,11 +51,20 @@ function ProductManage() {
   const [listSubCategory, setListSubCategory] = useState();
   const [listTag, setListTag] = useState();
   const allProduct = useSelector(
-    (state) => state.product.allProductNoPaginationDTO.items
+    (state) => state.product?.allProductPaginationDTO?.items
   );
+  console.log(allProduct);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const paging = useSelector((state) => state.product?.pagination);
 
   useEffect(() => {
-    dispatch(fetchAllProductNoPagination());
+    dispatch(
+      fetchAllProductPagination({
+        pageIndex: currentPage - 1,
+        pageSize: pageSize,
+      })
+    );
   }, []);
 
   useEffect(() => {
@@ -100,7 +109,7 @@ function ProductManage() {
   };
 
   const handleCancelUpdate = () => {
-    setSelectedUpdateProduct(undefined)
+    setSelectedUpdateProduct(undefined);
     setOpenUpdateModal(false);
   };
 
@@ -153,6 +162,16 @@ function ProductManage() {
         //   toast.error("Đã xảy ra lỗi!");
         // }
       });
+  };
+  const handleTableChange = (pagination) => {
+    console.log(pagination);
+    const index = Number(pagination.current) - 1;
+    dispatch(
+      fetchAllProductPagination({
+        pageIndex: index,
+        pageSize: pageSize,
+      })
+    );
   };
   const columns = [
     {
@@ -231,66 +250,66 @@ function ProductManage() {
 
   return (
     <>
-      {loading ? (
-        <Loading loading={loading} />
-      ) : (
-        <div className="flex justify-center mt-12">
-          <div className="w-[70%]">
-            <div className="font-semibold mb-6">Sản phẩm</div>
-            <div className="bg-[#ffffff] drop-shadow-2xl">
-              <div className="flex justify-between p-6">
-                <div>
-                  <button
-                    className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
-                    onClick={showCreateModal}
-                  >
-                    <PlusCircleOutlined /> Thêm sản phẩm
-                  </button>
-                </div>
-                <div className="pr-0">
-                  <Search
-                    placeholder="input search text"
-                    onSearch={onSearch}
-                    className="w-[300px]"
-                    allowClear
-                  />
-                </div>
+      <div className="flex justify-center mt-12">
+        <div className="w-[100%]">
+          <div className="font-semibold mb-6">Sản phẩm</div>
+          <div className="bg-[#ffffff] drop-shadow-2xl">
+            <div className="flex justify-between p-6">
+              <div>
+                <button
+                  className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
+                  onClick={showCreateModal}
+                >
+                  <PlusCircleOutlined /> Thêm sản phẩm
+                </button>
               </div>
-              <div className="mb-12">
+              <div className="pr-0">
+                <Search
+                  placeholder="input search text"
+                  onSearch={onSearch}
+                  className="w-[300px]"
+                  allowClear
+                />
+              </div>
+            </div>
+            <div className="mb-12">
                 <Table
                   className="w-[100%]"
                   dataSource={allProduct}
                   columns={columns}
+                  scroll={{ x: true }}
+                  pagination={paging}
+                  onChange={handleTableChange}
                   rowKey="id"
+                  loading={{indicator: <Loading loading={loading}/>, spinning: loading}}
                 />
-              </div>
             </div>
           </div>
-          <ModalCreateProduct
-            show={openCreateModal}
-            setShow={handleCancelCreate}
-            listSubCategory={listSubCategory}
-            listTag={listTag}
-          />
-          <ModalUpdateProduct
-            show={openUpdateModal}
-            setShow={handleCancelUpdate}
-            product={selectedUpdateProduct}
-            listSubCategory={listSubCategory}
-            listTag={listTag}
-          />
-          <Modal
-            title="Xóa sản phẩm"
-            open={openDelete}
-            onOk={handleDelete}
-            okButtonProps={{ type: "default" }}
-            confirmLoading={confirmLoadingDelete}
-            onCancel={handleCancelDelete}
-          >
-            <div>Bạn có muốn xóa sản phẩm này không?</div>
-          </Modal>
         </div>
-      )}
+        <ModalCreateProduct
+          show={openCreateModal}
+          setShow={handleCancelCreate}
+          listSubCategory={listSubCategory}
+          listTag={listTag}
+        />
+        <ModalUpdateProduct
+          show={openUpdateModal}
+          setShow={handleCancelUpdate}
+          product={selectedUpdateProduct}
+          listSubCategory={listSubCategory}
+          listTag={listTag}
+        />
+        <Modal
+          title="Xóa sản phẩm"
+          open={openDelete}
+          onOk={handleDelete}
+          okButtonProps={{ type: "default" }}
+          confirmLoading={confirmLoadingDelete}
+          onCancel={handleCancelDelete}
+        >
+          <div>Bạn có muốn xóa sản phẩm này không?</div>
+        </Modal>
+      </div>
     </>
   );
 }
