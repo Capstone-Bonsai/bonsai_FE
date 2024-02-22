@@ -53,7 +53,6 @@ function ProductManage() {
   const allProduct = useSelector(
     (state) => state.product.allProductNoPaginationDTO.items
   );
-  console.log(allProduct);
 
   useEffect(() => {
     dispatch(fetchAllProductNoPagination());

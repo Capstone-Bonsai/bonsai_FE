@@ -307,7 +307,7 @@ const ModalCreateProduct = (props) => {
               <Controller
                 name="Image"
                 control={control}
-                render={({ field:{ onChange, value, ...field }}) => (
+                render={({ field: { onChange, value, ...field } }) => (
                   <Upload
                     {...field}
                     listType="picture-card"
@@ -328,9 +328,9 @@ const ModalCreateProduct = (props) => {
               <Space size={[0, 8]} wrap>
                 {listTag?.items?.map((tag, index) => (
                   <Controller
+                    key={index}
                     render={({ field: { onChange, value } }) => (
                       <CheckableTag
-                        key={index}
                         value={value}
                         checked={selectedTags.includes(tag.name)}
                         onChange={(checked) => {

@@ -102,7 +102,6 @@ const ModalUpdateProduct = (props) => {
       setValue("Quantity", product.quantity);
       setValue("UnitPrice", product.unitPrice);
       setValue("Image", fetchListImage());
-      ;
     }
   }, [product]);
 
@@ -154,7 +153,7 @@ const ModalUpdateProduct = (props) => {
 
   const updateProduct = (data) => {
     try {
-      putProduct(product.id,data)
+      putProduct(product.id, data)
         .then((data) => {
           setConfirmLoading(false);
           toast.success(data.data);
@@ -381,9 +380,9 @@ const ModalUpdateProduct = (props) => {
               <Space size={[0, 8]} wrap>
                 {listTag?.items?.map((tag, index) => (
                   <Controller
+                    key={index}
                     render={({ field: { onChange, value } }) => (
                       <CheckableTag
-                        key={index}
                         value={value}
                         checked={selectedTags.includes(tag.name)}
                         onChange={(checked) => {
