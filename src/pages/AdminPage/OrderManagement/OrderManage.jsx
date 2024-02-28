@@ -1,87 +1,44 @@
 import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Space,
   Tag,
   Table,
   Input,
   Modal,
-  Button,
-  Cascader,
-  Checkbox,
-  ColorPicker,
-  DatePicker,
-  Form,
-  InputNumber,
-  Radio,
-  Select,
-  Slider,
-  Switch,
-  TreeSelect,
-  Upload,
 } from "antd";
-const { Search, TextArea } = Input;
+const { Search } = Input;
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchAllProduct,
-  fetchAllProductNoPagination,
-  fetchAllProductPagination,
-} from "../../../redux/slice/productSlice";
+import { fetchAllOrders } from "../../../redux/slice/orderSlice"
 import { deleteProduct } from "../../../utils/productApi";
-import ModalCreateProduct from "../ProductManagement/ModalCreateProduct";
 import { Link } from "react-router-dom";
-import ModalUpdateProduct from "./ModalUpdateProduct";
-import { getListSubCategory } from "../../../utils/subCategoryApi";
-import { getListTag } from "../../../utils/tagApi";
 import Loading from "../../../components/Loading";
 
-function ProductManage() {
+function OrderManage() {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.product.loading);
+  const loading = useSelector((state) => state.order.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
-  const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [openUpdateModal, setOpenUpdateModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState();
+  const [selectedOrder, setSelectedOrder] = useState();
   const [selectedUpdateProduct, setSelectedUpdateProduct] = useState();
 
-  const [listSubCategory, setListSubCategory] = useState();
-  const [listTag, setListTag] = useState();
-  const allProduct = useSelector(
-    (state) => state.product?.allProductPaginationDTO?.items
+  const allOrder = useSelector(
+    (state) => state.order?.listOrder?.items
   );
-  console.log(allProduct);
+  console.log(allOrder);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const paging = useSelector((state) => state.product?.pagination);
+  const paging = useSelector((state) => state.order?.pagination);
 
   useEffect(() => {
     dispatch(
-      fetchAllProductPagination({
+      fetchAllOrders({
         pageIndex: currentPage - 1,
         pageSize: pageSize,
       })
     );
   }, []);
-
-  useEffect(() => {
-    fetchListTag();
-  }, []);
-
-  useEffect(() => {
-    fetchListSubCategory();
-  }, []);
-
-  const showCreateModal = () => {
-    setOpenCreateModal(true);
-  };
-
-  const showUpdateModal = () => {
-    setOpenUpdateModal(true);
-  };
 
   const showModalDelete = () => {
     setOpenDelete(true);
@@ -104,110 +61,83 @@ function ProductManage() {
       });
   };
 
-  const handleCancelCreate = () => {
-    setOpenCreateModal(false);
-  };
-
-  const handleCancelUpdate = () => {
-    setSelectedUpdateProduct(undefined);
-    setOpenUpdateModal(false);
-  };
-
   const handleCancelDelete = () => {
     console.log("Clicked cancel button");
     setOpenDelete(false);
   };
 
-  const fetchListSubCategory = () => {
-    getListSubCategory()
-      .then((data) => {
-        setListSubCategory(data.data.items);
-        console.log(data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        // if (
-        //   err &&
-        //   err.response &&
-        //   err.response.data &&
-        //   err.response.data.value
-        // ) {
-        //   toast.error(err.response.data.value);
-        // } else {
-        //   toast.error("Đã xảy ra lỗi!");
-        // }
-      });
-  };
+  // const fetchListSubCategory = () => {
+  //   getListSubCategory()
+  //     .then((data) => {
+  //       setListSubCategory(data.data.items);
+  //       console.log(data.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       // if (
+  //       //   err &&
+  //       //   err.response &&
+  //       //   err.response.data &&
+  //       //   err.response.data.value
+  //       // ) {
+  //       //   toast.error(err.response.data.value);
+  //       // } else {
+  //       //   toast.error("Đã xảy ra lỗi!");
+  //       // }
+  //     });
+  // };
 
-  const fetchListTag = () => {
-    getListTag()
-      .then((data) => {
-        setListTag(data.data);
-        console.log(data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        // if (
-        //   err &&
-        //   err.response &&
-        //   err.response.data &&
-        //   err.response.data.value
-        // ) {
-        //   toast.error(err.response.data.value);
-        // } else {
-        //   toast.error("Đã xảy ra lỗi!");
-        // }
-      });
-  };
+  // const fetchListTag = () => {
+  //   getListTag()
+  //     .then((data) => {
+  //       setListTag(data.data);
+  //       console.log(data.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       // if (
+  //       //   err &&
+  //       //   err.response &&
+  //       //   err.response.data &&
+  //       //   err.response.data.value
+  //       // ) {
+  //       //   toast.error(err.response.data.value);
+  //       // } else {
+  //       //   toast.error("Đã xảy ra lỗi!");
+  //       // }
+  //     });
+  // };
+
   const handleTableChange = (pagination) => {
     console.log(pagination);
     const index = Number(pagination.current) - 1;
     dispatch(
-      fetchAllProductPagination({
+      fetchAllOrders({
         pageIndex: index,
         pageSize: pageSize,
       })
     );
   };
+
   const columns = [
     {
       title: "Sản phẩm",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "address",
+      key: "address",
     },
     {
       title: "Kho sẵn",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Giá tiền",
-      dataIndex: "unitPrice",
-      key: "unitPrice",
-    },
-    {
-      title: "Chiều cao",
-      dataIndex: "height",
-      key: "height",
-    },
-    {
-      title: "Hình dáng",
-      dataIndex: "treeShape",
-      key: "treeShape",
-    },
-    {
-      title: "Đơn vị",
-      dataIndex: "unit",
-      key: "unit",
+      dataIndex: "orderDate",
+      key: "orderDate",
     },
     {
       title: "Trạng thái",
-      dataIndex: "isDisable",
-      key: "isDisable",
+      dataIndex: "orderStatus",
+      key: "orderStatus",
       render: (_, record) => (
         <>
-          <Tag color={record.isDisable == false ? "geekblue" : "red"}>
-            {record.isDisabled == false ? "no" : "yes"}
+          <Tag color={record.isDisable == 1 ? "geekblue" : "red"}>
+            {record.isDisabled == 1 ? "no" : "yes"}
           </Tag>
         </>
       ),
@@ -220,19 +150,11 @@ function ProductManage() {
         <Space size="middle">
           <button
             onClick={() => {
-              setSelectedProduct(record.id);
+              setSelectedOrder(record.id);
               showModalDelete();
             }}
           >
             Xóa
-          </button>
-          <button
-            onClick={() => {
-              setSelectedUpdateProduct(record);
-              showUpdateModal();
-            }}
-          >
-            Chỉnh sửa
           </button>
           <Link to={`/admin/productDetail/${record.id}`} key={record.id}>
             Xem thông tin
@@ -252,12 +174,12 @@ function ProductManage() {
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
               <div>
-                <button
+                {/* <button
                   className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
                   onClick={showCreateModal}
                 >
                   <PlusCircleOutlined /> Thêm sản phẩm
-                </button>
+                </button> */}
               </div>
               <div className="pr-0">
                 <Search
@@ -271,7 +193,7 @@ function ProductManage() {
             <div className="mb-12">
                 <Table
                   className="w-[100%]"
-                  dataSource={allProduct}
+                  dataSource={allOrder}
                   columns={columns}
                   scroll={{ x: true }}
                   pagination={paging}
@@ -282,7 +204,7 @@ function ProductManage() {
             </div>
           </div>
         </div>
-        <ModalCreateProduct
+        {/* <ModalCreateProduct
           show={openCreateModal}
           setShow={handleCancelCreate}
           listSubCategory={listSubCategory}
@@ -294,7 +216,7 @@ function ProductManage() {
           product={selectedUpdateProduct}
           listSubCategory={listSubCategory}
           listTag={listTag}
-        />
+        /> */}
         <Modal
           title="Xóa sản phẩm"
           open={openDelete}
@@ -310,4 +232,4 @@ function ProductManage() {
   );
 }
 
-export default ProductManage;
+export default OrderManage;

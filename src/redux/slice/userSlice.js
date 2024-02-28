@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "./../utils/axiosCustomize";
+import axios from "./../../utils/axiosCustomize";
 import { toast } from "react-toastify";
 
 export const fetchAllUsers = createAsyncThunk(
@@ -62,6 +62,7 @@ const userSlice = createSlice({
         pageSize: action.payload.pageSize,
         total: action.payload.totalItemsCount,
       };
+      //console.log(listUser);
       state.loading = false;
     });
     builder.addCase(fetchAllUsers.rejected, (state) => {
