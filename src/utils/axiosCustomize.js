@@ -8,8 +8,8 @@ const instance = axios.create({
 instance.interceptors.request.use(
   function (config) {
     NProgress.start();
-    // const token = store?.getState()?.account?.user?.token;
-    // config.headers["Authorization"] = `Bearer ${token}`;
+    const token = store?.getState()?.account?.user?.token;
+    config.headers["Authorization"] = `Bearer ${token}`;
     return config;
   },
   function (error) {

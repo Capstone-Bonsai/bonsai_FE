@@ -67,7 +67,6 @@ function PrivateRoute() {
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["1"]}
             items={SideBarItems}
           />
         </Sider>

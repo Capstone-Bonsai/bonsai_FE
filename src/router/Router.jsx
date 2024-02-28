@@ -13,6 +13,7 @@ import Register from "../pages/Auth/Register";
 import UserManage from "../pages/AdminPage/UserManagement/UserManage";
 import ProductDetailManage from "../pages/AdminPage/ProductManagement/ProductDetailManage";
 import PrivateRoute from "./PrivateRoute";
+import OrderManage from "../pages/AdminPage/OrderManagement/OrderManage";
 function Router() {
   const element = useRoutes([
     {
@@ -55,6 +56,10 @@ function Router() {
         {
           path: "/admin/product",
           element: <ProductManage />,
+        },
+        {
+          path: "/admin/order",
+          element: <OrderManage />,
         },
       ],
     },

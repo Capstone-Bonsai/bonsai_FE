@@ -105,7 +105,7 @@ const ModalCreateProduct = (props) => {
   const [listImage, setListImage] = useState([]);
   const formRef = useRef(null);
 
-  const handleChangeTagList = (tag, checked) => {
+  const handleChangeTagList = (tag) => {
     const nextSelectedTags = checked
       ? [...selectedTags, tag]
       : selectedTags.filter((t) => t !== tag);
@@ -163,7 +163,6 @@ const ModalCreateProduct = (props) => {
   };
   const onSubmit = (i) => {
     formData.Image = listImage;
-    formData.TagId = selectedTags;
     console.log(formData);
     formRef.current
       .validateFields()
@@ -352,20 +351,18 @@ const ModalCreateProduct = (props) => {
                 {uploadButton}
               </Upload>
             </Form.Item>
-            <Form.Item label="Tag" valuePropName="text">
-              <Space size={[0, 8]} wrap>
-                {listTag?.items?.map((tag, index) => (
-                  <CheckableTag
-                    key={index}
-                    checked={selectedTags.includes(tag.id)}
-                    onChange={(checked) => {
-                      handleChangeTagList(tag.id, checked);
-                    }}
-                  >
-                    {tag.name}
-                  </CheckableTag>
-                ))}
-              </Space>
+            <Form.Item label="Tag" name="TagId" valuePropName="text">
+              <Select
+                mode="multiple"
+                allowClear
+                style={{ width: "100%" }}
+                placeholder="Please select"
+                options={listTag?.items?.map((tag, index) => ({
+                  key: index,
+                  value: tag.id,
+                  label: tag.name
+                }))}
+              />
             </Form.Item>
           </Form>
         </div>

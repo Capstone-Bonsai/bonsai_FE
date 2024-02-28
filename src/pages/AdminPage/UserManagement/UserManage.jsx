@@ -45,7 +45,6 @@ const UserManage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const paging = useSelector((state) => state.user?.pagination);
-  console.log(allUsers);
   useEffect(() => {
     const index = currentPage - 1;
     dispatch(fetchAllUsers({ pageIndex: currentPage - 1, pageSize: pageSize }));
