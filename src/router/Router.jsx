@@ -21,15 +21,6 @@ import ConfirmEmail from "../pages/Auth/ConfirmEmail";
 import ManageOrder from "../pages/OrderProduct/ManageOrder";
 function Router() {
   const element = useRoutes([
-    //test
-    {
-      path: "/admin/product",
-      element: <ProductManage />,
-    },
-    {
-      path: "/Login",
-      element: <Login />,
-    },
     {
       element: <CustomerRoute />,
       children: [

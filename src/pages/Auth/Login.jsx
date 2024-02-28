@@ -40,12 +40,12 @@ function Login() {
     }
   }, [userId, code]);
 
-  useEffect(() => {
-    if (userInfo) {
-      navigate("/");
-      alert("bạn đã đăng nhập rồi");
-    }
-  }, [userInfo]);
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     navigate("/");
+  //     alert("bạn đã đăng nhập rồi");
+  //   }
+  // }, [userInfo]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

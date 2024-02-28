@@ -1,14 +1,19 @@
 import axios from "axios";
 import NProgress from "nprogress";
+import Cookies from "universal-cookie";
 
 const instance = axios.create({
   baseURL: "https://capstoneb.azurewebsites.net/api/",
 });
+const cookies = new Cookies();
+const user = cookies.get("user");
+const token = user?.token;
+console.log(token);
 
 instance.interceptors.request.use(
   function (config) {
     NProgress.start();
-    const token = store?.getState()?.account?.user?.token;
+    const token = user?.token;
     config.headers["Authorization"] = `Bearer ${token}`;
     return config;
   },
