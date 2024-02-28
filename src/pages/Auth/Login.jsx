@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../../redux/slice/authSlice";
+import { confirmEmail, loginUser } from "../../redux/slice/authSlice";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loading";
 function Login() {
@@ -15,7 +15,44 @@ function Login() {
 
   const userInfo = cookies?.get("user");
 
-  const handleLogin = async () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const userId = searchParams.get("userId");
+  const code = searchParams.get("code");
+
+  useEffect(() => {
+    console.log("User ID:", userId);
+    console.log("Code:", code);
+  }, [userId, code]);
+
+  useEffect(() => {
+    if (userId != null && code != null) {
+      const confirmEmailFromUrl = async () => {
+        try {
+          await confirmEmail(userId, code);
+          toast.success("Xác thực thành công!");
+        } catch (error) {
+          toast.error("Xác thực thất bại!");
+        }
+      };
+
+      confirmEmailFromUrl();
+    }
+  }, [userId, code]);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
+      alert("bạn đã đăng nhập rồi");
+    }
+  }, [userInfo]);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (username.trim() === "" || password.trim() === "") {
+      toast.error("Bạn cần phải điền đầy đủ thông tin!");
+      return;
+    }
     try {
       setIsLoading(true);
       const response = await loginUser({ email: username, password });
@@ -26,8 +63,7 @@ function Login() {
       toast.success("Đăng nhập thành công");
       navigate("/");
     } catch (error) {
-      console.error("Error logging in:", error);
-      toast.error("Đăng nhập thất bại");
+      toast.error("Sai tài khoản hoặc mật khẩu");
     } finally {
       setIsLoading(false);
     }
@@ -41,9 +77,9 @@ function Login() {
         <div className="top-0 left-0 right-0 bottom-0 w-full h-full flex justify-center items-center my-10">
           <div className="bg-[#ffffff] w-[30%] drop-shadow-lg">
             <div className="w-[90%] m-auto h-full mb-5 ">
-              <h2 className="underline text-[20px] font-bold">Login</h2>
+              <h2 className="underline text-[20px] font-bold">Đăng nhập</h2>
               <div>
-                <label>Username:</label>
+                <label>Tài khoản:</label>
                 <div className="flex justify-center">
                   <input
                     type="text"
@@ -54,7 +90,7 @@ function Login() {
                 </div>
               </div>
               <div>
-                <label>Password:</label>
+                <label>Mật khẩu:</label>
                 <div className="flex justify-center">
                   <input
                     type="password"
@@ -69,7 +105,7 @@ function Login() {
                   {/* <input type="checkbox" />
                   <div className="pl-2">Remember Me</div> */}
                 </div>
-                <Link to="/ForgotPassword">Forgotten password?</Link>
+                <Link to="/ForgotPassword">Quên mật khẩu?</Link>
               </div>
               <div className="flex justify-between items-center">
                 <button

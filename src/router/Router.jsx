@@ -14,6 +14,9 @@ import UserManage from "../pages/AdminPage/UserManagement/UserManage";
 import ProductDetailManage from "../pages/AdminPage/ProductManagement/ProductDetailManage";
 import ForgotPassword from "../pages/Auth/ForgotPassword";
 import Order from "../pages/OrderProduct/Order";
+import ProfileUser from "../pages/Profile/ProfileUser";
+import ConfirmEmail from "../pages/Auth/ConfirmEmail";
+import ManageOrder from "../pages/OrderProduct/ManageOrder";
 function Router() {
   const element = useRoutes([
     //test
@@ -60,6 +63,18 @@ function Router() {
         {
           path: "/ForgotPassword",
           element: <ForgotPassword />,
+        },
+        {
+          path: "/Profile",
+          element: <ProfileUser />,
+        },
+        {
+          path: "/ManageOrder",
+          element: <ManageOrder />,
+        },
+        {
+          path: "/api/Auth/ConfirmEmail",
+          element: <Login />,
         },
       ],
     },

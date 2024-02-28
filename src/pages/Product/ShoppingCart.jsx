@@ -3,41 +3,59 @@ import TestProduct from "../../assets/testProduct.png";
 import { CloseCircleOutlined, ShoppingOutlined } from "@ant-design/icons";
 import { InputNumber, Space } from "antd";
 import Cookies from "universal-cookie";
-import { useDispatch } from "react-redux";
-import { setCartFromCookie } from "../../redux/slice/productSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchAllProductNoPagination,
+  setCartFromCookie,
+} from "../../redux/slice/productSlice";
 import MinHeight from "../../components/MinHeight";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function ShoppingCart() {
+  const navigate = useNavigate();
   const cookies = new Cookies();
+  const location = useLocation();
+  const [maxQuantityReached, setMaxQuantityReached] = useState(false);
+  const [fullNameNoneLogin, setFullNameNoneLogin] = useState("");
+  const [phoneNumberNoneLogin, setPhoneNumberNoneLogin] = useState("");
+  console.log(maxQuantityReached);
 
   const dispatch = useDispatch();
   const userInfo = cookies.get("user");
+  const allProduct = useSelector(
+    (state) => state.product.allProductNoPaginationDTO.items
+  );
   const idUser = userInfo?.id;
-  const [cartItems, setCartItems] = useState(() => {
-    if (userInfo != null) {
-      const cartIdUser = `cartId ${idUser}`;
-      return cookies.get(cartIdUser) || [];
-    } else {
-      return cookies.get("cartItems") || [];
-    }
-  });
+  const [cartItems, setCartItems] = useState(
+    userInfo != null
+      ? cookies.get(`cartId ${idUser}`) || []
+      : cookies.get("cartItems") || []
+  );
+
+  useEffect(() => {
+    dispatch(fetchAllProductNoPagination());
+  }, []);
+
   const updateCartItems = (newCartItems) => {
-    if (userInfo != null) {
-      setCartItems(newCartItems);
-      cookies.set(`cartId ${idUser}`, JSON.stringify(newCartItems), {
-        path: "/",
-      });
-    } else {
-      setCartItems(newCartItems);
-      cookies.set("cartItems", JSON.stringify(newCartItems), { path: "/" });
-    }
+    const cartId = userInfo ? `cartId ${idUser}` : "cartItems";
+    setCartItems(newCartItems);
+    cookies.set(cartId, JSON.stringify(newCartItems), { path: "/" });
   };
 
   const handleQuantityChange = (itemId, newQuantity) => {
-    const updatedCartItems = cartItems.map((item) =>
-      item.productId === itemId ? { ...item, quantity: newQuantity } : item
-    );
+    const updatedCartItems = cartItems.map((item) => {
+      if (item.productId === itemId) {
+        const productInStore = allProduct.find(
+          (product) => product.id === itemId
+        );
+        const quantityInStore = productInStore.quantity;
+        const updatedQuantity = Math.min(newQuantity, quantityInStore);
+        setMaxQuantityReached(updatedQuantity >= quantityInStore);
+        return { ...item, quantity: updatedQuantity };
+      } else {
+        return item;
+      }
+    });
     updateCartItems(updatedCartItems);
   };
 
@@ -101,7 +119,7 @@ function ShoppingCart() {
                 >
                   <td className="flex justify-center items-center h-[170px]">
                     <div>
-                      <img src={TestProduct} alt="" width={120} height={120} />
+                      <img src={item?.image} alt="" width={120} height={120} />
                     </div>
                   </td>
                   <td className="">
@@ -111,13 +129,15 @@ function ShoppingCart() {
                   <td>
                     <InputNumber
                       min={1}
-                      max={20}
                       style={{ margin: "0", fontSize: "20px" }}
                       value={item.quantity}
                       onChange={(newValue) =>
                         handleQuantityChange(item.productId, newValue)
                       }
                     />
+                    {maxQuantityReached && (
+                      <p style={{ color: "red" }}>Đã đạt tối đa trong kho</p>
+                    )}
                   </td>
                   <td className="font-medium">
                     {item.price * item.quantity} ₫
@@ -144,11 +164,19 @@ function ShoppingCart() {
                 <div className="flex w-[60%] justify-between ">
                   <div>
                     <div>Họ và tên</div>
-                    <input className=" h-[36px] outline-none p-5 border border-black" />
+                    <input
+                      value={fullNameNoneLogin}
+                      className="h-[36px] outline-none p-5 border border-black"
+                      onChange={(e) => setFullNameNoneLogin(e.target.value)}
+                    />
                   </div>
                   <div>
                     <div>Số điện thoại</div>
-                    <input className=" h-[36px] outline-none p-5 border border-black" />
+                    <input
+                      value={phoneNumberNoneLogin}
+                      className=" h-[36px] outline-none p-5 border border-black"
+                      onChange={(e) => setPhoneNumberNoneLogin(e.target.value)}
+                    />
                   </div>
                 </div>
               </>
@@ -157,10 +185,10 @@ function ShoppingCart() {
             )}
           </div>
           <div className="flex justify-end w-[30%]">
-            <div className="w-full bg-[#f2f2f2] h-[254px] flex justify-center items-center">
+            <div className="w-full bg-[#f2f2f2] h-[100px] flex justify-center items-center">
               <div className="w-[70%] h-[70%]">
                 <div className="text-[20px] underline capitalize leading-6 font-bold mb-[30px]">
-                  Tổng Giỏ Hàng
+                  Giá trị sản phẩm
                 </div>
                 <div className="flex justify-between mb-4">
                   <div>Tổng giá trị:</div>
@@ -175,8 +203,15 @@ function ShoppingCart() {
           </div>
         </div>
         <div className="flex justify-end ">
-          <Link to="/Order" className="uppercase bg-black p-2 rounded-[3px] text-[#fff] my-5 hover:bg-[#3a9943]">
-            Checkout
+          <Link
+            to={
+              userInfo != null
+                ? "/order"
+                : `/order?fullName=${fullNameNoneLogin}&phoneNumber=${phoneNumberNoneLogin}`
+            }
+            className="uppercase bg-black p-2 rounded-[3px] text-[#fff] my-5 hover:bg-[#3a9943]"
+          >
+            Tiến hành thanh toán
           </Link>
         </div>
       </div>

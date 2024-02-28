@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { register } from "../../redux/slice/authSlice";
 import Loading from "../../components/Loading";
+import Item from "antd/es/list/Item";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -11,11 +12,12 @@ function Register() {
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
 
   const handleSubmitRegister = async (e) => {
     e.preventDefault();
     if (email.trim() === "" || password.trim() === "") {
-      setError("Bạn cần phải điền đầy đủ thông tin!");
+      toast.error("Bạn cần phải điền đầy đủ thông tin!");
       return;
     }
     const registerData = {
@@ -30,8 +32,12 @@ function Register() {
       await register(registerData);
       toast.success("Đăng ký thành công");
     } catch (error) {
-      console.error("Error during registration:", error);
-      toast.error("Đăng ký thất bại");
+      setErrorMessage(error.response.data);
+      if (error.response.data == []) {
+        toast.error("Đăng ký thất bại");
+      } else {
+        toast.error(error.response.data);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -45,10 +51,10 @@ function Register() {
           <ToastContainer />
           <div className="bg-[#ffffff] w-[30%] drop-shadow-lg">
             <div className="w-[90%] m-auto h-full mb-5 ">
-              <h2 className="underline text-[20px] font-bold">Register</h2>
+              <h2 className="underline text-[20px] font-bold">Đăng ký</h2>
               <div className="flex justify-between">
                 <div>
-                  <label>Full Name</label>
+                  <label>Họ và Tên</label>
                   <div className="flex justify-center">
                     <input
                       type="text"
@@ -59,7 +65,7 @@ function Register() {
                   </div>
                 </div>
                 <div>
-                  <label>User Name</label>
+                  <label>Tên đăng nhập</label>
                   <div className="flex justify-center">
                     <input
                       type="text"
@@ -71,7 +77,7 @@ function Register() {
                 </div>
               </div>
               <div>
-                <label>Password:</label>
+                <label>Mật khẩu:</label>
                 <div className="flex justify-center">
                   <input
                     type="password"
@@ -93,7 +99,7 @@ function Register() {
                   </div>
                 </div>
                 <div>
-                  <label>Phone</label>
+                  <label>Số điện thoại</label>
                   <div className="flex justify-center">
                     <input
                       value={phoneNumber}
@@ -102,6 +108,14 @@ function Register() {
                     />
                   </div>
                 </div>
+              </div>
+              <div className="my-2">
+                {errorMessage == [] &&
+                  errorMessage?.map((errMess, index) => (
+                    <Item key={index} className="text-[red]">
+                      {errMess}
+                    </Item>
+                  ))}
               </div>
               <div className="flex justify-between items-center">
                 <button

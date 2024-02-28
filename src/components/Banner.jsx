@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import logo from "../assets/logo_footer_final.png";
 import SPCus from "../assets/img-sp.webp";
-import { Input, Space } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Image, Input, Space } from "antd";
+import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 import {
   ShoppingCartOutlined,
   FacebookOutlined,
@@ -13,6 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { setCartFromCookie } from "../redux/slice/productSlice";
+import { profileUser } from "../redux/slice/authSlice";
 function Banner() {
   const { Search } = Input;
   const navLinks = [
@@ -26,12 +27,25 @@ function Banner() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo = cookies.get("user");
+
   const idUser = userInfo?.id;
   const handleLogout = () => {
     cookies.remove("user");
-    navigate("/");
+    cookies.remove("userData");
   };
-
+  useEffect(() => {
+    if (userInfo) {
+      setImageAvt(userInfo?.avatar);
+      profileUser()
+        .then((data) => {
+          cookies.set("userData", data);
+        })
+        .catch((error) => {
+          console.error("Error while fetching profile data:", error);
+        });
+    }
+  }, [userInfo]);
+  const [imageAvt, setImageAvt] = useState(userInfo?.avatarUrl);
   const fetchCartFromCookie = () => {
     if (userInfo != null) {
       const cartIdUser = `cartId ${idUser}`;
@@ -70,27 +84,63 @@ function Banner() {
               </Link>
             </div>
             {userInfo != null ? (
-              <div className="text-white pr-2">
-                <details className="dropdown">
-                  <summary className="m-1 btn"> Hi {userInfo.fullName}</summary>
-                  <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
-                    <li>
-                      <a className="text-black" onClick={handleLogout}>
-                        Đăng xuất
-                      </a>
-                    </li>
-                    <li>
-                      <a className="text-black">Item 2</a>
-                    </li>
-                  </ul>
-                </details>
+              <div className="flex items-center">
+                <div className="bg-[#f2f2f2] w-[40px] h-[40px] flex justify-center rounded-full drop-shadow-lg text-[30px]">
+                  {imageAvt != null ? (
+                    <div>
+                      <Image
+                        src={imageAvt}
+                        className=" rounded-full"
+                        alt=""
+                        width={40}
+                        height={40}
+                      />
+                    </div>
+                  ) : (
+                    <UserOutlined />
+                  )}
+                </div>
+                <div className="text-white pr-2">
+                  <div className="dropdown">
+                    <div tabIndex={0} role="button" className="btn m-1">
+                      <span className="normal-case font-semibold">Hi</span>
+                      <span className="uppercase font-bold">
+                        {userInfo?.fullName}
+                      </span>
+                    </div>
+                    <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                      <li>
+                        <Link className="text-black" to="/Profile">
+                          Hồ sơ cá nhân
+                        </Link>
+                      </li>
+                      <li>
+                        <Link className="text-black" to="/ManageOrder">
+                          Đơn đã đặt
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/login"
+                          className="text-black"
+                          onClick={handleLogout}
+                        >
+                          Đăng xuất
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="flex items-center justify-center">
                 <Link to="/Login" className="text-white no-underline pr-2">
                   Đăng nhập
                 </Link>
-                <Link to="/Register" className="pl-2 pr-2 text-white no-underline border-l-2 border-white">
+                <Link
+                  to="/Register"
+                  className="pl-2 pr-2 text-white no-underline border-l-2 border-white"
+                >
                   Đăng ký
                 </Link>
               </div>

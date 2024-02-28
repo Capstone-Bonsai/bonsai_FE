@@ -31,13 +31,14 @@ function Filter({ priceRange, setPriceRange }) {
       <div className="uppercase text-[#333] font-semibold text-[16px]">
         Mức giá
       </div>
-      <div className=" w-full flex justify-between">
+      <div className=" w-full flex justify-between items-center">
         <InputNumber
           min={1}
           defaultValue={tempPriceRange[0]}
           onChange={(value) => handleChangePriceRange(value, 0)}
           className="w-[40%]"
         />
+        <div>đến</div>
         <InputNumber
           min={1}
           defaultValue={tempPriceRange[1]}

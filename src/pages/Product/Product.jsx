@@ -8,13 +8,20 @@ import Loading from "../../components/Loading";
 import CustomPagination from "./Pagination";
 import { InputNumber } from "antd";
 import Filter from "./Filter";
+import { toast } from "react-toastify";
 
 function Product() {
   const [priceRange, setPriceRange] = useState([]);
-  const allProduct = useSelector((state) => state.product.allProductDTO.items);
+  const allProduct = useSelector((state) => state.product.allProductDTO?.items);
   const loading = useSelector((state) => state.product.loading);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(6);
+
+  useEffect(() => {
+    if (priceRange[0] != null && priceRange[1] != null && allProduct == null) {
+      toast.error("Không tìm thấy sản phẩm phù hợp");
+    }
+  }, [allProduct, priceRange]);
 
   const countPageProduct = useSelector(
     (state) => state.product.allProductDTO.totalPagesCount
@@ -31,10 +38,7 @@ function Product() {
         maxPrice: priceRange[1],
       })
     );
-    console.log(priceRange[0]);
   }, [pageIndex, pageSize, priceRange[0], priceRange[1]]);
-
- 
 
   return (
     <>
@@ -50,10 +54,7 @@ function Product() {
                 </div>
                 <div className="border-b">Bonsai</div>
               </div>
-              <Filter
-                priceRange={priceRange}
-                setPriceRange={setPriceRange}
-              />
+              <Filter priceRange={priceRange} setPriceRange={setPriceRange} />
               <div className="uppercase text-[#333] font-semibold text-[16px]  border-t">
                 Dáng cây
               </div>

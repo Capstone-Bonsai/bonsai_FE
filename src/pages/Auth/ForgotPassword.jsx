@@ -22,7 +22,7 @@ function ForgotPassword() {
         <ToastContainer />
         <div className="bg-[#ffffff] w-[30%] drop-shadow-lg">
           <div className="w-[90%] m-auto h-full text-center">
-            <h2 className="underline text-[20px] font-bold">Forgot Password</h2>
+            <h2 className="underline text-[20px] font-bold">Quên mật khẩu</h2>
 
             <label>Vui lòng nhập email</label>
             <div className="flex justify-center">
@@ -30,9 +30,14 @@ function ForgotPassword() {
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
+                className="w-full border border-[#999999] py-[10px] px-[20px] my-[15px] outline-none"
               />
-              <button onClick={handleForgotPassword}>Gửi</button>
+              <button
+                onClick={handleForgotPassword}
+                className="hover:text-[#3a9943] ml-5"
+              >
+                Gửi
+              </button>
             </div>
           </div>
           <div className=" w-full flex justify-end p-2 hover:text-[#3a9943]">
