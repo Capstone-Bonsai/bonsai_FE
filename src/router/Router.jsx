@@ -12,6 +12,11 @@ import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import UserManage from "../pages/AdminPage/UserManagement/UserManage";
 import ProductDetailManage from "../pages/AdminPage/ProductManagement/ProductDetailManage";
+import ForgotPassword from "../pages/Auth/ForgotPassword";
+import Order from "../pages/OrderProduct/Order";
+import ProfileUser from "../pages/Profile/ProfileUser";
+import ConfirmEmail from "../pages/Auth/ConfirmEmail";
+import ManageOrder from "../pages/OrderProduct/ManageOrder";
 function Router() {
   const element = useRoutes([
     //test
@@ -19,16 +24,21 @@ function Router() {
       path: "/admin/product",
       element: <ProductManage />,
     },
-    {
-      path: "/Login",
-      element: <Login />,
-    },
+
     {
       element: <CustomerRoute />,
       children: [
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/Login",
+          element: <Login />,
+        },
+        {
+          path: "/Register",
+          element: <Register />,
         },
         {
           path: "/product",
@@ -43,8 +53,28 @@ function Router() {
           element: <ShoppingCart />,
         },
         {
+          path: "/Order",
+          element: <Order />,
+        },
+        {
           path: "/service",
           element: <ServiceListPage />,
+        },
+        {
+          path: "/ForgotPassword",
+          element: <ForgotPassword />,
+        },
+        {
+          path: "/Profile",
+          element: <ProfileUser />,
+        },
+        {
+          path: "/ManageOrder",
+          element: <ManageOrder />,
+        },
+        {
+          path: "/api/Auth/ConfirmEmail",
+          element: <Login />,
         },
       ],
     },
