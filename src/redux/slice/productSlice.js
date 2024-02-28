@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { topProducts, bonsaiOffice } from "../../data/TopProducts";
 import { productList } from "../../data/TopProducts";
 import axios from "axios";
@@ -42,9 +42,12 @@ export const fetchAllProduct = createAsyncThunk(
         `/Product/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
         { minPrice, maxPrice }
       );
+
       return response.data;
     } catch (error) {
-      throw error;
+      const errorMessage = error.response.data;
+      const errorStatus = error.response.status;
+      throw (error, errorMessage, errorStatus);
     }
   }
 );
@@ -68,11 +71,22 @@ export const fetchBonsaiOffice = createAsyncThunk(
   }
 );
 
+export const orderProduct = async (dataOrder) => {
+  try {
+    const res = await axiosCus.post("/Order", dataOrder);
+    return res.data;
+  } catch (err) {
+    const errMessage = err.response;
+    console.log(errMessage);
+    throw err, errMessage;
+  }
+};
+
 const initialState = {
   topProductDTO: [],
   allProductNoPaginationDTO: {},
   allProductPaginationDTO: {},
-  allProductDTO: [],
+  allProductDTO: {},
   bonsaiOfficeDTO: [],
   productById: [],
   cart: [],
@@ -88,7 +102,7 @@ const productSlice = createSlice({
   initialState,
   reducers: {
     setAllProductsNoPagintion: (state, action) => {
-      state.allProductNoPagintionDTO = action.payload;
+      state.allProductNoPaginationDTO = action.payload;
     },
     setAllProductsPagintion: (state, action) => {
       state.allProductPagintionDTO = action.payload;
@@ -154,7 +168,8 @@ const productSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(fetchAllProduct.rejected, (state) => {
-      state.msg = "Error loading data";
+      state.allProductDTO = [];
+      state.msg = "Không tìm thấy";
       state.loading = false;
     });
     builder.addCase(fetchProductById.pending, (state) => {
@@ -175,7 +190,7 @@ const productSlice = createSlice({
 
 const { reducer: productReducer, actions } = productSlice;
 export const {
-  setAllProductsNoPagintion,
+  setAllProductsNoPaginxtion,
   setAllProductsPagintion,
   setAllProducts,
   setBonsaiOffice,

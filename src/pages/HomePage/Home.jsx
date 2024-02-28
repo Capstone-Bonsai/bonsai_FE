@@ -1,12 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Carousel from "./Carousel";
 import Banner from "../../assets/banner.png";
 import BannerMuaBan from "../../assets/mua-ban.png";
 import BannerDichVu from "../../assets/dich-vu.png";
 import { PhoneOutlined } from "@ant-design/icons";
 import SellProducts from "./SellProducts";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { profileUser } from "../../redux/slice/authSlice";
+import Cookies from "universal-cookie";
+import { toast } from "react-toastify";
 function Home() {
+  const cookies = new Cookies();
+  const userInfo = cookies?.get("user");
+  const location = useLocation();
+
+  const searchParams = new URLSearchParams(location.search);
+  const userId = searchParams.get("userId");
+  const code = searchParams.get("code");
+  useEffect(() => {
+    // Thực hiện các hành động cần thiết với userId và code
+    console.log("User ID:", userId);
+    console.log("Code:", code);
+  }, [userId, code]);
   return (
     <>
       <div className="">

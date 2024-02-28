@@ -4,9 +4,12 @@ import { productDetailImage } from "../../data/TopProducts";
 import { Link, useParams } from "react-router-dom";
 import { Col, InputNumber, Row, Slider, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductById, setCartFromCookie } from "../../redux/slice/productSlice";
+import {
+  fetchProductById,
+  setCartFromCookie,
+} from "../../redux/slice/productSlice";
 import Cookies from "universal-cookie";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BeatLoader } from "react-spinners";
 import Loading from "../../components/Loading";
@@ -14,7 +17,7 @@ import Loading from "../../components/Loading";
 function ProductDetail() {
   const dispatch = useDispatch();
   const { productId } = useParams();
-
+  const [maxQuantityReached, setMaxQuantityReached] = useState(false);
   useEffect(() => {
     dispatch(fetchProductById(productId));
   }, [productId]);
@@ -39,17 +42,31 @@ function ProductDetail() {
   };
 
   const [inputValue, setInputValue] = useState(1);
-  const onChange = (newValue) => {
-    setInputValue(newValue);
+
+  const onChangeQuantity = (newValue) => {
+    if (newValue <= productDetail.quantity) {
+      setInputValue(newValue);
+      setMaxQuantityReached(false);
+    } else {
+      setMaxQuantityReached(true);
+    }
   };
+  const cookies = new Cookies();
+  const userInfo = cookies.get("user");
+  const idUser = userInfo?.id;
 
   const addToCart = async () => {
-    const cookies = new Cookies();
-    let cartItems = cookies.get("cartItems") || [];
+    let cartItems =
+      userInfo != null
+        ? cookies.get(`cartId ${idUser}`) || []
+        : cookies.get("cartItems") || [];
+
     if (!Array.isArray(cartItems)) {
       cartItems = [];
     }
+
     const existingItem = cartItems.find((item) => item.productId === productId);
+
     if (existingItem) {
       existingItem.quantity += inputValue;
     } else {
@@ -57,12 +74,17 @@ function ProductDetail() {
         productId,
         name: productDetail.name,
         price: productDetail.unitPrice,
-        image: productDetail.image,
+        image: productDetail.productImages[0]?.imageUrl,
+        subCategory: productDetail.subCategory,
         quantity: inputValue,
       });
-      toast.success("Item added to cart!");
+      toast.success("Đã thêm sản phẩm vào giỏ hàng!");
     }
-    await cookies.set("cartItems", cartItems, { path: "/" });
+
+    const cartId = userInfo != null ? `cartId ${idUser}` : "cartItems";
+
+    await cookies.set(cartId, cartItems, { path: "/" });
+
     const itemCount = cartItems.length;
     dispatch(setCartFromCookie({ cartItems, itemCount }));
   };
@@ -120,23 +142,30 @@ function ProductDetail() {
                 Voluptas consectetur inventore voluptatem dignissimos nemo
                 repellendus est, harum maiores veritatis quidem.
               </div>
-              <div className="flex items-center py-5 border-b">
-                <p>Số lượng</p>
-                <div className="px-5">
-                  <InputNumber
-                    min={1}
-                    max={20}
-                    style={{ margin: "0", fontSize: "20px" }}
-                    value={inputValue}
-                    onChange={onChange}
-                  />
+              <div className="border-b">
+                <div className="flex items-center py-5 ">
+                  <p>Số lượng</p>
+                  <div className="px-5">
+                    <InputNumber
+                      min={1}
+                      max={productDetail.quantity}
+                      style={{ margin: "0", fontSize: "20px" }}
+                      value={inputValue}
+                      onChange={onChangeQuantity}
+                    />
+                  </div>
+                  <button
+                    className="bg-[#3a9943] w-[200px] h-[45px] rounded-[10px] text-[#ffffff] text-[16px]"
+                    onClick={addToCart}
+                  >
+                    + Thêm vào Giỏ Hàng
+                  </button>
                 </div>
-                <button
-                  className="bg-[#3a9943] w-[200px] h-[45px] rounded-[10px] text-[#ffffff] text-[16px]"
-                  onClick={addToCart}
-                >
-                  + Thêm vào Giỏ Hàng
-                </button>
+                {maxQuantityReached && (
+                  <div style={{ color: "red" }}>
+                    Đã đạt tối đa số lượng trong kho!
+                  </div>
+                )}
               </div>
             </div>
           </div>

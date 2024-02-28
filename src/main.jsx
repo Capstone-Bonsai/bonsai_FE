@@ -8,7 +8,6 @@ import store from "./redux/store.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import "nprogress/nprogress.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>

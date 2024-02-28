@@ -1,79 +1,131 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../../redux/slice/authSlice";
-
+import { confirmEmail, loginUser } from "../../redux/slice/authSlice";
+import { toast } from "react-toastify";
+import Loading from "../../components/Loading";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const cookies = new Cookies();
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    setUser(null);
-    cookies.remove("jwt_authorization");
-  };
+  const userInfo = cookies?.get("user");
 
-  const handleLogin = async () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const userId = searchParams.get("userId");
+  const code = searchParams.get("code");
+
+  useEffect(() => {
+    console.log("User ID:", userId);
+    console.log("Code:", code);
+  }, [userId, code]);
+
+  useEffect(() => {
+    if (userId != null && code != null) {
+      const confirmEmailFromUrl = async () => {
+        try {
+          await confirmEmail(userId, code);
+          toast.success("Xác thực thành công!");
+        } catch (error) {
+          toast.error("Xác thực thất bại!");
+        }
+      };
+
+      confirmEmailFromUrl();
+    }
+  }, [userId, code]);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
+      alert("bạn đã đăng nhập rồi");
+    }
+  }, [userInfo]);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (username.trim() === "" || password.trim() === "") {
+      toast.error("Bạn cần phải điền đầy đủ thông tin!");
+      return;
+    }
     try {
-      const response = await dispatch(loginUser({ email: username, password }));
-      const { token } = response.payload;
-      cookies.set("user", token);
+      setIsLoading(true);
+      const response = await loginUser({ email: username, password });
+      if (userInfo != null) {
+        cookies.remove("user");
+      }
+      cookies.set("user", response);
+      toast.success("Đăng nhập thành công");
+      navigate("/");
     } catch (error) {
-      console.error("Error logging in:", error);
+      toast.error("Sai tài khoản hoặc mật khẩu");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className=" fixed top-0 left-0 right-0 bottom-0 w-full h-full flex justify-center items-center">
-      <div className="bg-[#ffffff] w-[30%] drop-shadow-lg">
-        <div className="w-[90%] m-auto h-full mb-5 ">
-          <h2 className="underline text-[20px] font-bold">Login</h2>
-          <div>
-            <label>Username:</label>
-            <div className="flex justify-center">
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
-              />
+    <>
+      {isLoading ? (
+        <Loading loading={isLoading} />
+      ) : (
+        <div className="top-0 left-0 right-0 bottom-0 w-full h-full flex justify-center items-center my-10">
+          <div className="bg-[#ffffff] w-[30%] drop-shadow-lg">
+            <div className="w-[90%] m-auto h-full mb-5 ">
+              <h2 className="underline text-[20px] font-bold">Đăng nhập</h2>
+              <div>
+                <label>Tài khoản:</label>
+                <div className="flex justify-center">
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
+                  />
+                </div>
+              </div>
+              <div>
+                <label>Mật khẩu:</label>
+                <div className="flex justify-center">
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className=" w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <div className="flex items-center">
+                  {/* <input type="checkbox" />
+                  <div className="pl-2">Remember Me</div> */}
+                </div>
+                <Link to="/ForgotPassword">Quên mật khẩu?</Link>
+              </div>
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={handleLogin}
+                  className="uppercase bg-black rounded-[3px] text-[#ffffff] w-[140px] h-[36px]"
+                >
+                  Login
+                </button>
+                <Link
+                  to="/register"
+                  className="hover:text-[#3a9943] text-[15px]"
+                >
+                  Chưa có tài khoản? Đăng ký ngay
+                </Link>
+              </div>
             </div>
-          </div>
-          <div>
-            <label>Password:</label>
-            <div className="flex justify-center">
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className=" w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
-              />
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className="flex items-center">
-              <input type="checkbox" />
-              <div className="pl-2">Remember Me</div>
-            </div>
-            <div>Forgotten password?</div>
-          </div>
-          <div className="flex justify-between items-center">
-            <button
-              onClick={handleLogin}
-              className="uppercase bg-black rounded-[3px] text-[#ffffff] w-[140px] h-[36px]"
-            >
-              Login
-            </button>
-            <Link to="/register" className="hover:text-[#3a9943]">
-              Register
-            </Link>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 
