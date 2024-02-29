@@ -55,10 +55,9 @@ function Login() {
       cookies.set("user", response);
 
       console.log(response);
-      if(response.role == "Customer"){
+      if (response.role == "Customer") {
         navigate("/");
-
-      } else if (response.role == "Manager"){
+      } else if (response.role == "Manager") {
         navigate("/admin/product");
       }
     } catch (error) {
