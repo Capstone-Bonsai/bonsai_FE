@@ -7,36 +7,40 @@ import { updateProfileUser } from "../../redux/slice/authSlice";
 function ProfileUser() {
   const cookies = new Cookies();
   const userInfo = cookies?.get("userData");
-
   const [userName, setUserName] = useState(userInfo?.userName);
   const [fullName, setFullName] = useState(userInfo?.fullname);
   const [imageAvt, setImageAvt] = useState(userInfo?.avatarUrl);
   const [phoneNumber, setPhoneNumber] = useState(userInfo?.phoneNumber);
-  console.log(userInfo);
+  const [file, setFile] = useState(imageAvt);
+  const [previewImage, setPreviewImage] = useState(null);
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      const imageUrl = reader.result;
-      console.log(imageUrl);
-      setImageAvt(reader.result);
-    };
-    reader.readAsDataURL(file);
+    setFile(file);
+    const imageURL = URL.createObjectURL(file);
+    setPreviewImage(imageURL);
   };
   const handleUploadClick = () => {
     document.getElementById("upload-input").click();
   };
+
   const handleUpdate = async () => {
     const formData = new FormData();
     formData.append("Username", userName);
     formData.append("Fullname", fullName);
     formData.append("PhoneNumber", phoneNumber);
-    if (imageAvt) {
-      formData.append("Avatar", imageAvt);
-    }
+    formData.append("Avatar", file);
     try {
       await updateProfileUser(formData);
       toast.success("Update thành Công");
+      const newData = {
+        ...userInfo,
+        userName: userName,
+        fullname: fullName,
+        avatarUrl: file,
+        phoneNumber: phoneNumber,
+      };
+      cookies.set("userData", newData);
     } catch (error) {
       toast.error("Update không thành công", error);
     }
@@ -46,10 +50,10 @@ function ProfileUser() {
       <div className="text-center flex flex-col items-center">
         <div className=" items-center">
           <div className=" flex flex-col items-center justify-center">
-            {imageAvt != null ? (
+            {imageAvt != null || file != imageAvt ? (
               <div className="w-[100px] h-[100px] rounded-full flex justify-center items-center">
                 <Image
-                  src={imageAvt}
+                  src={previewImage || file || imageAvt}
                   className="rounded-full bg-cover"
                   alt=""
                   width={100}

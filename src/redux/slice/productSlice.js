@@ -87,7 +87,7 @@ const initialState = {
   allProductNoPaginationDTO: {},
   allProductPaginationDTO: {},
   allProductDTO: {},
-  bonsaiOfficeDTO: [],
+  bonsaiOfficeDTO: [ ],
   productById: [],
   cart: [],
   pagination: {},
