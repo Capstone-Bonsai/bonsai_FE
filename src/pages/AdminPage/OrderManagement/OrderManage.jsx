@@ -1,31 +1,30 @@
 import React, { useState, useEffect } from "react";
 import {
-  Space,
-  Tag,
-  Table,
-  Input,
-  Modal,
-} from "antd";
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
+import { Space, Tag, Table, Input, Modal } from "antd";
 const { Search } = Input;
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllOrders } from "../../../redux/slice/orderSlice"
+import { fetchAllOrders } from "../../../redux/slice/orderSlice";
 import { deleteProduct } from "../../../utils/productApi";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
+import ModalUpdateOrder from "./ModalUpdateOrder";
 
 function OrderManage() {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.order.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState();
-  const [selectedUpdateProduct, setSelectedUpdateProduct] = useState();
+  const [selectedUpdateOrder, setSelectedUpdateOrder] = useState();
 
-  const allOrder = useSelector(
-    (state) => state.order?.listOrder?.items
-  );
+  const allOrder = useSelector((state) => state.order?.listOrder?.items);
   console.log(allOrder);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
@@ -40,6 +39,10 @@ function OrderManage() {
     );
   }, []);
 
+  const showUpdateModal = () => {
+    setOpenUpdateModal(true);
+  };
+
   const showModalDelete = () => {
     setOpenDelete(true);
     console.log(openDelete);
@@ -47,7 +50,7 @@ function OrderManage() {
 
   const handleDelete = () => {
     setConfirmLoadingDelete(true);
-    deleteProduct(selectedProduct)
+    deleteProduct(selectedOrder)
       .then((data) => {
         toast.success(data);
         setOpenDelete(false);
@@ -64,6 +67,11 @@ function OrderManage() {
   const handleCancelDelete = () => {
     console.log("Clicked cancel button");
     setOpenDelete(false);
+  };
+
+  const handleCancelUpdate = () => {
+    setSelectedUpdateOrder(undefined);
+    setOpenUpdateModal(false);
   };
 
   // const fetchListSubCategory = () => {
@@ -108,6 +116,19 @@ function OrderManage() {
   //     });
   // };
 
+  const getColor = (orderStatus) => {
+    switch (orderStatus) {
+      case "Paid":
+        return { color: "success", icon: <CheckCircleOutlined /> };
+      case "Waiting":
+        return { color: "warning", icon: <ClockCircleOutlined /> };
+      case "Failed":
+        return { color: "error", icon: <CloseCircleOutlined /> };
+      default:
+        return "defaultColor";
+    }
+  };
+
   const handleTableChange = (pagination) => {
     console.log(pagination);
     const index = Number(pagination.current) - 1;
@@ -121,14 +142,94 @@ function OrderManage() {
 
   const columns = [
     {
-      title: "Sản phẩm",
+      title: "Khách hàng",
+      dataIndex: "customer",
+      key: "customer",
+      render: (_, record) => (
+        <>
+          <p>{record.customer.applicationUser.email}</p>
+        </>
+      ),
+    },
+    {
+      title: "Địa chỉ",
       dataIndex: "address",
       key: "address",
     },
     {
-      title: "Kho sẵn",
+      title: "Ngày đặt",
       dataIndex: "orderDate",
       key: "orderDate",
+      render: (_, record) => (
+        <>
+          <p>{new Date(record.orderDate).toLocaleDateString()}</p>
+        </>
+      ),
+    },
+    {
+      title: "Ngày giao",
+      dataIndex: "expectedDeliveryDate",
+      key: "expectedDeliveryDate",
+      render: (_, record) => (
+        <>
+          <p>{new Date(record.expectedDeliveryDate).toLocaleDateString()}</p>
+        </>
+      ),
+    },
+    {
+      title: "Giá hàng",
+      dataIndex: "price",
+      key: "price",
+      render: (_, record) => (
+        <>
+          <p>
+            {new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "VND",
+            }).format(record.price)}
+          </p>
+        </>
+      ),
+    },
+    {
+      title: "Phí giao hàng",
+      dataIndex: "deliveryPrice",
+      key: "deliveryPrice",
+      render: (_, record) => (
+        <>
+          <p>
+            {new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "VND",
+            }).format(record.deliveryPrice)}
+          </p>
+        </>
+      ),
+    },
+    {
+      title: "Tổng cộng",
+      dataIndex: "totalPrice",
+      key: "totalPrice",
+      render: (_, record) => (
+        <>
+          <p>
+            {new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "VND",
+            }).format(record.totalPrice)}
+          </p>
+        </>
+      ),
+    },
+    {
+      title: "Loại đơn hàng",
+      dataIndex: "orderType",
+      key: "orderType",
+      render: (_, record) => (
+        <>
+          <Tag>{record.orderType}</Tag>
+        </>
+      ),
     },
     {
       title: "Trạng thái",
@@ -136,8 +237,11 @@ function OrderManage() {
       key: "orderStatus",
       render: (_, record) => (
         <>
-          <Tag color={record.isDisable == 1 ? "geekblue" : "red"}>
-            {record.isDisabled == 1 ? "no" : "yes"}
+          <Tag
+            color={getColor(record.orderStatus).color}
+            icon={getColor(record.orderStatus).icon}
+          >
+            {record.orderStatus}
           </Tag>
         </>
       ),
@@ -156,7 +260,15 @@ function OrderManage() {
           >
             Xóa
           </button>
-          <Link to={`/admin/productDetail/${record.id}`} key={record.id}>
+          <button
+            onClick={() => {
+              setSelectedUpdateOrder(record);
+              showUpdateModal();
+            }}
+          >
+            Chỉnh sửa
+          </button>
+          <Link to={`/admin/order/${record.id}`} key={record.id}>
             Xem thông tin
           </Link>
         </Space>
@@ -191,32 +303,27 @@ function OrderManage() {
               </div>
             </div>
             <div className="mb-12">
-                <Table
-                  className="w-[100%]"
-                  dataSource={allOrder}
-                  columns={columns}
-                  scroll={{ x: true }}
-                  pagination={paging}
-                  onChange={handleTableChange}
-                  rowKey="id"
-                  loading={{indicator: <Loading loading={loading}/>, spinning: loading}}
-                />
+              <Table
+                className="w-[100%]"
+                dataSource={allOrder}
+                columns={columns}
+                scroll={{ x: true }}
+                pagination={paging}
+                onChange={handleTableChange}
+                rowKey="id"
+                loading={{
+                  indicator: <Loading loading={loading} />,
+                  spinning: loading,
+                }}
+              />
             </div>
           </div>
         </div>
-        {/* <ModalCreateProduct
-          show={openCreateModal}
-          setShow={handleCancelCreate}
-          listSubCategory={listSubCategory}
-          listTag={listTag}
-        />
-        <ModalUpdateProduct
+        <ModalUpdateOrder
           show={openUpdateModal}
           setShow={handleCancelUpdate}
-          product={selectedUpdateProduct}
-          listSubCategory={listSubCategory}
-          listTag={listTag}
-        /> */}
+          order={selectedUpdateOrder}
+        />
         <Modal
           title="Xóa sản phẩm"
           open={openDelete}

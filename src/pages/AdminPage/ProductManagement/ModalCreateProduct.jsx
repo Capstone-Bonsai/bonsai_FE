@@ -150,7 +150,7 @@ const ModalCreateProduct = (props) => {
       postProduct(product)
         .then((data) => {
           setConfirmLoading(false);
-          toast.success(data.data);
+          toast.success("Thêm sản phẩm thành công!");
           dispatch(fetchAllProductPagination(0, 5));
           handleClose();
         })
@@ -162,13 +162,25 @@ const ModalCreateProduct = (props) => {
     }
   };
   const onSubmit = (i) => {
-    formData.Image = listImage;
-    console.log(formData);
+    formData.Image = listImage?.map((image) => image.originFileObj);
+    const postData = new FormData();
+    postData.append("SubCategoryId", formData.SubCategoryId);
+    postData.append("Name", formData.Name);
+    postData.append("Description", formData.Description);
+    postData.append("TreeShape", formData.TreeShape);
+    postData.append("AgeRange", formData.AgeRange);
+    postData.append("Height", formData.Height);
+    postData.append("Unit", formData.Unit);
+    postData.append("Quantity", formData.Quantity);
+    postData.append("UnitPrice", formData.UnitPrice);
+    formData.Image?.map((image) => postData.append("Image", image));
+    formData.TagId?.map((tagId) => postData.append("TagId", tagId));
+
     formRef.current
       .validateFields()
       .then(() => {
         setConfirmLoading(true);
-        createProduct(formData);
+        createProduct(postData);
         setConfirmLoading(false);
       })
       .catch((errorInfo) => {
@@ -321,16 +333,19 @@ const ModalCreateProduct = (props) => {
                 {
                   type: "number",
                   min: 0,
-                  max: 10000000,
+                  max: 100000000,
                   message:
-                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 10000000 Vnd!",
+                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 100,000,000 Vnd!",
                 },
               ]}
             >
               <InputNumber
                 min={0}
                 step={1000}
-                prefix="(Vnd)"
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                prefix="₫"
                 className="w-[100%]"
               />
             </Form.Item>
@@ -356,11 +371,19 @@ const ModalCreateProduct = (props) => {
                 mode="multiple"
                 allowClear
                 style={{ width: "100%" }}
-                placeholder="Please select"
+                placeholder="Please select tag"
+                filterOption={(input, option) =>
+                  (option?.label ?? "").includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
                 options={listTag?.items?.map((tag, index) => ({
                   key: index,
                   value: tag.id,
-                  label: tag.name
+                  label: tag.name,
                 }))}
               />
             </Form.Item>
