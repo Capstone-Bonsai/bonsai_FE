@@ -12,6 +12,7 @@ export const fetchAllProductNoPagination = createAsyncThunk(
   async () => {
     try {
       const response = await axiosCus.get(`/Product`);
+      console.log(response)
       return response.data;
     } catch (error) {
       throw error;
@@ -19,6 +20,20 @@ export const fetchAllProductNoPagination = createAsyncThunk(
   }
 );
 
+export const fetchAllProductPagination = createAsyncThunk(
+  "product/fetchTopProductsPagination",
+  async ({ pageIndex = 0, pageSize = 20 }) => {
+    try {
+      const response = await axiosCus.get(
+        `/Product/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      );
+      console.log(response.data)
+      return response.data ;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 export const fetchAllProduct = createAsyncThunk(
   "product/fetchTopProducts",
   async ({ pageIndex, pageSize, minPrice, maxPrice }) => {
@@ -69,11 +84,13 @@ export const orderProduct = async (dataOrder) => {
 
 const initialState = {
   topProductDTO: [],
-  allProductNoPaginationDTO: [],
+  allProductNoPaginationDTO: {},
+  allProductPaginationDTO: {},
   allProductDTO: {},
   bonsaiOfficeDTO: [ ],
   productById: [],
   cart: [],
+  pagination: {},
   itemCount: 0,
   loading: false,
   msg: "",
@@ -86,6 +103,9 @@ const productSlice = createSlice({
   reducers: {
     setAllProductsNoPagintion: (state, action) => {
       state.allProductNoPaginationDTO = action.payload;
+    },
+    setAllProductsPagintion: (state, action) => {
+      state.allProductPagintionDTO = action.payload;
     },
     setAllProducts: (state, action) => {
       state.allProductDTO = action.payload;
@@ -115,6 +135,25 @@ const productSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(fetchAllProductNoPagination.rejected, (state) => {
+      state.msg = "Error loading data";
+      state.loading = false;
+    });
+    builder.addCase(fetchAllProductPagination.pending, (state) => {
+      state.msg = "Loading...";
+      state.loading = true;
+    });
+
+    builder.addCase(fetchAllProductPagination.fulfilled, (state, action) => {
+      state.allProductPaginationDTO = action.payload;
+      state.pagination = {
+        current: action.payload.pageIndex + 1,
+        pageSize: action.payload.pageSize,
+        total: action.payload.totalItemsCount,
+      };
+      state.msg = "Data loaded successfully";
+      state.loading = false;
+    });
+    builder.addCase(fetchAllProductPagination.rejected, (state) => {
       state.msg = "Error loading data";
       state.loading = false;
     });
@@ -152,6 +191,7 @@ const productSlice = createSlice({
 const { reducer: productReducer, actions } = productSlice;
 export const {
   setAllProductsNoPaginxtion,
+  setAllProductsPagintion,
   setAllProducts,
   setBonsaiOffice,
   setCartFromCookie,
