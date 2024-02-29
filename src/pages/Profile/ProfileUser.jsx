@@ -7,7 +7,7 @@ import { updateProfileUser } from "../../redux/slice/authSlice";
 function ProfileUser() {
   const cookies = new Cookies();
   const userInfo = cookies?.get("userData");
-
+  const [file, setFile] = useState(null);
   const [userName, setUserName] = useState(userInfo?.userName);
   const [fullName, setFullName] = useState(userInfo?.fullname);
   const [imageAvt, setImageAvt] = useState(userInfo?.avatarUrl);
@@ -15,14 +15,9 @@ function ProfileUser() {
   console.log(userInfo);
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      const imageUrl = reader.result;
-      console.log(imageUrl);
-      setImageAvt(reader.result);
-    };
-    reader.readAsDataURL(file);
+    setFile(file);
   };
+
   const handleUploadClick = () => {
     document.getElementById("upload-input").click();
   };
@@ -31,9 +26,7 @@ function ProfileUser() {
     formData.append("Username", userName);
     formData.append("Fullname", fullName);
     formData.append("PhoneNumber", phoneNumber);
-    if (imageAvt) {
-      formData.append("Avatar", imageAvt);
-    }
+    formData.append("Avatar", file);
     try {
       await updateProfileUser(formData);
       toast.success("Update thành Công");

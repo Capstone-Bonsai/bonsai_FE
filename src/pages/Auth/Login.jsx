@@ -40,13 +40,6 @@ function Login() {
     }
   }, [userId, code]);
 
-  useEffect(() => {
-    if (userInfo) {
-      navigate("/");
-      alert("bạn đã đăng nhập rồi");
-    }
-  }, [userInfo]);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     if (username.trim() === "" || password.trim() === "") {
@@ -60,8 +53,14 @@ function Login() {
         cookies.remove("user");
       }
       cookies.set("user", response);
-      toast.success("Đăng nhập thành công");
-      navigate("/");
+
+      console.log(response);
+      if(response.role == "Customer"){
+        navigate("/");
+
+      } else if (response.role == "Manager"){
+        navigate("/admin/product");
+      }
     } catch (error) {
       toast.error("Sai tài khoản hoặc mật khẩu");
     } finally {

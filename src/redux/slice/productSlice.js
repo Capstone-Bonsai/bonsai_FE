@@ -71,7 +71,7 @@ const initialState = {
   topProductDTO: [],
   allProductNoPaginationDTO: [],
   allProductDTO: {},
-  bonsaiOfficeDTO: [],
+  bonsaiOfficeDTO: [ ],
   productById: [],
   cart: [],
   itemCount: 0,
