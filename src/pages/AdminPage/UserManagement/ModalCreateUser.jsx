@@ -146,16 +146,17 @@ const ModalCreateUser = (props) => {
       postData.append("PhoneNumber", formData.phone);
       postData.append("Avatar", fileList[0] ? fileList[0].originFileObj : null);
 
-      postCreateNewUser(postData)
-        .then((data) => {
-          setConfirmLoading(false);
-          toast.success(data.data);
-          dispatch(fetchAllUsers({ pageIndex: 0, pageSize: 20 }));
-          handleClose();
-        })
-        .catch((err) => {
-          toast.error(err.response.data);
-        });
+      console.log(fileList[0] ? fileList[0].originFileObj : null)
+      // postCreateNewUser(postData)
+      //   .then((data) => {
+      //     setConfirmLoading(false);
+      //     toast.success(data.data);
+      //     dispatch(fetchAllUsers({ pageIndex: 0, pageSize: 20 }));
+      //     handleClose();
+      //   })
+      //   .catch((err) => {
+      //     toast.error(err.response.data);
+      //   });
     } catch (error) {
       console.log(error);
     }

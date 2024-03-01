@@ -88,6 +88,7 @@ const UserManage = () => {
     console.log("Clicked cancel button");
     setOpenUnlock(false);
   };
+
   const getColor = (role) => {
     switch (role) {
       case "Manager":
@@ -102,6 +103,7 @@ const UserManage = () => {
         return "defaultColor";
     }
   };
+
   const handleTableChange = (pagination) => {
     console.log(pagination);
     const index = Number(pagination.current) - 1;
@@ -219,7 +221,7 @@ const UserManage = () => {
 
   return (
     <>
-      <div className="flex justify-center mt-12">
+      <div className="flex justify-center">
         <div className="w-[100%]">
           <div className="font-semibold mb-6">Quản lý người dùng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">

@@ -165,7 +165,7 @@ const ModalUpdateProduct = (props) => {
   );
 
   const fetchListImage = () => {
-    const image=product?.productImages.map((data) => ({
+    const image = product?.productImages.map((data) => ({
       url: data.imageUrl,
       uid: "",
     }));
@@ -179,7 +179,7 @@ const ModalUpdateProduct = (props) => {
         .then((data) => {
           setConfirmLoading(false);
           toast.success(data.data);
-          dispatch(fetchAllProductPagination(0, 5));
+          dispatch(fetchAllProductPagination({pageIndex: 0, pageSize: 5}));
           handleClose();
         })
         .catch((err) => {
@@ -191,7 +191,6 @@ const ModalUpdateProduct = (props) => {
   };
   const onSubmit = (i) => {
     formData.Image = listImage;
-    formData.TagId = selectedTags;
     console.log(formData);
     formRef.current
       .validateFields()
@@ -354,16 +353,19 @@ const ModalUpdateProduct = (props) => {
                 {
                   type: "number",
                   min: 0,
-                  max: 10000000,
+                  max: 100000000,
                   message:
-                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 10000000 Vnd!",
+                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 100,000,000 Vnd!",
                 },
               ]}
             >
               <InputNumber
                 min={0}
                 step={1000}
-                prefix="(Vnd)"
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                prefix="₫"
                 className="w-[100%]"
               />
             </Form.Item>
@@ -384,20 +386,26 @@ const ModalUpdateProduct = (props) => {
                 {uploadButton}
               </Upload>
             </Form.Item>
-            <Form.Item label="Tag" valuePropName="text">
-              <Space size={[0, 8]} wrap>
-                {listTag?.items?.map((tag, index) => (
-                  <CheckableTag
-                    key={index}
-                    checked={selectedTags.includes(tag.id)}
-                    onChange={(checked) => {
-                      handleChangeTagList(tag.id, checked);
-                    }}
-                  >
-                    {tag.name}
-                  </CheckableTag>
-                ))}
-              </Space>
+            <Form.Item label="Tag" name="TagId" valuePropName="text">
+              <Select
+                mode="multiple"
+                allowClear
+                style={{ width: "100%" }}
+                placeholder="Please select tag"
+                filterOption={(input, option) =>
+                  (option?.label ?? "").includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
+                options={listTag?.items?.map((tag, index) => ({
+                  key: index,
+                  value: tag.id,
+                  label: tag.name,
+                }))}
+              />
             </Form.Item>
           </Form>
         </div>
