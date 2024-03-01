@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MinHeight from "../../components/MinHeight";
 import Cookies from "universal-cookie";
 import TestProduct from "../../assets/testProduct.png";
@@ -10,11 +10,18 @@ function Order() {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const location = useLocation();
-
+  const searchParams = new URLSearchParams(location.search);
+  const resultCode = searchParams.get("resultCode");
   const userInfo = cookies.get("user");
-
   const userProfile = cookies.get("userData");
   const idUser = userInfo?.id;
+  useEffect(() => {
+    if (resultCode === "0") {
+      cookies.remove(userInfo ? `cartId ${idUser}` : "cartItems");
+      navigate("/ManageOrder");
+    }
+  }, [resultCode]);
+
   const [cartItems, setCartItems] = useState(() => {
     if (userInfo != null) {
       const cartIdUser = `cartId ${idUser}`;
@@ -23,10 +30,6 @@ function Order() {
       return cookies.get("cartItems") || [];
     }
   });
-
-  const searchParams = new URLSearchParams(location.search);
-  const fullNameNotLogin = searchParams.get("fullName");
-  const phoneNumberNotLogin = searchParams.get("phoneNumber");
 
   const productIdOrder = cartItems.map((item) => item.productId);
   const productQuantityOrder = cartItems.map((item) => item.quantity);
@@ -55,15 +58,17 @@ function Order() {
   const [dateToBE, setDateToBE] = useState("");
   const [note, setNote] = useState("");
   const [confirmNote, setConfirmNote] = useState("");
+  const [fullNameNoneLogin, setFullNameNoneLogin] = useState("");
+  const [phoneNumberNoneLogin, setPhoneNumberNoneLogin] = useState("");
 
   const handleOrder = async () => {
     const dataOrder = {
       orderInfo: {
-        fullname: userProfile ? userProfile.fullname : fullNameNotLogin,
+        fullname: userProfile ? userProfile.fullname : fullNameNoneLogin,
         email: userProfile?.email,
         phoneNumber: userProfile
           ? userProfile.phoneNumber
-          : phoneNumberNotLogin,
+          : phoneNumberNoneLogin,
       },
       address: address,
       expectedDeliveryDate: dateToBE,
@@ -73,7 +78,6 @@ function Order() {
     try {
       const res = await orderProduct(dataOrder);
       console.log(cartItems);
-      cookies.remove(userInfo ? `cartId ${idUser}` : "cartItems");
       toast.success("Order thành Công");
       console.log(res);
       window.location.href = res;
@@ -147,13 +151,73 @@ function Order() {
             </tbody>
           </table>
         </div>
-        <div className="flex my-5">
-          <div className="pl-5 flex flex-col justify-center items-center">
-            <div>Thời gian giao hàng dự kiến:</div>
+        <div className="flex my-5 justify-between">
+          <div className=" w-[70%] p-5 border border-t-[2px] border-t-[#3e9943] rounded-b-[10px]">
+            {userInfo == null ? (
+              <div className="mb-5">
+                <div className="text-[20px] leading-6 font-bold underline text-[#3e9943]">
+                  Không cần đăng nhập
+                </div>
+                <div className="flex w-[100%] justify-between gap-x-5">
+                  <div className="w-[50%]">
+                    <div>Họ và tên</div>
+                    <input
+                      value={fullNameNoneLogin}
+                      className="h-[36px] w-full outline-none p-5 border border-black rounded-[10px]"
+                      onChange={(e) => setFullNameNoneLogin(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-[50%]">
+                    <div>Số điện thoại</div>
+                    <input
+                      value={phoneNumberNoneLogin}
+                      className=" h-[36px] w-full outline-none p-5 border border-black rounded-[10px]"
+                      onChange={(e) => setPhoneNumberNoneLogin(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+            <div>
+              <div className="text-[24px] font-bold  text-[#3e9943]">
+                Địa chỉ
+              </div>
+              <div className="w-full flex">
+                <input
+                  value={address}
+                  className="border border-black w-full px-5 h-[50px] rounded-[10px] outline-none"
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Nhập địa chỉ"
+                  required
+                  onBlur={() => setConfirmAddress(address)}
+                />
+              </div>
+            </div>
+            <div className="mt-5">
+              <div className="text-[24px] font-bold  text-[#3e9943]">
+                Lời nhắn
+              </div>
+              <input
+                className="border w-full px-5 h-[50px] rounded-[10px] outline-none"
+                placeholder="Lời nhắn chú ý"
+                onChange={(e) => setNote(e.target.value)}
+                onBlur={() => {
+                  setConfirmNote(note);
+                }}
+              />
+            </div>
+          </div>
+          <div className=" pl-5 flex flex-col justify-center items-center w-[25%]">
+            <div className="bg-[#3e9943] p-2 rounded-[10px] text-[#ffffff]">
+              Thời gian giao hàng dự kiến
+            </div>
             <div style={wrapperStyle}>
               <Calendar
                 fullscreen={false}
                 defaultValue={null}
+                className="border border-[#3e9943] mt-2"
                 onPanelChange={onPanelChange}
                 onSelect={(date, { source }) => {
                   if (source === "date") {
@@ -164,44 +228,27 @@ function Order() {
               />
             </div>
           </div>
-          <div className=" ml-5">
-            <div>
-              <div className="text-[24px] font-bold">Địa chỉ</div>
-              <div className="w-[500px] flex">
-                <input
-                  value={address}
-                  className="border border-black w-[80%] px-5 h-[50px] rounded-[10px] outline-none"
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Nhập địa chỉ"
-                  required
-                  onBlur={() => setConfirmAddress(address)}
-                />
-              </div>
-            </div>
-            <div className="mt-5">
-              <div className="text-[24px] font-bold">Lời nhắn</div>
-              <input
-                className="border border-black w-[80%] px-5 h-[50px] rounded-[10px] outline-none"
-                placeholder="Lời nhắn chú ý"
-                onChange={(e) => setNote(e.target.value)}
-                onBlur={() => {
-                  setConfirmNote(note);
-                }}
-              />
-            </div>
-          </div>
         </div>
-        <div className=" drop-shadow-lg bg-[#ffffff] my-5">
+
+        <div className=" drop-shadow-lg bg-[#ffffff] my-5 border border-t-[2px] border-t-[#3e9943] pb-5">
           <div className="pl-5 pt-5 font-bold text-[25px] text-[#3e9943] underline">
             Thông tin người nhận
           </div>
           <div className="flex justify-between p-5">
             <div className="font-bold">
-              <div>
-                {userProfile ? userProfile?.fullname : fullNameNotLogin}
+              <div className="w-[300px]">
+                Họ và tên:{" "}
+                <span className="font-normal">
+                  {userProfile ? userProfile?.fullname : fullNameNoneLogin}
+                </span>
               </div>
-              <div>
-                {userProfile ? userProfile?.phoneNumber : phoneNumberNotLogin}
+              <div className=" w-[300px]">
+                Số điện thoại:{" "}
+                <span className="font-normal">
+                  {userProfile
+                    ? userProfile?.phoneNumber
+                    : phoneNumberNoneLogin}
+                </span>
               </div>
             </div>
             <div className=" w-[40%] text-[16px] flex">

@@ -12,7 +12,7 @@ export const fetchAllProductNoPagination = createAsyncThunk(
   async () => {
     try {
       const response = await axiosCus.get(`/Product`);
-      console.log(response)
+      console.log(response);
       return response.data;
     } catch (error) {
       throw error;
@@ -27,8 +27,8 @@ export const fetchAllProductPagination = createAsyncThunk(
       const response = await axiosCus.get(
         `/Product/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
       );
-      console.log(response.data)
-      return response.data ;
+      console.log(response.data);
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -78,7 +78,7 @@ export const orderProduct = async (dataOrder) => {
   } catch (err) {
     const errMessage = err.response;
     console.log(errMessage);
-    throw err, errMessage;
+    throw (err, errMessage);
   }
 };
 
@@ -87,7 +87,7 @@ const initialState = {
   allProductNoPaginationDTO: {},
   allProductPaginationDTO: {},
   allProductDTO: {},
-  bonsaiOfficeDTO: [ ],
+  bonsaiOfficeDTO: [],
   productById: [],
   cart: [],
   pagination: {},
@@ -105,7 +105,7 @@ const productSlice = createSlice({
       state.allProductNoPaginationDTO = action.payload;
     },
     setAllProductsPagintion: (state, action) => {
-      state.allProductPagintionDTO = action.payload;
+      state.allProductPaginationDTO = action.payload;
     },
     setAllProducts: (state, action) => {
       state.allProductDTO = action.payload;
@@ -124,67 +124,68 @@ const productSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    builder.addCase(fetchAllProductNoPagination.pending, (state) => {
-      state.msg = "Loading...";
-      state.loading = true;
-    });
+    builder
+      .addCase(fetchAllProductNoPagination.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
 
-    builder.addCase(fetchAllProductNoPagination.fulfilled, (state, action) => {
-      state.allProductNoPaginationDTO = action.payload;
-      state.msg = "Data loaded successfully";
-      state.loading = false;
-    });
-    builder.addCase(fetchAllProductNoPagination.rejected, (state) => {
-      state.msg = "Error loading data";
-      state.loading = false;
-    });
-    builder.addCase(fetchAllProductPagination.pending, (state) => {
-      state.msg = "Loading...";
-      state.loading = true;
-    });
+      .addCase(fetchAllProductNoPagination.fulfilled, (state, action) => {
+        state.allProductNoPaginationDTO = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(fetchAllProductNoPagination.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.loading = false;
+      })
+      .addCase(fetchAllProductPagination.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
 
-    builder.addCase(fetchAllProductPagination.fulfilled, (state, action) => {
-      state.allProductPaginationDTO = action.payload;
-      state.pagination = {
-        current: action.payload.pageIndex + 1,
-        pageSize: action.payload.pageSize,
-        total: action.payload.totalItemsCount,
-      };
-      state.msg = "Data loaded successfully";
-      state.loading = false;
-    });
-    builder.addCase(fetchAllProductPagination.rejected, (state) => {
-      state.msg = "Error loading data";
-      state.loading = false;
-    });
-    builder.addCase(fetchAllProduct.pending, (state) => {
-      state.msg = "Loading...";
-      state.loading = true;
-    });
+      .addCase(fetchAllProductPagination.fulfilled, (state, action) => {
+        state.allProductPaginationDTO = action.payload;
+        state.pagination = {
+          current: action.payload.pageIndex + 1,
+          pageSize: action.payload.pageSize,
+          total: action.payload.totalItemsCount,
+        };
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(fetchAllProductPagination.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.loading = false;
+      })
+      .addCase(fetchAllProduct.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
 
-    builder.addCase(fetchAllProduct.fulfilled, (state, action) => {
-      state.allProductDTO = action.payload;
-      state.msg = "Data loaded successfully";
-      state.loading = false;
-    });
-    builder.addCase(fetchAllProduct.rejected, (state) => {
-      state.allProductDTO = [];
-      state.msg = "Không tìm thấy";
-      state.loading = false;
-    });
-    builder.addCase(fetchProductById.pending, (state) => {
-      state.msg = "Loading...";
-      state.loading = true;
-    });
-    builder.addCase(fetchProductById.fulfilled, (state, action) => {
-      state.productById = action.payload;
-      state.msg = "Data loaded successfully";
-      state.loading = false;
-    });
-    builder.addCase(fetchProductById.rejected, (state) => {
-      state.msg = "Error loading data";
-      state.loading = false;
-    });
+      .addCase(fetchAllProduct.fulfilled, (state, action) => {
+        state.allProductDTO = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(fetchAllProduct.rejected, (state) => {
+        state.allProductDTO = [];
+        state.msg = "Không tìm thấy";
+        state.loading = false;
+      })
+      .addCase(fetchProductById.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(fetchProductById.fulfilled, (state, action) => {
+        state.productById = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(fetchProductById.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.loading = false;
+      });
   },
 });
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CayTung from "../../assets/cay-tung.png";
 import { productDetailImage } from "../../data/TopProducts";
 import { Link, useParams } from "react-router-dom";
-import { Col, InputNumber, Row, Slider, Space } from "antd";
+import { Col, Image, InputNumber, Row, Slider, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProductById,
@@ -102,9 +102,11 @@ function ProductDetail() {
             <div className=" w-[450px] ">
               <div className="flex">
                 <div className="w-full h-[450px]">
-                  <img
+                  <Image
                     src={imageDetail?.imageUrl}
                     alt=""
+                    width="100%"
+                    height="100%"
                     className=" w-full h-full object-cover"
                   />
                 </div>
@@ -138,9 +140,7 @@ function ProductDetail() {
                 </div>
               </div>
               <div className="py-5 border-b">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Voluptas consectetur inventore voluptatem dignissimos nemo
-                repellendus est, harum maiores veritatis quidem.
+                {productDetail?.description}
               </div>
               <div className="border-b">
                 <div className="flex items-center py-5 ">

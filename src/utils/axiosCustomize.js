@@ -6,13 +6,12 @@ const instance = axios.create({
   baseURL: "https://capstoneb.azurewebsites.net/api/",
 });
 const cookies = new Cookies();
-const user = cookies.get("user");
-const token = user?.token;
-console.log(token);
 
 instance.interceptors.request.use(
   function (config) {
     NProgress.start();
+    const user = cookies.get("user");
+
     const token = user?.token;
     config.headers["Authorization"] = `Bearer ${token}`;
     return config;

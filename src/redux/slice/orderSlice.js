@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "./../../utils/axiosCustomize";
 import { toast } from "react-toastify";
-
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 export const fetchAllOrders = createAsyncThunk(
   "order/fetchAllOrders",
   async ({ pageIndex = 0, pageSize = 20 }) => {
@@ -9,6 +10,32 @@ export const fetchAllOrders = createAsyncThunk(
       const response = await axios.get(
         `/Order?pageIndex=${pageIndex}&pageSize=${pageSize}`
       );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const fetchOrderUser = createAsyncThunk(
+  "order/orderUser",
+  async ({ pageIndex = 0, pageSize = 20 }) => {
+    try {
+      const response = await axios.get(
+        `/Order?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const fetchOrderDetail = createAsyncThunk(
+  "order/orderDetail",
+  async (orderId) => {
+    try {
+      const response = await axios.get(`/Order/${orderId}`);
       return response.data;
     } catch (error) {
       throw error;
@@ -31,6 +58,8 @@ export const fetchOrderById = createAsyncThunk(
 const initialState = {
   listOrder: {},
   orderById: {},
+  orderUser: {},
+  orderDetailUser: {},
   pagination: {},
   loading: false,
   msg: {},
@@ -47,6 +76,12 @@ const orderSlice = createSlice({
     setOrderById: (state, action) => {
       state.orderById = action.payload;
     },
+    setOrderUser: (state, action) => {
+      state.orderUser = action.payload;
+    },
+    setOrderDetail: (state, action) => {
+      state.orderDetailUser = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -62,7 +97,6 @@ const orderSlice = createSlice({
         pageSize: action.payload.pageSize,
         total: action.payload.totalItemsCount,
       };
-      //console.log(listUser);
       state.loading = false;
     });
     builder.addCase(fetchAllOrders.rejected, (state) => {
@@ -79,8 +113,34 @@ const orderSlice = createSlice({
     builder.addCase(fetchOrderById.rejected, (state) => {
       state.loading = false;
     });
+    builder
+      .addCase(fetchOrderUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchOrderUser.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.loading = false;
+      })
+      .addCase(fetchOrderUser.fulfilled, (state, action) => {
+        state.orderUser = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(fetchOrderDetail.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchOrderDetail.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.loading = false;
+      })
+      .addCase(fetchOrderDetail.fulfilled, (state, action) => {
+        state.orderDetailUser = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      });
   },
 });
 const { reducer: orderReducer, actions } = orderSlice;
-export const { setAllOrders, setOrderById } = actions;
+export const { setAllOrders, setOrderById, setOrderUser, setOrderDetail } =
+  actions;
 export { orderReducer as default };

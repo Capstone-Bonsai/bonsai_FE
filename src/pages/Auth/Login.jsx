@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { confirmEmail, loginUser } from "../../redux/slice/authSlice";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loading";
+import MinHeight from "../../components/MinHeight";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -72,56 +73,58 @@ function Login() {
       {isLoading ? (
         <Loading loading={isLoading} />
       ) : (
-        <div className="top-0 left-0 right-0 bottom-0 w-full h-full flex justify-center items-center my-10">
-          <div className="bg-[#ffffff] w-[30%] drop-shadow-lg">
-            <div className="w-[90%] m-auto h-full mb-5 ">
-              <h2 className="underline text-[20px] font-bold">Đăng nhập</h2>
-              <div>
-                <label>Tài khoản:</label>
-                <div className="flex justify-center">
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
-                  />
+        <MinHeight>
+          <div className="top-0 left-0 right-0 bottom-0 w-full h-full flex justify-center items-center my-10">
+            <div className="bg-[#ffffff] w-[30%] drop-shadow-lg">
+              <div className="w-[90%] m-auto h-full mb-5 ">
+                <h2 className="underline text-[20px] font-bold">Đăng nhập</h2>
+                <div>
+                  <label>Tài khoản:</label>
+                  <div className="flex justify-center">
+                    <input
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <label>Mật khẩu:</label>
-                <div className="flex justify-center">
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className=" w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
-                  />
+                <div>
+                  <label>Mật khẩu:</label>
+                  <div className="flex justify-center">
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className=" w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="flex justify-between">
-                <div className="flex items-center">
-                  {/* <input type="checkbox" />
+                <div className="flex justify-between">
+                  <div className="flex items-center">
+                    {/* <input type="checkbox" />
                   <div className="pl-2">Remember Me</div> */}
+                  </div>
+                  <Link to="/ForgotPassword">Quên mật khẩu?</Link>
                 </div>
-                <Link to="/ForgotPassword">Quên mật khẩu?</Link>
-              </div>
-              <div className="flex justify-between items-center">
-                <button
-                  onClick={handleLogin}
-                  className="uppercase bg-black rounded-[3px] text-[#ffffff] w-[140px] h-[36px]"
-                >
-                  Login
-                </button>
-                <Link
-                  to="/register"
-                  className="hover:text-[#3a9943] text-[15px]"
-                >
-                  Chưa có tài khoản? Đăng ký ngay
-                </Link>
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={handleLogin}
+                    className="uppercase bg-black rounded-[3px] text-[#ffffff] w-[140px] h-[36px]"
+                  >
+                    Login
+                  </button>
+                  <Link
+                    to="/register"
+                    className="hover:text-[#3a9943] text-[15px]"
+                  >
+                    Chưa có tài khoản? Đăng ký ngay
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </MinHeight>
       )}
     </>
   );

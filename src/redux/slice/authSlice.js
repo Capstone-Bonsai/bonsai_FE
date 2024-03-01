@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../../utils/axiosCustomize";
 import Cookies from "universal-cookie";
+import instance from "../../utils/axiosCustomize";
 const cookies = new Cookies();
 const currentUrl = window.location.href;
-
 export const register = async (registerData) => {
   try {
     const res = await axios.post("/Auth/Register", registerData, {
@@ -58,11 +58,7 @@ export const profileUser = async () => {
     if (!token) {
       throw new Error("Token not found");
     }
-    const response = await axios.get("/User/Profile", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get("/User/Profile", );
     return response.data;
   } catch (error) {
     throw error;
