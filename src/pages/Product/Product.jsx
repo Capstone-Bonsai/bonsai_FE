@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProduct } from "../../redux/slice/productSlice";
 import Loading from "../../components/Loading";
 import CustomPagination from "./Pagination";
-import { InputNumber } from "antd";
+import { Image, InputNumber } from "antd";
 import Filter from "./Filter";
 import { toast } from "react-toastify";
 
@@ -63,16 +63,20 @@ function Product() {
 
             <div className="w-[75%] pl-10 flex flex-wrap">
               {allProduct?.map((product) => (
-                <Link
-                  to={`/productDetail/${product.id}`}
+                <div
                   key={product.id}
                   className="w-[255px] h-[355px] border mt-5 mx-5"
                 >
-                  <img
+                  <Image
                     className="bg-cover bg-no-repeat w-full h-[250px]"
+                    width="100%"
+                    height="250px"
                     src={product.productImages[0]?.imageUrl}
                   />
-                  <div className="flex items-center justify-evenly">
+                  <Link
+                    to={`/productDetail/${product.id}`}
+                    className="flex items-center justify-evenly"
+                  >
                     <div className="py-5 text-[18px] w-[70%] ">
                       <div className="w-full ">{product.nameUnsign}</div>
                       <div className="text-[#3a9943]">{product.unitPrice}đ</div>
@@ -80,8 +84,8 @@ function Product() {
                     <button className="bg-[#f2f2f2] w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]">
                       <ShoppingCartOutlined />
                     </button>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               ))}
             </div>
           </div>
