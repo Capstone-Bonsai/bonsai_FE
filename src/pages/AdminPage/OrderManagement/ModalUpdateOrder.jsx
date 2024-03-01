@@ -9,7 +9,7 @@ import { Tag, Input, Modal, Form, InputNumber, Select, Upload } from "antd";
 const { Search, TextArea } = Input;
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { putOrder } from "../../../utils/orderApi";
+import { getOrderStatus, putOrder } from "../../../utils/orderApi";
 import { fetchAllOrders } from "../../../redux/slice/orderSlice";
 
 const ModalUpdateOrder = (props) => {
@@ -29,7 +29,12 @@ const ModalUpdateOrder = (props) => {
   });
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [listOrderStatus, setListOrderStatus] = useState();
   const formRef = useRef(null);
+
+  useEffect(() => {
+    fetchListOrderStatus();
+  }, []);
 
   useEffect(() => {
     if (order != undefined) {
@@ -48,19 +53,39 @@ const ModalUpdateOrder = (props) => {
   const updateOrder = (data) => {
     try {
       console.log(data);
-      putOrder(order.id, order.orderStatus)
+      putOrder(order.id, formData.orderStatus)
         .then((data) => {
           setConfirmLoading(false);
           toast.success(data.data);
-          dispatch(fetchAllOrders(0, 5));
+          dispatch(fetchAllOrders({pageIndex: 0, pageSize: 5}));
           handleClose();
         })
         .catch((err) => {
-          toast.error(err.response.statusText);
+          console.log(err.response.data);
         });
     } catch (err) {
-      toast.error(err.response.statusText);
+      toast.error(err.response.data);
     }
+  };
+
+  const fetchListOrderStatus = () => {
+    getOrderStatus()
+      .then((data) => {
+        setListOrderStatus(data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (
+          err &&
+          err.response &&
+          err.response.data &&
+          err.response.data.value
+        ) {
+          toast.error(err.response.data.value);
+        } else {
+          toast.error("Đã xảy ra lỗi!");
+        }
+      });
   };
 
   const onSubmit = (i) => {
@@ -105,62 +130,68 @@ const ModalUpdateOrder = (props) => {
             onValuesChange={handleFormChange}
             initialValues={formData}
           >
-            <Form.Item label="Trạng thái đơn hàng"
-              name="address">
+            <Form.Item label="Khách hàng">
+              <p>{order?.customer.applicationUser.email}</p>
+            </Form.Item>
+            <Form.Item label="Địa chỉ">
               <p>{order?.address}</p>
+            </Form.Item>
+            <Form.Item label="Ngày đặt">
+              <p>{new Date(order?.orderDate).toLocaleDateString()}</p>
+            </Form.Item>
+            <Form.Item label="Ngày giao">
+              <p>
+                {new Date(order?.expectedDeliveryDate).toLocaleDateString()}
+              </p>
+            </Form.Item>
+            <Form.Item label="Giá hàng">
+              <p>
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(order?.price)}
+              </p>
+            </Form.Item>
+            <Form.Item label="Phí giao hàng">
+              <p>
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(order?.deliveryPrice)}
+              </p>
+            </Form.Item>
+            <Form.Item label="Tổng cộng">
+              <p>
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(order?.totalPrice)}
+              </p>
+            </Form.Item>
+            <Form.Item label="Loại đơn hàng">
+              <Tag>{order?.orderType}</Tag>
             </Form.Item>
             <Form.Item
               label="Trạng thái đơn hàng"
               name="orderStatus"
               rules={[
-                { required: true, message: "Trạng thái đơn hàng không được để trống!" },
-              ]}
-            >
-              <Select>
-                {/* {listSubCategory?.map((subCategory, index) => (
-                  <Select.Option value={subCategory.id} key={index}>
-                    {subCategory.name}
-                  </Select.Option>
-                ))} */}
-              </Select>
-            </Form.Item>
-            <Form.Item
-              label="Đơn vị"
-              name="Unit"
-              rules={[
-                { required: true, message: "Đơn vị không được để trống!" },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Giá tiền"
-              name="UnitPrice"
-              rules={[
-                { required: true, message: "Giá tiền không được để trống!" },
                 {
-                  type: "number",
-                  min: 0,
-                  max: 100000000,
-                  message:
-                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 100,000,000 Vnd!",
+                  required: true,
+                  message: "Trạng thái đơn hàng không được để trống!",
                 },
               ]}
             >
-              <InputNumber
-                min={0}
-                step={1000}
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                }
-                prefix="₫"
-                className="w-[100%]"
-              />
+              <Select value={order?.orderStatus}>
+                {listOrderStatus?.map((orderStatus, index) => (
+                  <Select.Option value={orderStatus.value} key={index}>
+                    {orderStatus.display}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </Form>
         </div>
       </Modal>
-    
     </>
   );
 };

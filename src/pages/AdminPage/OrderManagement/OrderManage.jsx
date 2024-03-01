@@ -268,9 +268,6 @@ function OrderManage() {
           >
             Chỉnh sửa
           </button>
-          <Link to={`/admin/order/${record.id}`} key={record.id}>
-            Xem thông tin
-          </Link>
         </Space>
       ),
     },
@@ -280,9 +277,9 @@ function OrderManage() {
 
   return (
     <>
-      <div className="flex justify-center mt-12">
+      <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Sản phẩm</div>
+          <div className="font-semibold mb-6">Đơn hàng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
               <div>

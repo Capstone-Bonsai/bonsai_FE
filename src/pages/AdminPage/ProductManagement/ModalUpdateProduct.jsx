@@ -179,7 +179,7 @@ const ModalUpdateProduct = (props) => {
         .then((data) => {
           setConfirmLoading(false);
           toast.success(data.data);
-          dispatch(fetchAllProductPagination(0, 5));
+          dispatch(fetchAllProductPagination({pageIndex: 0, pageSize: 5}));
           handleClose();
         })
         .catch((err) => {

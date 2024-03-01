@@ -5,4 +5,8 @@ const putOrder = (orderId, orderStatus) => {
   return axios.put(`/Order/${orderId}?orderStatus=${orderStatus}`);
 };
 
-export { putOrder };
+const getOrderStatus = () => {
+  return axios.get(`/Order/OrderStatus`);
+};
+
+export { putOrder, getOrderStatus };

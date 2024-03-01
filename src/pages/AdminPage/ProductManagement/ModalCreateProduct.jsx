@@ -151,7 +151,7 @@ const ModalCreateProduct = (props) => {
         .then((data) => {
           setConfirmLoading(false);
           toast.success("Thêm sản phẩm thành công!");
-          dispatch(fetchAllProductPagination(0, 5));
+          dispatch(fetchAllProductPagination({pageIndex: 0, pageSize: 5}));
           handleClose();
         })
         .catch((err) => {

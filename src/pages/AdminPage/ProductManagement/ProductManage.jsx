@@ -256,7 +256,7 @@ function ProductManage() {
 
   return (
     <>
-      <div className="flex justify-center mt-12">
+      <div className="flex justify-center">
         <div className="w-[100%]">
           <div className="font-semibold mb-6">Sản phẩm</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">

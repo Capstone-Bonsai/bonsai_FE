@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export const fetchAllOrders = createAsyncThunk(
   "order/fetchAllOrders",
-  async ({ pageIndex = 0, pageSize = 20 }) => {
+  async ({ pageIndex , pageSize }) => {
     try {
       const response = await axios.get(
         `/Order?pageIndex=${pageIndex}&pageSize=${pageSize}`
