@@ -16,8 +16,7 @@ function ShoppingCart() {
   const cookies = new Cookies();
   const location = useLocation();
   const [maxQuantityReached, setMaxQuantityReached] = useState(false);
-  const [fullNameNoneLogin, setFullNameNoneLogin] = useState("");
-  const [phoneNumberNoneLogin, setPhoneNumberNoneLogin] = useState("");
+
   console.log(maxQuantityReached);
 
   const dispatch = useDispatch();
@@ -155,35 +154,7 @@ function ShoppingCart() {
       )}
       <div className="m-auto w-[70%] mt-10">
         <div className="flex w-full">
-          <div className=" w-[70%]">
-            {userInfo == null ? (
-              <>
-                <div className="text-[20px] leading-6 font-bold mb-[30px] underline">
-                  Thông tin người nhận
-                </div>
-                <div className="flex w-[60%] justify-between ">
-                  <div>
-                    <div>Họ và tên</div>
-                    <input
-                      value={fullNameNoneLogin}
-                      className="h-[36px] outline-none p-5 border border-black"
-                      onChange={(e) => setFullNameNoneLogin(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <div>Số điện thoại</div>
-                    <input
-                      value={phoneNumberNoneLogin}
-                      className=" h-[36px] outline-none p-5 border border-black"
-                      onChange={(e) => setPhoneNumberNoneLogin(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </>
-            ) : (
-              <></>
-            )}
-          </div>
+          <div className=" w-[70%]"></div>
           <div className="flex justify-end w-[30%]">
             <div className="w-full bg-[#f2f2f2] h-[100px] flex justify-center items-center">
               <div className="w-[70%] h-[70%]">
@@ -204,11 +175,7 @@ function ShoppingCart() {
         </div>
         <div className="flex justify-end ">
           <Link
-            to={
-              userInfo != null
-                ? "/order"
-                : `/order?fullName=${fullNameNoneLogin}&phoneNumber=${phoneNumberNoneLogin}`
-            }
+            to="/order"
             className="uppercase bg-black p-2 rounded-[3px] text-[#fff] my-5 hover:bg-[#3a9943]"
           >
             Tiến hành thanh toán

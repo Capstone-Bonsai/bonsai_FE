@@ -27,8 +27,8 @@ function Banner() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo = cookies.get("user");
-  const token = userInfo?.token;
   const idUser = userInfo?.id;
+
   const handleLogout = () => {
     cookies.remove("user");
     cookies.remove("userData");
@@ -45,7 +45,9 @@ function Banner() {
         });
     }
   }, [userInfo]);
-  const [imageAvt, setImageAvt] = useState(userInfo?.avatarUrl);
+
+  const [imageAvt, setImageAvt] = useState(userInfo?.avatar);
+
   const fetchCartFromCookie = () => {
     if (userInfo != null) {
       const cartIdUser = `cartId ${idUser}`;
