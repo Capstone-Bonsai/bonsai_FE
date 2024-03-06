@@ -63,6 +63,7 @@ function ProductManage() {
       fetchAllProductPagination({
         pageIndex: currentPage - 1,
         pageSize: pageSize,
+        keyword: "",
       })
     );
   }, []);
@@ -159,6 +160,18 @@ function ProductManage() {
         // }
       });
   };
+
+  const handleSearchInputChange = (e) => {
+    e.preventDefault()
+    dispatch(
+      fetchAllProductPagination({
+        pageIndex: 0,
+        pageSize: 5,
+        keyword: e.target.value,
+      })
+    );
+  }
+
   const handleTableChange = (pagination) => {
     console.log(pagination);
     const index = Number(pagination.current) - 1;
@@ -166,6 +179,7 @@ function ProductManage() {
       fetchAllProductPagination({
         pageIndex: index,
         pageSize: pageSize,
+        keyword: "",
       })
     );
   };
@@ -273,6 +287,7 @@ function ProductManage() {
                 <Search
                   placeholder="input search text"
                   onSearch={onSearch}
+                  onChange={(e) => handleSearchInputChange(e)}
                   className="w-[300px]"
                   allowClear
                 />

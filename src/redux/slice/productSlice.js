@@ -22,10 +22,11 @@ export const fetchAllProductNoPagination = createAsyncThunk(
 
 export const fetchAllProductPagination = createAsyncThunk(
   "product/fetchTopProductsPagination",
-  async ({ pageIndex = 0, pageSize = 20 }) => {
+  async ({ pageIndex , pageSize, keyword }) => {
     try {
-      const response = await axiosCus.get(
-        `/Product/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      const response = await axiosCus.post(
+        `/Product/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
+        { keyword }
       );
       console.log(response.data);
       return response.data;

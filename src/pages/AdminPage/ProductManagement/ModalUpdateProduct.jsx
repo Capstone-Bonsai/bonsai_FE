@@ -179,10 +179,17 @@ const ModalUpdateProduct = (props) => {
         .then((data) => {
           setConfirmLoading(false);
           toast.success(data.data);
-          dispatch(fetchAllProductPagination({pageIndex: 0, pageSize: 5}));
+          dispatch(
+            fetchAllProductPagination({
+              pageIndex: 0,
+              pageSize: 5,
+              keyword: "",
+            })
+          );
           handleClose();
         })
         .catch((err) => {
+          console.log(err);
           toast.error(err.response.statusText);
         });
     } catch (err) {
@@ -190,13 +197,24 @@ const ModalUpdateProduct = (props) => {
     }
   };
   const onSubmit = (i) => {
-    formData.Image = listImage;
-    console.log(formData);
+    formData.Image = listImage?.map((image) => image.originFileObj);
+    const postData = new FormData();
+    postData.append("SubCategoryId", formData.SubCategoryId);
+    postData.append("Name", formData.Name);
+    postData.append("Description", formData.Description);
+    postData.append("TreeShape", formData.TreeShape);
+    postData.append("AgeRange", formData.AgeRange);
+    postData.append("Height", formData.Height);
+    postData.append("Unit", formData.Unit);
+    postData.append("Quantity", formData.Quantity);
+    postData.append("UnitPrice", formData.UnitPrice);
+    formData.Image?.map((image) => postData.append("Image", image));
+    formData.TagId?.map((tagId) => postData.append("TagId", tagId));
     formRef.current
       .validateFields()
       .then(() => {
         setConfirmLoading(true);
-        updateProduct(formData);
+        updateProduct(postData);
       })
       .catch((errorInfo) => {
         console.log(errorInfo);
@@ -228,7 +246,8 @@ const ModalUpdateProduct = (props) => {
   return (
     <>
       <Modal
-        title="Thêm sản phẩm"
+        width={800}
+        title="Sửa sản phẩm"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
@@ -236,7 +255,7 @@ const ModalUpdateProduct = (props) => {
         onCancel={handleClose}
         maskClosable={false}
       >
-        <div className="">
+        <div className="mt-12">
           <Form
             form={form1}
             ref={formRef}
@@ -253,7 +272,7 @@ const ModalUpdateProduct = (props) => {
                 { required: true, message: "Phân loại không được để trống!" },
               ]}
             >
-              <Select>
+              <Select value={product?.subCategoryId}>
                 {listSubCategory?.map((subCategory, index) => (
                   <Select.Option value={subCategory.id} key={index}>
                     {subCategory.name}
@@ -277,7 +296,7 @@ const ModalUpdateProduct = (props) => {
                 { required: true, message: "Mô tả không được để trống!" },
               ]}
             >
-              <TextArea />
+              <TextArea rows={10} />
             </Form.Item>
 
             <Form.Item
@@ -386,26 +405,33 @@ const ModalUpdateProduct = (props) => {
                 {uploadButton}
               </Upload>
             </Form.Item>
-            <Form.Item label="Tag" name="TagId" valuePropName="text">
-              <Select
-                mode="multiple"
-                allowClear
-                style={{ width: "100%" }}
-                placeholder="Please select tag"
-                filterOption={(input, option) =>
-                  (option?.label ?? "").includes(input)
-                }
-                filterSort={(optionA, optionB) =>
-                  (optionA?.label ?? "")
-                    .toLowerCase()
-                    .localeCompare((optionB?.label ?? "").toLowerCase())
-                }
-                options={listTag?.items?.map((tag, index) => ({
-                  key: index,
-                  value: tag.id,
-                  label: tag.name,
-                }))}
-              />
+            <Form.Item label="Tag" valuePropName="text">
+              <>
+                <Tag icon={<PlusOutlined />} onClick={() => {}}>
+                  New Tag
+                </Tag>
+                <Form.Item name="TagId">
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    style={{ width: "100%" }}
+                    placeholder="Please select tag"
+                    filterOption={(input, option) =>
+                      (option?.label ?? "").includes(input)
+                    }
+                    filterSort={(optionA, optionB) =>
+                      (optionA?.label ?? "")
+                        .toLowerCase()
+                        .localeCompare((optionB?.label ?? "").toLowerCase())
+                    }
+                    options={listTag?.items?.map((tag, index) => ({
+                      key: index,
+                      value: tag.id,
+                      label: tag.name,
+                    }))}
+                  />
+                </Form.Item>
+              </>
             </Form.Item>
           </Form>
         </div>

@@ -33,12 +33,8 @@ const { Search, TextArea } = Input;
 const { CheckableTag } = Tag;
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { postProduct } from "../../../utils/productApi";
-import {
-  fetchAllProduct,
-  fetchAllProductNoPagination,
-  fetchAllProductPagination,
-} from "../../../redux/slice/productSlice";
+import { putProduct } from "../../../utils/productApi";
+import { fetchAllProductPagination } from "../../../redux/slice/productSlice";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -61,9 +57,9 @@ const ALLOWED_FILE_TYPES = [
   "image/gif",
 ];
 
-const ModalCreateProduct = (props) => {
-  const [form] = Form.useForm();
-  const { show, setShow, listSubCategory, listTag } = props;
+const ModalUpdateProduct = (props) => {
+  const [form1] = Form.useForm();
+  const { show, setShow, product, listSubCategory, listTag } = props;
   const handleClose = () => {
     setFormData({
       SubCategoryId: "",
@@ -78,7 +74,7 @@ const ModalCreateProduct = (props) => {
       Image: "",
       TagId: [],
     });
-    form.resetFields();
+    form1.resetFields();
     setListImage([]);
     setSelectedTags([]);
     setShow(false);
@@ -94,7 +90,7 @@ const ModalCreateProduct = (props) => {
     Unit: "",
     Quantity: 0,
     UnitPrice: 0,
-    Image: "",
+    Image: [],
     TagId: [],
   });
   const dispatch = useDispatch();
@@ -105,7 +101,30 @@ const ModalCreateProduct = (props) => {
   const [listImage, setListImage] = useState([]);
   const formRef = useRef(null);
 
-  const handleChangeTagList = (tag) => {
+  useEffect(() => {
+    if (product != undefined) {
+      console.log(product);
+      setFormData({
+        SubCategoryId: product.subCategoryId,
+        Name: product.name,
+        Description: product.description,
+        TreeShape: product.treeShape,
+        AgeRange: product.ageRange,
+        Height: product.height,
+        Unit: product.unit,
+        Quantity: product.quantity,
+        UnitPrice: product.unitPrice,
+        Image: fetchListImage(),
+        TagId: [],
+      });
+    }
+  }, [product]);
+
+  useEffect(() => {
+    form1.setFieldsValue(formData);
+  }, [form1, formData]);
+
+  const handleChangeTagList = (tag, checked) => {
     const nextSelectedTags = checked
       ? [...selectedTags, tag]
       : selectedTags.filter((t) => t !== tag);
@@ -140,17 +159,26 @@ const ModalCreateProduct = (props) => {
           marginTop: 8,
         }}
       >
-        Tạo sản phẩm
+        Cập nhật
       </div>
     </button>
   );
-  const createProduct = (product) => {
+
+  const fetchListImage = () => {
+    const image = product?.productImages.map((data) => ({
+      url: data.imageUrl,
+      uid: "",
+    }));
+    setListImage(image);
+    return image;
+  };
+  const updateProduct = (data) => {
     try {
-      console.log(product);
-      postProduct(product)
+      console.log(data);
+      putProduct(product.id, data)
         .then((data) => {
           setConfirmLoading(false);
-          toast.success("Thêm sản phẩm thành công!");
+          toast.success(data.data);
           dispatch(
             fetchAllProductPagination({
               pageIndex: 0,
@@ -163,34 +191,25 @@ const ModalCreateProduct = (props) => {
         .catch((err) => {
           toast.error(err.response.statusText);
         });
-    } catch (error) {
-      toast.error(error.response.statusText);
+    } catch (err) {
+      toast.error(err.response.statusText);
     }
   };
   const onSubmit = (i) => {
-    formData.Image = listImage?.map((image) => image.originFileObj);
-    const postData = new FormData();
-    postData.append("SubCategoryId", formData.SubCategoryId);
-    postData.append("Name", formData.Name);
-    postData.append("Description", formData.Description);
-    postData.append("TreeShape", formData.TreeShape);
-    postData.append("AgeRange", formData.AgeRange);
-    postData.append("Height", formData.Height);
-    postData.append("Unit", formData.Unit);
-    postData.append("Quantity", formData.Quantity);
-    postData.append("UnitPrice", formData.UnitPrice);
-    formData.Image?.map((image) => postData.append("Image", image));
-    formData.TagId?.map((tagId) => postData.append("TagId", tagId));
-
+    formData.Image = listImage;
+    console.log(formData);
     formRef.current
       .validateFields()
       .then(() => {
         setConfirmLoading(true);
-        createProduct(postData);
-        setConfirmLoading(false);
+        updateProduct(formData);
       })
       .catch((errorInfo) => {
+        console.log(errorInfo);
         toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
+      })
+      .finally(() => {
+        setConfirmLoading(false);
       });
   };
   const handleFormChange = (changedValues, allValues) => {
@@ -215,7 +234,6 @@ const ModalCreateProduct = (props) => {
   return (
     <>
       <Modal
-        width={800}
         title="Thêm sản phẩm"
         open={show}
         onOk={onSubmit}
@@ -224,14 +242,15 @@ const ModalCreateProduct = (props) => {
         onCancel={handleClose}
         maskClosable={false}
       >
-        <div className="mt-12">
+        <div className="">
           <Form
-            form={form}
+            form={form1}
             ref={formRef}
             layout="horizontal"
             labelCol={{ span: 5 }}
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
+            initialValues={formData}
           >
             <Form.Item
               label="Phân loại"
@@ -264,7 +283,7 @@ const ModalCreateProduct = (props) => {
                 { required: true, message: "Mô tả không được để trống!" },
               ]}
             >
-              <TextArea rows={10}/>
+              <TextArea />
             </Form.Item>
 
             <Form.Item
@@ -415,4 +434,4 @@ const ModalCreateProduct = (props) => {
   );
 };
 
-export default ModalCreateProduct;
+export default ModalUpdateProduct;
