@@ -89,6 +89,14 @@ function ProductDetail() {
     dispatch(setCartFromCookie({ cartItems, itemCount }));
   };
 
+    // Hàm định dạng giá tiền
+    const formatPrice = (price) => {
+      return new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }).format(price);
+    };
+
   return (
     <>
       {loading ? (
@@ -129,14 +137,14 @@ function ProductDetail() {
             </div>
             <div className="w-[48%] border p-5">
               <div className="border-b">
-                <div className="text-[14px] text-[#343434]">
-                  Tags: <Link>Cây, Hạt ,...</Link>
+                <div className="text-[14px] text-[#343434] flex">
+                  Tags: <div>Cây, Hạt ,...</div>
                 </div>
                 <div className="text-[24px] text-[#333333]">
                   {productDetail.name}
                 </div>
                 <div className="text-[#3a9943] text-[32px] font-bold">
-                  {productDetail.unitPrice}đ
+                  {formatPrice(productDetail.unitPrice)}
                 </div>
               </div>
               <div className="py-5 border-b">

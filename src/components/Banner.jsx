@@ -14,6 +14,7 @@ import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { setCartFromCookie } from "../redux/slice/productSlice";
 import { profileUser } from "../redux/slice/authSlice";
+import { setAvatarUrlRedux } from "../redux/slice/avatarSlice";
 function Banner() {
   const { Search } = Input;
   const navLinks = [
@@ -24,29 +25,31 @@ function Banner() {
   ];
   const cookies = new Cookies();
   const countCart = useSelector((state) => state.product.itemCount);
+
+  const avatarUrl = useSelector((state) => state.avatar.avatarUrlRedux);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo = cookies.get("user");
   const idUser = userInfo?.id;
-
+  const userProfile = useState(cookies.get("userData"));
   const handleLogout = () => {
     cookies.remove("user");
     cookies.remove("userData");
   };
+
   useEffect(() => {
     if (userInfo) {
-      setImageAvt(userInfo?.avatar);
       profileUser()
         .then((data) => {
           cookies.set("userData", data);
+          const newAvt = data?.avatarUrl;
+          dispatch(setAvatarUrlRedux(newAvt));
         })
         .catch((error) => {
           console.error("Error while fetching profile data:", error);
         });
     }
   }, [userInfo]);
-
-  const [imageAvt, setImageAvt] = useState(userInfo?.avatar);
 
   const fetchCartFromCookie = () => {
     if (userInfo != null) {
@@ -88,10 +91,10 @@ function Banner() {
             {userInfo != null ? (
               <div className="flex items-center">
                 <div className="bg-[#f2f2f2] w-[40px] h-[40px] flex justify-center rounded-full drop-shadow-lg text-[30px]">
-                  {imageAvt != null ? (
+                  {avatarUrl != null ? (
                     <div>
                       <Image
-                        src={imageAvt}
+                        src={avatarUrl}
                         className=" rounded-full"
                         alt=""
                         width={40}
