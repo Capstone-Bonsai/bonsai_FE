@@ -55,7 +55,11 @@ function PrivateRoute() {
     {
       key: "3",
       icon: <UploadOutlined />,
-      label: "nav 3",
+      label: (
+        <Link to={`/admin/order`}>
+          Đơn hàng
+        </Link>
+      ),
     },
   ];
   return (

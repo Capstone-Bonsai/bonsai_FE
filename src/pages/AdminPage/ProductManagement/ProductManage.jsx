@@ -184,6 +184,16 @@ function ProductManage() {
       title: "Giá tiền",
       dataIndex: "unitPrice",
       key: "unitPrice",
+      render: (_, record) => (
+        <>
+          <p>
+            {new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "VND",
+            }).format(record.unitPrice)}
+          </p>
+        </>
+      ),
     },
     {
       title: "Chiều cao",
@@ -246,7 +256,7 @@ function ProductManage() {
 
   return (
     <>
-      <div className="flex justify-center mt-12">
+      <div className="flex justify-center">
         <div className="w-[100%]">
           <div className="font-semibold mb-6">Sản phẩm</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
@@ -269,16 +279,19 @@ function ProductManage() {
               </div>
             </div>
             <div className="mb-12">
-                <Table
-                  className="w-[100%]"
-                  dataSource={allProduct}
-                  columns={columns}
-                  scroll={{ x: true }}
-                  pagination={paging}
-                  onChange={handleTableChange}
-                  rowKey="id"
-                  loading={{indicator: <Loading loading={loading}/>, spinning: loading}}
-                />
+              <Table
+                className="w-[100%]"
+                dataSource={allProduct}
+                columns={columns}
+                scroll={{ x: true }}
+                pagination={paging}
+                onChange={handleTableChange}
+                rowKey="id"
+                loading={{
+                  indicator: <Loading loading={loading} />,
+                  spinning: loading,
+                }}
+              />
             </div>
           </div>
         </div>

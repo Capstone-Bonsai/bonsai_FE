@@ -34,13 +34,32 @@ export const fetchAllProductPagination = createAsyncThunk(
     }
   }
 );
+
+export const allCategory = createAsyncThunk("product/subCategory", async () => {
+  try {
+    const response = await axiosCus.get("/Category");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+});
+
+export const filterTag = createAsyncThunk("product/tags", async () => {
+  try {
+    const response = await axiosCus.get("/Tag");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+});
+
 export const fetchAllProduct = createAsyncThunk(
   "product/fetchTopProducts",
-  async ({ pageIndex, pageSize, minPrice, maxPrice }) => {
+  async ({ pageIndex, pageSize, minPrice, maxPrice, subCategory }) => {
     try {
       const response = await axiosCus.post(
         `/Product/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
-        { minPrice, maxPrice }
+        { minPrice, maxPrice, subCategory }
       );
 
       return response.data;
@@ -87,7 +106,9 @@ const initialState = {
   allProductNoPaginationDTO: {},
   allProductPaginationDTO: {},
   allProductDTO: {},
+  allCategoryDTO: {},
   bonsaiOfficeDTO: [],
+  tagDTO: {},
   productById: [],
   cart: [],
   pagination: {},
@@ -120,6 +141,12 @@ const productSlice = createSlice({
     },
     setProdctById: (state, action) => {
       state.productById = action.payload;
+    },
+    setCategory: (state, action) => {
+      state.subCategoryDTO = action.payload;
+    },
+    setTag: (state, action) => {
+      state.tagDTO = action.payload;
     },
   },
 
@@ -185,6 +212,32 @@ const productSlice = createSlice({
       .addCase(fetchProductById.rejected, (state) => {
         state.msg = "Error loading data";
         state.loading = false;
+      })
+      .addCase(allCategory.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(allCategory.fulfilled, (state, action) => {
+        state.allCategoryDTO = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(allCategory.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.loading = false;
+      })
+      .addCase(filterTag.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(filterTag.fulfilled, (state, action) => {
+        state.tagDTO = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(filterTag.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.loading = false;
       });
   },
 });
@@ -197,5 +250,6 @@ export const {
   setBonsaiOffice,
   setCartFromCookie,
   setProdctById,
+  setCategory,
 } = actions;
 export { productReducer as default };

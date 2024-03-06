@@ -73,7 +73,13 @@ function ShoppingCart() {
     });
     return totalPrice;
   };
-
+  // Hàm định dạng giá tiền
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(price);
+  };
   return (
     <MinHeight>
       {cartItems.length === 0 ? (
@@ -124,7 +130,7 @@ function ShoppingCart() {
                   <td className="">
                     <div className="text-[16px] font-medium">{item.name}</div>
                   </td>
-                  <td className="font-medium">{item.price} ₫</td>
+                  <td className="font-medium">{formatPrice(item.price)}</td>
                   <td>
                     <InputNumber
                       min={1}
@@ -139,7 +145,7 @@ function ShoppingCart() {
                     )}
                   </td>
                   <td className="font-medium">
-                    {item.price * item.quantity} ₫
+                    {formatPrice(item.price * item.quantity)}
                   </td>
                   <td className="text-[20px] pr-5">
                     <button onClick={() => handleRemoveItem(item)}>
@@ -165,10 +171,6 @@ function ShoppingCart() {
                   <div>Tổng giá trị:</div>
                   <div>{subTotal()} ₫</div>
                 </div>
-                {/* <div className="flex justify-between border-t border-t-1 border-black font-bold text-[18px] pt-[9px]">
-                  <div className="">Grand Total</div>
-                  <div>{subTotal()} ₫</div>
-                </div> */}
               </div>
             </div>
           </div>

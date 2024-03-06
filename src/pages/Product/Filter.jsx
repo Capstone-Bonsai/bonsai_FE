@@ -28,7 +28,7 @@ function Filter({ priceRange, setPriceRange }) {
 
   return (
     <div>
-      <div className="uppercase text-[#333] font-semibold text-[16px]">
+      <div className="uppercase text-[#333] font-semibold text-[16px] my-5">
         Mức giá
       </div>
       <div className=" w-full flex justify-between items-center">
