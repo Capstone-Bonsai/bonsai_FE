@@ -6,6 +6,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Calendar, theme } from "antd";
 import { orderProduct } from "../../redux/slice/productSlice";
 import { toast } from "react-toastify";
+import { destination } from "../../redux/slice/orderSlice";
 function Order() {
   const navigate = useNavigate();
   const cookies = new Cookies();
@@ -15,12 +16,6 @@ function Order() {
   const userInfo = cookies.get("user");
   const userProfile = cookies.get("userData");
   const idUser = userInfo?.id;
-  useEffect(() => {
-    if (resultCode === "0") {
-      cookies.remove(userInfo ? `cartId ${idUser}` : "cartItems");
-      navigate("/ManageOrder");
-    }
-  }, [resultCode]);
 
   const [cartItems, setCartItems] = useState(() => {
     if (userInfo != null) {
@@ -53,19 +48,33 @@ function Order() {
 
   const [address, setAddress] = useState("");
   const [confirmAddress, setConfirmAddress] = useState("");
+  const [emailNotLogin, setEmailNotLogin] = useState("");
   const [expectedDeliveryDate, setExpectedDeliveryDate] = useState("");
-  const [confirmDate, setConfirmDate] = useState("");
   const [dateToBE, setDateToBE] = useState("");
   const [note, setNote] = useState("");
   const [confirmNote, setConfirmNote] = useState("");
   const [fullNameNoneLogin, setFullNameNoneLogin] = useState("");
   const [phoneNumberNoneLogin, setPhoneNumberNoneLogin] = useState("");
+  const [deliveryFee, setDeliveryFee] = useState("");
+  useEffect(() => {
+    if (resultCode === "0") {
+      cookies.remove(userInfo ? `cartId ${idUser}` : "cartItems");
+      navigate("/ManageOrder");
+    } else {
+      const userTemp = cookies?.get("userTemp");
+      if (userTemp) {
+        setEmailNotLogin(userTemp.email);
+        setFullNameNoneLogin(userTemp.fullName);
+        setPhoneNumberNoneLogin(userTemp.phoneNumber);
+      }
+    }
+  }, [resultCode]);
 
   const handleOrder = async () => {
     const dataOrder = {
       orderInfo: {
         fullname: userProfile ? userProfile.fullname : fullNameNoneLogin,
-        email: userProfile?.email,
+        email: userProfile ? userProfile?.email : emailNotLogin,
         phoneNumber: userProfile
           ? userProfile.phoneNumber
           : phoneNumberNoneLogin,
@@ -76,9 +85,14 @@ function Order() {
       listProduct: listProduct,
     };
     try {
+      cookies.set("userTemp", {
+        email: emailNotLogin,
+        fullName: fullNameNoneLogin,
+        phoneNumber: phoneNumberNoneLogin,
+      });
       const res = await orderProduct(dataOrder);
       console.log(cartItems);
-      toast.success("Order thành Công");
+      toast.success("Đang đến trang thanh toán");
       console.log(res);
       window.location.href = res;
     } catch (error) {
@@ -107,7 +121,17 @@ function Order() {
     });
     return totalPrice;
   };
-
+  const handleDeliveryFee = async (address) => {
+    const res = await destination(address);
+    const fee = res?.price;
+    setDeliveryFee(fee);
+  };
+  const handleTotalOrder = () => {
+    let totalPriceOrder = 0;
+    totalPriceOrder = subTotal() + deliveryFee;
+    return totalPriceOrder
+  };
+  
   return (
     <MinHeight>
       <div className="m-auto w-[70%]">
@@ -158,6 +182,14 @@ function Order() {
                 <div className="text-[20px] leading-6 font-bold underline text-[#3e9943]">
                   Không cần đăng nhập
                 </div>
+                <div className="my-5">
+                  <div>Email</div>
+                  <input
+                    value={emailNotLogin}
+                    className="h-[36px] w-full outline-none p-5 border border-black rounded-[10px]"
+                    onChange={(e) => setEmailNotLogin(e.target.value)}
+                  />
+                </div>
                 <div className="flex w-[100%] justify-between gap-x-5">
                   <div className="w-[50%]">
                     <div>Họ và tên</div>
@@ -191,7 +223,7 @@ function Order() {
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="Nhập địa chỉ"
                   required
-                  onBlur={() => setConfirmAddress(address)}
+                  onBlur={() => handleDeliveryFee(address)}
                 />
               </div>
             </div>
@@ -200,7 +232,7 @@ function Order() {
                 Lời nhắn
               </div>
               <input
-                className="border w-full px-5 h-[50px] rounded-[10px] outline-none"
+                className="border w-full px-5 h-[50px] rounded-[10px] border-black outline-none"
                 placeholder="Lời nhắn chú ý"
                 onChange={(e) => setNote(e.target.value)}
                 onBlur={() => {
@@ -213,11 +245,11 @@ function Order() {
             <div className="bg-[#3e9943] p-2 rounded-[10px] text-[#ffffff]">
               Thời gian giao hàng dự kiến
             </div>
-            <div style={wrapperStyle}>
+            <div style={wrapperStyle} className=" mt-2">
               <Calendar
                 fullscreen={false}
                 defaultValue={null}
-                className="border border-[#3e9943] mt-2"
+                className="border border-[#3e9943]"
                 onPanelChange={onPanelChange}
                 onSelect={(date, { source }) => {
                   if (source === "date") {
@@ -237,6 +269,12 @@ function Order() {
           <div className="flex justify-between p-5">
             <div className="font-bold">
               <div className="w-[300px]">
+                Email:{" "}
+                <span className="font-normal">
+                  {userProfile ? userProfile?.email : emailNotLogin}
+                </span>
+              </div>
+              <div className="w-[300px]">
                 Họ và tên:{" "}
                 <span className="font-normal">
                   {userProfile ? userProfile?.fullname : fullNameNoneLogin}
@@ -253,7 +291,7 @@ function Order() {
             </div>
             <div className=" w-[40%] text-[16px] flex">
               <div className="font-bold">Địa chỉ:</div>
-              <div className="pl-2 w-[85%]">{confirmAddress}</div>
+              <div className="pl-2 w-[85%]">{address}</div>
             </div>
             <div className=" w-[20%] text-[16px]">
               <span className="font-bold">Ngày dự kiến:</span>
@@ -279,11 +317,11 @@ function Order() {
                 </div>
                 <div className="flex justify-between mb-4">
                   <div>Phí vận chuyển:</div>
-                  <div>{subTotal()} ₫</div>
+                  <div>{deliveryFee} ₫</div>
                 </div>
                 <div className="flex justify-between border-t border-t-1 border-black font-bold text-[18px] pt-[9px]">
                   <div className="">Grand Total</div>
-                  <div>{subTotal()} ₫</div>
+                  <div>{handleTotalOrder()} ₫</div>
                 </div>
               </div>
             </div>

@@ -5,7 +5,7 @@ import Cookies from "universal-cookie";
 const cookies = new Cookies();
 export const fetchAllOrders = createAsyncThunk(
   "order/fetchAllOrders",
-  async ({ pageIndex , pageSize }) => {
+  async ({ pageIndex, pageSize }) => {
     try {
       const response = await axios.get(
         `/Order?pageIndex=${pageIndex}&pageSize=${pageSize}`
@@ -42,6 +42,15 @@ export const fetchOrderDetail = createAsyncThunk(
     }
   }
 );
+
+export const destination = async (address) => {
+  try {
+    const response = await axios.get(`/DeliveryFee?destination=${address}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const fetchOrderById = createAsyncThunk(
   "order/fetchOrderById",
