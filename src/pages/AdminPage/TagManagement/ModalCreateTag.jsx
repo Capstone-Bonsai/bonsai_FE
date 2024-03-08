@@ -215,7 +215,6 @@ const ModalCreateProduct = (props) => {
   return (
     <>
       <Modal
-        width={800}
         title="Thêm sản phẩm"
         open={show}
         onOk={onSubmit}
@@ -224,7 +223,7 @@ const ModalCreateProduct = (props) => {
         onCancel={handleClose}
         maskClosable={false}
       >
-        <div className="mt-12">
+        <div className="">
           <Form
             form={form}
             ref={formRef}
@@ -264,7 +263,7 @@ const ModalCreateProduct = (props) => {
                 { required: true, message: "Mô tả không được để trống!" },
               ]}
             >
-              <TextArea rows={10}/>
+              <TextArea />
             </Form.Item>
 
             <Form.Item

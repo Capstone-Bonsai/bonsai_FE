@@ -94,25 +94,21 @@ function Product() {
                       tabIndex={0}
                       className="dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52"
                     >
-                      {category.subCategories.length > 0 ? (
-                        category.subCategories.map((subCategory) => (
-                          <button
-                            key={subCategory.id}
-                            onClick={() =>
-                              setSelectedSubCategories(subCategory.id)
-                            }
-                            className={`p-2 flex justify-center w-full mt-1 ${
-                              selectedSubCategories.includes(subCategory.id)
-                                ? "bg-[#3a9943] text-[#fff]"
-                                : "bg-[#f8f8f8]"
-                            }`}
-                          >
-                            {subCategory.name}
-                          </button>
-                        ))
-                      ) : (
-                        <div>không có phân loại chi tiết</div>
-                      )}
+                      {category.subCategories?.map((subCategory) => (
+                        <button
+                          key={subCategory.id}
+                          onClick={() =>
+                            setSelectedSubCategories(subCategory.id)
+                          }
+                          className={`p-2 flex justify-center w-full mt-1 ${
+                            selectedSubCategories.includes(subCategory.id)
+                              ? "bg-[#3a9943] text-[#fff]"
+                              : "bg-[#f8f8f8]"
+                          }`}
+                        >
+                          {subCategory.name}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 ))}
@@ -123,7 +119,9 @@ function Product() {
                   Từ khóa
                 </div>
                 {tags?.map((tag) => (
-                  <div key={tag.id} className="border-b">{tag.name}</div>
+                  <div key={tag.id} className="border-b">
+                    {tag.name}
+                  </div>
                 ))}
               </div>
             </div>
