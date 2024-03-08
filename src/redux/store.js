@@ -11,8 +11,8 @@ const store = configureStore({
     product: productReducer,
     user: userReducer,
     order: orderReducer,
-    tag: tagReducer,,
-    avatar: avatarReducer
+    tag: tagReducer,
+    avatar: avatarReducer,
   },
 });
 
