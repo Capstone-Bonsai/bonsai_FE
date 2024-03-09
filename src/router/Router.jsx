@@ -2,28 +2,27 @@ import { useRoutes } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import React from "react";
 import Home from "../pages/HomePage/Home";
-import Product from "../pages/Product/Product";
-import ProductDetail from "../pages/Product/ProductDetail";
-import ShoppingCart from "../pages/Product/ShoppingCart";
+import ShoppingCart from "../pages/Bonsai/ShoppingCart";
 import ServiceListPage from "../pages/ServicePage/ServiceListPage";
 import ProductManage from "../pages/AdminPage/ProductManagement/ProductManage";
 import CustomerRoute from "./CustomerRoute";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import UserManage from "../pages/AdminPage/UserManagement/UserManage";
-import ProductDetailManage from "../pages/AdminPage/ProductManagement/ProductDetailManage";
 import PrivateRoute from "./PrivateRoute";
 import OrderManage from "../pages/AdminPage/OrderManagement/OrderManage";
 import ForgotPassword from "../pages/Auth/ForgotPassword";
 import Order from "../pages/OrderProduct/Order";
 import ProfileUser from "../pages/Profile/ProfileUser";
-import ConfirmEmail from "../pages/Auth/ConfirmEmail";
 import ManageOrder from "../pages/OrderProduct/ManageOrder";
+import Bonsai from "../pages/Bonsai/Bonsai";
+import BonsaiDetail from "../pages/Bonsai/BonsaiDetail";
 function Router() {
   const element = useRoutes([
     {
       element: <CustomerRoute />,
       children: [
+       
         {
           path: "/",
           element: <Home />,
@@ -37,12 +36,12 @@ function Router() {
           element: <Register />,
         },
         {
-          path: "/product",
-          element: <Product />,
+          path: "/bonsai",
+          element: <Bonsai />,
         },
         {
-          path: "/productDetail/:productId",
-          element: <ProductDetail />,
+          path: "/bonsaiDetail/:bonsaiId",
+          element: <BonsaiDetail />,
         },
         {
           path: "/shoppingCart",

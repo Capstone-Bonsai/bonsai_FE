@@ -21,6 +21,19 @@ export const fetchAllBonsaiPagination = createAsyncThunk(
   }
 );
 
+export const fetchAllBonsaiNoPagination = createAsyncThunk(
+  "bonsai/fetchBonsaisNoPagination",
+  async () => {
+    try {
+      const response = await axiosCus.get(`/Bonsai`);
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const allCategory = createAsyncThunk("product/subCategory", async () => {
   try {
     const response = await axiosCus.get("/Category");
@@ -82,6 +95,7 @@ export const orderBonsai = async (dataOrder) => {
 
 const initialState = {
   allBonsaiPaginationDTO: {},
+  allBonsaiNoPagination: {},
   allBonsaiDTO: {},
   allCategoryDTO: {},
   tagDTO: {},
@@ -115,9 +129,10 @@ const bonsaiSlice = createSlice({
     setCategory: (state, action) => {
       state.subCategoryDTO = action.payload;
     },
-    setTag: (state, action) => {
-      state.tagDTO = action.payload;
-    },
+
+    setBonsaiNoPagination: (state, action) => {
+        state.allBonsaiNoPagination = action.payload;
+      },
   },
 
   extraReducers: (builder) => {
@@ -153,6 +168,20 @@ const bonsaiSlice = createSlice({
       })
       .addCase(fetchAllBonsai.rejected, (state) => {
         state.allBonsaiDTO = [];
+        state.msg = "Không tìm thấy";
+        state.loading = false;
+      })
+      .addCase(fetchAllBonsaiNoPagination.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+
+      .addCase(fetchAllBonsaiNoPagination.fulfilled, (state, action) => {
+        state.allBonsaiNoPagination = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(fetchAllBonsaiNoPagination.rejected, (state) => {
         state.msg = "Không tìm thấy";
         state.loading = false;
       })
@@ -205,5 +234,6 @@ export const {
   setCartFromCookie,
   setBonsaiById,
   setCategory,
+  setBonsaiNoPagination
 } = actions;
 export { bonsaiReducer as default };

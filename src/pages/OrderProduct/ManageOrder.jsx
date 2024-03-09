@@ -8,6 +8,7 @@ import { Modal, Pagination } from "antd";
 import Loading from "../../components/Loading";
 import CustomModal from "./CustomModal";
 import { ShoppingCartOutlined } from "@ant-design/icons";
+import NavbarUser from "../Auth/NavbarUser";
 
 function ManageOrder() {
   const dispatch = useDispatch();
@@ -19,13 +20,23 @@ function ManageOrder() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [loading, setLoading] = useState(false);
   console.log(selectedOrderId);
   const pageSize = 5;
-  const loading = useSelector((state) => state.order.loading);
   console.log(totalItems);
   useEffect(() => {
-    dispatch(fetchOrderUser({ pageIndex: currentPage - 1, pageSize }));
-  }, [currentPage]);
+    if (!orderList) {
+      setLoading(true);
+      dispatch(fetchOrderUser({ pageIndex: currentPage - 1, pageSize }))
+        .then(() => {
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching order data:", error);
+          setLoading(false);
+        });
+    }
+  }, [currentPage, orderList]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const orderById = useSelector((state) => state.order?.orderDetailUser);
@@ -61,10 +72,11 @@ function ManageOrder() {
       {loading ? (
         <Loading loading={loading} />
       ) : (
-        <div className="m-auto w-[70%]">
+        <div className="m-auto w-[70%] mt-10 flex justify-between bg-[#ffffff] mb-5">
+          <NavbarUser />
           {orderList?.length > 0 ? (
             orderList?.map((order) => (
-              <div key={order.id}>
+              <div key={order.id} className="border w-[75%]">
                 <div className="bg-[#ffffff] border drop-shadow-lg my-2 p-5">
                   <div className="flex justify-between">
                     <div>
