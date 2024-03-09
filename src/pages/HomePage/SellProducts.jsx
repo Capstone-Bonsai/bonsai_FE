@@ -83,7 +83,7 @@ function SellProducts() {
               />
               <div className="pt-3 px-3">
                 <div className="mb-3 h-[40px]">
-                  <Link to={`/productDetail/${office.id}`} className="text-[#333333] text-lg hover:text-[#1E7100]">
+                  <Link to={`/bonsaiDetail/${office.id}`} className="text-[#333333] text-lg hover:text-[#1E7100]">
                     {office.name}
                   </Link>
                 </div>
@@ -140,7 +140,7 @@ function SellProducts() {
               />
               <div className="pt-3 px-3">
                 <div className="mb-3 h-[40px]">
-                  <Link to={`/productDetail/${office.id}`} className="text-[#333333] text-lg hover:text-[#1E7100]">
+                  <Link to={`/bonsaiDetail/${office.id}`} className="text-[#333333] text-lg hover:text-[#1E7100]">
                     {office.name}
                   </Link>
                 </div>
