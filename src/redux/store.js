@@ -5,6 +5,7 @@ import userReducer from "./slice/userSlice";
 import orderReducer from "./slice/orderSlice";
 import avatarReducer from "./slice/avatarSlice";
 import tagReducer from "./slice/tagSlice";
+import bonsaiReducer from "./slice/bonsaiSlice";
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     order: orderReducer,
     tag: tagReducer,
     avatar: avatarReducer,
+    bonsai: bonsaiReducer
   },
 });
 

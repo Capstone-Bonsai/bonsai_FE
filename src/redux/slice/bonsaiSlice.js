@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const axiosCus = axios.create({
   baseURL: "https://capstoneb.azurewebsites.net/api/",

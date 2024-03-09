@@ -57,7 +57,7 @@ const ALLOWED_FILE_TYPES = [
   "image/gif",
 ];
 
-const ModalUpdateProduct = (props) => {
+const ModalUpdateTag = (props) => {
   const [form1] = Form.useForm();
   const { show, setShow, product, listSubCategory, listTag } = props;
   const handleClose = () => {
@@ -434,4 +434,4 @@ const ModalUpdateProduct = (props) => {
   );
 };
 
-export default ModalUpdateProduct;
+export default ModalUpdateTag;
