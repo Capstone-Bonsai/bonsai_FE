@@ -40,13 +40,13 @@ function ProfileUser() {
     setIsLoading(true);
     try {
       await updateProfileUser(formData);
-      toast.success("Update thành Công");
       cookies.remove("userData");
       profileUser()
         .then((data) => {
           cookies.set("userData", data);
           dispatch(setAvatarUrlRedux(data.avatarUrl));
           setIsLoading(false);
+          toast.success("Update thành Công");
         })
         .catch((error) => {
           console.error("Error while fetching profile data:", error);

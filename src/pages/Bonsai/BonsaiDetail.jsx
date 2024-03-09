@@ -52,8 +52,11 @@ function BonsaiDetail() {
     if (!Array.isArray(cartItems)) {
       cartItems = [];
     }
-
-    const existingItem = cartItems.find((item) => item.bonsaiId === bonsaiId);
+    const isProductExist = cartItems.some((item) => item.bonsaiId === bonsaiId);
+    if (isProductExist) {
+      toast.info("Sản phẩm đã có trong giỏ hàng!");
+      return;
+    }
 
     cartItems.push({
       bonsaiId,

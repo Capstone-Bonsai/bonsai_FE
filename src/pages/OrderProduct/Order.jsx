@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MinHeight from "../../components/MinHeight";
 import Cookies from "universal-cookie";
-import TestProduct from "../../assets/testProduct.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Calendar, theme } from "antd";
-import { orderProduct } from "../../redux/slice/productSlice";
 import { toast } from "react-toastify";
 import { destination } from "../../redux/slice/orderSlice";
 import { orderBonsai } from "../../redux/slice/bonsaiSlice";
@@ -38,17 +35,13 @@ function Order() {
   const onPanelChange = (value, mode) => {
     console.log(value.format("YYYY-MM-DD"), mode);
   };
-  const { token } = theme.useToken();
-  const wrapperStyle = {
-    width: 300,
-    border: `1px solid ${token.colorBorderSecondary}`,
-    borderRadius: token.borderRadiusLG,
-  };
+  // const { token } = theme.useToken();
+
 
   const [address, setAddress] = useState("");
   const [confirmAddress, setConfirmAddress] = useState("");
   const [emailNotLogin, setEmailNotLogin] = useState("");
-  const [expectedDeliveryDate, setExpectedDeliveryDate] = useState("");
+  // const [expectedDeliveryDate, setExpectedDeliveryDate] = useState("");
   const [dateToBE, setDateToBE] = useState("");
   const [note, setNote] = useState("");
   const [confirmNote, setConfirmNote] = useState("");
@@ -105,8 +98,6 @@ function Order() {
       console.log(Array.isArray(error.data));
       if (Array.isArray(error.data)) {
         toast.error(error.data[0], error);
-      } else if (expectedDeliveryDate == "") {
-        toast.error("Vui lòng chọn thời gian nhận hàng");
       } else {
         toast.error(error.data, error);
       }
@@ -148,7 +139,7 @@ function Order() {
             </thead>
             <tbody>
               {cartItems.map((item) => (
-                <tr key={item.productId} className="ml-5 text-center h-[70px]">
+                <tr key={item.bonsaiId} className="ml-5 text-center h-[70px]">
                   <td className="flex justify-center items-center h-[70px]">
                     <div>
                       <img src={item?.image} alt="" width={50} height={50} />
@@ -238,7 +229,7 @@ function Order() {
               />
             </div>
           </div>
-          <div className=" pl-5 flex flex-col justify-center items-center w-[25%]">
+          {/* <div className=" pl-5 flex flex-col justify-center items-center w-[25%]">
             <div className="bg-[#3e9943] p-2 rounded-[10px] text-[#ffffff]">
               Thời gian giao hàng dự kiến
             </div>
@@ -256,7 +247,7 @@ function Order() {
                 }}
               />
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className=" drop-shadow-lg bg-[#ffffff] my-5 border border-t-[2px] border-t-[#3e9943] pb-5">
@@ -290,10 +281,10 @@ function Order() {
               <div className="font-bold">Địa chỉ:</div>
               <div className="pl-2 w-[85%]">{address}</div>
             </div>
-            <div className=" w-[20%] text-[16px]">
+            {/* <div className=" w-[20%] text-[16px]">
               <span className="font-bold">Ngày dự kiến:</span>
               <span>{expectedDeliveryDate}</span>
-            </div>
+            </div> */}
           </div>
           <div className="flex pl-5 w-full">
             <div className="font-bold">Lời nhắn</div>

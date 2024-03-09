@@ -69,60 +69,53 @@ function ManageOrder() {
 
   return (
     <MinHeight>
-      {loading ? (
-        <Loading loading={loading} />
-      ) : (
-        <div className="m-auto w-[70%] mt-10 flex justify-between bg-[#ffffff] mb-5">
-          <NavbarUser />
+    {loading ? (
+      <Loading loading={loading} />
+    ) : (
+      <div className="m-auto w-[70%] mt-10 flex justify-between bg-[#ffffff] mb-5">
+        <NavbarUser />
+        <div className=" w-[75%] ">
+          <div className=" h-[500px]">
           {orderList?.length > 0 ? (
             orderList?.map((order) => (
-              <div key={order.id} className="border w-[75%]">
-                <div className="bg-[#ffffff] border drop-shadow-lg my-2 p-5">
-                  <div className="flex justify-between">
-                    <div>
-                      <div className="">
-                        {" "}
-                        <span className="font-bold">Đơn hàng trị giá:</span>
-                        {order.price} ₫
-                      </div>
-                      <div className="italic">
-                        {(() => {
-                          const dateString = order.orderDate;
-                          if (dateString) {
-                            const dateObject = new Date(dateString);
-                            const day = dateObject.getDate();
-                            const month = dateObject.getMonth() + 1;
-                            const year = dateObject.getFullYear();
-                            return `${day < 10 ? "0" : ""}${day}/${
-                              month < 10 ? "0" : ""
-                            }${month}/${year}`;
-                          }
-                          return "";
-                        })()}
-                      </div>
+              <div key={order.id} className="bg-[#ffffff] border  drop-shadow-lg my-2 p-5">
+                <div className="flex justify-between">
+                  <div>
+                    <div className="">
+                      {" "}
+                      <span className="font-bold">Đơn hàng trị giá:</span>
+                      {order.price} ₫
                     </div>
-                    <div>Đến địa chỉ: {order.address}</div>
-                    <div>
-                      Tình trạng:{" "}
-                      <span className={getClassForStatus(order.orderStatus)}>
-                        {order.orderStatus}
-                      </span>
+                    <div className="italic">
+                      {(() => {
+                        const dateString = order.orderDate;
+                        if (dateString) {
+                          const dateObject = new Date(dateString);
+                          const day = dateObject.getDate();
+                          const month = dateObject.getMonth() + 1;
+                          const year = dateObject.getFullYear();
+                          return `${day < 10 ? "0" : ""}${day}/${
+                            month < 10 ? "0" : ""
+                          }${month}/${year}`;
+                        }
+                        return "";
+                      })()}
                     </div>
-                    <button
-                      className="hover:text-[#3e9943]"
-                      onClick={() => showModal(order.id)}
-                    >
-                      Chi tiết đơn hàng
-                    </button>
                   </div>
+                  <div>Đến địa chỉ: {order.address}</div>
+                  <div>
+                    Tình trạng:{" "}
+                    <span className={getClassForStatus(order.orderStatus)}>
+                      {order.orderStatus}
+                    </span>
+                  </div>
+                  <button
+                    className="hover:text-[#3e9943]"
+                    onClick={() => showModal(order.id)}
+                  >
+                    Chi tiết đơn hàng
+                  </button>
                 </div>
-                <Pagination
-                  current={currentPage}
-                  pageSize={pageSize}
-                  total={totalItems}
-                  onChange={onPageChange}
-                  className="text-center mt-5"
-                />
               </div>
             ))
           ) : (
@@ -130,17 +123,25 @@ function ManageOrder() {
               <ShoppingCartOutlined className="text-[50px] mt-5 " />
               <div className="font-bold">Bạn chưa mua hàng</div>
             </div>
-          )}
-          {selectedOrderId !== null && (
-            <CustomModal
-              orderId={selectedOrderId}
-              onClose={handleCloseModal}
-              orderById={orderById}
-            />
-          )}
+          )}</div>
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={totalItems}
+            onChange={onPageChange}
+            className="text-center mt-5"
+          />
         </div>
-      )}
-    </MinHeight>
+        {selectedOrderId !== null && (
+          <CustomModal
+            orderId={selectedOrderId}
+            onClose={handleCloseModal}
+            orderById={orderById}
+          />
+        )}
+      </div>
+    )}
+  </MinHeight>
   );
 }
 

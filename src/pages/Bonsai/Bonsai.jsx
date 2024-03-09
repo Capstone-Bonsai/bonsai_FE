@@ -36,7 +36,7 @@ function Bonsai() {
       maxPrice: priceRange[1],
     };
     if (selectedCategories !== "") {
-      payload.Category = selectedCategories;
+      payload.category = selectedCategories;
     }
 
     dispatch(fetchAllBonsai(payload));
