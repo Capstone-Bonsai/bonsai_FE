@@ -7,6 +7,7 @@ import { Calendar, theme } from "antd";
 import { orderProduct } from "../../redux/slice/productSlice";
 import { toast } from "react-toastify";
 import { destination } from "../../redux/slice/orderSlice";
+import { orderBonsai } from "../../redux/slice/bonsaiSlice";
 function Order() {
   const navigate = useNavigate();
   const cookies = new Cookies();
@@ -26,14 +27,12 @@ function Order() {
     }
   });
 
-  const productIdOrder = cartItems.map((item) => item.productId);
-  const productQuantityOrder = cartItems.map((item) => item.quantity);
-  console.log(productIdOrder);
-  const listProduct = productIdOrder.map((productId, index) => ({
-    productId,
-    quantity: productQuantityOrder[index],
-  }));
-  console.log(listProduct);
+  const bonsaiIdOrder = cartItems.map((item) => item.bonsaiId);
+  console.log(bonsaiIdOrder);
+  // const listBonsai = bonsaiIdOrder.map((bonsaiId, index) => ({
+  //   bonsaiId,
+  // }));
+  // console.log(listBonsai);
 
   //calender
   const onPanelChange = (value, mode) => {
@@ -80,9 +79,9 @@ function Order() {
           : phoneNumberNoneLogin,
       },
       address: address,
-      expectedDeliveryDate: dateToBE,
+      // expectedDeliveryDate: dateToBE,
       note: note,
-      listProduct: listProduct,
+      listBonsai: bonsaiIdOrder,
     };
     try {
       cookies.set("userTemp", {
@@ -90,7 +89,7 @@ function Order() {
         fullName: fullNameNoneLogin,
         phoneNumber: phoneNumberNoneLogin,
       });
-      const res = await orderProduct(dataOrder);
+      const res = await orderBonsai(dataOrder);
       console.log(cartItems);
       toast.success("Đang đến trang thanh toán");
       console.log(res);
@@ -117,7 +116,7 @@ function Order() {
   const subTotal = () => {
     let totalPrice = 0;
     cartItems.forEach((item) => {
-      totalPrice += item.price * item.quantity;
+      totalPrice += item.price ;
     });
     return totalPrice;
   };
@@ -143,7 +142,6 @@ function Order() {
                 <th className="uppercase">Sản phẩm</th>
                 <th className="uppercase"></th>
                 <th className="uppercase">Giá</th>
-                <th className="uppercase">Số lượng</th>
                 <th className="uppercase">Tổng</th>
                 <th></th>
               </tr>
@@ -165,9 +163,8 @@ function Order() {
                     </div>
                   </td>
                   <td className="font-medium">{item.price} ₫</td>
-                  <td>{item.quantity}</td>
                   <td className="font-medium">
-                    {item.price * item.quantity} ₫
+                    {item.price } ₫
                   </td>
                   <td className="text-[20px] pr-5"></td>
                 </tr>

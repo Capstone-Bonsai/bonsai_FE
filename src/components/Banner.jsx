@@ -12,19 +12,19 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { setCartFromCookie } from "../redux/slice/productSlice";
+import { setCartFromCookie } from "../redux/slice/bonsaiSlice";
 import { profileUser } from "../redux/slice/authSlice";
 import { setAvatarUrlRedux } from "../redux/slice/avatarSlice";
 function Banner() {
   const { Search } = Input;
   const navLinks = [
     { text: "Trang chủ", to: "/" },
-    { text: "Sản phẩm", to: "/product" },
+    { text: "Sản phẩm", to: "/bonsai" },
     { text: "Chăm sóc cây cảnh", to: "/knowledge" },
     { text: "Địa chỉ", to: "/address" },
   ];
   const cookies = new Cookies();
-  const countCart = useSelector((state) => state.product.itemCount);
+  const countCart = useSelector((state) => state.bonsai.itemCount);
 
   const avatarUrl = useSelector((state) => state.avatar.avatarUrlRedux);
   const dispatch = useDispatch();

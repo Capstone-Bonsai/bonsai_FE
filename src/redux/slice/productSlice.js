@@ -22,7 +22,7 @@ export const fetchAllProductNoPagination = createAsyncThunk(
 
 export const fetchAllProductPagination = createAsyncThunk(
   "product/fetchTopProductsPagination",
-  async ({ pageIndex , pageSize, keyword }) => {
+  async ({ pageIndex, pageSize, keyword }) => {
     try {
       const response = await axiosCus.post(
         `/Product/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
@@ -39,15 +39,6 @@ export const fetchAllProductPagination = createAsyncThunk(
 export const allCategory = createAsyncThunk("product/subCategory", async () => {
   try {
     const response = await axiosCus.get("/Category");
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-});
-
-export const filterTag = createAsyncThunk("product/tags", async () => {
-  try {
-    const response = await axiosCus.get("/Tag");
     return response.data;
   } catch (error) {
     throw error;
@@ -224,19 +215,6 @@ const productSlice = createSlice({
         state.loading = false;
       })
       .addCase(allCategory.rejected, (state) => {
-        state.msg = "Error loading data";
-        state.loading = false;
-      })
-      .addCase(filterTag.pending, (state) => {
-        state.msg = "Loading...";
-        state.loading = true;
-      })
-      .addCase(filterTag.fulfilled, (state, action) => {
-        state.tagDTO = action.payload;
-        state.msg = "Data loaded successfully";
-        state.loading = false;
-      })
-      .addCase(filterTag.rejected, (state) => {
         state.msg = "Error loading data";
         state.loading = false;
       });
