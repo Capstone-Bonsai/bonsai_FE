@@ -17,6 +17,7 @@ import ProfileUser from "../pages/Profile/ProfileUser";
 import ManageOrder from "../pages/OrderProduct/ManageOrder";
 import Bonsai from "../pages/Bonsai/Bonsai";
 import BonsaiDetail from "../pages/Bonsai/BonsaiDetail";
+import ServiceDetailPage from "../pages/ServicePage/ServiceDetailPage";
 function Router() {
   const element = useRoutes([
     {
@@ -50,6 +51,10 @@ function Router() {
         {
           path: "/Order",
           element: <Order />,
+        },
+        {
+          path: "/ServiceDetail/:serviceId",
+          element: <ServiceDetailPage />,
         },
         {
           path: "/service",

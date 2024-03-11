@@ -20,7 +20,7 @@ function Banner() {
   const navLinks = [
     { text: "Trang chủ", to: "/" },
     { text: "Sản phẩm", to: "/bonsai" },
-    { text: "Chăm sóc cây cảnh", to: "/knowledge" },
+    { text: "Chăm sóc cây cảnh", to: "/service" },
     { text: "Địa chỉ", to: "/address" },
   ];
   const cookies = new Cookies();
