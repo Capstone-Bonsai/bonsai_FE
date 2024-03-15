@@ -172,7 +172,7 @@ function Banner() {
                 />
                 <button className="absolute inset-y-0 right-5 flex items-center pl-2 text-[#ffffff] text-[30px] hover:text-[#ffdd20]">
                   <SearchOutlined />
-                </button>
+                </button>     
               </div>
             </form>
             <div className="flex items-center">

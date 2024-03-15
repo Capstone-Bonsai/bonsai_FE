@@ -1,28 +1,49 @@
-import { InputNumber } from "antd";
-import React, { useState } from "react";
+import { InputNumber, Select } from "antd";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import "./style.css";
+const { Option } = Select;
 
 function Filter({ priceRange, setPriceRange }) {
   const [tempPriceRange, setTempPriceRange] = useState(priceRange);
+  const [namePrice, setNamePrice] = useState();
 
-  const validatePriceRange = () => {
-    if (tempPriceRange[0] >= tempPriceRange[1]) {
-      toast.error("Vui lòng điền khoảng giá phù hợp");
-      return false;
+  const priceRangeSelect = [
+    {
+      name: "Dưới 1m",
+      range: [0, 999999],
+    },
+    {
+      name: "1m tới 5m",
+      range: [1000000, 5000000],
+    },
+    {
+      name: "5m tới 10m",
+      range: [5000000, 10000000],
+    },
+    {
+      name: "Trên 10m",
+      range: [10000000, 99999999],
+    },
+  ];
+
+  useEffect(() => {
+    const selectedRange = priceRangeSelect.find(
+      (prs) =>
+        prs.range[0] === tempPriceRange[0] && prs.range[1] === tempPriceRange[1]
+    );
+    if (selectedRange) {
+      setNamePrice(selectedRange.name);
     } else {
-      return true;
+      setNamePrice("Tất cả");
     }
-  };
+  }, [tempPriceRange]);
 
-  const handleChangePriceRange = (value, index) => {
-    const newPriceRange = [...tempPriceRange];
-    newPriceRange[index] = value;
-    setTempPriceRange(newPriceRange);
-  };
-
-  const handleApplyFilterClick = () => {
-    if (validatePriceRange()) {
-      setPriceRange(tempPriceRange);
+  const handleChangeSelectPriceRange = (value) => {
+    const selectedRange = priceRangeSelect.find((prs) => prs.name === value);
+    if (selectedRange) {
+      setTempPriceRange(selectedRange.range);
+      setPriceRange(selectedRange.range);
     }
   };
 
@@ -31,29 +52,17 @@ function Filter({ priceRange, setPriceRange }) {
       <div className="uppercase text-[#333] font-semibold text-[16px] my-5">
         Mức giá
       </div>
-      <div className=" w-full flex justify-between items-center">
-        <InputNumber
-          min={1}
-          defaultValue={tempPriceRange[0]}
-          onChange={(value) => handleChangePriceRange(value, 0)}
-          className="w-[40%]"
-        />
-        <div>đến</div>
-        <InputNumber
-          min={1}
-          defaultValue={tempPriceRange[1]}
-          onChange={(value) => handleChangePriceRange(value, 1)}
-          className="w-[40%]"
-        />
-      </div>
-      <div className="flex justify-center">
-        <button
-          className="bg-[#3a9943] w-[90%] rounded-lg my-5 text-[#fff] py-1"
-          onClick={handleApplyFilterClick}
-        >
-          Áp dụng
-        </button>
-      </div>
+      <Select
+        onChange={handleChangeSelectPriceRange}
+        className="selectFilter w-full mb-5 h-[40px]"
+        value={namePrice}
+      >
+        {priceRangeSelect.map((prs, index) => (
+          <Option key={index} value={prs.name}>
+            {prs.name}
+          </Option>
+        ))}
+      </Select>
     </div>
   );
 }
