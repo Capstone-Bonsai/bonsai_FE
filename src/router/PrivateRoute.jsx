@@ -7,8 +7,9 @@ import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
-  SmileOutlined
+  SmileOutlined,
 } from "@ant-design/icons";
+import logo from "../assets/logo_footer_final.png";
 import { Dropdown, Layout, Menu, Button, theme } from "antd";
 
 const { Header, Sider, Content } = Layout;
@@ -20,15 +21,15 @@ function PrivateRoute() {
   const NavBarItems = [
     {
       key: "1",
-      label:(<UserOutlined />),
+      label: <UserOutlined />,
       children: [
         {
-          type: 'group',
-          label: 'Item 1',
+          type: "group",
+          label: "Item 1",
         },
         {
-          type: 'group',
-          label: 'Item 2',
+          type: "group",
+          label: "Item 2",
         },
       ],
     },
@@ -37,29 +38,17 @@ function PrivateRoute() {
     {
       key: "1",
       icon: <UserOutlined />,
-      label: (
-        <Link to={`/admin/user`}>
-          Người dùng
-        </Link>
-      ),
+      label: <Link to={`/admin/user`}>Người dùng</Link>,
     },
     {
       key: "2",
       icon: <VideoCameraOutlined />,
-      label: (
-        <Link to={`/admin/product`}>
-          Sản phẩm
-        </Link>
-      ),
+      label: <Link to={`/admin/product`}>Sản phẩm</Link>,
     },
     {
       key: "3",
       icon: <UploadOutlined />,
-      label: (
-        <Link to={`/admin/order`}>
-          Đơn hàng
-        </Link>
-      ),
+      label: <Link to={`/admin/order`}>Đơn hàng</Link>,
     },
   ];
   return (
@@ -67,12 +56,10 @@ function PrivateRoute() {
       <ToastContainer />
       <Layout>
         <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div className="demo-logo-vertical" />
-          <Menu
-            theme="dark"
-            mode="inline"
-            items={SideBarItems}
-          />
+          <div className="demo-logo-vertical my-6 flex justify-center">
+            <img src={logo} width={150} />
+          </div>
+          <Menu className="text-base" theme="dark" mode="inline" items={SideBarItems} />
         </Sider>
         <Layout>
           <Header
@@ -98,8 +85,7 @@ function PrivateRoute() {
               defaultSelectedKeys={["3"]}
               style={{ flex: 1 }}
               items={NavBarItems}
-            >
-            </Menu>
+            ></Menu>
           </Header>
           <Content
             style={{

@@ -61,7 +61,7 @@ const ModalUpdateOrder = (props) => {
           handleClose();
         })
         .catch((err) => {
-          console.log(err.response.data);
+          toast.error(err.response.data);
         });
     } catch (err) {
       toast.error(err.response.data);
@@ -131,10 +131,16 @@ const ModalUpdateOrder = (props) => {
             initialValues={formData}
           >
             <Form.Item label="Khách hàng">
-              <p>{order?.customer.applicationUser.email}</p>
+              <p>{order?.customer.applicationUser?.email}</p>
+            </Form.Item>
+            <Form.Item label="Sản phẩm">
+              <p>{order?.orderDetails[0]?.bonsai?.name}</p>
             </Form.Item>
             <Form.Item label="Địa chỉ">
               <p>{order?.address}</p>
+            </Form.Item>
+            <Form.Item label="Khách hàng">
+              <p>{order?.deliveryType}</p>
             </Form.Item>
             <Form.Item label="Ngày đặt">
               <p>{new Date(order?.orderDate).toLocaleDateString()}</p>

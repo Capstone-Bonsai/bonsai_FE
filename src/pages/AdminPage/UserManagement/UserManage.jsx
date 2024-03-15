@@ -33,8 +33,10 @@ const { Search } = Input;
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUsers } from "../../../redux/slice/userSlice";
 import ModalCreateUser from "./ModalCreateUser";
+import Loading from "../../../components/Loading";
 const UserManage = () => {
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.user?.loading);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUnlock, setOpenUnlock] = useState(false);
   const [openLock, setOpenLock] = useState(false);
@@ -252,6 +254,10 @@ const UserManage = () => {
                 pagination={paging}
                 onChange={handleTableChange}
                 rowKey="id"
+                loading={{
+                  indicator: <Loading loading={loading} />,
+                  spinning: loading,
+                }}
               />
             </div>
           </div>

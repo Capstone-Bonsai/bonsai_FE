@@ -1,0 +1,10 @@
+.selectFilter:where(
+    .css-dev-only-do-not-override-17sses9
+  ).ant-select-single.ant-select-show-arrow
+  .ant-select-selection-item,
+:where(
+    .css-dev-only-do-not-override-17sses9
+  ).ant-select-single.ant-select-show-arrow
+  .ant-select-selection-placeholder {
+  font-size: 15px;
+}

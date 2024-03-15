@@ -35,6 +35,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { putProduct } from "../../../utils/productApi";
 import { fetchAllProductPagination } from "../../../redux/slice/productSlice";
+import { putBonsai } from "../../../utils/bonsaiApi";
+import { fetchAllBonsaiPagination } from "../../../redux/slice/bonsaiSlice";
+import ModalCreateCategory from "./ModalCreateCategory";
+import ModalCreateStyle from "./ModalCreateStyle";
+import { blobCreationFromURL } from "../../../utils/setInitForm";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -59,39 +64,37 @@ const ALLOWED_FILE_TYPES = [
 
 const ModalUpdateProduct = (props) => {
   const [form1] = Form.useForm();
-  const { show, setShow, product, listSubCategory, listTag } = props;
+  const { show, setShow, bonsai, listCategory, listStyle } = props;
   const handleClose = () => {
     setFormData({
-      SubCategoryId: "",
+      CategoryId: "",
+      StyleId: "",
       Name: "",
       Description: "",
-      TreeShape: "",
-      AgeRange: 0,
+      YearOfPlanting: 0,
+      TrunkDimenter: 0,
       Height: 0,
-      Unit: "",
-      Quantity: 0,
-      UnitPrice: 0,
+      NumberOfTrunk: 0,
+      Price: 0,
       Image: "",
-      TagId: [],
     });
     form1.resetFields();
     setListImage([]);
-    setSelectedTags([]);
+    // setSelectedTags([]);
     setShow(false);
   };
   const [selectedTags, setSelectedTags] = useState([]);
   const [formData, setFormData] = useState({
-    SubCategoryId: "",
+    CategoryId: "",
+    StyleId: "",
     Name: "",
     Description: "",
-    TreeShape: "",
-    AgeRange: 0,
+    YearOfPlanting: 0,
+    TrunkDimenter: 0,
     Height: 0,
-    Unit: "",
-    Quantity: 0,
-    UnitPrice: 0,
-    Image: [],
-    TagId: [],
+    NumberOfTrunk: 0,
+    Price: 0,
+    Image: "",
   });
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -99,26 +102,27 @@ const ModalUpdateProduct = (props) => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [listImage, setListImage] = useState([]);
+  const [openCreateCategory, setOpenCreateCategory] = useState(false);
+  const [openCreateStyle, setOpenCreateStyle] = useState(false);
   const formRef = useRef(null);
 
   useEffect(() => {
-    if (product != undefined) {
-      console.log(product);
+    if (bonsai != undefined) {
+      console.log(bonsai);
       setFormData({
-        SubCategoryId: product.subCategoryId,
-        Name: product.name,
-        Description: product.description,
-        TreeShape: product.treeShape,
-        AgeRange: product.ageRange,
-        Height: product.height,
-        Unit: product.unit,
-        Quantity: product.quantity,
-        UnitPrice: product.unitPrice,
+        CategoryId: bonsai.categoryId,
+        StyleId: bonsai.styleId,
+        Name: bonsai.name,
+        Description: bonsai.description,
+        YearOfPlanting: bonsai.yearOfPlanting,
+        TrunkDimenter: bonsai.trunkDimenter,
+        Height: bonsai.height,
+        NumberOfTrunk: bonsai.numberOfTrunk,
+        Price: bonsai.price,
         Image: fetchListImage(),
-        TagId: [],
       });
     }
-  }, [product]);
+  }, [bonsai]);
 
   useEffect(() => {
     form1.setFieldsValue(formData);
@@ -165,22 +169,21 @@ const ModalUpdateProduct = (props) => {
   );
 
   const fetchListImage = () => {
-    const image = product?.productImages.map((data) => ({
+    const image = bonsai?.bonsaiImages?.map((data) => ({
       url: data.imageUrl,
       uid: "",
     }));
     setListImage(image);
     return image;
   };
-  const updateProduct = (data) => {
+  const updateBonsai = (data) => {
     try {
       console.log(data);
-      putProduct(product.id, data)
+      putBonsai(bonsai.id, data)
         .then((data) => {
-          setConfirmLoading(false);
-          toast.success(data.data);
+          toast.success("Cập nhật thành công!");
           dispatch(
-            fetchAllProductPagination({
+            fetchAllBonsaiPagination({
               pageIndex: 0,
               pageSize: 5,
               keyword: "",
@@ -190,38 +193,43 @@ const ModalUpdateProduct = (props) => {
         })
         .catch((err) => {
           console.log(err);
-          toast.error(err.response.statusText);
+          toast.error(err.response.data);
+        })
+        .finally(() => {
+          setConfirmLoading(false);
         });
     } catch (err) {
-      toast.error(err.response.statusText);
+      console.log(err);
+      toast.error(err.response.data);
     }
   };
   const onSubmit = (i) => {
-    formData.Image = listImage?.map((image) => image.originFileObj);
+    formData.Image = listImage?.map((image) => image);
     const postData = new FormData();
-    postData.append("SubCategoryId", formData.SubCategoryId);
+    postData.append("CategoryId", formData.CategoryId);
+    postData.append("StyleId", formData.StyleId);
     postData.append("Name", formData.Name);
     postData.append("Description", formData.Description);
-    postData.append("TreeShape", formData.TreeShape);
-    postData.append("AgeRange", formData.AgeRange);
+    postData.append("YearOfPlanting", formData.YearOfPlanting);
+    postData.append("TrunkDimenter", formData.TrunkDimenter);
     postData.append("Height", formData.Height);
-    postData.append("Unit", formData.Unit);
-    postData.append("Quantity", formData.Quantity);
-    postData.append("UnitPrice", formData.UnitPrice);
-    formData.Image?.map((image) => postData.append("Image", image));
-    formData.TagId?.map((tagId) => postData.append("TagId", tagId));
+    postData.append("NumberOfTrunk", formData.NumberOfTrunk);
+    postData.append("Price", formData.Price);
+    formData.Image?.map((image) =>
+      image.originFileObj
+        ? postData.append("Image", image.originFileObj)
+        : postData.append("OldImage", image.url)
+    );
+    console.log(formData);
     formRef.current
       .validateFields()
       .then(() => {
         setConfirmLoading(true);
-        updateProduct(postData);
+        updateBonsai(postData);
       })
       .catch((errorInfo) => {
         console.log(errorInfo);
         toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
-      })
-      .finally(() => {
-        setConfirmLoading(false);
       });
   };
   const handleFormChange = (changedValues, allValues) => {
@@ -243,6 +251,28 @@ const ModalUpdateProduct = (props) => {
     return false;
   };
 
+  //modal create category
+  const showModalCreateCategory = () => {
+    setOpenCreateCategory(true);
+    console.log(openCreateCategory);
+  };
+
+  const handleCancelCreateCategory = () => {
+    console.log("Clicked cancel button");
+    setOpenCreateCategory(false);
+  };
+
+  // modal create style
+  const showModalCreateStyle = () => {
+    setOpenCreateStyle(true);
+    console.log(openCreateStyle);
+  };
+
+  const handleCancelCreateStyle = () => {
+    console.log("Clicked cancel button");
+    setOpenCreateStyle(false);
+  };
+
   return (
     <>
       <Modal
@@ -251,6 +281,8 @@ const ModalUpdateProduct = (props) => {
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
+        okText={confirmLoading ? "Đang cập nhật" : "Cập nhật"}
+        cancelText="Hủy"
         confirmLoading={confirmLoading}
         onCancel={handleClose}
         maskClosable={false}
@@ -267,18 +299,45 @@ const ModalUpdateProduct = (props) => {
           >
             <Form.Item
               label="Phân loại"
-              name="SubCategoryId"
               rules={[
                 { required: true, message: "Phân loại không được để trống!" },
               ]}
             >
-              <Select value={product?.subCategoryId}>
-                {listSubCategory?.map((subCategory, index) => (
-                  <Select.Option value={subCategory.id} key={index}>
-                    {subCategory.name}
-                  </Select.Option>
-                ))}
-              </Select>
+              <div>
+                <Tag icon={<PlusOutlined />} onClick={showModalCreateCategory}>
+                  Thêm Phân loại
+                </Tag>
+                <Form.Item name="CategoryId">
+                  <Select>
+                    {listCategory?.map((category, index) => (
+                      <Select.Option value={category.id} key={index}>
+                        {category.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </div>
+            </Form.Item>
+            <Form.Item
+              label="Kiểu dáng"
+              rules={[
+                { required: true, message: "Phân loại không được để trống!" },
+              ]}
+            >
+              <div>
+                <Tag icon={<PlusOutlined />} onClick={showModalCreateStyle}>
+                  Thêm Kiểu mẫu
+                </Tag>
+                <Form.Item name="StyleId">
+                  <Select value={bonsai?.styleId}>
+                    {listStyle?.map((style, index) => (
+                      <Select.Option value={style.id} key={index}>
+                        {style.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </div>
             </Form.Item>
             <Form.Item
               label="Tên sản phẩm"
@@ -298,24 +357,30 @@ const ModalUpdateProduct = (props) => {
             >
               <TextArea rows={10} />
             </Form.Item>
-
             <Form.Item
-              label="Dáng cây"
-              name="TreeShape"
+              label="Số năm trồng"
+              name="YearOfPlanting"
               rules={[
-                { required: true, message: "Dáng cây không được để trống!" },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Số tuổi"
-              name="AgeRange"
-              rules={[
-                { required: true, message: "Số tuổi không được để trống!" },
+                {
+                  required: true,
+                  message: "Số năm trồng không được để trống!",
+                },
                 {
                   type: "number",
-                  message: "Tuổi cây phải là một số!",
+                  message: "Số năm trồng phải là một số!",
+                },
+              ]}
+            >
+              <InputNumber min={0} className="w-[100%]" />
+            </Form.Item>
+            <Form.Item
+              label="Đường kính"
+              name="TrunkDimenter"
+              rules={[
+                { required: true, message: "Đường kính không được để trống!" },
+                {
+                  type: "number",
+                  message: "Đường kính phải là một số!",
                 },
               ]}
             >
@@ -340,25 +405,16 @@ const ModalUpdateProduct = (props) => {
               />
             </Form.Item>
             <Form.Item
-              label="Đơn vị"
-              name="Unit"
+              label="Số nhánh chính"
+              name="NumberOfTrunk"
               rules={[
-                { required: true, message: "Đơn vị không được để trống!" },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Kho sẵn"
-              name="Quantity"
-              rules={[
-                { required: true, message: "Kho sẵn không được để trống!" },
+                {
+                  required: true,
+                  message: "Số nhánh chính không được để trống!",
+                },
                 {
                   type: "number",
-                  min: 1,
-                  max: 999,
-                  message:
-                    "Kho sẵn phải có ít nhất 1 sản phẩm và nhiều nhất 1000 sản phẩm!",
+                  message: "Số nhánh chính phải là một số!",
                 },
               ]}
             >
@@ -366,7 +422,7 @@ const ModalUpdateProduct = (props) => {
             </Form.Item>
             <Form.Item
               label="Giá tiền"
-              name="UnitPrice"
+              name="Price"
               rules={[
                 { required: true, message: "Giá tiền không được để trống!" },
                 {
@@ -399,13 +455,14 @@ const ModalUpdateProduct = (props) => {
                 onPreview={handlePreview}
                 beforeUpload={beforeUpload}
                 onChange={(e) => {
+                  console.log(e.fileList);
                   handleChange(e.fileList);
                 }}
               >
                 {uploadButton}
               </Upload>
             </Form.Item>
-            <Form.Item label="Tag" valuePropName="text">
+            {/* <Form.Item label="Tag" valuePropName="text">
               <>
                 <Tag icon={<PlusOutlined />} onClick={() => {}}>
                   New Tag
@@ -432,7 +489,7 @@ const ModalUpdateProduct = (props) => {
                   />
                 </Form.Item>
               </>
-            </Form.Item>
+            </Form.Item> */}
           </Form>
         </div>
       </Modal>
@@ -450,6 +507,14 @@ const ModalUpdateProduct = (props) => {
           src={previewImage}
         />
       </Modal>
+      <ModalCreateCategory
+        show={openCreateCategory}
+        setShow={handleCancelCreateCategory}
+      />
+      <ModalCreateStyle
+        show={openCreateStyle}
+        setShow={handleCancelCreateStyle}
+      />
     </>
   );
 };
