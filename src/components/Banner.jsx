@@ -41,7 +41,7 @@ function Banner() {
   const handleSearch = () => {
     navigate("/bonsai", { state: { keyword } });
   };
-  
+
   useEffect(() => {
     if (userInfo) {
       profileUser()
@@ -157,19 +157,24 @@ function Banner() {
           </div>
           <div className="flex items-center justify-between">
             <img src={logo} width={200} height={200} />
-            <div className="relative">
-              <input
-                onChange={(e) => setKeyword(e.target.value)}
-                placeholder="Nhập sản phẩm tại đây..."
-                className="border-none w-[60vh] h-[50px] focus:outline-none active:border-none rounded-[5px] text-[#ffffff] text-[18px] placeholder-[#ffffff] bg-[#61ad69] pl-[40px] pr-[10px]"
-              />
-              <button
-                onClick={handleSearch}
-                className="absolute inset-y-0 right-5 flex items-center pl-2 text-[#ffffff] text-[30px] hover:text-[#ffdd20]"
-              >
-                <SearchOutlined />
-              </button>
-            </div>
+            <form
+              action=""
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSearch();
+              }}
+            >
+              <div className="relative">
+                <input
+                  onChange={(e) => setKeyword(e.target.value)}
+                  placeholder="Nhập sản phẩm tại đây..."
+                  className="border-none w-[60vh] h-[50px] focus:outline-none active:border-none rounded-[5px] text-[#ffffff] text-[18px] placeholder-[#ffffff] bg-[#61ad69] pl-[40px] pr-[10px]"
+                />
+                <button className="absolute inset-y-0 right-5 flex items-center pl-2 text-[#ffffff] text-[30px] hover:text-[#ffdd20]">
+                  <SearchOutlined />
+                </button>
+              </div>
+            </form>
             <div className="flex items-center">
               <img src={SPCus} alt="" />
               <div className="ml-3">
