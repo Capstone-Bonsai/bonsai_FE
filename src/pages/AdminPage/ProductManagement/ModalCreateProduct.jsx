@@ -36,7 +36,6 @@ import { toast } from "react-toastify";
 import { postProduct } from "../../../utils/productApi";
 import {
   fetchAllProduct,
-  fetchAllProductNoPagination,
   fetchAllProductPagination,
 } from "../../../redux/slice/productSlice";
 

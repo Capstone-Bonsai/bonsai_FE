@@ -7,13 +7,14 @@ import Cookies from "universal-cookie";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../../components/Loading";
-import { fetchBonsaiById, setCartFromCookie } from "../../redux/slice/bonsaiSlice";
+import {
+  fetchBonsaiById,
+  setCartFromCookie,
+} from "../../redux/slice/bonsaiSlice";
 
-function ProductDetail() {
+function BonsaiDetail() {
   const dispatch = useDispatch();
-  const  {bonsaiId}  = useParams();
-  console.log(bonsaiId);
-  const [maxQuantityReached, setMaxQuantityReached] = useState(false);
+  const { bonsaiId } = useParams();
   useEffect(() => {
     dispatch(fetchBonsaiById(bonsaiId));
   }, [bonsaiId]);
@@ -29,7 +30,6 @@ function ProductDetail() {
     }
   }, [bonsaiDetail.bonsaiImages]);
 
-  console.log(currentImage);
   const imageDetail = bonsaiDetail.bonsaiImages?.find(
     (img) => img.id == currentImage
   );
@@ -37,16 +37,7 @@ function ProductDetail() {
     setCurrentImage(newImageId);
   };
 
-  const [inputValue, setInputValue] = useState(1);
 
-  const onChangeQuantity = (newValue) => {
-    if (newValue <= bonsaiDetail.quantity) {
-      setInputValue(newValue);
-      setMaxQuantityReached(false);
-    } else {
-      setMaxQuantityReached(true);
-    }
-  };
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
   const idUser = userInfo?.id;
@@ -60,22 +51,20 @@ function ProductDetail() {
     if (!Array.isArray(cartItems)) {
       cartItems = [];
     }
-
-    const existingItem = cartItems.find((item) => item.bonsaiId === bonsaiId);
-
-    if (existingItem) {
-      existingItem.quantity += inputValue;
-    } else {
-      cartItems.push({
-        bonsaiId,
-        name: bonsaiDetail.name,
-        price: bonsaiDetail.price,
-        image: bonsaiDetail.bonsaiImages[0]?.imageUrl,
-        subCategory: bonsaiDetail.subCategory,
-        quantity: inputValue,
-      });
-      toast.success("Đã thêm sản phẩm vào giỏ hàng!");
+    const isProductExist = cartItems.some((item) => item.bonsaiId === bonsaiId);
+    if (isProductExist) {
+      toast.info("Sản phẩm đã có trong giỏ hàng!");
+      return;
     }
+
+    cartItems.push({
+      bonsaiId,
+      name: bonsaiDetail.name,
+      price: bonsaiDetail.price,
+      image: bonsaiDetail.bonsaiImages[0]?.imageUrl,
+      subCategory: bonsaiDetail.subCategory,
+    });
+    toast.success("Đã thêm sản phẩm vào giỏ hàng!");
 
     const cartId = userInfo != null ? `cartId ${idUser}` : "cartItems";
 
@@ -85,13 +74,13 @@ function ProductDetail() {
     dispatch(setCartFromCookie({ cartItems, itemCount }));
   };
 
-    // Hàm định dạng giá tiền
-    const formatPrice = (price) => {
-      return new Intl.NumberFormat("vi-VN", {
-        style: "currency",
-        currency: "VND",
-      }).format(price);
-    };
+  // Hàm định dạng giá tiền
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(price);
+  };
 
   return (
     <>
@@ -143,21 +132,9 @@ function ProductDetail() {
                   {formatPrice(bonsaiDetail.price)}
                 </div>
               </div>
-              <div className="py-5 border-b">
-                {bonsaiDetail?.description}
-              </div>
+              <div className="py-5 border-b">{bonsaiDetail?.description}</div>
               <div className="border-b">
                 <div className="flex items-center py-5 ">
-                  <p>Số lượng</p>
-                  <div className="px-5">
-                    <InputNumber
-                      min={1}
-                      max={bonsaiDetail.quantity}
-                      style={{ margin: "0", fontSize: "20px" }}
-                      value={inputValue}
-                      onChange={onChangeQuantity}
-                    />
-                  </div>
                   <button
                     className="bg-[#3a9943] w-[200px] h-[45px] rounded-[10px] text-[#ffffff] text-[16px]"
                     onClick={addToCart}
@@ -165,11 +142,6 @@ function ProductDetail() {
                     + Thêm vào Giỏ Hàng
                   </button>
                 </div>
-                {maxQuantityReached && (
-                  <div style={{ color: "red" }}>
-                    Đã đạt tối đa số lượng trong kho!
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -179,4 +151,4 @@ function ProductDetail() {
   );
 }
 
-export default ProductDetail;
+export default BonsaiDetail;

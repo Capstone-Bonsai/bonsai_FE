@@ -27,9 +27,9 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllProduct,
-  fetchAllProductNoPagination,
   fetchAllProductPagination,
 } from "../../../redux/slice/productSlice";
+import { fetchAllBonsaiPagination } from "../../../redux/slice/bonsaiSlice";
 import { deleteProduct } from "../../../utils/productApi";
 import ModalCreateProduct from "../ProductManagement/ModalCreateProduct";
 import { Link } from "react-router-dom";
@@ -37,10 +37,12 @@ import ModalUpdateProduct from "./ModalUpdateProduct";
 import { getListSubCategory } from "../../../utils/subCategoryApi";
 import { getListTag } from "../../../utils/tagApi";
 import Loading from "../../../components/Loading";
+import { getListCategory } from "../../../utils/categoryApi";
+import { getListSytle } from "../../../utils/styleApi";
 
 function ProductManage() {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.product.loading);
+  const loading = useSelector((state) => state.bonsai.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -48,19 +50,19 @@ function ProductManage() {
   const [selectedProduct, setSelectedProduct] = useState();
   const [selectedUpdateProduct, setSelectedUpdateProduct] = useState();
 
-  const [listSubCategory, setListSubCategory] = useState();
-  const [listTag, setListTag] = useState();
-  const allProduct = useSelector(
-    (state) => state.product?.allProductPaginationDTO?.items
+  const [listCategory, setListCategory] = useState();
+  const [listStyle, setListStyle] = useState();
+  const allBonsai = useSelector(
+    (state) => state.bonsai?.allBonsaiPaginationDTO?.items
   );
-  console.log(allProduct);
+  console.log(allBonsai);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const paging = useSelector((state) => state.product?.pagination);
+  const paging = useSelector((state) => state.bonsai?.pagination);
 
   useEffect(() => {
     dispatch(
-      fetchAllProductPagination({
+      fetchAllBonsaiPagination({
         pageIndex: currentPage - 1,
         pageSize: pageSize,
         keyword: "",
@@ -69,11 +71,11 @@ function ProductManage() {
   }, []);
 
   useEffect(() => {
-    fetchListTag();
+    fetchListCategory();
   }, []);
 
   useEffect(() => {
-    fetchListSubCategory();
+    fetchListStyle();
   }, []);
 
   const showCreateModal = () => {
@@ -119,10 +121,10 @@ function ProductManage() {
     setOpenDelete(false);
   };
 
-  const fetchListSubCategory = () => {
-    getListSubCategory()
+  const fetchListCategory = () => {
+    getListCategory()
       .then((data) => {
-        setListSubCategory(data.data.items);
+        setListCategory(data.data);
         console.log(data.data);
       })
       .catch((err) => {
@@ -140,10 +142,10 @@ function ProductManage() {
       });
   };
 
-  const fetchListTag = () => {
-    getListTag()
+  const fetchListStyle = () => {
+    getListSytle()
       .then((data) => {
-        setListTag(data.data);
+        setListStyle(data.data);
         console.log(data.data);
       })
       .catch((err) => {
@@ -162,15 +164,15 @@ function ProductManage() {
   };
 
   const handleSearchInputChange = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(
-      fetchAllProductPagination({
+      fetchAllBonsaiPagination({
         pageIndex: 0,
         pageSize: 5,
         keyword: e.target.value,
       })
     );
-  }
+  };
 
   const handleTableChange = (pagination) => {
     console.log(pagination);
@@ -180,6 +182,8 @@ function ProductManage() {
         pageIndex: index,
         pageSize: pageSize,
         keyword: "",
+        category: "",
+        style: "",
       })
     );
   };
@@ -190,39 +194,60 @@ function ProductManage() {
       key: "name",
     },
     {
-      title: "Kho sẵn",
-      dataIndex: "quantity",
-      key: "quantity",
+      title: "Năm trồng",
+      dataIndex: "yearOfPlanting",
+      key: "yearOfPlanting",
+    },
+    {
+      title: "Đường kính",
+      dataIndex: "trunkDimenter",
+      key: "trunkDimenter",
+    },
+    {
+      title: "Chiều cao ",
+      dataIndex: "height",
+      key: "height",
+    },
+    {
+      title: "Nhánh chính",
+      dataIndex: "mainBranch",
+      key: "mainBranch",
     },
     {
       title: "Giá tiền",
-      dataIndex: "unitPrice",
-      key: "unitPrice",
+      dataIndex: "price",
+      key: "price",
       render: (_, record) => (
         <>
           <p>
             {new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: "VND",
-            }).format(record.unitPrice)}
+            }).format(record.price)}
           </p>
         </>
       ),
-    },
-    {
-      title: "Chiều cao",
-      dataIndex: "height",
-      key: "height",
-    },
-    {
-      title: "Hình dáng",
-      dataIndex: "treeShape",
-      key: "treeShape",
-    },
-    {
-      title: "Đơn vị",
-      dataIndex: "unit",
-      key: "unit",
+    },{
+      title: "Loại cây",
+      dataIndex: "category",
+      key: "category",
+      render: (_, record) => (
+        <>
+          <p>{record?.category?.name}
+          </p>
+        </>
+      ),
+    },{
+      title: "Kiểu mẫu",
+      dataIndex: "style",
+      key: "style",
+      render: (_, record) => (
+        <>
+          <p>
+            {record?.style?.name}
+          </p>
+        </>
+      ),
     },
     {
       title: "Trạng thái",
@@ -285,7 +310,7 @@ function ProductManage() {
               </div>
               <div className="pr-0">
                 <Search
-                  placeholder="input search text"
+                  placeholder="Nhập từ khóa để tìm kiếm"
                   onSearch={onSearch}
                   onChange={(e) => handleSearchInputChange(e)}
                   className="w-[300px]"
@@ -296,7 +321,7 @@ function ProductManage() {
             <div className="mb-12">
               <Table
                 className="w-[100%]"
-                dataSource={allProduct}
+                dataSource={allBonsai}
                 columns={columns}
                 scroll={{ x: true }}
                 pagination={paging}
@@ -310,7 +335,7 @@ function ProductManage() {
             </div>
           </div>
         </div>
-        <ModalCreateProduct
+        {/* <ModalCreateProduct
           show={openCreateModal}
           setShow={handleCancelCreate}
           listSubCategory={listSubCategory}
@@ -322,7 +347,7 @@ function ProductManage() {
           product={selectedUpdateProduct}
           listSubCategory={listSubCategory}
           listTag={listTag}
-        />
+        /> */}
         <Modal
           title="Xóa sản phẩm"
           open={openDelete}

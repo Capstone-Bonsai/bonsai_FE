@@ -77,7 +77,7 @@ function TagManage() {
   const handleCancelCreate = () => {
     setOpenCreateModal(false);
   };
-  
+
   const handleCancelUpdate = () => {
     setSelectedUpdateOrder(undefined);
     setOpenUpdateModal(false);
@@ -296,7 +296,7 @@ function TagManage() {
                   className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
                   onClick={showCreateModal}
                 >
-                  <PlusCircleOutlined /> Thêm sản phẩm
+                  <PlusCircleOutlined /> Thêm tag
                 </button>
               </div>
               <div className="pr-0">
@@ -311,7 +311,7 @@ function TagManage() {
             <div className="mb-12">
               <Table
                 className="w-[100%]"
-                dataSource={allOrder}
+                dataSource={allTag}
                 columns={columns}
                 scroll={{ x: true }}
                 pagination={paging}
@@ -325,10 +325,10 @@ function TagManage() {
             </div>
           </div>
         </div>
-        <ModalUpdateOrder
+        <ModalUpdateTag
           show={openUpdateModal}
           setShow={handleCancelUpdate}
-          order={selectedUpdateOrder}
+          order={selectedUpdateTag}
         />
         <Modal
           title="Xóa sản phẩm"

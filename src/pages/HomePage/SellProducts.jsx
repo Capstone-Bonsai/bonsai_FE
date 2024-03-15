@@ -1,9 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setBonsaiOffice,
   fetchAllProductPagination,
 } from "../../redux/slice/productSlice";
+import {
+  fetchAllBonsai,
+  fetchAllBonsaiPagination,
+} from "../../redux/slice/bonsaiSlice";
 import { bonsaiOffice } from "../../data/TopProducts";
 import { categoryList } from "../../data/AllCategory";
 import { ShoppingCartOutlined } from "@ant-design/icons";
@@ -12,17 +16,15 @@ function SellProducts() {
   const dispatch = useDispatch();
   const { topProductDTO } = useSelector((state) => state.product);
   const { bonsaiOfficeDTO } = useSelector((state) => state.product);
-  const { allProductPaginationDTO } = useSelector((state) => state.product);
+  const { allBonsaiPaginationDTO } = useSelector((state) => state.bonsai);
 
   useEffect(() => {
-    // Dispatch action để cập nhật state trong Redux
     dispatch(setBonsaiOffice(bonsaiOffice));
   }, [dispatch]);
 
   useEffect(() => {
-    // Dispatch action để cập nhật state trong Redux
     dispatch(
-      fetchAllProductPagination({
+      fetchAllBonsaiPagination({
         pageIndex: 0,
         pageSize: 8,
         keyword: "",
@@ -62,7 +64,7 @@ function SellProducts() {
           </div>
         </div>
         <div className="flex flex-wrap justify-between">
-          {allProductPaginationDTO?.items?.map((office) => (
+          {allBonsaiPaginationDTO?.items?.map((office) => (
             <div
               className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[370px] "
               key={office.id}
@@ -70,9 +72,9 @@ function SellProducts() {
               <img
                 className="h-[70%] w-[100%]"
                 src={
-                  office.productImages.length == 0
+                  office.bonsaiImages.length == 0
                     ? ""
-                    : office.productImages[0]?.imageUrl
+                    : office.bonsaiImages[0]?.imageUrl
                 }
                 onError={(e) => {
                   e.target.onError = null;
@@ -82,7 +84,10 @@ function SellProducts() {
               />
               <div className="pt-3 px-3">
                 <div className="mb-3 h-[40px]">
-                  <Link className="text-[#333333] text-lg hover:text-[#1E7100]">
+                  <Link
+                    to={`/bonsaiDetail/${office.id}`}
+                    className="text-[#333333] text-lg hover:text-[#1E7100]"
+                  >
                     {office.name}
                   </Link>
                 </div>
@@ -92,7 +97,7 @@ function SellProducts() {
                       {new Intl.NumberFormat("en-US", {
                         style: "currency",
                         currency: "VND",
-                      }).format(office.unitPrice)}
+                      }).format(office.price)}
                     </div>
                   </div>
                   <div className="col-end-4 flex justify-end">
@@ -119,22 +124,40 @@ function SellProducts() {
           </div>
         </div>
         <div className="flex flex-wrap justify-between">
-          {bonsaiOfficeDTO.map((office) => (
+          {allBonsaiPaginationDTO?.items?.map((office) => (
             <div
               className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[370px] "
               key={office.id}
             >
-              <img src={office.image} alt="" />
+              <img
+                className="h-[70%] w-[100%]"
+                src={
+                  office.bonsaiImages.length == 0
+                    ? ""
+                    : office.bonsaiImages[0]?.imageUrl
+                }
+                onError={(e) => {
+                  e.target.onError = null;
+                  e.target.src =
+                    "https://i.ibb.co/8sQwx76/images-q-tbn-ANd9-Gc-TE3ogc-Suv-DVe-N1iwin1a-Tlbrk2-QXSKYv-Vz7t-Sn0-LV9k7h2-L-FPu-Pndu-Ow-HIE8jc3-L.png";
+                }}
+              />
               <div className="pt-3 px-3">
-                <div className="mb-3">
-                  <Link className="text-[#333333] text-lg hover:text-[#1E7100]">
+                <div className="mb-3 h-[40px]">
+                  <Link
+                    to={`/bonsaiDetail/${office.id}`}
+                    className="text-[#333333] text-lg hover:text-[#1E7100]"
+                  >
                     {office.name}
                   </Link>
                 </div>
                 <div className="grid grid-cols-3">
                   <div className="flex items-center">
                     <div className="text-[#3A994A] text-xl font-semibold">
-                      {office.price}
+                      {new Intl.NumberFormat("en-US", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(office.price)}
                     </div>
                   </div>
                   <div className="col-end-4 flex justify-end">

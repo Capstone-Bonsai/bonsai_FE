@@ -36,7 +36,6 @@ import { toast } from "react-toastify";
 import { postProduct } from "../../../utils/productApi";
 import {
   fetchAllProduct,
-  fetchAllProductNoPagination,
   fetchAllProductPagination,
 } from "../../../redux/slice/productSlice";
 
@@ -61,7 +60,7 @@ const ALLOWED_FILE_TYPES = [
   "image/gif",
 ];
 
-const ModalCreateProduct = (props) => {
+const ModalCreateOrder = (props) => {
   const [form] = Form.useForm();
   const { show, setShow, listSubCategory, listTag } = props;
   const handleClose = () => {
@@ -414,4 +413,4 @@ const ModalCreateProduct = (props) => {
   );
 };
 
-export default ModalCreateProduct;
+export default ModalCreateOrder;

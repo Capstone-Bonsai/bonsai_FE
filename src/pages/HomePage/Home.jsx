@@ -18,7 +18,6 @@ function Home() {
   const userId = searchParams.get("userId");
   const code = searchParams.get("code");
   useEffect(() => {
-    // Thực hiện các hành động cần thiết với userId và code
     console.log("User ID:", userId);
     console.log("Code:", code);
   }, [userId, code]);
@@ -26,14 +25,9 @@ function Home() {
     <>
       <div className="">
         <div className="">
-          <div className="flex items-center">
-            {/* <div className="bg-[#50b737] w-8 h-8 flex justify-center items-center rounded-full">
-              <PhoneOutlined />
-            </div>
-            SĐT:  */}
-          </div>
+          <div className="flex items-center"></div>
         </div>
-        {/* <Carousel /> */}
+
         <div className="w-[70%] m-auto flex justify-center">
           <img src={Banner} alt="" className="w-[100%]" />
         </div>
@@ -42,7 +36,7 @@ function Home() {
           <Link
             className="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
             style={{ backgroundImage: `url(${BannerMuaBan})` }}
-            to="/product"
+            to="/bonsai"
           >
             <div className="h-[70%] flex items-center">
               <div className="text-2xl pl-6 font-semibold uppercase">
