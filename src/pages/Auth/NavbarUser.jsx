@@ -5,7 +5,7 @@ function NavbarUser() {
   const menuItems = [
     { name: "Hồ sơ người dùng", path: "/Profile" },
     { name: "Quản lý đặt hàng", path: "/manageOrder" },
-    { name: "Settings", path: "/settings" },
+    { name: "Vườn của bạn", path: "/customerGarden" },
   ];
   const location = useLocation();
   const [selectedItem, setSelectedItem] = useState(
@@ -17,7 +17,7 @@ function NavbarUser() {
     setSelectedItem(path);
   };
   return (
-    <nav className="border w-[20%] ">
+    <nav className="border w-[20%] h-[400px]">
       <ul className=" w-full">
         {menuItems.map((item, index) => (
           <button

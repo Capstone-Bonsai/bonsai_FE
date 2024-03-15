@@ -8,6 +8,7 @@ import bonsaiReducer from "./slice/bonsaiSlice";
 import categoryReducer from "./slice/categorySlice";
 import serviceReducer from "./slice/serviceSlice";
 import styleReducer from "./slice/styleSlice";
+import gardenReducer from "./slice/userGarden";
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
     category: categoryReducer,
     service: serviceReducer,
     style: styleReducer,
+    garden: gardenReducer,
   },
 });
 

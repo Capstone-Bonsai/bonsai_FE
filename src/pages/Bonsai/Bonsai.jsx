@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../HomePage/styleHome.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ShoppingCartOutlined, FileSearchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../components/Loading";
@@ -12,7 +12,8 @@ import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { allCategory } from "../../redux/slice/categorySlice";
 import { fetchStyle } from "../../redux/slice/styleSlice";
 
-function Bonsai() {
+function Bonsai(props) {
+  const location = useLocation();
   const [priceRange, setPriceRange] = useState([]);
   const allBonsai = useSelector((state) => state.bonsai.allBonsaiDTO?.items);
   const loading = useSelector((state) => state.bonsai.loading);
@@ -20,11 +21,10 @@ function Bonsai() {
   const [pageSize, setPageSize] = useState(6);
   const [selectedCategories, setSelectedCategories] = useState();
   const [selectStyle, setSelectStyle] = useState();
-  console.log(selectedCategories);
-  console.log(selectStyle);
   const countPageBonsai = useSelector(
     (state) => state.bonsai.allBonsaiDTO.totalPagesCount
   );
+  const keyword = location.state?.keyword;
   useEffect(() => {
     dispatch(allCategory());
     dispatch(fetchStyle());
@@ -39,6 +39,7 @@ function Bonsai() {
       maxPrice: priceRange[1],
       category: selectedCategories,
       style: selectStyle,
+      keyword: keyword,
     };
 
     dispatch(fetchAllBonsai(payload));
@@ -49,6 +50,7 @@ function Bonsai() {
     priceRange[1],
     selectedCategories,
     selectStyle,
+    keyword
   ]);
 
   const handlePageChange = (page) => {
@@ -88,7 +90,7 @@ function Bonsai() {
               <Filter priceRange={priceRange} setPriceRange={setPriceRange} />
               <div className=" border-t py-5">
                 <div className="uppercase text-[#333] font-semibold text-[16px]">
-                  Từ khóa
+                  Dáng cây
                 </div>
                 <div className="h-[200px] overflow-y-auto">
                   <div className="flex flex-wrap gap-2 ">
@@ -96,7 +98,11 @@ function Bonsai() {
                       <button
                         key={style.id}
                         onClick={() => setSelectStyle(style.id)}
-                        className="hover:text-[#3a9943] h-[50px] p-2 border hover:border-[#3a9943]"
+                        className={`hover:text-[#3a9943] h-[50px] p-2 border hover:border-[#3a9943] ${
+                          selectStyle === style.id
+                            ? "text-[#3a9943] border-[#3a9943]"
+                            : ""
+                        }`}
                       >
                         {style.name}
                       </button>

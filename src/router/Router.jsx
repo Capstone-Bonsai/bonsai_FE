@@ -18,12 +18,12 @@ import ManageOrder from "../pages/OrderProduct/ManageOrder";
 import Bonsai from "../pages/Bonsai/Bonsai";
 import BonsaiDetail from "../pages/Bonsai/BonsaiDetail";
 import ServiceDetailPage from "../pages/ServicePage/ServiceDetailPage";
+import CustomerGarden from "../pages/Garden/CustomerGarden";
 function Router() {
   const element = useRoutes([
     {
       element: <CustomerRoute />,
       children: [
-       
         {
           path: "/",
           element: <Home />,
@@ -68,7 +68,6 @@ function Router() {
           path: "/Profile",
           element: <ProfileUser />,
         },
-
         {
           path: "/ManageOrder",
           element: <ManageOrder />,
@@ -76,6 +75,10 @@ function Router() {
         {
           path: "/api/Auth/ConfirmEmail",
           element: <Login />,
+        },
+        {
+          path: "/CustomerGarden",
+          element: <CustomerGarden />,
         },
       ],
     },

@@ -32,50 +32,53 @@ function ServiceListPage() {
         <div className="mb-12 pb-12 w-[80%] m-auto">
           <MinHeight>
             <div className="">
-              <div className="text-center text-3xl font-semibold my-12 text-[#3e9943]">
+              <div className="text-center text-3xl font-bold my-12">
                 Dịch vụ chăm sóc
               </div>
             </div>
             {serivceList?.map((service) => (
               <div
                 key={service.id}
-                className=" w-[90%] m-auto drop-shadow-lg border hover:border-gray-950 flex justify-between gap-4 "
+                className="w-[90%] my-5 h-[300px] m-auto border border-[#f0f0f0] flex justify-between gap-4 "
               >
-                <div className=" bg-[red] w-[25%]">
-                  <img src={service_img} className="h-full w-full" alt="" />
+                <div className=" w-[25%] p-4">
+                  <img src={service?.image} className="h-full w-full border drop-shadow-lg" alt="" />
                 </div>
                 <div className="w-[50%]">
-                  <div className="text-2xl py-6 font-normal ">
-                    <Link className="hover:text-[#3e9943]" 
-                    to={`/serviceDetail/${service.id}`}
+                  <div className="text-[15px] py-3">
+                    <Link
+                      className="hover:text-[#3e9943] text-[#333] montserrat text-[24px]"
+                      to={`/serviceDetail/${service.id}`}
                     >
                       {service.name}
-                      <span className="text-[#3e9943] pl-5">
-                        {service.serviceType === "OneTime"
-                          ? "(1 lần)"
-                          : "(hàng tháng)"}
-                      </span>
                     </Link>
                   </div>
-                  <div className="text-lg font-light">
-                    {service.description}
-                  </div>
+                  <div className="text-[14px] py-5">{service.description}</div>
                 </div>
-                <div className="col-span-2 border-l-2 border-slate-200 p-12 w-[25%]">
-                  <div className="p-2">
-                    <div className="text-4xl font-extrabold uppercase text-[#3e9943]">
-                      {formatPrice(service.standardPrice)}{" "}
-                      <span className="text-sm">vnd/ngày</span>
+                <div className="p-5 w-[25%]">
+                  <div className="h-full border-l pl-5">
+                    <div className="">
+                      <div className="text-[14px] text-[#666] font-[300]">
+                        Dịch vụ:
+                        <span className="text-[#3e9943]">
+                          {service.serviceType === "BonsaiCare"
+                            ? "(Chăm sóc cây cảnh)"
+                            : "(Chăm sóc sân vườn)"}
+                        </span>
+                      </div>
+                      <div className="text-[24px] font-bold uppercase text-[#3e9943] py-4">
+                        {formatPrice(service.standardPrice)}
+                      </div>
                     </div>
-                    <div className="pt-4"></div>
-                  </div>
-                  <div className="text-center">
-                    <Link
-                      className="text-[20px] w-[100%] h-[56px] flex justify-center items-center rounded
-          border-2 border-slate-950 hover:bg-[#3e9943] hover:text-[#ffffff]"
-                    >
-                      Đăng ký ngay
-                    </Link>
+                    <div className="text-center mt-5">
+                      <Link
+                        to={`/serviceDetail/${service.id}`}
+                        className="text-[20px] w-[100%] h-[40px] bg-[#f0f0f0] flex justify-center items-center rounded
+          hover:bg-[#3e9943] hover:text-[#ffffff]"
+                      >
+                        Xem chi tiết
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>

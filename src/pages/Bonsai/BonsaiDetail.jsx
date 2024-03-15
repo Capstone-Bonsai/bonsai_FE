@@ -37,7 +37,6 @@ function BonsaiDetail() {
     setCurrentImage(newImageId);
   };
 
-  const [inputValue, setInputValue] = useState(1);
 
   const cookies = new Cookies();
   const userInfo = cookies.get("user");

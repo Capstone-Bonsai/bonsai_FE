@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setBonsaiOffice,
   fetchAllProductPagination,
 } from "../../redux/slice/productSlice";
-import { fetchAllBonsaiPagination } from "../../redux/slice/bonsaiSlice";
+import {
+  fetchAllBonsai,
+  fetchAllBonsaiPagination,
+} from "../../redux/slice/bonsaiSlice";
 import { bonsaiOffice } from "../../data/TopProducts";
 import { categoryList } from "../../data/AllCategory";
 import { ShoppingCartOutlined } from "@ant-design/icons";
@@ -16,12 +19,10 @@ function SellProducts() {
   const { allBonsaiPaginationDTO } = useSelector((state) => state.bonsai);
 
   useEffect(() => {
-    // Dispatch action để cập nhật state trong Redux
     dispatch(setBonsaiOffice(bonsaiOffice));
   }, [dispatch]);
 
   useEffect(() => {
-    // Dispatch action để cập nhật state trong Redux
     dispatch(
       fetchAllBonsaiPagination({
         pageIndex: 0,
@@ -83,7 +84,10 @@ function SellProducts() {
               />
               <div className="pt-3 px-3">
                 <div className="mb-3 h-[40px]">
-                  <Link to={`/bonsaiDetail/${office.id}`} className="text-[#333333] text-lg hover:text-[#1E7100]">
+                  <Link
+                    to={`/bonsaiDetail/${office.id}`}
+                    className="text-[#333333] text-lg hover:text-[#1E7100]"
+                  >
                     {office.name}
                   </Link>
                 </div>
@@ -140,7 +144,10 @@ function SellProducts() {
               />
               <div className="pt-3 px-3">
                 <div className="mb-3 h-[40px]">
-                  <Link to={`/bonsaiDetail/${office.id}`} className="text-[#333333] text-lg hover:text-[#1E7100]">
+                  <Link
+                    to={`/bonsaiDetail/${office.id}`}
+                    className="text-[#333333] text-lg hover:text-[#1E7100]"
+                  >
                     {office.name}
                   </Link>
                 </div>

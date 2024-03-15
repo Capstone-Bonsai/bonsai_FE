@@ -12,7 +12,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { setCartFromCookie } from "../redux/slice/bonsaiSlice";
+import { fetchAllBonsai, setCartFromCookie } from "../redux/slice/bonsaiSlice";
 import { profileUser } from "../redux/slice/authSlice";
 import { setAvatarUrlRedux } from "../redux/slice/avatarSlice";
 function Banner() {
@@ -37,6 +37,11 @@ function Banner() {
     cookies.remove("userData");
   };
 
+  const [keyword, setKeyword] = useState("");
+  const handleSearch = () => {
+    navigate("/bonsai", { state: { keyword } });
+  };
+  
   useEffect(() => {
     if (userInfo) {
       profileUser()
@@ -70,7 +75,6 @@ function Banner() {
     fetchCartFromCookie();
   }, []);
 
-  // const onSearch = (value, _e, info) => console.log(info?.source, value);
   return (
     <>
       <div className="bg-[#3a9943] py-5">
@@ -155,12 +159,16 @@ function Banner() {
             <img src={logo} width={200} height={200} />
             <div className="relative">
               <input
+                onChange={(e) => setKeyword(e.target.value)}
                 placeholder="Nhập sản phẩm tại đây..."
                 className="border-none w-[60vh] h-[50px] focus:outline-none active:border-none rounded-[5px] text-[#ffffff] text-[18px] placeholder-[#ffffff] bg-[#61ad69] pl-[40px] pr-[10px]"
               />
-              <Link className="absolute inset-y-0 right-5 flex items-center pl-2 text-[#ffffff] text-[30px] hover:text-[#ffdd20]">
+              <button
+                onClick={handleSearch}
+                className="absolute inset-y-0 right-5 flex items-center pl-2 text-[#ffffff] text-[30px] hover:text-[#ffdd20]"
+              >
                 <SearchOutlined />
-              </Link>
+              </button>
             </div>
             <div className="flex items-center">
               <img src={SPCus} alt="" />
@@ -175,7 +183,7 @@ function Banner() {
           border-[#ffffff]-500 border-opacity-50 border-opacity-50 hover:bg-[#ffffff] hover:text-black"
             >
               <ShoppingCartOutlined />
-              <div className="w-[20px] h-[20px] bg-[red] flex text-[15px] justify-center items-center rounded-full">
+              <div className="w-[20px] h-[20px] bg-[red]  flex text-[15px] justify-center items-center hover:text-[#ffffff] rounded-full">
                 {countCart}
               </div>
             </Link>

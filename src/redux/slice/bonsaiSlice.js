@@ -54,11 +54,11 @@ export const filterTag = createAsyncThunk("product/tags", async () => {
 
 export const fetchAllBonsai = createAsyncThunk(
   "bonsai/fetchAllBonsai",
-  async ({ pageIndex, pageSize, minPrice, maxPrice, category, style }) => {
+  async ({ pageIndex, pageSize, minPrice, maxPrice, category, style, keyword }) => {
     try {
       const response = await axiosCus.post(
         `/Bonsai/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
-        { minPrice, maxPrice, category, style }
+        { minPrice, maxPrice, category, style, keyword }
       );
 
       return response.data;
