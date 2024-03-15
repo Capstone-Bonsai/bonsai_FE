@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { fetchAllBonsai } from "../../redux/slice/bonsaiSlice";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { allCategory } from "../../redux/slice/categorySlice";
-import { fetchStyle } from "../../redux/slice/styleSlice";
+import { allStyle } from "../../redux/slice/styleSlice";
 
 function Bonsai(props) {
   const location = useLocation();
@@ -27,7 +27,7 @@ function Bonsai(props) {
   const keyword = location.state?.keyword;
   useEffect(() => {
     dispatch(allCategory());
-    dispatch(fetchStyle());
+    dispatch(allStyle());
   }, []);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -60,7 +60,7 @@ function Bonsai(props) {
   const categories = useSelector(
     (state) => state.category.allCategoryDTO?.items
   );
-  const styles = useSelector((state) => state.style.styleDTO.items);
+  const styles = useSelector((state) => state.style.allStyleDTO.items);
   return (
     <>
       {loading ? (
