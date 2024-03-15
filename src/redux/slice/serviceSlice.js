@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "./../../utils/axiosCustomize";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
@@ -10,6 +10,19 @@ export const fetchAllService = createAsyncThunk(
       const response = await axios.get(
         `/Service?pageIndex=${pageIndex}&pageSize=${pageSize}`
       );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const fetchService = createAsyncThunk(
+  "bonsai/fetchService",
+  async ({ page, size }) => {
+    try {
+      const response = await axios.get(`/Service?page=${page}&size=${size}`);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       throw error;
@@ -34,7 +47,7 @@ export const allServiceType = createAsyncThunk(
   async () => {
     try {
       const response = await axios.get("/Service/ServiveType");
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     } catch (error) {
       throw error;
@@ -44,11 +57,11 @@ export const allServiceType = createAsyncThunk(
 
 const initialState = {
   listService: {},
+  serviceDTO: {},
   serviceById: {},
   allServiceTypeDTO: {},
-  pagination: {},
   loading: false,
-  msg: {},
+  msg: "",
   token: null,
 };
 
@@ -61,6 +74,9 @@ const serviceSlice = createSlice({
     },
     setAllService: (state, action) => {
       state.listService = action.payload;
+    },
+    setService: (state, action) => {
+      state.serviceDTO = action.payload;
     },
     setServiceById: (state, action) => {
       state.serviceById = action.payload;
@@ -109,8 +125,25 @@ const serviceSlice = createSlice({
       state.msg = "Error loading data";
       state.loading = false;
     });
+    builder
+      .addCase(fetchService.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+
+      .addCase(fetchService.fulfilled, (state, action) => {
+        state.serviceDTO = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(fetchService.rejected, (state) => {
+        state.serviceDTO = [];
+        state.msg = "Không tìm thấy";
+        state.loading = false;
+      });
   },
 });
 const { reducer: serviceReducer, actions } = serviceSlice;
-export const { setAllService, setServiceById, setServiceType } = actions;
+export const { setService, setAllService, setServiceById, setServiceType } =
+  actions;
 export { serviceReducer as default };

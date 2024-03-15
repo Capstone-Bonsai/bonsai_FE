@@ -54,11 +54,11 @@ export const filterTag = createAsyncThunk("product/tags", async () => {
 
 export const fetchAllBonsai = createAsyncThunk(
   "bonsai/fetchAllBonsai",
-  async ({ pageIndex, pageSize, minPrice, maxPrice, category }) => {
+  async ({ pageIndex, pageSize, minPrice, maxPrice, category, style, keyword }) => {
     try {
       const response = await axiosCus.post(
         `/Bonsai/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
-        { minPrice, maxPrice, category }
+        { minPrice, maxPrice, category, style, keyword }
       );
 
       return response.data;
@@ -131,8 +131,8 @@ const bonsaiSlice = createSlice({
     },
 
     setBonsaiNoPagination: (state, action) => {
-        state.allBonsaiNoPagination = action.payload;
-      },
+      state.allBonsaiNoPagination = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -234,6 +234,6 @@ export const {
   setCartFromCookie,
   setBonsaiById,
   setCategory,
-  setBonsaiNoPagination
+  setBonsaiNoPagination,
 } = actions;
 export { bonsaiReducer as default };
