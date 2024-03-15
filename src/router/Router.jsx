@@ -17,6 +17,7 @@ import ProfileUser from "../pages/Profile/ProfileUser";
 import ManageOrder from "../pages/OrderProduct/ManageOrder";
 import Bonsai from "../pages/Bonsai/Bonsai";
 import BonsaiDetail from "../pages/Bonsai/BonsaiDetail";
+import ServiceManage from "../pages/AdminPage/ServiceManagement/ServiceManage";
 import ServiceDetailPage from "../pages/ServicePage/ServiceDetailPage";
 import CustomerGarden from "../pages/Garden/CustomerGarden";
 function Router() {
@@ -113,6 +114,10 @@ function Router() {
         {
           path: "/admin/order",
           element: <OrderManage />,
+        },
+        {
+          path: "/admin/service",
+          element: <ServiceManage />,
         },
       ],
     },

@@ -5,10 +5,8 @@ const { Search, TextArea } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { fetchAllBonsaiPagination } from "../../../redux/slice/bonsaiSlice";
-import { postBonsai } from "../../../utils/bonsaiApi";
-import ModalCreateCategory from "./ModalCreateCategory";
-import ModalCreateStyle from "./ModalCreateStyle";
+import { postService } from "../../../utils/serviceApi";
+import { fetchAllService } from "../../../redux/slice/serviceSlice";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -31,37 +29,30 @@ const ALLOWED_FILE_TYPES = [
   "image/gif",
 ];
 
-const ModalCreateProduct = (props) => {
+const ModalCreateService = (props) => {
   const [form] = Form.useForm();
-  const { show, setShow, listCategory, listStyle } = props;
+  const { show, setShow, listServiceType, listBaseTask } = props;
+  console.log(listServiceType);
   const handleClose = () => {
     setFormData({
-      CategoryId: "",
-      StyleId: "",
       Name: "",
       Description: "",
-      YearOfPlanting: 0,
-      TrunkDimenter: 0,
-      Height: 0,
-      NumberOfTrunk: 0,
-      Price: 0,
+      StandardPrice: 0,
+      ServiceType: 0,
       Image: "",
+      ServiceBaseTaskId: "",
     });
     form.resetFields();
     setListImage([]);
     setShow(false);
   };
   const [formData, setFormData] = useState({
-    CategoryId: "",
-    StyleId: "",
     Name: "",
     Description: "",
-    YearOfPlanting: 0,
-    TrunkDimenter: 0,
-    Height: 0,
-    NumberOfTrunk: 0,
-    Price: 0,
+    StandardPrice: 0,
+    ServiceType: 0,
     Image: "",
+    ServiceBaseTaskId: "",
   });
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -105,17 +96,16 @@ const ModalCreateProduct = (props) => {
       </div>
     </button>
   );
-  const createBonsai = (product) => {
+  const createService = (service) => {
     try {
-      console.log(product);
-      postBonsai(product)
+      console.log(service);
+      postService(service)
         .then((data) => {
-          toast.success("Thêm sản phẩm thành công!");
+          toast.success("Thêm dịch vụ thành công!");
           dispatch(
-            fetchAllBonsaiPagination({
+            fetchAllService({
               pageIndex: 0,
               pageSize: 5,
-              keyword: "",
             })
           );
           handleClose();
@@ -131,24 +121,25 @@ const ModalCreateProduct = (props) => {
     }
   };
   const onSubmit = (i) => {
-    formData.Image = listImage?.map((image) => image.originFileObj);
-    const postData = new FormData();
-    postData.append("CategoryId", formData.CategoryId);
-    postData.append("StyleId", formData.StyleId);
-    postData.append("Name", formData.Name);
-    postData.append("Description", formData.Description);
-    postData.append("YearOfPlanting", formData.YearOfPlanting);
-    postData.append("TrunkDimenter", formData.TrunkDimenter);
-    postData.append("Height", formData.Height);
-    postData.append("NumberOfTrunk", formData.NumberOfTrunk);
-    postData.append("Price", formData.Price);
-    formData.Image?.map((image) => postData.append("Image", image));
+    // formData.Image = listImage?.map((image) => image.originFileObj);
+    // const postData = new FormData();
+    // postData.append("CategoryId", formData.CategoryId);
+    // postData.append("StyleId", formData.StyleId);
+    // postData.append("Name", formData.Name);
+    // postData.append("Description", formData.Description);
+    // postData.append("YearOfPlanting", formData.YearOfPlanting);
+    // postData.append("TrunkDimenter", formData.TrunkDimenter);
+    // postData.append("Height", formData.Height);
+    // postData.append("NumberOfTrunk", formData.NumberOfTrunk);
+    // postData.append("Price", formData.Price);
+    // formData.Image?.map((image) => postData.append("Image", image));
+    console.log(formData);
 
     formRef.current
       .validateFields()
       .then(() => {
         setConfirmLoading(true);
-        createBonsai(postData);
+        createService(postData);
       })
       .catch((errorInfo) => {
         toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
@@ -175,36 +166,15 @@ const ModalCreateProduct = (props) => {
     return false;
   };
 
-  //modal create category
-  const showModalCreateCategory = () => {
-    setOpenCreateCategory(true);
-    console.log(openCreateCategory);
-  };
-
-  const handleCancelCreateCategory = () => {
-    console.log("Clicked cancel button");
-    setOpenCreateCategory(false);
-  };
-
-  // modal create style
-  const showModalCreateStyle = () => {
-    setOpenCreateStyle(true);
-    console.log(openCreateStyle);
-  };
-
-  const handleCancelCreateStyle = () => {
-    console.log("Clicked cancel button");
-    setOpenCreateStyle(false);
-  };
   return (
     <>
       <Modal
         width={800}
-        title="Thêm sản phẩm"
+        title="Thêm dịch vụ"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
-        okText={confirmLoading?"Đang tạo":"Tạo mới"}
+        okText={confirmLoading ? "Đang tạo" : "Tạo mới"}
         cancelText="Hủy"
         confirmLoading={confirmLoading}
         onCancel={handleClose}
@@ -220,27 +190,24 @@ const ModalCreateProduct = (props) => {
             onValuesChange={handleFormChange}
           >
             <Form.Item
-              label="Phân loại"
+              label="Loại dịch vụ"
+              name="CategoryId"
               rules={[
-                { required: true, message: "Phân loại không được để trống!" },
+                {
+                  required: true,
+                  message: "Loại dịch vụ không được để trống!",
+                },
               ]}
             >
-              <div>
-                <Tag icon={<PlusOutlined />} onClick={showModalCreateCategory}>
-                  Thêm Phân loại
-                </Tag>
-                <Form.Item name="CategoryId">
-                  <Select>
-                    {listCategory?.map((category, index) => (
-                      <Select.Option value={category.id} key={index}>
-                        {category.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </div>
+              <Select>
+                {listServiceType?.map((serviceType, index) => (
+                  <Select.Option value={serviceType.value} key={index}>
+                    {serviceType.display}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               label="Kiểu dáng"
               rules={[
                 { required: true, message: "Phân loại không được để trống!" },
@@ -260,7 +227,7 @@ const ModalCreateProduct = (props) => {
                   </Select>
                 </Form.Item>
               </div>
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item
               label="Tên sản phẩm"
               name="Name"
@@ -280,79 +247,19 @@ const ModalCreateProduct = (props) => {
               <TextArea rows={10} />
             </Form.Item>
             <Form.Item
-              label="Số năm trồng"
-              name="YearOfPlanting"
+              label="Giá tiêu chuẩn"
+              name="StandardPrice"
               rules={[
                 {
                   required: true,
-                  message: "Số năm trồng không được để trống!",
+                  message: "Giá tiêu chuẩn không được để trống!",
                 },
-                {
-                  type: "number",
-                  message: "Số năm trồng phải là một số!",
-                },
-              ]}
-            >
-              <InputNumber min={0} className="w-[100%]" />
-            </Form.Item>
-            <Form.Item
-              label="Đường kính"
-              name="TrunkDimenter"
-              rules={[
-                { required: true, message: "Đường kính không được để trống!" },
-                {
-                  type: "number",
-                  message: "Đường kính phải là một số!",
-                },
-              ]}
-            >
-              <InputNumber min={0} className="w-[100%]" />
-            </Form.Item>
-            <Form.Item
-              label="Chiều cao"
-              name="Height"
-              rules={[
-                { required: true, message: "Chiều cao không được để trống!" },
-                {
-                  type: "number",
-                  message: "Chiều cao phải là một số!",
-                },
-              ]}
-            >
-              <InputNumber
-                min={0}
-                step={0.1}
-                prefix="(m)"
-                className="w-[100%]"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Số nhánh chính"
-              name="NumberOfTrunk"
-              rules={[
-                {
-                  required: true,
-                  message: "Số nhánh chính không được để trống!",
-                },
-                {
-                  type: "number",
-                  message: "Số nhánh chính phải là một số!",
-                },
-              ]}
-            >
-              <InputNumber min={0} className="w-[100%]" />
-            </Form.Item>
-            <Form.Item
-              label="Giá tiền"
-              name="Price"
-              rules={[
-                { required: true, message: "Giá tiền không được để trống!" },
                 {
                   type: "number",
                   min: 0,
                   max: 100000000,
                   message:
-                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 100,000,000 Vnd!",
+                    "Giá tiêu chuẩn phải có ít nhất 0 Vnd và nhiều nhất 100,000,000 Vnd!",
                 },
               ]}
             >
@@ -380,7 +287,7 @@ const ModalCreateProduct = (props) => {
                   handleChange(e.fileList);
                 }}
               >
-                {uploadButton}
+                {listImage.length >= 1 ? null : uploadButton}
               </Upload>
             </Form.Item>
           </Form>
@@ -400,7 +307,7 @@ const ModalCreateProduct = (props) => {
           src={previewImage}
         />
       </Modal>
-      <ModalCreateCategory
+      {/* <ModalCreateCategory
         show={openCreateCategory}
         setShow={handleCancelCreateCategory}
       />
@@ -408,9 +315,9 @@ const ModalCreateProduct = (props) => {
       <ModalCreateStyle
         show={openCreateStyle}
         setShow={handleCancelCreateStyle}
-      />
+      /> */}
     </>
   );
 };
 
-export default ModalCreateProduct;
+export default ModalCreateService;

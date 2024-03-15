@@ -17,12 +17,12 @@ const initialState = {
   token: null,
 };
 
-const productSlice = createSlice({
-  name: "product",
+const categorySlice = createSlice({
+  name: "category",
   initialState,
   reducers: {
     setCategory: (state, action) => {
-      state.allProductNoPaginationDTO = action.payload;
+      state.allCategoryDTO = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -42,7 +42,7 @@ const productSlice = createSlice({
       });
   },
 });
-const { reducer: categoryReducer, actions } = productSlice;
+const { reducer: categoryReducer, actions } = categorySlice;
 export const {
   setCategory
 } = actions;

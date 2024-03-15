@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Space,
@@ -25,65 +24,44 @@ const { Search, TextArea } = Input;
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllBonsaiPagination } from "../../../redux/slice/bonsaiSlice";
-import ModalCreateProduct from "../ProductManagement/ModalCreateProduct";
 import { Link } from "react-router-dom";
-import ModalUpdateProduct from "./ModalUpdateProduct";
 import Loading from "../../../components/Loading";
-import { allCategory } from "../../../redux/slice/categorySlice";
-import { allStyle } from "../../../redux/slice/styleSlice";
-import { deleteBonsai } from "../../../utils/bonsaiApi";
+import { fetchAllService, allServiceType } from "../../../redux/slice/serviceSlice";
+import { deleteService } from "../../../utils/serviceApi";
+import ModalCreateService from "./ModalCreateService";
 
-function ProductManage() {
+function ServiceManage() {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.bonsai.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
-  const [selectedBonsai, setSelectedBonsai] = useState();
-  const [selectedUpdateBonsai, setSelectedUpdateBonsai] = useState();
-  const [filter, setFilter] = useState({
-    keyword: "",
-    category: "",
-    style: "",
-  });
+  const [selectedService, setSelectedService] = useState();
+  const [selectedUpdateServie, setSelectedUpdateService] = useState();
 
-  const [listCategory, setListCategory] = useState();
-  const [listStyle, setListStyle] = useState();
-  const allBonsai = useSelector(
-    (state) => state.bonsai?.allBonsaiPaginationDTO?.items
-  );
-  const allCategories = useSelector(
-    (state) => state.category?.allCategoryDTO?.items
-  );
-  const allStyles = useSelector((state) => state.style?.allStyleDTO?.items);
+  const allService = useSelector((state) => state.service?.listService?.items);
+  const allServiceTypes = useSelector((state) => state.service?.allServiceTypeDTO);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const paging = useSelector((state) => state.bonsai?.pagination);
-
+  const paging = useSelector((state) => state.service?.pagination);
+  
+  console.log(allServiceTypes)
   useEffect(() => {
     dispatch(
-      fetchAllBonsaiPagination({
+      fetchAllService({
         pageIndex: currentPage - 1,
-        pageSize: pageSize
+        pageSize: pageSize,
       })
     );
   }, []);
 
   useEffect(() => {
-    dispatch(allCategory());
+    dispatch(allServiceType());
   }, []);
-
-  useEffect(() => {
-    dispatch(allStyle());
-  }, []);
-
-  useEffect(() => {
-    handleSearchInputChange();
-  }, [filter]);
 
   const showCreateModal = () => {
+    console.log("1111")
     setOpenCreateModal(true);
   };
 
@@ -98,13 +76,13 @@ function ProductManage() {
 
   const handleDelete = () => {
     setConfirmLoadingDelete(true);
-    deleteBonsai(selectedBonsai)
+    deleteService(selectedBonsai)
       .then((data) => {
         toast.success("Xóa thành công!");
         dispatch(
-          fetchAllBonsaiPagination({
+          fetchAllService({
             pageIndex: currentPage - 1,
-            pageSize: pageSize
+            pageSize: pageSize,
           })
         );
         setOpenDelete(false);
@@ -123,7 +101,7 @@ function ProductManage() {
   };
 
   const handleCancelUpdate = () => {
-    setSelectedUpdateBonsai(undefined);
+    setSelectedUpdateService(undefined);
     setOpenUpdateModal(false);
   };
 
@@ -132,89 +110,61 @@ function ProductManage() {
     setOpenDelete(false);
   };
 
-  const handleSearchInputChange = () => {
-    console.log(filter);
-    //e.preventDefault();
-    dispatch(
-      fetchAllBonsaiPagination({
-        pageIndex: 0,
-        pageSize: 5,
-        keyword: filter.keyword,
-        category: filter.category,
-        style: filter.style,
-      })
-    );
-  };
-
   const handleTableChange = (pagination) => {
     console.log(pagination);
     const index = Number(pagination.current) - 1;
     dispatch(
-      fetchAllBonsaiPagination({
+      fetchAllService({
         pageIndex: index,
         pageSize: pageSize,
-        keyword: "",
       })
     );
   };
   const columns = [
     {
-      title: "Sản phẩm",
+      title: "Tên dịch vụ",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Năm trồng",
-      dataIndex: "yearOfPlanting",
-      key: "yearOfPlanting",
+      title: "Mô tả",
+      dataIndex: "description",
+      key: "description",
     },
     {
-      title: "Hoành cây",
-      dataIndex: "trunkDimenter",
-      key: "trunkDimenter",
-    },
-    {
-      title: "Chiều cao ",
-      dataIndex: "height",
-      key: "height",
-    },
-    {
-      title: "Số thân",
-      dataIndex: "numberOfTrunk",
-      key: "numberOfTrunk",
-    },
-    {
-      title: "Giá tiền",
-      dataIndex: "price",
-      key: "price",
+      title: "Giá tiêu chuẩn",
+      dataIndex: "standardPrice",
+      key: "standardPrice",
       render: (_, record) => (
         <>
           <p>
             {new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: "VND",
-            }).format(record.price)}
+            }).format(record.standardPrice)}
           </p>
         </>
       ),
     },
     {
-      title: "Loại cây",
-      dataIndex: "category",
-      key: "category",
+      title: "Loại dịch vụ",
+      dataIndex: "catserviceTypeegory",
+      key: "serviceType",
       render: (_, record) => (
         <>
-          <p>{record?.category?.name}</p>
+          <p>{record.serviceType}</p>
         </>
       ),
     },
     {
-      title: "Kiểu mẫu",
-      dataIndex: "style",
-      key: "style",
+      title: "Hinh ảnh",
+      dataIndex: "image",
+      key: "image",
       render: (_, record) => (
         <>
-          <p>{record?.style?.name}</p>
+          <div>
+            <img src={record.image} width={200} height={200} />
+          </div>
         </>
       ),
     },
@@ -226,7 +176,7 @@ function ProductManage() {
         <Space size="middle">
           <button
             onClick={() => {
-              setSelectedBonsai(record.id);
+              setSelectedService(record.id);
               showModalDelete();
             }}
           >
@@ -234,21 +184,19 @@ function ProductManage() {
           </button>
           <button
             onClick={() => {
-              setSelectedUpdateBonsai(record);
+              setSelectedUpdateService(record);
               showUpdateModal();
             }}
           >
             Chỉnh sửa
           </button>
-          <Link to={`/admin/productDetail/${record.id}`} key={record.id}>
+          {/* <Link to={`/admin/productDetail/${record.id}`} key={record.id}>
             Xem thông tin
-          </Link>
+          </Link> */}
         </Space>
       ),
     },
   ];
-
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
 
   return (
     <>
@@ -262,55 +210,15 @@ function ProductManage() {
                   className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
                   onClick={showCreateModal}
                 >
-                  <PlusCircleOutlined /> Thêm sản phẩm
+                  <PlusCircleOutlined /> Thêm Dịch vụ
                 </button>
               </div>
-              <div className="grid grid-cols-3 lg:grid-cols-3">
-                <div>
-                  <Select
-                    defaultValue={""}
-                    style={{ width: "80%" }}
-                    onChange={(e) => setFilter({ ...filter, category: e })}
-                  >
-                    <Select.Option value={""}>Tất cả</Select.Option>
-                    {allCategories?.map((category, index) => (
-                      <Select.Option value={category.id} key={index}>
-                        {category.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </div>
-                <div>
-                  <Select
-                    defaultValue={""}
-                    style={{ width: "80%" }}
-                    onChange={(e) => setFilter({ ...filter, style: e })}
-                  >
-                    <Select.Option value={""}>Tất cả</Select.Option>
-                    {allStyles?.map((style, index) => (
-                      <Select.Option value={style.id} key={index}>
-                        {style.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </div>
-                <div className="w-[100%]">
-                  <Search
-                    placeholder="Nhập từ khóa để tìm kiếm"
-                    onSearch={onSearch}
-                    onChange={(e) =>
-                      setFilter({ ...filter, keyword: e.target.value })
-                    }
-                    className="w-[300px]"
-                    allowClear
-                  />
-                </div>
-              </div>
+              <div className="grid grid-cols-3 lg:grid-cols-3"></div>
             </div>
             <div className="mb-12">
               <Table
                 className="w-[100%]"
-                dataSource={allBonsai}
+                dataSource={allService}
                 columns={columns}
                 scroll={{ x: true }}
                 pagination={paging}
@@ -324,19 +232,19 @@ function ProductManage() {
             </div>
           </div>
         </div>
-        <ModalCreateProduct
+        <ModalCreateService
           show={openCreateModal}
           setShow={handleCancelCreate}
-          listCategory={allCategories}
-          listStyle={allStyles}
+          listServiceType={allServiceTypes}
+          listBaseTask={allServiceTypes}
         />
-        <ModalUpdateProduct
+        {/* <ModalUpdateProduct
           show={openUpdateModal}
           setShow={handleCancelUpdate}
           bonsai={selectedUpdateBonsai}
           listCategory={allCategories}
           listStyle={allStyles}
-        />
+        /> */}
         <Modal
           title="Xóa sản phẩm"
           open={openDelete}
@@ -352,4 +260,4 @@ function ProductManage() {
   );
 }
 
-export default ProductManage;
+export default ServiceManage;

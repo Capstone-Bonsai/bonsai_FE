@@ -56,12 +56,13 @@ function SellProducts() {
       </div>
       <div className="mb-6">
         <div className="flex justify-between mt-5 border-b-2 pb-1">
-          <div className="text-[#00B214] font-bold text-2xl">
-            CÂY CẢNH VĂN PHÒNG
-          </div>
-          <div className="bg-[#8CCA46] h-[30px] flex items-center text-[#ffffff] px-2 rounded-[4px]">
+          <div className="text-[#00B214] font-bold text-2xl">BONSAI</div>
+          <Link
+            to={"/bonsai"}
+            className="bg-[#8CCA46] h-[30px] flex items-center text-[#ffffff] px-2 rounded-[4px]"
+          >
             + Xem tất cả
-          </div>
+          </Link>
         </div>
         <div className="flex flex-wrap justify-between">
           {allBonsaiPaginationDTO?.items?.map((office) => (
@@ -116,12 +117,13 @@ function SellProducts() {
       </div>
       <div className="mb-6">
         <div className="flex justify-between mt-5 border-b-2 pb-1">
-          <div className="text-[#00B214] font-bold text-2xl">
-            CÂY CẢNH VĂN PHÒNG
-          </div>
-          <div className="bg-[#8CCA46] h-[30px] flex items-center text-[#ffffff] px-2 rounded-[4px]">
+          <div className="text-[#00B214] font-bold text-2xl">BONSAI</div>
+          <Link
+            to={"/bonsai"}
+            className="bg-[#8CCA46] h-[30px] flex items-center text-[#ffffff] px-2 rounded-[4px]"
+          >
             + Xem tất cả
-          </div>
+          </Link>
         </div>
         <div className="flex flex-wrap justify-between">
           {allBonsaiPaginationDTO?.items?.map((office) => (
