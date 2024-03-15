@@ -6,6 +6,8 @@ import orderReducer from "./slice/orderSlice";
 import avatarReducer from "./slice/avatarSlice";
 import bonsaiReducer from "./slice/bonsaiSlice";
 import categoryReducer from "./slice/categorySlice";
+import styleReducer from "./slice/styleSlice";
+import serviceReducer from "./slice/serviceSlice";
 
 const store = configureStore({
   reducer: {
@@ -15,6 +17,8 @@ const store = configureStore({
     avatar: avatarReducer,
     bonsai: bonsaiReducer,
     category: categoryReducer,
+    style: styleReducer,
+    service: serviceReducer,
   },
 });
 

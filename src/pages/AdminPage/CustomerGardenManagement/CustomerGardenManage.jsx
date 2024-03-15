@@ -13,9 +13,8 @@ import { fetchAllOrders } from "../../../redux/slice/orderSlice";
 import { deleteProduct } from "../../../utils/productApi";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
-import ModalUpdateOrder from "./ModalUpdateOrder";
 
-function OrderManage() {
+function CustomerGardenManage() {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.order.loading);
   const [openDelete, setOpenDelete] = useState(false);
@@ -326,11 +325,6 @@ function OrderManage() {
             </div>
           </div>
         </div>
-        <ModalUpdateOrder
-          show={openUpdateModal}
-          setShow={handleCancelUpdate}
-          order={selectedUpdateOrder}
-        />
         <Modal
           title="Xóa sản phẩm"
           open={openDelete}
@@ -346,4 +340,4 @@ function OrderManage() {
   );
 }
 
-export default OrderManage;
+export default CustomerGardenManage;

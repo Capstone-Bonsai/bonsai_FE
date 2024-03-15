@@ -1,9 +1,9 @@
 import axios from "../../utils/axiosCustomize";
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 
-export const allCategory = createAsyncThunk("bonsai/category", async () => {
+export const allStyle = createAsyncThunk("bonsai/style", async () => {
   try {
-    const response = await axios.get("/Category");
+    const response = await axios.get("/Style");
     return response.data;
   } catch (error) {
     throw error;
@@ -11,39 +11,39 @@ export const allCategory = createAsyncThunk("bonsai/category", async () => {
 });
 
 const initialState = {
-  allCategoryDTO: {},
+  allStyleDTO: {},
   loading: false,
   msg: "",
   token: null,
 };
 
-const categorySlice = createSlice({
-  name: "category",
+const styleSlice = createSlice({
+  name: "style",
   initialState,
   reducers: {
-    setCategory: (state, action) => {
-      state.allCategoryDTO = action.payload;
+    setStyle: (state, action) => {
+      state.allStyleDTO = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(allCategory.pending, (state) => {
+      .addCase(allStyle.pending, (state) => {
         state.msg = "Loading...";
         state.loading = true;
       })
-      .addCase(allCategory.fulfilled, (state, action) => {
-        state.allCategoryDTO = action.payload;
+      .addCase(allStyle.fulfilled, (state, action) => {
+        state.allStyleDTO = action.payload;
         state.msg = "Data loaded successfully";
         state.loading = false;
       })
-      .addCase(allCategory.rejected, (state) => {
+      .addCase(allStyle.rejected, (state) => {
         state.msg = "Error loading data";
         state.loading = false;
       });
   },
 });
-const { reducer: categoryReducer, actions } = categorySlice;
+const { reducer: styleReducer, actions } = styleSlice;
 export const {
-  setCategory
+  setStyle
 } = actions;
-export { categoryReducer as default };
+export { styleReducer as default };
