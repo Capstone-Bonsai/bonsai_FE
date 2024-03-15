@@ -1,0 +1,4 @@
+.cartItem:hover .cartItemChildren {
+  background-color: #3a9943;
+  color: #fff;
+}

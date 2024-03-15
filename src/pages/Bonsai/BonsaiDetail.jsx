@@ -11,6 +11,7 @@ import {
   fetchBonsaiById,
   setCartFromCookie,
 } from "../../redux/slice/bonsaiSlice";
+import MinHeight from "../../components/MinHeight";
 
 function BonsaiDetail() {
   const dispatch = useDispatch();
@@ -36,7 +37,6 @@ function BonsaiDetail() {
   const handleImageClick = (newImageId) => {
     setCurrentImage(newImageId);
   };
-
 
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -83,7 +83,7 @@ function BonsaiDetail() {
   };
 
   return (
-    <>
+    <MinHeight>
       {loading ? (
         <Loading loading={loading} />
       ) : (
@@ -91,10 +91,10 @@ function BonsaiDetail() {
           {/* <div className="border-b py-2">
             <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
           </div> */}
-          <div className="m-auto w-[70%] flex justify-between my-10">
+          <div className="m-auto w-[60%] flex justify-between my-10">
             <div className=" w-[450px] ">
               <div className="flex">
-                <div className="w-full h-[450px]">
+                <div className="w-full h-[450px] drop-shadow-lg">
                   <Image
                     src={imageDetail?.imageUrl}
                     alt=""
@@ -114,29 +114,45 @@ function BonsaiDetail() {
                     style={{
                       cursor: "pointer",
                       opacity: currentImage === imageDetail.id ? 1 : 0.5,
+                      border:
+                        currentImage === imageDetail.id
+                          ? "5px solid #3a9943"
+                          : "none",
                     }}
-                    className="object-cover w-[103px]"
+                    className="object-cover w-[103px] "
                   />
                 ))}
               </a>
             </div>
             <div className="w-[48%] border p-5">
-              <div className="border-b">
-                <div className="text-[14px] text-[#343434] flex">
-                  Tags: <div>Cây, Hạt ,...</div>
+              <div className="border-b pb-10">
+                <div className="text-[14px] text-[#343434] flex text-[#343434] font-[300] ">
+                  Dáng cây:{" "}
+                  <div className="pl-2 opacity-50">
+                    {bonsaiDetail?.style?.name}
+                  </div>
                 </div>
-                <div className="text-[24px] text-[#333333]">
+                <div className="text-[24px] text-[#333333] montserrat">
                   {bonsaiDetail.name}
                 </div>
                 <div className="text-[#3a9943] text-[32px] font-bold">
                   {formatPrice(bonsaiDetail.price)}
                 </div>
+                <div className="text-[13px] font-[300] text-[#666]">
+                  Năm tuổi:{" "}
+                </div>
+                <div className="text-[13px] font-[300] text-[#666] ">
+                  Hoành cây:{" "}
+                </div>
+                <div className="text-[13px] font-[300] text-[#666]">
+                  Chiều cao:{" "}
+                </div>
               </div>
               <div className="py-5 border-b">{bonsaiDetail?.description}</div>
               <div className="border-b">
-                <div className="flex items-center py-5 ">
+                <div className="flex items-center py-5 justify-end">
                   <button
-                    className="bg-[#3a9943] w-[200px] h-[45px] rounded-[10px] text-[#ffffff] text-[16px]"
+                    className="bg-[#3a9943] h-[45px] px-[70px] rounded-[10px] text-[#ffffff] font-bold text-[16px] transition-colors duration-300 hover:bg-black"
                     onClick={addToCart}
                   >
                     + Thêm vào Giỏ Hàng
@@ -147,7 +163,7 @@ function BonsaiDetail() {
           </div>
         </div>
       )}
-    </>
+    </MinHeight>
   );
 }
 

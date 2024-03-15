@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBonsai, setCartFromCookie } from "../redux/slice/bonsaiSlice";
 import { profileUser } from "../redux/slice/authSlice";
 import { setAvatarUrlRedux } from "../redux/slice/avatarSlice";
+import "./Banner.css"
 function Banner() {
   const { Search } = Input;
   const navLinks = [
@@ -172,7 +173,7 @@ function Banner() {
                 />
                 <button className="absolute inset-y-0 right-5 flex items-center pl-2 text-[#ffffff] text-[30px] hover:text-[#ffdd20]">
                   <SearchOutlined />
-                </button>     
+                </button>
               </div>
             </form>
             <div className="flex items-center">
@@ -184,11 +185,11 @@ function Banner() {
             </div>
             <Link
               to="/shoppingCart"
-              className="text-[30px] w-[70px] h-[50px] text-[#ffffff] flex items-center border pl-2 rounded-[5px] 
+              className="cartItem text-[30px] w-[70px] h-[50px] text-[#ffffff] flex items-center border pl-2 rounded-[5px] 
           border-[#ffffff]-500 border-opacity-50 border-opacity-50 hover:bg-[#ffffff] hover:text-black"
             >
               <ShoppingCartOutlined />
-              <div className="w-[20px] h-[20px] bg-[red]  flex text-[15px] justify-center items-center hover:text-[#ffffff] rounded-full">
+              <div className="cartItemChildren w-[20px] h-[20px] bg-[#fff] text-black flex text-[15px] justify-center items-center rounded-full">
                 {countCart}
               </div>
             </Link>
