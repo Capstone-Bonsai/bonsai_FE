@@ -17,19 +17,6 @@ export const fetchAllService = createAsyncThunk(
   }
 );
 
-export const fetchService = createAsyncThunk(
-  "bonsai/fetchService",
-  async ({ page, size }) => {
-    try {
-      const response = await axios.get(`/Service?page=${page}&size=${size}`);
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-);
-
 export const fetchServiceById = createAsyncThunk(
   "service/fetchServiceById",
   async (serviceId) => {
@@ -47,7 +34,6 @@ export const allServiceType = createAsyncThunk(
   async () => {
     try {
       const response = await axios.get("/Service/ServiveType");
-      console.log(response.data);
       return response.data;
     } catch (error) {
       throw error;
@@ -57,9 +43,8 @@ export const allServiceType = createAsyncThunk(
 
 const initialState = {
   listService: {},
-  serviceDTO: {},
   serviceById: {},
-  allServiceTypeDTO: {},
+  allServiceTypeDTO: undefined,
   loading: false,
   msg: "",
   token: null,
@@ -74,9 +59,6 @@ const serviceSlice = createSlice({
     },
     setAllService: (state, action) => {
       state.listService = action.payload;
-    },
-    setService: (state, action) => {
-      state.serviceDTO = action.payload;
     },
     setServiceById: (state, action) => {
       state.serviceById = action.payload;
@@ -125,25 +107,8 @@ const serviceSlice = createSlice({
       state.msg = "Error loading data";
       state.loading = false;
     });
-    builder
-      .addCase(fetchService.pending, (state) => {
-        state.msg = "Loading...";
-        state.loading = true;
-      })
-
-      .addCase(fetchService.fulfilled, (state, action) => {
-        state.serviceDTO = action.payload;
-        state.msg = "Data loaded successfully";
-        state.loading = false;
-      })
-      .addCase(fetchService.rejected, (state) => {
-        state.serviceDTO = [];
-        state.msg = "Không tìm thấy";
-        state.loading = false;
-      });
   },
 });
 const { reducer: serviceReducer, actions } = serviceSlice;
-export const { setService, setAllService, setServiceById, setServiceType } =
-  actions;
+export const { setAllService, setServiceById, setServiceType } = actions;
 export { serviceReducer as default };
