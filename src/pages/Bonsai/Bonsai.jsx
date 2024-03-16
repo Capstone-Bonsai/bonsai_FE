@@ -32,16 +32,11 @@ function Bonsai() {
   );
   const loading = useSelector((state) => state.bonsai.loading);
   const keyword = location.state?.keyword;
-  const categories = useSelector(
-    (state) => state.category.allCategoryDTO?.items
-  );
-  const styles = useSelector((state) => state.style.styleDTO.items);
 
   useEffect(() => {
     dispatch(allCategory());
     dispatch(allStyle());
   }, []);
-  const dispatch = useDispatch();
   useEffect(() => {
     const payload = {
       pageIndex: pageIndex - 1,
@@ -54,7 +49,15 @@ function Bonsai() {
     };
 
     dispatch(fetchAllBonsai(payload));
-  }, [dispatch, pageIndex, pageSize, priceRange, selectedCategories, selectStyle, keyword]);
+  }, [
+    dispatch,
+    pageIndex,
+    pageSize,
+    priceRange,
+    selectedCategories,
+    selectStyle,
+    keyword,
+  ]);
 
   const handleResetFilter = () => {
     setSelectedCategories();
@@ -85,7 +88,7 @@ function Bonsai() {
                   Phân loại
                 </div>
                 <button onClick={handleResetFilter}>
-                  Tắt bộ lọc <RedoOutlined className="pl-2"/>
+                  Tắt bộ lọc <RedoOutlined className="pl-2" />
                 </button>
               </div>
               {categories?.map((category) => (
