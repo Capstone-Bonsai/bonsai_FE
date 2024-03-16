@@ -4,8 +4,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 function NavbarUser() {
   const menuItems = [
     { name: "Hồ sơ người dùng", path: "/Profile" },
-    { name: "Quản lý đặt hàng", path: "/manageOrder" },
-    { name: "Vườn của bạn", path: "/customerGarden" },
+    { name: "Quản lý đặt hàng", path: "/ManageOrder" },
+    { name: "Vườn của bạn", path: "/CustomerGarden" },
   ];
   const location = useLocation();
   const [selectedItem, setSelectedItem] = useState(
