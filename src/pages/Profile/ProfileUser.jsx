@@ -57,11 +57,11 @@ function ProfileUser() {
   };
 
   return (
-    <MinHeight>
+    <>
       {isLoading ? (
         <Loading loading={isLoading} />
       ) : (
-        <>
+        <MinHeight>
           <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
             <NavbarUser />
             <div className="text-center border w-[75%] flex flex-col items-center p-4">
@@ -133,9 +133,9 @@ function ProfileUser() {
               </button>
             </div>
           </div>
-        </>
+        </MinHeight>
       )}
-    </MinHeight>
+    </>
   );
 }
 

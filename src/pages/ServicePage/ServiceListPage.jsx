@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import service_img from "../../assets/test_service.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchService } from "../../redux/slice/serviceSlice";
+import { fetchAllService } from "../../redux/slice/serviceSlice";
 import { Pagination } from "antd";
 import Loading from "../../components/Loading";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
@@ -15,15 +15,15 @@ function ServiceListPage() {
     setCurrentPage(page);
   };
   useEffect(() => {
-    dispatch(fetchService({ page: currentPage - 1, size: pageSize }));
+    dispatch(fetchAllService({ pageIndex: currentPage - 1, pageSize: pageSize }));
   }, [currentPage]);
   const isLoading = useSelector((state) => state.service.loading);
   console.log(isLoading);
   const totalItems = useSelector(
-    (state) => state.service.serviceDTO.totalItemsCount
+    (state) => state.service.listService.totalItemsCount
   );
   console.log(totalItems);
-  const serivceList = useSelector((state) => state.service.serviceDTO.items);
+  const serivceList = useSelector((state) => state.service.listService?.items);
   return (
     <>
       {isLoading ? (

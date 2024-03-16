@@ -46,7 +46,6 @@ function ServiceManage() {
   const [pageSize, setPageSize] = useState(5);
   const paging = useSelector((state) => state.service?.pagination);
   
-  console.log(allServiceTypes)
   useEffect(() => {
     dispatch(
       fetchAllService({
