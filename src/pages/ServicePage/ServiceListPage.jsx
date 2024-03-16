@@ -20,10 +20,10 @@ function ServiceListPage() {
   const isLoading = useSelector((state) => state.service.loading);
   console.log(isLoading);
   const totalItems = useSelector(
-    (state) => state.service.serviceDTO.totalItemsCount
+    (state) => state.service.listService.totalItemsCount
   );
   console.log(totalItems);
-  const serivceList = useSelector((state) => state.service.serviceDTO.items);
+  const serivceList = useSelector((state) => state.service.listService?.items);
   return (
     <>
       {isLoading ? (
