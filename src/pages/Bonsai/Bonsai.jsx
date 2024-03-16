@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { fetchAllBonsai } from "../../redux/slice/bonsaiSlice";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { allCategory } from "../../redux/slice/categorySlice";
-import { fetchStyle } from "../../redux/slice/styleSlice";
+import { allStyle } from "../../redux/slice/styleSlice";
 
 function Bonsai() {
   const location = useLocation();
@@ -39,9 +39,9 @@ function Bonsai() {
 
   useEffect(() => {
     dispatch(allCategory());
-    dispatch(fetchStyle());
-  }, [dispatch]);
-
+    dispatch(allStyle());
+  }, []);
+  const dispatch = useDispatch();
   useEffect(() => {
     const payload = {
       pageIndex: pageIndex - 1,
@@ -68,6 +68,10 @@ function Bonsai() {
     setPageIndex(page);
   };
 
+  const categories = useSelector(
+    (state) => state.category.allCategoryDTO?.items
+  );
+  const styles = useSelector((state) => state.style.allStyleDTO.items);
   return (
     <div className="my-5 m-auto w-[70%]">
       {loading ? (

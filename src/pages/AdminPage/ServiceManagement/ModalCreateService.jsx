@@ -32,7 +32,6 @@ const ALLOWED_FILE_TYPES = [
 const ModalCreateService = (props) => {
   const [form] = Form.useForm();
   const { show, setShow, listServiceType, listBaseTask } = props;
-  console.log(listServiceType);
   const handleClose = () => {
     setFormData({
       Name: "",
@@ -44,6 +43,7 @@ const ModalCreateService = (props) => {
     });
     form.resetFields();
     setListImage([]);
+    setConfirmLoading(false);
     setShow(false);
   };
   const [formData, setFormData] = useState({
@@ -121,7 +121,7 @@ const ModalCreateService = (props) => {
     }
   };
   const onSubmit = (i) => {
-    // formData.Image = listImage?.map((image) => image.originFileObj);
+    formData.Image = listImage[0]?listImage[0].originFileObj: null;
     // const postData = new FormData();
     // postData.append("CategoryId", formData.CategoryId);
     // postData.append("StyleId", formData.StyleId);
@@ -139,7 +139,7 @@ const ModalCreateService = (props) => {
       .validateFields()
       .then(() => {
         setConfirmLoading(true);
-        createService(postData);
+        //createService(postData);
       })
       .catch((errorInfo) => {
         toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
@@ -229,10 +229,10 @@ const ModalCreateService = (props) => {
               </div>
             </Form.Item> */}
             <Form.Item
-              label="Tên sản phẩm"
+              label="Tên dịch vụ"
               name="Name"
               rules={[
-                { required: true, message: "Phân loại không được để trống!" },
+                { required: true, message: "Tên dịch vụ không được để trống!" },
               ]}
             >
               <Input />
