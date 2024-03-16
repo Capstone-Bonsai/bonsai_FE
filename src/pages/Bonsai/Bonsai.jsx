@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { fetchAllBonsai } from "../../redux/slice/bonsaiSlice";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { allCategory } from "../../redux/slice/categorySlice";
-import { fetchStyle } from "../../redux/slice/styleSlice";
+import { allStyle } from "../../redux/slice/styleSlice";
 
 function Bonsai() {
   const location = useLocation();
@@ -32,15 +32,11 @@ function Bonsai() {
   );
   const loading = useSelector((state) => state.bonsai.loading);
   const keyword = location.state?.keyword;
-  const categories = useSelector(
-    (state) => state.category.allCategoryDTO?.items
-  );
-  const styles = useSelector((state) => state.style.styleDTO.items);
 
   useEffect(() => {
     dispatch(allCategory());
-    dispatch(fetchStyle());
-  }, [dispatch]);
+    dispatch(allStyle());
+  }, []);
 
   useEffect(() => {
     const payload = {
@@ -76,6 +72,10 @@ function Bonsai() {
     setPageIndex(page);
   };
 
+  const categories = useSelector(
+    (state) => state.category.allCategoryDTO?.items
+  );
+  const styles = useSelector((state) => state.style.allStyleDTO.items);
   return (
     <div className="my-5 m-auto w-[70%]">
       {loading ? (
@@ -89,6 +89,7 @@ function Bonsai() {
                   Phân loại
                 </div>
                 <button onClick={handleResetFilter}>
+                  Tắt bộ lọc <RedoOutlined className="pl-2" />
                   Tắt bộ lọc <RedoOutlined className="pl-2" />
                 </button>
               </div>
