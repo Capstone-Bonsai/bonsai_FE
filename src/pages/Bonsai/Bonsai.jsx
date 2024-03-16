@@ -59,6 +59,15 @@ function Bonsai() {
     selectStyle,
     keyword,
   ]);
+  }, [
+    dispatch,
+    pageIndex,
+    pageSize,
+    priceRange,
+    selectedCategories,
+    selectStyle,
+    keyword,
+  ]);
 
   const handleResetFilter = () => {
     setSelectedCategories();
@@ -89,6 +98,7 @@ function Bonsai() {
                   Phân loại
                 </div>
                 <button onClick={handleResetFilter}>
+                  Tắt bộ lọc <RedoOutlined className="pl-2" />
                   Tắt bộ lọc <RedoOutlined className="pl-2" />
                 </button>
               </div>
