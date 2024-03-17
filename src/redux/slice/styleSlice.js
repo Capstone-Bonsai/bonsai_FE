@@ -18,9 +18,21 @@ export const fetchStyle = createAsyncThunk("bonsai/fetchStyle", async () => {
     throw error;
   }
 });
-
+export const fetchStyleCount = createAsyncThunk(
+  "bonsai/fetchStyleCount",
+  async () => {
+    try {
+      const response = await axios.get(`/Style/count`);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 const initialState = {
   allStyleDTO: {},
+  styleCount: [],
   loading: false,
   msg: "",
   token: null,
@@ -32,6 +44,9 @@ const styleSlice = createSlice({
   reducers: {
     setStyle: (state, action) => {
       state.allStyleDTO = action.payload;
+    },
+    setStyleCount: (state, action) => {
+      state.styleCount = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -48,9 +63,22 @@ const styleSlice = createSlice({
       .addCase(allStyle.rejected, (state) => {
         state.msg = "Error loading data";
         state.loading = false;
+      })
+      .addCase(fetchStyleCount.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(fetchStyleCount.fulfilled, (state, action) => {
+        state.styleCount = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(fetchStyleCount.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.loading = false;
       });
   },
 });
 const { reducer: styleReducer, actions } = styleSlice;
-export const { setStyle } = actions;
+export const { setStyle, setStyleCount } = actions;
 export { styleReducer as default };

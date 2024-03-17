@@ -5,7 +5,7 @@ import BannerMuaBan from "../../assets/mua-ban.png";
 import BannerDichVu from "../../assets/dich-vu.png";
 import { PhoneOutlined } from "@ant-design/icons";
 import SellProducts from "./SellProducts";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { profileUser } from "../../redux/slice/authSlice";
 import Cookies from "universal-cookie";
 import { toast } from "react-toastify";
@@ -15,11 +15,11 @@ import { bonsaiOffice } from "../../data/TopProducts";
 import { setBonsaiOffice } from "../../redux/slice/productSlice";
 import { fetchAllBonsaiPagination } from "../../redux/slice/bonsaiSlice";
 import Loading from "../../components/Loading";
+import { fetchStyleCount } from "../../redux/slice/styleSlice";
 function Home() {
   const cookies = new Cookies();
   const userInfo = cookies?.get("user");
   const location = useLocation();
-
   const searchParams = new URLSearchParams(location.search);
   const userId = searchParams.get("userId");
   const code = searchParams.get("code");
@@ -29,11 +29,11 @@ function Home() {
   }, [userId, code]);
   const dispatch = useDispatch();
   const { topProductDTO } = useSelector((state) => state.product);
-  const { bonsaiOfficeDTO } = useSelector((state) => state.product);
   const { allBonsaiPaginationDTO } = useSelector((state) => state.bonsai);
+  const { styleCount } = useSelector((state) => state.style);
   const loading = useSelector((state) => state.bonsai.loading);
   useEffect(() => {
-    dispatch(setBonsaiOffice(bonsaiOffice));
+    dispatch(fetchStyleCount());
   }, [dispatch]);
 
   useEffect(() => {
@@ -45,6 +45,11 @@ function Home() {
       })
     );
   }, [dispatch]);
+  const navigate = useNavigate();
+  const handleFilterStyle = (styleId) => {
+    console.log(styleId);
+    navigate("/bonsai", { state: { styleId } });
+  };
   return (
     <>
       {loading ? (
@@ -59,27 +64,23 @@ function Home() {
             <img src={Banner} alt="" className="w-[100%]" />
           </div>
 
-          <div className="w-[70%] m-auto mt-6 grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <div className="w-[70%] m-auto mt-6 flex justify-between gap-5">
             <Link
-              className="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
-              style={{ backgroundImage: `url(${BannerMuaBan})` }}
+              className="min-h-[220px] w-[50%]  hover:opacity-50 bg-cover bg-no-repeat relative "
               to="/bonsai"
             >
-              <div className="h-[70%] flex items-center">
-                <div className="text-2xl pl-6 font-semibold uppercase">
-                  Mua sắm
-                </div>
+              <img src={BannerMuaBan} alt="" className="w-full h-full " />
+              <div className="text-2xl pl-6 font-semibold uppercase absolute top-[30%]">
+                Mua sắm
               </div>
             </Link>
             <Link
-              className="min-h-[220px] col hover:opacity-50 bg-cover bg-no-repeat"
-              style={{ backgroundImage: `url(${BannerDichVu})` }}
+              className="min-h-[220px]  w-[50%]  hover:opacity-50 bg-cover bg-no-repeat relative"
               to="/service"
             >
-              <div className="w-[50%] h-[70%] flex items-center">
-                <div className="text-2xl pl-6 font-semibold uppercase">
-                  Dịch vụ chăm sóc
-                </div>
+              <img src={BannerDichVu} alt="" className="w-full h-full " />
+              <div className="text-2xl pl-6 font-semibold uppercase absolute top-[30%]">
+                Dịch vụ chăm sóc
               </div>
             </Link>
           </div>
@@ -87,6 +88,8 @@ function Home() {
           <SellProducts
             topProductDTO={topProductDTO}
             allBonsaiPaginationDTO={allBonsaiPaginationDTO}
+            styleCount={styleCount}
+            handleFilterStyle={handleFilterStyle}
           />
         </div>
       )}

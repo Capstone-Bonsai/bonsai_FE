@@ -24,7 +24,9 @@ function Bonsai() {
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(6);
   const [selectedCategories, setSelectedCategories] = useState();
-  const [selectStyle, setSelectStyle] = useState();
+  const styleId = location.state?.styleId;
+
+  const [selectStyle, setSelectStyle] = useState(styleId || undefined);
 
   const allBonsai = useSelector((state) => state.bonsai.allBonsaiDTO?.items);
   const countPageBonsai = useSelector(
@@ -32,7 +34,6 @@ function Bonsai() {
   );
   const loading = useSelector((state) => state.bonsai.loading);
   const keyword = location.state?.keyword;
-
   useEffect(() => {
     dispatch(allCategory());
     dispatch(allStyle());
