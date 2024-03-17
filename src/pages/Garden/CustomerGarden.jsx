@@ -9,6 +9,7 @@ import {
 import Loading from "../../components/Loading";
 import { UploadOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
+import { Image } from "antd";
 
 function CustomerGarden() {
   const dispatch = useDispatch();
@@ -127,9 +128,11 @@ function CustomerGarden() {
                 <div key={garden.id} className=" flex p-4">
                   <div>
                     {garden.customerGardenImages.map((imageGarden) => (
-                      <img
+                      <Image
                         key={imageGarden.id}
-                        className="w-[300px] h-[300px]"
+                        className="rounded-[10px]"
+                        width={300}
+                        height={300}
                         src={imageGarden.image}
                         alt=""
                       />

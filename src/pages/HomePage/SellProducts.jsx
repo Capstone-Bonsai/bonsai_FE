@@ -49,7 +49,7 @@ function SellProducts({
           <div className="flex mt-5 border-b-2 pb-1">
             <div className="text-[#00B214] font-bold text-2xl">BONSAI</div>
           </div>
-          <div className="m-auto flex flex-wrap gap-[70px] pl-5 pr-5">
+          <div className="m-auto flex flex-wrap gap-[60px] pl-5 pr-5">
             {allBonsaiPaginationDTO?.items?.map((office) => (
               <div
                 className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[370px] "
@@ -104,7 +104,7 @@ function SellProducts({
           <div className="flex justify-between mt-5 border-b-2 pb-1">
             <div className="text-[#00B214] font-bold text-2xl">BONSAI</div>
           </div>
-          <div className="m-auto flex flex-wrap gap-[70px] pl-5 pr-5">
+          <div className="m-auto flex flex-wrap gap-[60px] pl-5 pr-5">
             {allBonsaiPaginationDTO?.items?.map((office) => (
               <div
                 className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[370px] "
