@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Col, Image, InputNumber, Row, Slider, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-
+import { ShoppingCartOutlined } from "@ant-design/icons";
 import Cookies from "universal-cookie";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,7 +12,7 @@ import {
   setCartFromCookie,
 } from "../../redux/slice/bonsaiSlice";
 import MinHeight from "../../components/MinHeight";
-
+import logo from "../../assets/logoFinal.png";
 function BonsaiDetail() {
   const dispatch = useDispatch();
   const { bonsaiId } = useParams();
@@ -150,13 +150,26 @@ function BonsaiDetail() {
               </div>
               <div className="py-5 border-b">{bonsaiDetail?.description}</div>
               <div className="border-b">
-                <div className="flex items-center py-5 justify-end">
+                <div className="flex items-center py-5 justify-between">
+                  <div className="flex items-center  text-[#3a9943]">
+                    <ShoppingCartOutlined className="text-[30px] " />
+                    <span className=""> Còn hàng</span>
+                  </div>
                   <button
                     className="bg-[#3a9943] h-[45px] px-[70px] rounded-[10px] text-[#ffffff] font-bold text-[16px] transition-colors duration-300 hover:bg-black"
                     onClick={addToCart}
                   >
                     + Thêm vào Giỏ Hàng
                   </button>
+                </div>
+              </div>
+              <div className="flex items-center justify-between py-5">
+                <div>
+                  <img src={logo} className="w-[100px] h-[100px]" alt="" />
+                </div>
+                <div>
+                  <div>372 Quốc lộ 20, Liên Nghĩa, Đức Trọng, Lâm Đồng</div>
+                  <div>0934534534</div>
                 </div>
               </div>
             </div>

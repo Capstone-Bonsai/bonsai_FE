@@ -4,12 +4,29 @@ import { categoryList } from "../../data/AllCategory";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import Loading from "../../components/Loading";
-function SellProducts({ topProductDTO, allBonsaiPaginationDTO }) {
+import dangHoanh from "../../assets/dangHoanh.jpg";
+import dangHuyen from "../../assets/dangHuyen.jpg";
+import dangTruc from "../../assets/dangTruc.jpg";
+import dangXien from "../../assets/dangXien.jpg";
+function SellProducts({
+  topProductDTO,
+  allBonsaiPaginationDTO,
+  styleCount,
+  handleFilterStyle
+  
+}) {
+  const imageMapping = {
+    "27e666b4-4731-4d20-921a-08dc3f334824": dangXien,
+    "1b3c4d1b-1100-43cc-faaa-08dc3f36382d": dangHuyen,
+    "69d3d9f5-65b1-41b8-faab-08dc3f36382d": dangHoanh,
+    "aa996d1c-ede4-4b66-faac-08dc3f36382d": dangTruc,
+  };
+
   return (
     <>
       <div className="m-auto w-[70%] mt-10">
         <div className="text-[#00B214] text-center text-2xl font-bold">
-          SẢN PHẨM BÁN CHẠY
+          SẢN PHẨM ĐA DẠNG
         </div>
         <div className="flex flex-wrap justify-between mt-4 gap-4">
           {topProductDTO.map((product) => (
@@ -29,10 +46,10 @@ function SellProducts({ topProductDTO, allBonsaiPaginationDTO }) {
           ))}
         </div>
         <div className="mb-6">
-          <div className="flex justify-between mt-5 border-b-2 pb-1">
+          <div className="flex mt-5 border-b-2 pb-1">
             <div className="text-[#00B214] font-bold text-2xl">BONSAI</div>
           </div>
-          <div className="flex flex-wrap justify-between">
+          <div className="m-auto flex flex-wrap gap-[70px] pl-5 pr-5">
             {allBonsaiPaginationDTO?.items?.map((office) => (
               <div
                 className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[370px] "
@@ -87,7 +104,7 @@ function SellProducts({ topProductDTO, allBonsaiPaginationDTO }) {
           <div className="flex justify-between mt-5 border-b-2 pb-1">
             <div className="text-[#00B214] font-bold text-2xl">BONSAI</div>
           </div>
-          <div className="flex flex-wrap justify-between">
+          <div className="m-auto flex flex-wrap gap-[70px] pl-5 pr-5">
             {allBonsaiPaginationDTO?.items?.map((office) => (
               <div
                 className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[370px] "
@@ -142,23 +159,29 @@ function SellProducts({ topProductDTO, allBonsaiPaginationDTO }) {
         <div className="mb-6">
           <div className="flex justify-between mt-5 border-b-2 pb-1">
             <div className="text-[#00B214] font-bold text-2xl">
-              DANH MỤC NỔI BẬT
+              DÁNG CÂY NỔI BẬT
             </div>
           </div>
           <div className="flex flex-wrap justify-between">
-            {categoryList.map((office) => (
-              <Link
+            {styleCount.map((styleCountItem) => (
+              <button
                 className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[355px] bg-local bg-no-repeat bg-cover hover:opacity-50"
-                style={{ backgroundImage: `url(${office.image})` }}
-                key={office.id}
+                onClick={() => handleFilterStyle(styleCountItem.id)}
+                style={{
+                  backgroundImage: `url(${imageMapping[styleCountItem.id]})`,
+                  backgroundPosition: "center",
+                }}
+                key={styleCountItem.id}
               >
-                <div className="text-center flex flex-col-reverse h-[100%] py-4">
-                  <div className="font-normal">{office.amount} sản phẩm</div>
+                <div className="text-center flex flex-col-reverse h-[100%] py-2">
+                  <div className="font-normal">
+                    {styleCountItem.count} sản phẩm
+                  </div>
                   <div className="text-lg font-semibold uppercase">
-                    {office.name}
+                    {styleCountItem.name}
                   </div>
                 </div>
-              </Link>
+              </button>
             ))}
           </div>
         </div>
