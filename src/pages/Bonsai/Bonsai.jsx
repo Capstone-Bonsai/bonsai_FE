@@ -91,7 +91,6 @@ function Bonsai() {
                 </div>
                 <button onClick={handleResetFilter}>
                   Tắt bộ lọc <RedoOutlined className="pl-2" />
-                  Tắt bộ lọc <RedoOutlined className="pl-2" />
                 </button>
               </div>
               {categories?.map((category) => (
