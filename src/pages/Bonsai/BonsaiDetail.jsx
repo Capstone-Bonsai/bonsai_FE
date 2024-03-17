@@ -83,11 +83,11 @@ function BonsaiDetail() {
   };
 
   return (
-    <MinHeight>
+    <>
       {loading ? (
         <Loading loading={loading} />
       ) : (
-        <div className="">
+        <MinHeight>
           {/* <div className="border-b py-2">
             <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
           </div> */}
@@ -174,9 +174,9 @@ function BonsaiDetail() {
               </div>
             </div>
           </div>
-        </div>
+        </MinHeight>
       )}
-    </MinHeight>
+    </>
   );
 }
 
