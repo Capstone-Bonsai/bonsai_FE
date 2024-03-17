@@ -31,7 +31,7 @@ function Home() {
   const { topProductDTO } = useSelector((state) => state.product);
   const { allBonsaiPaginationDTO } = useSelector((state) => state.bonsai);
   const { styleCount } = useSelector((state) => state.style);
-  const loading = useSelector((state) => state.bonsai.loading);
+  const loading = useSelector((state) => state.style.loading);
   useEffect(() => {
     dispatch(fetchStyleCount());
   }, [dispatch]);

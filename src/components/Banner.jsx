@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import logo from "../assets/logo_footer_final.png";
+import logo from "../assets/logoFinal.png";
 import SPCus from "../assets/img-sp.webp";
 import { Image, Input, Space } from "antd";
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
@@ -22,7 +22,7 @@ function Banner() {
     { text: "Trang chủ", to: "/" },
     { text: "Sản phẩm", to: "/bonsai" },
     { text: "Chăm sóc cây cảnh", to: "/service" },
-    { text: "Địa chỉ", to: "/address" },
+    { text: "Liên hệ", to: "/contact" },
   ];
   const cookies = new Cookies();
   const countCart = useSelector((state) => state.bonsai.itemCount);
@@ -156,8 +156,8 @@ function Banner() {
               </div>
             )}
           </div>
-          <div className="flex items-center justify-between">
-            <img src={logo} width={200} height={200} />
+          <div className="flex items-center justify-between mt-5">
+            <img src={logo} width={100} height={100} />
             <form
               action=""
               onSubmit={(e) => {

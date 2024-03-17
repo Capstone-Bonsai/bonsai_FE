@@ -1,5 +1,5 @@
 import React from "react";
-import logo_final from "../assets/logo_footer_final.png";
+import logo_final from "../assets/logoFinal.png";
 function Footer() {
   const linksFooter = [
     { id: 1, text: "Hướng dẫn đặt hàng & thanh toán", href: "#" },
@@ -16,7 +16,7 @@ function Footer() {
           <div className="font-bold text-[#000000] text-[20px]">
             Về chúng tôi
           </div>
-          <img src={logo_final} alt="" className="ml-[-10px] mt-5" />
+          <img src={logo_final} alt="" className="ml-[-10px] w-[100px] mt-5" />
           <div className="text-[14px]">
             Thanh Sơn Garden là thương hiệu dẫn đầu trong lĩnh vực cung cấp các
             loại Cây phong thủy, cây văn phòng, sen đá, xương rồng & tiểu cảnh

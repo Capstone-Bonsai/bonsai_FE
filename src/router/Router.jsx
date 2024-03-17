@@ -20,6 +20,7 @@ import BonsaiDetail from "../pages/Bonsai/BonsaiDetail";
 import ServiceManage from "../pages/AdminPage/ServiceManagement/ServiceManage";
 import ServiceDetailPage from "../pages/ServicePage/ServiceDetailPage";
 import CustomerGarden from "../pages/Garden/CustomerGarden";
+import Contact from "../pages/Contact/Contact";
 function Router() {
   const element = useRoutes([
     {
@@ -80,6 +81,10 @@ function Router() {
         {
           path: "/CustomerGarden",
           element: <CustomerGarden />,
+        },
+        {
+          path: "/Contact",
+          element: <Contact />,
         },
       ],
     },
