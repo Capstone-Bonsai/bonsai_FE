@@ -21,6 +21,36 @@ export const fetchAllBonsaiPagination = createAsyncThunk(
   }
 );
 
+export const fetchBonsaiWithCateCayTrac = createAsyncThunk(
+  "bonsai/fetchAllBonsaiPaginationCayTrac",
+  async ({ pageIndex, pageSize }) => {
+    try {
+      const response = await axiosCus.get(
+        `/Bonsai/Category?pageIndex=${pageIndex}&pageSize=${pageSize}&categoryId=96feef97-a25c-4849-832f-08dc3f32bfc0`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const fetchBonsaiWithCateCayThong = createAsyncThunk(
+  "bonsai/fetchAllBonsaiPaginationCayThong",
+  async ({ pageIndex, pageSize }) => {
+    try {
+      const response = await axiosCus.get(
+        `/Bonsai/Category?pageIndex=${pageIndex}&pageSize=${pageSize}&categoryId=603b484b-7faa-40e6-6b22-08dc40005bf3`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const fetchAllBonsaiNoPagination = createAsyncThunk(
   "bonsai/fetchBonsaisNoPagination",
   async () => {
@@ -54,7 +84,15 @@ export const filterTag = createAsyncThunk("product/tags", async () => {
 
 export const fetchAllBonsai = createAsyncThunk(
   "bonsai/fetchAllBonsai",
-  async ({ pageIndex, pageSize, minPrice, maxPrice, category, style, keyword }) => {
+  async ({
+    pageIndex,
+    pageSize,
+    minPrice,
+    maxPrice,
+    category,
+    style,
+    keyword,
+  }) => {
     try {
       const response = await axiosCus.post(
         `/Bonsai/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
@@ -96,6 +134,8 @@ export const orderBonsai = async (dataOrder) => {
 const initialState = {
   allBonsaiPaginationDTO: {},
   allBonsaiNoPagination: {},
+  bonsaiCayTrac: [],
+  bonsaiCayThong: [],
   allBonsaiDTO: {},
   allCategoryDTO: {},
   tagDTO: {},
@@ -221,6 +261,32 @@ const bonsaiSlice = createSlice({
         state.loading = false;
       })
       .addCase(filterTag.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.loading = false;
+      })
+      .addCase(fetchBonsaiWithCateCayTrac.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(fetchBonsaiWithCateCayTrac.fulfilled, (state, action) => {
+        state.bonsaiCayTrac = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(fetchBonsaiWithCateCayTrac.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.loading = false;
+      })
+      .addCase(fetchBonsaiWithCateCayThong.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(fetchBonsaiWithCateCayThong.fulfilled, (state, action) => {
+        state.bonsaiCayThong = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(fetchBonsaiWithCateCayThong.rejected, (state) => {
         state.msg = "Error loading data";
         state.loading = false;
       });

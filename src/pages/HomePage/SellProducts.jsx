@@ -13,9 +13,10 @@ import { addToCart } from "../Bonsai/AddToCart";
 import { useDispatch } from "react-redux";
 function SellProducts({
   topProductDTO,
-  allBonsaiPaginationDTO,
+  bonsaiCayThong,
   styleCount,
   handleFilterStyle,
+  bonsaiCayTrac,
 }) {
   const imageMapping = {
     "27e666b4-4731-4d20-921a-08dc3f334824": dangXien,
@@ -49,10 +50,10 @@ function SellProducts({
         </div>
         <div className="mb-6">
           <div className="flex mt-5 border-b-2 pb-1">
-            <div className="text-[#00B214] font-bold text-2xl">BONSAI</div>
+            <div className="text-[#00B214] font-bold text-2xl">CÂY TRẮC</div>
           </div>
           <div className="m-auto flex flex-wrap gap-[60px] pl-5 pr-5">
-            {allBonsaiPaginationDTO?.items?.map((office) => (
+            {bonsaiCayTrac?.items?.map((office) => (
               <div
                 className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[370px] "
                 key={office.id}
@@ -124,10 +125,12 @@ function SellProducts({
         </div>
         <div className="mb-6">
           <div className="flex justify-between mt-5 border-b-2 pb-1">
-            <div className="text-[#00B214] font-bold text-2xl">BONSAI</div>
+            <div className="text-[#00B214] font-bold text-2xl">
+              CÂY THÔNG ĐÀ LẠT
+            </div>
           </div>
           <div className="m-auto flex flex-wrap gap-[60px] pl-5 pr-5">
-            {allBonsaiPaginationDTO?.items?.map((office) => (
+            {bonsaiCayThong?.items?.map((office) => (
               <div
                 className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[370px] "
                 key={office.id}
