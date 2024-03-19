@@ -8,12 +8,14 @@ import dangHoanh from "../../assets/dangHoanh.jpg";
 import dangHuyen from "../../assets/dangHuyen.jpg";
 import dangTruc from "../../assets/dangTruc.jpg";
 import dangXien from "../../assets/dangXien.jpg";
+import { formatPrice } from "../../components/formatPrice/FormatPrice";
+import { addToCart } from "../Bonsai/AddToCart";
+import { useDispatch } from "react-redux";
 function SellProducts({
   topProductDTO,
   allBonsaiPaginationDTO,
   styleCount,
-  handleFilterStyle
-  
+  handleFilterStyle,
 }) {
   const imageMapping = {
     "27e666b4-4731-4d20-921a-08dc3f334824": dangXien,
@@ -21,7 +23,7 @@ function SellProducts({
     "69d3d9f5-65b1-41b8-faab-08dc3f36382d": dangHoanh,
     "aa996d1c-ede4-4b66-faac-08dc3f36382d": dangTruc,
   };
-
+  const dispatch = useDispatch();
   return (
     <>
       <div className="m-auto w-[70%] mt-10">
@@ -80,19 +82,39 @@ function SellProducts({
                   <div className="grid grid-cols-3">
                     <div className="flex items-center">
                       <div className="text-[#3A994A] text-xl font-semibold">
-                        {new Intl.NumberFormat("en-US", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(office.price)}
+                        {formatPrice(office.price)}
                       </div>
                     </div>
                     <div className="col-end-4 flex justify-end">
-                      <Link
+                      <button
+                        onClick={() => {
+                          if (
+                            office?.bonsaiImages &&
+                            office.bonsaiImages.length > 0
+                          ) {
+                            addToCart(
+                              office.id,
+                              office.name,
+                              office.price,
+                              office.bonsaiImages[0].imageUrl,
+                              office.subCategory,
+                              dispatch
+                            );
+                          } else {
+                            addToCart(
+                              office.id,
+                              office.name,
+                              office.price,
+                              office.subCategory,
+                              dispatch
+                            );
+                          }
+                        }}
                         className="text-[20px] w-[40px] h-[40px] bg-[#f2f2f2] flex items-center border pl-2 rounded-[100%] 
           border-[#ffffff]-500 border-opacity-50 border-opacity-50 hover:bg-[#3A994A] hover:text-[#ffffff]"
                       >
                         <ShoppingCartOutlined />
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -135,19 +157,39 @@ function SellProducts({
                   <div className="grid grid-cols-3">
                     <div className="flex items-center">
                       <div className="text-[#3A994A] text-xl font-semibold">
-                        {new Intl.NumberFormat("en-US", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(office.price)}
+                        {formatPrice(office.price)}
                       </div>
                     </div>
                     <div className="col-end-4 flex justify-end">
-                      <Link
+                      <button
+                        onClick={() => {
+                          if (
+                            office?.bonsaiImages &&
+                            office.bonsaiImages.length > 0
+                          ) {
+                            addToCart(
+                              office.id,
+                              office.name,
+                              office.price,
+                              office.bonsaiImages[0].imageUrl,
+                              office.subCategory,
+                              dispatch
+                            );
+                          } else {
+                            addToCart(
+                              office.id,
+                              office.name,
+                              office.price,
+                              office.subCategory,
+                              dispatch
+                            );
+                          }
+                        }}
                         className="text-[20px] w-[40px] h-[40px] bg-[#f2f2f2] flex items-center border pl-2 rounded-[100%] 
           border-[#ffffff]-500 border-opacity-50 border-opacity-50 hover:bg-[#3A994A] hover:text-[#ffffff]"
                       >
                         <ShoppingCartOutlined />
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>
