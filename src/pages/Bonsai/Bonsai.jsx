@@ -15,6 +15,7 @@ import { fetchAllBonsai } from "../../redux/slice/bonsaiSlice";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { allCategory } from "../../redux/slice/categorySlice";
 import { allStyle } from "../../redux/slice/styleSlice";
+import { addToCart } from "./AddToCart";
 
 function Bonsai() {
   const location = useLocation();
@@ -58,7 +59,7 @@ function Bonsai() {
       style: selectStyle,
       keyword,
     };
-      dispatch(fetchAllBonsai(payload));
+    dispatch(fetchAllBonsai(payload));
   }, [
     dispatch,
     pageIndex,
@@ -149,21 +150,48 @@ function Bonsai() {
                     height="250px"
                     src={bonsai.bonsaiImages[0]?.imageUrl}
                   />
-                  <Link
-                    to={`/bonsaiDetail/${bonsai.id}`}
-                    className="flex items-center justify-evenly"
-                  >
+                  <div className="flex items-center justify-evenly">
                     <div className="py-5 text-[18px] w-[70%] ">
-                      <div className="w-full ">{bonsai.name}</div>
+                      <Link
+                        className="w-full 
+                      hover:text-[#3a9943]"
+                        to={`/bonsaiDetail/${bonsai.id}`}
+                      >
+                        {bonsai.name}
+                      </Link>
                       <div className="text-[#3a9943]">
                         {formatPrice(bonsai.price)}
                       </div>
                     </div>
-                    <button className="bg-[#f2f2f2] w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]">
+                    <button
+                      onClick={() => {
+                        if (
+                          bonsai?.bonsaiImages &&
+                          bonsai.bonsaiImages.length > 0
+                        ) {
+                          addToCart(
+                            bonsai.id,
+                            bonsai.name,
+                            bonsai.price,
+                            bonsai.bonsaiImages[0].imageUrl,
+                            bonsai.subCategory,
+                            dispatch
+                          );
+                        } else {
+                          addToCart(
+                            bonsai.id,
+                            bonsai.name,
+                            bonsai.price,
+                            bonsai.subCategory,
+                            dispatch
+                          );
+                        }
+                      }}
+                      className="bg-[#f2f2f2] w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]"
+                    >
                       <ShoppingCartOutlined />
                     </button>
-                    <div></div>
-                  </Link>
+                  </div>
                 </div>
               ))
             ) : (
