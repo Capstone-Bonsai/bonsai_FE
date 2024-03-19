@@ -58,9 +58,7 @@ function Bonsai() {
       style: selectStyle,
       keyword,
     };
-    if (!allBonsai) {
       dispatch(fetchAllBonsai(payload));
-    }
   }, [
     dispatch,
     pageIndex,

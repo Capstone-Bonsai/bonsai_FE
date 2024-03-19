@@ -45,6 +45,9 @@ function ManageOrder() {
   const getClassForStatus = (status) => {
     switch (status) {
       case "Paid":
+      case "Preparing":
+      case "Delivering":
+      case "Delivered":
         return "text-green-500";
       case "Failed":
         return "text-[#ee4d2d]";
@@ -110,6 +113,12 @@ function ManageOrder() {
                                   return "Thất bại";
                                 case "Waiting":
                                   return "Đang chờ";
+                                case "Preparing":
+                                  return "Đang chuẩn bị";
+                                case "Delivering":
+                                  return "Đang giao hàng";
+                                case "Delivered":
+                                  return "Đã giao hàng";
                                 default:
                                   return "";
                               }
