@@ -215,6 +215,27 @@ function CustomerGarden() {
                       <span className="font-[400] opacity-50">Diện tích:</span>
                       {garden.square} m²
                     </div>
+                    <div className="flex">
+                      Bonsai: Trong vườn chưa có bonsai{" "}
+                    </div>
+                    <div className="text-end">
+                      <div className="dropdown">
+                        <div tabIndex={0} role="button" className="btn m-1">
+                          Thêm bonsai vào vườn
+                        </div>
+                        <ul
+                          tabIndex={0}
+                          className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                        >
+                          <li>
+                            <button>Cây của cửa hàng</button>
+                          </li>
+                          <li>
+                            <button>Cây cá nhân</button>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
