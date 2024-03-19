@@ -20,7 +20,7 @@ function ProfileUser() {
   const [file, setFile] = useState(imageAvt);
   const [previewImage, setPreviewImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+console.log(file);
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setFile(file);

@@ -33,18 +33,20 @@ function Home() {
   const { styleCount } = useSelector((state) => state.style);
   const loading = useSelector((state) => state.style.loading);
   useEffect(() => {
-    dispatch(fetchStyleCount());
-  }, [dispatch]);
+    if(styleCount.length == 0) {
+    dispatch(fetchStyleCount());}
+  }, [dispatch, styleCount]);
 
   useEffect(() => {
+    if (!allBonsaiPaginationDTO.items) {
     dispatch(
       fetchAllBonsaiPagination({
         pageIndex: 0,
         pageSize: 8,
         keyword: "",
       })
-    );
-  }, [dispatch]);
+    );}
+  }, [dispatch, allBonsaiPaginationDTO]);
   const navigate = useNavigate();
   const handleFilterStyle = (styleId) => {
     console.log(styleId);
