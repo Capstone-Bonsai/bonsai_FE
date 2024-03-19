@@ -32,12 +32,21 @@ function Bonsai() {
   const countPageBonsai = useSelector(
     (state) => state.bonsai.allBonsaiDTO.totalPagesCount
   );
+  const categories = useSelector(
+    (state) => state.category.allCategoryDTO?.items
+  );
+  const styles = useSelector((state) => state.style.allStyleDTO.items);
+
   const loading = useSelector((state) => state.bonsai.loading);
   const keyword = location.state?.keyword;
   useEffect(() => {
-    dispatch(allCategory());
-    dispatch(allStyle());
-  }, []);
+    if (!categories?.items) {
+      dispatch(allCategory());
+    }
+    if (!styles) {
+      dispatch(allStyle());
+    }
+  }, [categories, styles]);
 
   useEffect(() => {
     const payload = {
@@ -49,8 +58,9 @@ function Bonsai() {
       style: selectStyle,
       keyword,
     };
-
-    dispatch(fetchAllBonsai(payload));
+    if (!allBonsai) {
+      dispatch(fetchAllBonsai(payload));
+    }
   }, [
     dispatch,
     pageIndex,
@@ -73,10 +83,6 @@ function Bonsai() {
     setPageIndex(page);
   };
 
-  const categories = useSelector(
-    (state) => state.category.allCategoryDTO?.items
-  );
-  const styles = useSelector((state) => state.style.allStyleDTO.items);
   return (
     <div className="my-5 m-auto w-[70%]">
       {loading ? (
