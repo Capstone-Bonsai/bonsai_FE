@@ -13,7 +13,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { bonsaiOffice } from "../../data/TopProducts";
 
 import { setBonsaiOffice } from "../../redux/slice/productSlice";
-import { fetchAllBonsaiPagination } from "../../redux/slice/bonsaiSlice";
+import {
+  fetchAllBonsaiPagination,
+  fetchBonsaiWithCateCayThong,
+  fetchBonsaiWithCateCayTrac,
+} from "../../redux/slice/bonsaiSlice";
 import Loading from "../../components/Loading";
 import { fetchStyleCount } from "../../redux/slice/styleSlice";
 function Home() {
@@ -30,23 +34,45 @@ function Home() {
   const dispatch = useDispatch();
   const { topProductDTO } = useSelector((state) => state.product);
   const { allBonsaiPaginationDTO } = useSelector((state) => state.bonsai);
+  const { bonsaiCayTrac } = useSelector((state) => state.bonsai);
+  const { bonsaiCayThong } = useSelector((state) => state.bonsai);
   const { styleCount } = useSelector((state) => state.style);
   const loading = useSelector((state) => state.style.loading);
   useEffect(() => {
-    if(styleCount.length == 0) {
-    dispatch(fetchStyleCount());}
+    if (styleCount.length == 0) {
+      dispatch(fetchStyleCount());
+    }
   }, [dispatch, styleCount]);
 
   useEffect(() => {
-    if (!allBonsaiPaginationDTO.items) {
-    dispatch(
-      fetchAllBonsaiPagination({
-        pageIndex: 0,
-        pageSize: 8,
-        keyword: "",
-      })
-    );}
-  }, [dispatch, allBonsaiPaginationDTO]);
+    const actions = [
+      {
+        action: fetchAllBonsaiPagination,
+        data: allBonsaiPaginationDTO,
+      },
+      {
+        action: fetchBonsaiWithCateCayTrac,
+        data: bonsaiCayTrac,
+      },
+      {
+        action: fetchBonsaiWithCateCayThong,
+        data: bonsaiCayThong,
+      },
+    ];
+
+    // Duyệt qua mảng và dispatch các action cần thiết
+    actions.forEach(({ action, data }) => {
+      if (data.length < 1) {
+        dispatch(
+          action({
+            pageIndex: 0,
+            pageSize: 8,
+            keyword: "",
+          })
+        );
+      }
+    });
+  }, [dispatch, allBonsaiPaginationDTO, bonsaiCayTrac, bonsaiCayThong]);
   const navigate = useNavigate();
   const handleFilterStyle = (styleId) => {
     console.log(styleId);
@@ -92,6 +118,8 @@ function Home() {
             allBonsaiPaginationDTO={allBonsaiPaginationDTO}
             styleCount={styleCount}
             handleFilterStyle={handleFilterStyle}
+            bonsaiCayTrac={bonsaiCayTrac}
+            bonsaiCayThong={bonsaiCayThong}
           />
         </div>
       )}
