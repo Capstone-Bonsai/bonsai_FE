@@ -11,6 +11,8 @@ import dangXien from "../../assets/dangXien.jpg";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { addToCart } from "../Bonsai/AddToCart";
 import { useDispatch } from "react-redux";
+import { motion, useScroll } from "framer-motion";
+
 function SellProducts({
   topProductDTO,
   bonsaiCayThong,
@@ -31,31 +33,16 @@ function SellProducts({
         <div className="text-[#00B214] text-center text-2xl font-bold">
           SẢN PHẨM ĐA DẠNG
         </div>
-        <div className="flex flex-wrap justify-between mt-4 gap-4">
-          {topProductDTO.map((product) => (
-            <a
-              href=""
-              key={product.id}
-              className="flex items-center bg-[#ffffff] drop-shadow-lg w-[400px]"
-            >
-              <img src={product.image} width={145} height={145} alt="" />
-              <div className="ml-2">
-                <div className="text-[#333333] text-lg hover:text-[#1E7100]">
-                  {product.name}
-                </div>
-                <div className="text-[#3A994A]">{product.price}</div>
-              </div>
-            </a>
-          ))}
-        </div>
+
         <div className="mb-6">
           <div className="flex mt-5 border-b-2 pb-1">
             <div className="text-[#00B214] font-bold text-2xl">CÂY TRẮC</div>
           </div>
           <div className="m-auto flex flex-wrap gap-[60px] pl-5 pr-5">
             {bonsaiCayTrac?.items?.map((office) => (
-              <div
+              <motion.div
                 className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[370px] "
+                whileHover={{ scale: 1.1 }}
                 key={office.id}
               >
                 <img
@@ -119,7 +106,7 @@ function SellProducts({
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -131,7 +118,8 @@ function SellProducts({
           </div>
           <div className="m-auto flex flex-wrap gap-[60px] pl-5 pr-5">
             {bonsaiCayThong?.items?.map((office) => (
-              <div
+              <motion.div
+                whileHover={{ scale: 1.1 }}
                 className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[370px] "
                 key={office.id}
               >
@@ -196,7 +184,7 @@ function SellProducts({
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

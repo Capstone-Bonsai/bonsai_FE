@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Col, Image, InputNumber, Row, Slider, Space } from "antd";
+import { Image } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import Cookies from "universal-cookie";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../../components/Loading";
-import {
-  fetchBonsaiById,
-  setCartFromCookie,
-} from "../../redux/slice/bonsaiSlice";
+import { fetchBonsaiById } from "../../redux/slice/bonsaiSlice";
 import MinHeight from "../../components/MinHeight";
 import logo from "../../assets/logoFinal.png";
 import { addToCart } from "./AddToCart";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { formatPrice } from "../../components/formatPrice/FormatPrice";
+
 function BonsaiDetail() {
   const dispatch = useDispatch();
   const { bonsaiId } = useParams();
+
   useEffect(() => {
     dispatch(fetchBonsaiById(bonsaiId));
   }, [bonsaiId]);
@@ -32,9 +33,6 @@ function BonsaiDetail() {
     }
   }, [bonsaiDetail.bonsaiImages]);
 
-  const imageDetail = bonsaiDetail.bonsaiImages?.find(
-    (img) => img.id == currentImage
-  );
   const handleImageClick = (newImageId) => {
     setCurrentImage(newImageId);
   };
@@ -43,73 +41,41 @@ function BonsaiDetail() {
   const userInfo = cookies.get("user");
   const idUser = userInfo?.id;
 
-  // const addToCart = async () => {
-  //   let cartItems =
-  //     userInfo != null
-  //       ? cookies.get(`cartId ${idUser}`) || []
-  //       : cookies.get("cartItems") || [];
 
-  //   if (!Array.isArray(cartItems)) {
-  //     cartItems = [];
-  //   }
-  //   const isProductExist = cartItems.some((item) => item.bonsaiId === bonsaiId);
-  //   if (isProductExist) {
-  //     toast.info("Sản phẩm đã có trong giỏ hàng!");
-  //     return;
-  //   }
-
-  //   cartItems.push({
-  //     bonsaiId,
-  //     name: bonsaiDetail.name,
-  //     price: bonsaiDetail.price,
-  //     image: bonsaiDetail.bonsaiImages[0]?.imageUrl,
-  //     subCategory: bonsaiDetail.subCategory,
-  //   });
-  //   toast.success("Đã thêm sản phẩm vào giỏ hàng!");
-
-  //   const cartId = userInfo != null ? `cartId ${idUser}` : "cartItems";
-
-  //   await cookies.set(cartId, cartItems, { path: "/" });
-
-  //   const itemCount = cartItems.length;
-  //   dispatch(setCartFromCookie({ cartItems, itemCount }));
-  // };
-
-  // Hàm định dạng giá tiền
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(price);
-  };
-
+  const { scrollYProgress } = useScroll();
+  const progressBarHeight = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["0%", "100%"]
+  );
   return (
     <>
+     <motion.div
+        className="progress-bar"
+        style={{ scaleX: scrollYProgress, height: progressBarHeight }}
+      />
       {loading ? (
         <Loading loading={loading} />
       ) : (
         <MinHeight>
-          {/* <div className="border-b py-2">
-            <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
-          </div> */}
-          <div className="m-auto w-[60%] flex justify-between my-10">
-            <div className=" w-[450px] ">
+          <div className="m-auto max-w-5xl flex flex-col lg:flex-row justify-between my-10">
+            <div className="w-full lg:w-1/2">
               <div className="flex">
-                <div className="w-full h-[450px] drop-shadow-lg">
+                <div className="w-full h-[450px] lg:w-[450px] drop-shadow-lg">
                   <Image
-                    src={imageDetail?.imageUrl}
+                    src={bonsaiDetail.bonsaiImages?.[0]?.imageUrl}
                     alt=""
                     width="100%"
                     height="100%"
-                    className=" w-full h-full object-cover"
+                    className="w-full h-full object-cover"
                   />
                 </div>
               </div>
-              <a className="mt-5 flex w-full h-[103px] justify-evenly">
+              <div className="flex justify-center mt-5 space-x-2">
                 {bonsaiDetail.bonsaiImages?.map((imageDetail) => (
                   <img
                     key={imageDetail.id}
-                    src={imageDetail?.imageUrl}
+                    src={imageDetail.imageUrl}
                     alt=""
                     onClick={() => handleImageClick(imageDetail.id)}
                     style={{
@@ -120,71 +86,51 @@ function BonsaiDetail() {
                           ? "5px solid #3a9943"
                           : "none",
                     }}
-                    className="object-cover w-[103px] "
+                    className="object-cover w-[103px] h-[103px]"
                   />
                 ))}
-              </a>
+              </div>
             </div>
-            <div className="w-[48%] border p-5">
+            <div className="w-full lg:w-1/2 border p-5 mt-5 lg:mt-0">
               <div className="border-b pb-10">
-                <div className="text-[14px] text-[#343434] flex text-[#343434] font-[300] ">
-                  Dáng cây:{" "}
+                <div className="text-sm text-gray-700 flex items-center mb-3">
+                  Dáng cây:
                   <div className="pl-2 opacity-50">
-                    {bonsaiDetail?.style?.name}
+                    {bonsaiDetail.style?.name}
                   </div>
                 </div>
-                <div className="text-[24px] text-[#333333] montserrat">
+                <div className="text-xl text-gray-900 font-semibold">
                   {bonsaiDetail.name}
                 </div>
-                <div className="text-[#3a9943] text-[32px] font-bold">
+                <div className="text-green-600 text-2xl font-bold mt-2">
                   {formatPrice(bonsaiDetail.price)}
                 </div>
-                <div className="text-[13px] font-[300] text-[#666]">
-                  Năm tuổi:{" "}
-                </div>
-                <div className="text-[13px] font-[300] text-[#666] ">
-                  Hoành cây:{" "}
-                </div>
-                <div className="text-[13px] font-[300] text-[#666]">
-                  Chiều cao:{" "}
-                </div>
               </div>
-              <div className="py-5 border-b">{bonsaiDetail?.description}</div>
-              <div className="border-b">
-                <div className="flex items-center py-5 justify-between">
-                  <div className="flex items-center  text-[#3a9943]">
-                    <ShoppingCartOutlined className="text-[30px] " />
-                    <span className=""> Còn hàng</span>
-                  </div>
-                  <button
-                    className="bg-[#3a9943] h-[45px] px-[70px] rounded-[10px] text-[#ffffff] font-bold text-[16px] transition-colors duration-300 hover:bg-black"
-                    onClick={() => {
-                      if (
-                        bonsaiDetail?.bonsaiImages &&
-                        bonsaiDetail.bonsaiImages.length > 0
-                      ) {
-                        addToCart(
-                          bonsaiDetail.id,
-                          bonsaiDetail.name,
-                          bonsaiDetail.price,
-                          bonsaiDetail.bonsaiImages[0].imageUrl,
-                          bonsaiDetail.subCategory,
-                          dispatch
-                        );
-                      } else {
-                        addToCart(
-                          bonsaiDetail.id,
-                          bonsaiDetail.name,
-                          bonsaiDetail.price,
-                          bonsaiDetail.subCategory,
-                          dispatch
-                        );
-                      }
-                    }}
-                  >
-                    + Thêm vào Giỏ Hàng
-                  </button>
+              <div className="py-5 border-b">
+                {bonsaiDetail.description}
+              </div>
+              <div className="border-b py-5 flex items-center justify-between">
+                <div className="flex items-center text-green-600">
+                  <ShoppingCartOutlined className="text-2xl" />
+                  <span className="ml-2">Còn hàng</span>
                 </div>
+                <button
+                  className="bg-green-600 text-white px-6 py-3 rounded-md font-semibold text-lg hover:bg-black transition duration-300"
+                  onClick={() => {
+                    const imageUrl =
+                      bonsaiDetail.bonsaiImages?.[0]?.imageUrl || "";
+                    addToCart(
+                      bonsaiDetail.id,
+                      bonsaiDetail.name,
+                      bonsaiDetail.price,
+                      imageUrl,
+                      bonsaiDetail.subCategory,
+                      dispatch
+                    );
+                  }}
+                >
+                  + Thêm vào Giỏ Hàng
+                </button>
               </div>
               <div className="flex items-center justify-between py-5">
                 <div>
