@@ -9,6 +9,7 @@ import categoryReducer from "./slice/categorySlice";
 import serviceReducer from "./slice/serviceSlice";
 import styleReducer from "./slice/styleSlice";
 import gardenReducer from "./slice/userGarden";
+import baseTaskReducer from "./slice/baseTaskSlice";
 
 const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ const store = configureStore({
     service: serviceReducer,
     style: styleReducer,
     garden: gardenReducer,
+    baseTask: baseTaskReducer,
   },
 });
 

@@ -204,13 +204,13 @@ const ModalCreateProduct = (props) => {
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
-        okText={confirmLoading?"Đang tạo":"Tạo mới"}
+        okText={confirmLoading ? "Đang tạo" : "Tạo mới"}
         cancelText="Hủy"
         confirmLoading={confirmLoading}
         onCancel={handleClose}
         maskClosable={false}
       >
-        <div className="mt-12">
+        <div className="mt-9">
           <Form
             form={form}
             ref={formRef}
@@ -226,18 +226,25 @@ const ModalCreateProduct = (props) => {
               ]}
             >
               <div>
-                <Tag icon={<PlusOutlined />} onClick={showModalCreateCategory}>
-                  Thêm Phân loại
-                </Tag>
-                <Form.Item name="CategoryId">
-                  <Select>
-                    {listCategory?.map((category, index) => (
-                      <Select.Option value={category.id} key={index}>
-                        {category.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
+                <div className="mt-1">
+                  <Tag
+                    icon={<PlusOutlined />}
+                    onClick={showModalCreateCategory}
+                  >
+                    Thêm Phân loại
+                  </Tag>
+                </div>
+                <div className="mt-3">
+                  <Form.Item name="CategoryId">
+                    <Select>
+                      {listCategory?.map((category, index) => (
+                        <Select.Option value={category.id} key={index}>
+                          {category.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </div>
               </div>
             </Form.Item>
             <Form.Item
@@ -247,18 +254,22 @@ const ModalCreateProduct = (props) => {
               ]}
             >
               <div>
-                <Tag icon={<PlusOutlined />} onClick={showModalCreateStyle}>
-                  Thêm Kiểu mẫu
-                </Tag>
-                <Form.Item name="StyleId">
-                  <Select>
-                    {listStyle?.map((style, index) => (
-                      <Select.Option value={style.id} key={index}>
-                        {style.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
+                <div className="mt-1">
+                  <Tag icon={<PlusOutlined />} onClick={showModalCreateStyle}>
+                    Thêm Kiểu mẫu
+                  </Tag>
+                </div>
+                <div className="mt-3">
+                  <Form.Item name="StyleId">  
+                    <Select>
+                      {listStyle?.map((style, index) => (
+                        <Select.Option value={style.id} key={index}>
+                          {style.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </div>
               </div>
             </Form.Item>
             <Form.Item
