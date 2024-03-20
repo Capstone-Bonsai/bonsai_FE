@@ -15,6 +15,7 @@ import { fetchAllBonsai } from "../../redux/slice/bonsaiSlice";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { allCategory } from "../../redux/slice/categorySlice";
 import { allStyle } from "../../redux/slice/styleSlice";
+import { addToCart } from "./AddToCart";
 
 function Bonsai() {
   const location = useLocation();
@@ -24,19 +25,29 @@ function Bonsai() {
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(6);
   const [selectedCategories, setSelectedCategories] = useState();
-  const [selectStyle, setSelectStyle] = useState();
+  const styleId = location.state?.styleId;
+
+  const [selectStyle, setSelectStyle] = useState(styleId || undefined);
 
   const allBonsai = useSelector((state) => state.bonsai.allBonsaiDTO?.items);
   const countPageBonsai = useSelector(
     (state) => state.bonsai.allBonsaiDTO.totalPagesCount
   );
+  const categories = useSelector(
+    (state) => state.category.allCategoryDTO?.items
+  );
+  const styles = useSelector((state) => state.style.allStyleDTO.items);
+
   const loading = useSelector((state) => state.bonsai.loading);
   const keyword = location.state?.keyword;
-
   useEffect(() => {
-    dispatch(allCategory());
-    dispatch(allStyle());
-  }, []);
+    if (!categories?.items) {
+      dispatch(allCategory());
+    }
+    if (!styles) {
+      dispatch(allStyle());
+    }
+  }, [categories, styles]);
 
   useEffect(() => {
     const payload = {
@@ -48,7 +59,6 @@ function Bonsai() {
       style: selectStyle,
       keyword,
     };
-
     dispatch(fetchAllBonsai(payload));
   }, [
     dispatch,
@@ -72,10 +82,6 @@ function Bonsai() {
     setPageIndex(page);
   };
 
-  const categories = useSelector(
-    (state) => state.category.allCategoryDTO?.items
-  );
-  const styles = useSelector((state) => state.style.allStyleDTO.items);
   return (
     <div className="my-5 m-auto w-[70%]">
       {loading ? (
@@ -89,7 +95,6 @@ function Bonsai() {
                   Phân loại
                 </div>
                 <button onClick={handleResetFilter}>
-                  Tắt bộ lọc <RedoOutlined className="pl-2" />
                   Tắt bộ lọc <RedoOutlined className="pl-2" />
                 </button>
               </div>
@@ -145,21 +150,48 @@ function Bonsai() {
                     height="250px"
                     src={bonsai.bonsaiImages[0]?.imageUrl}
                   />
-                  <Link
-                    to={`/bonsaiDetail/${bonsai.id}`}
-                    className="flex items-center justify-evenly"
-                  >
+                  <div className="flex items-center justify-evenly">
                     <div className="py-5 text-[18px] w-[70%] ">
-                      <div className="w-full ">{bonsai.name}</div>
+                      <Link
+                        className="w-full 
+                      hover:text-[#3a9943]"
+                        to={`/bonsaiDetail/${bonsai.id}`}
+                      >
+                        {bonsai.name}
+                      </Link>
                       <div className="text-[#3a9943]">
                         {formatPrice(bonsai.price)}
                       </div>
                     </div>
-                    <button className="bg-[#f2f2f2] w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]">
+                    <button
+                      onClick={() => {
+                        if (
+                          bonsai?.bonsaiImages &&
+                          bonsai.bonsaiImages.length > 0
+                        ) {
+                          addToCart(
+                            bonsai.id,
+                            bonsai.name,
+                            bonsai.price,
+                            bonsai.bonsaiImages[0].imageUrl,
+                            bonsai.subCategory,
+                            dispatch
+                          );
+                        } else {
+                          addToCart(
+                            bonsai.id,
+                            bonsai.name,
+                            bonsai.price,
+                            bonsai.subCategory,
+                            dispatch
+                          );
+                        }
+                      }}
+                      className="bg-[#f2f2f2] w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]"
+                    >
                       <ShoppingCartOutlined />
                     </button>
-                    <div></div>
-                  </Link>
+                  </div>
                 </div>
               ))
             ) : (

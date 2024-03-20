@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Col, Image, InputNumber, Row, Slider, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-
+import { ShoppingCartOutlined } from "@ant-design/icons";
 import Cookies from "universal-cookie";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,7 +12,8 @@ import {
   setCartFromCookie,
 } from "../../redux/slice/bonsaiSlice";
 import MinHeight from "../../components/MinHeight";
-
+import logo from "../../assets/logoFinal.png";
+import { addToCart } from "./AddToCart";
 function BonsaiDetail() {
   const dispatch = useDispatch();
   const { bonsaiId } = useParams();
@@ -42,37 +43,37 @@ function BonsaiDetail() {
   const userInfo = cookies.get("user");
   const idUser = userInfo?.id;
 
-  const addToCart = async () => {
-    let cartItems =
-      userInfo != null
-        ? cookies.get(`cartId ${idUser}`) || []
-        : cookies.get("cartItems") || [];
+  // const addToCart = async () => {
+  //   let cartItems =
+  //     userInfo != null
+  //       ? cookies.get(`cartId ${idUser}`) || []
+  //       : cookies.get("cartItems") || [];
 
-    if (!Array.isArray(cartItems)) {
-      cartItems = [];
-    }
-    const isProductExist = cartItems.some((item) => item.bonsaiId === bonsaiId);
-    if (isProductExist) {
-      toast.info("Sản phẩm đã có trong giỏ hàng!");
-      return;
-    }
+  //   if (!Array.isArray(cartItems)) {
+  //     cartItems = [];
+  //   }
+  //   const isProductExist = cartItems.some((item) => item.bonsaiId === bonsaiId);
+  //   if (isProductExist) {
+  //     toast.info("Sản phẩm đã có trong giỏ hàng!");
+  //     return;
+  //   }
 
-    cartItems.push({
-      bonsaiId,
-      name: bonsaiDetail.name,
-      price: bonsaiDetail.price,
-      image: bonsaiDetail.bonsaiImages[0]?.imageUrl,
-      subCategory: bonsaiDetail.subCategory,
-    });
-    toast.success("Đã thêm sản phẩm vào giỏ hàng!");
+  //   cartItems.push({
+  //     bonsaiId,
+  //     name: bonsaiDetail.name,
+  //     price: bonsaiDetail.price,
+  //     image: bonsaiDetail.bonsaiImages[0]?.imageUrl,
+  //     subCategory: bonsaiDetail.subCategory,
+  //   });
+  //   toast.success("Đã thêm sản phẩm vào giỏ hàng!");
 
-    const cartId = userInfo != null ? `cartId ${idUser}` : "cartItems";
+  //   const cartId = userInfo != null ? `cartId ${idUser}` : "cartItems";
 
-    await cookies.set(cartId, cartItems, { path: "/" });
+  //   await cookies.set(cartId, cartItems, { path: "/" });
 
-    const itemCount = cartItems.length;
-    dispatch(setCartFromCookie({ cartItems, itemCount }));
-  };
+  //   const itemCount = cartItems.length;
+  //   dispatch(setCartFromCookie({ cartItems, itemCount }));
+  // };
 
   // Hàm định dạng giá tiền
   const formatPrice = (price) => {
@@ -83,11 +84,11 @@ function BonsaiDetail() {
   };
 
   return (
-    <MinHeight>
+    <>
       {loading ? (
         <Loading loading={loading} />
       ) : (
-        <div className="">
+        <MinHeight>
           {/* <div className="border-b py-2">
             <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
           </div> */}
@@ -150,20 +151,55 @@ function BonsaiDetail() {
               </div>
               <div className="py-5 border-b">{bonsaiDetail?.description}</div>
               <div className="border-b">
-                <div className="flex items-center py-5 justify-end">
+                <div className="flex items-center py-5 justify-between">
+                  <div className="flex items-center  text-[#3a9943]">
+                    <ShoppingCartOutlined className="text-[30px] " />
+                    <span className=""> Còn hàng</span>
+                  </div>
                   <button
                     className="bg-[#3a9943] h-[45px] px-[70px] rounded-[10px] text-[#ffffff] font-bold text-[16px] transition-colors duration-300 hover:bg-black"
-                    onClick={addToCart}
+                    onClick={() => {
+                      if (
+                        bonsaiDetail?.bonsaiImages &&
+                        bonsaiDetail.bonsaiImages.length > 0
+                      ) {
+                        addToCart(
+                          bonsaiDetail.id,
+                          bonsaiDetail.name,
+                          bonsaiDetail.price,
+                          bonsaiDetail.bonsaiImages[0].imageUrl,
+                          bonsaiDetail.subCategory,
+                          dispatch
+                        );
+                      } else {
+                        addToCart(
+                          bonsaiDetail.id,
+                          bonsaiDetail.name,
+                          bonsaiDetail.price,
+                          bonsaiDetail.subCategory,
+                          dispatch
+                        );
+                      }
+                    }}
                   >
                     + Thêm vào Giỏ Hàng
                   </button>
                 </div>
               </div>
+              <div className="flex items-center justify-between py-5">
+                <div>
+                  <img src={logo} className="w-[100px] h-[100px]" alt="" />
+                </div>
+                <div>
+                  <div>372 Quốc lộ 20, Liên Nghĩa, Đức Trọng, Lâm Đồng</div>
+                  <div>0934534534</div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </MinHeight>
       )}
-    </MinHeight>
+    </>
   );
 }
 
