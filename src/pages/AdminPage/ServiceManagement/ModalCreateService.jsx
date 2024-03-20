@@ -1,12 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Tag, Input, Modal, Form, InputNumber, Select, Upload } from "antd";
+import {
+  Tag,
+  Input,
+  Modal,
+  Form,
+  InputNumber,
+  Select,
+  Upload,
+  List,
+} from "antd";
 const { Search, TextArea } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { postService } from "../../../utils/serviceApi";
 import { fetchAllService } from "../../../redux/slice/serviceSlice";
+import ModalSelectBaseTask from "./ModalSelectBaseTask";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -44,6 +54,7 @@ const ModalCreateService = (props) => {
     form.resetFields();
     setListImage([]);
     setConfirmLoading(false);
+    setListSelectedBaseTask([]);
     setShow(false);
   };
   const [formData, setFormData] = useState({
@@ -59,10 +70,10 @@ const ModalCreateService = (props) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [openCreateCategory, setOpenCreateCategory] = useState(false);
-  const [openCreateStyle, setOpenCreateStyle] = useState(false);
+  const [openSelectBaseTask, setOpenSelectBaseTask] = useState(false);
 
   const [listImage, setListImage] = useState([]);
+  const [listSelectedBaseTask, setListSelectedBaseTask] = useState([]);
   const formRef = useRef(null);
   const handleCancelPreview = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
@@ -121,18 +132,17 @@ const ModalCreateService = (props) => {
     }
   };
   const onSubmit = (i) => {
-    formData.Image = listImage[0]?listImage[0].originFileObj: null;
-    // const postData = new FormData();
-    // postData.append("CategoryId", formData.CategoryId);
-    // postData.append("StyleId", formData.StyleId);
-    // postData.append("Name", formData.Name);
-    // postData.append("Description", formData.Description);
-    // postData.append("YearOfPlanting", formData.YearOfPlanting);
-    // postData.append("TrunkDimenter", formData.TrunkDimenter);
-    // postData.append("Height", formData.Height);
-    // postData.append("NumberOfTrunk", formData.NumberOfTrunk);
-    // postData.append("Price", formData.Price);
-    // formData.Image?.map((image) => postData.append("Image", image));
+    formData.Image = listImage[0] ? listImage[0].originFileObj : null;
+    formData.ServiceBaseTaskId = listSelectedBaseTask;
+    const postData = new FormData();
+    postData.append("Name", formData.Name);
+    postData.append("Description", formData.Description);
+    postData.append("StandardPrice", formData.StandardPrice);
+    postData.append("ServiceType", formData.ServiceType);
+    postData.append("Image", formData.Image);
+    listSelectedBaseTask?.map((selectedBaseTask) =>
+      postData.append("ServiceBaseTaskId", selectedBaseTask.id)
+    );
     console.log(formData);
 
     formRef.current
@@ -164,6 +174,23 @@ const ModalCreateService = (props) => {
       );
     }
     return false;
+  };
+
+  // modal select style
+  const showModalSelectBaseTask = () => {
+    setOpenSelectBaseTask(true);
+    console.log();
+  };
+
+  const handleCancelSelectBaseTask = () => {
+    console.log("Clicked cancel button");
+    setOpenSelectBaseTask(false);
+  };
+
+  const handleSubmitForm = (input) => {
+    console.log("Clicked cancel SubmitForm");
+    setListSelectedBaseTask(input);
+    console.log(listSelectedBaseTask);
   };
 
   return (
@@ -290,6 +317,49 @@ const ModalCreateService = (props) => {
                 {listImage.length >= 1 ? null : uploadButton}
               </Upload>
             </Form.Item>
+            <Form.Item
+              label="Kiểu dáng"
+              rules={[
+                { required: true, message: "Phân loại không được để trống!" },
+              ]}
+            >
+              <div>
+                <div className="mt-1">
+                  <Tag
+                    icon={<PlusOutlined />}
+                    onClick={showModalSelectBaseTask}
+                  >
+                    Chọn task
+                  </Tag>
+                </div>
+
+                <div
+                  className="mt-6"
+                  style={{
+                    height: 400,
+                    overflow: "auto",
+                    padding: "0 16px",
+                    border: "1px solid rgba(140, 140, 140, 0.35)",
+                  }}
+                >
+                  <List
+                    className="demo-loadmore-list"
+                    itemLayout="horizontal"
+                    dataSource={listSelectedBaseTask}
+                    renderItem={(item) => (
+                      <List.Item>
+                        <List.Item.Meta
+                          title={
+                            <div href="https://ant.design">{item.name}</div>
+                          }
+                          description={item.detail}
+                        />
+                      </List.Item>
+                    )}
+                  />
+                </div>
+              </div>
+            </Form.Item>
           </Form>
         </div>
       </Modal>
@@ -307,12 +377,13 @@ const ModalCreateService = (props) => {
           src={previewImage}
         />
       </Modal>
-      {/* <ModalCreateCategory
-        show={openCreateCategory}
-        setShow={handleCancelCreateCategory}
+      <ModalSelectBaseTask
+        show={openSelectBaseTask}
+        setShow={handleCancelSelectBaseTask}
+        onSubmitForm={handleSubmitForm}
       />
 
-      <ModalCreateStyle
+      {/* <ModalCreateStyle
         show={openCreateStyle}
         setShow={handleCancelCreateStyle}
       /> */}

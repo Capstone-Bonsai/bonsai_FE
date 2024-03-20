@@ -32,7 +32,7 @@ import ModalCreateService from "./ModalCreateService";
 
 function ServiceManage() {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.bonsai.loading);
+  const loading = useSelector((state) => state.service?.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -119,6 +119,7 @@ function ServiceManage() {
       })
     );
   };
+  
   const columns = [
     {
       title: "Tên dịch vụ",
