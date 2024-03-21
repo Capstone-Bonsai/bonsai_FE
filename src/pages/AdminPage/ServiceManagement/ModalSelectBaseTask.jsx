@@ -67,7 +67,7 @@ const TableTransfer = ({ leftColumns, rightColumns, ...restProps }) => (
 );
 
 const ModalSelectBaseTask = (props) => {
-  const { show, setShow, onSubmitForm } = props;
+  const { show, setShow, onSubmitForm, serviceBaseTask } = props;
   const handleClose = () => {
     setConfirmLoading(false);
     setShow(false);
@@ -86,7 +86,8 @@ const ModalSelectBaseTask = (props) => {
     console.log(listBaseTask);
   }, []);
 
-  const [listSelectedBaseTask, setListSelectedBaseTask] = useState([]);
+  const [listSelectedBaseTask, setListSelectedBaseTask] =
+    useState(serviceBaseTask);
   const formRef = useRef(null);
   const handleChange = (newTargetKeys, direction, moveKeys) => {
     console.log(newTargetKeys, direction, moveKeys);
@@ -112,7 +113,11 @@ const ModalSelectBaseTask = (props) => {
   ];
 
   const onSubmit = (i) => {
-    onSubmitForm(listSelectedBaseTask);
+    onSubmitForm(
+      listBaseTask.filter((baseTask) =>
+        listSelectedBaseTask?.includes(baseTask.id)
+      )
+    );
     handleClose();
   };
 
@@ -142,7 +147,7 @@ const ModalSelectBaseTask = (props) => {
             onChange={handleChange}
             leftColumns={leftTableColumns}
             rightColumns={rightTableColumns}
-            rowKey={(item) => item}
+            rowKey={(item) => item.id}
             filterOption={(inputValue, item) =>
               item.name.indexOf(inputValue) !== -1
             }

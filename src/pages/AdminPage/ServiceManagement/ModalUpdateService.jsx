@@ -15,27 +15,30 @@ const { Search, TextArea } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { postService } from "../../../utils/serviceApi";
+import { postService, putService } from "../../../utils/serviceApi";
 import { fetchAllService } from "../../../redux/slice/serviceSlice";
-import ModalSelectBaseTask from "./ModalSelectBaseTask";
-import FormGardenCare from "./CreateServiceForm/FormGardenCare";
-import { setBaseTask } from "../../../redux/slice/baseTaskSlice";
-import FormBonsaiCare from "./CreateServiceForm/FormBonsaiCare";
-const ModalCreateService = (props) => {
-  const { show, setShow } = props;
+import FormBonsaiCare from "./UpdateServiceForm/FormBonsaiCare";
+import FormGardenCare from "./UpdateServiceForm/FormGardenCare";
+import "./TabsBar.css";
+import { putBonsai } from "../../../utils/bonsaiApi";
+
+const ModalUpdateService = (props) => {
+  const { show, setShow, service } = props;
   const dispatch = useDispatch();
   const [formBonsaiInstance, setFormBonsaiInstance] = useState();
   const [formGardenInstance, setFormGardenInstance] = useState();
-  const [formData, setFormData] = useState({
-    Name: undefined,
-    Description: undefined,
-    StandardPrice: undefined,
-    ServiceType: undefined,
-    Image: undefined,
-    ServiceBaseTaskId: undefined,
-  });
-  const [listImage, setListImage] = useState([]);
+  const [formData, setFormData] = useState({});
+  const [listImage, setListImage] = useState();
   const [listSelectedBaseTask, setListSelectedBaseTask] = useState([]);
+
+  useEffect(() => {
+    setListImage(service?.image);
+    setListSelectedBaseTask(
+      service?.serviceBaseTasks?.map(
+        (serviceBaseTask) => serviceBaseTask.baseTask
+      )
+    );
+  }, [service]);
   const handleClose = () => {
     setConfirmLoading(false);
     setFormData({});
@@ -45,12 +48,12 @@ const ModalCreateService = (props) => {
   };
   const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const createService = (service) => {
+  const updateService = (input) => {
     try {
       console.log(service);
-      postService(service)
+      putService(service.id, input)
         .then((data) => {
-          toast.success("Thêm dịch vụ thành công!");
+          toast.success("Cập nhật dịch vụ thành công!");
           dispatch(
             fetchAllService({
               pageIndex: 0,
@@ -73,8 +76,15 @@ const ModalCreateService = (props) => {
   };
 
   const onSubmit = () => {
-    formData.Image = listImage[0] ? listImage[0].originFileObj : null;
-    listSelectedBaseTask.length >= 1
+    console.log(listSelectedBaseTask);
+    console.log(listImage);
+    formData.Image =
+      listImage?.length !== 0
+        ? listImage[0]?.originFileObj
+          ? listImage[0].originFileObj
+          : listImage
+        : null;
+    listSelectedBaseTask?.length >= 1
       ? (formData.ServiceBaseTaskId = listSelectedBaseTask)
       : null;
     const postData = new FormData();
@@ -94,20 +104,18 @@ const ModalCreateService = (props) => {
           ?.validateFields()
           .then(() => {
             setConfirmLoading(true);
-            createService(postData);
+            updateService(postData);
           })
           .catch((errorInfo) => {
-            console.log(errorInfo);
             toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
           })
       : formBonsaiInstance?.current
           ?.validateFields()
           .then(() => {
             setConfirmLoading(true);
-            createService(postData);
+            updateService(postData);
           })
           .catch((errorInfo) => {
-            console.log(errorInfo);
             toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
           });
   };
@@ -125,7 +133,7 @@ const ModalCreateService = (props) => {
     <>
       <Modal
         width={800}
-        title="Thêm dịch vụ"
+        title="Thông tin dịch vụ"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
@@ -138,11 +146,13 @@ const ModalCreateService = (props) => {
       >
         <div className="mt-12">
           <Tabs
-            defaultActiveKey="1"
+            defaultActiveKey={service?.serviceType == "BonsaiCare" ? "2" : "1"}
             type="card"
             destroyInactiveTabPane
+            tabBarStyle={{ display: "flex", justifyContent: "space-between" }}
             items={[
               {
+                disabled: service?.serviceType == "BonsaiCare",
                 key: "1",
                 label: `Form Garden Care`,
                 children: (
@@ -152,11 +162,13 @@ const ModalCreateService = (props) => {
                     }}
                     onFormDataChange={onFormDataChange}
                     onImageChange={onImageChange}
+                    service={service}
                     onBaseTaskChange={onBaseTaskChange}
                   />
                 ),
               },
               {
+                disabled: service?.serviceType == "GardenCare",
                 key: "2",
                 label: `Form Bonsai Care`,
                 children: (
@@ -166,6 +178,7 @@ const ModalCreateService = (props) => {
                     }}
                     onFormDataChange={onFormDataChange}
                     onImageChange={onImageChange}
+                    service={service}
                   />
                 ),
               },
@@ -177,4 +190,4 @@ const ModalCreateService = (props) => {
   );
 };
 
-export default ModalCreateService;
+export default ModalUpdateService;
