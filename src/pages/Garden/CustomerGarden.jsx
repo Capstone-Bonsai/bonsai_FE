@@ -14,13 +14,19 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import noImage from "../../assets/unImage.png";
 import address from "../../assets/address.jpg";
 import square from "../../assets/square.png";
+import { allStyle } from "../../redux/slice/styleSlice";
+import { allCategory } from "../../redux/slice/categorySlice";
+import ModalBonsaiCustomer from "./ModalBonsaiCustomer";
 function CustomerGarden() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [newAddress, setNewAddress] = useState("");
   const [newSquare, setNewSquare] = useState("");
   const [imageGarden, setImageGarden] = useState([]);
+
   useEffect(() => {
+    dispatch(allCategory());
+    dispatch(allStyle());
     if (!gardens) {
       setLoading(true);
       dispatch(fetchCustomerGarden())
@@ -76,6 +82,17 @@ function CustomerGarden() {
     updatedImageGarden.splice(index, 1);
     setImageGarden(updatedImageGarden);
   };
+
+  const [selectedGardenId, setSelectedGardenId] = useState();
+
+  const { allStyleDTO } = useSelector((state) => state.style);
+  const { allCategoryDTO } = useSelector((state) => state.category);
+  const props = {
+    gardens,
+    allStyleDTO,
+    allCategoryDTO,
+    selectedGardenId,
+  };
   return (
     <>
       {loading ? (
@@ -95,6 +112,11 @@ function CustomerGarden() {
               </button>
               <dialog id="my_modal_1" className="modal">
                 <div className="modal-box">
+                  <form method="dialog">
+                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                      ✕
+                    </button>
+                  </form>
                   <h3 className="font-bold text-lg">Thêm vườn của bạn</h3>
                   <div>
                     <div className="text-[#3a9943]">Địa chỉ</div>
@@ -120,7 +142,6 @@ function CustomerGarden() {
                     />
                   </div>
                   <div>
-                    {" "}
                     <input
                       type="file"
                       accept="image/*"
@@ -132,14 +153,17 @@ function CustomerGarden() {
                   <div className="flex flex-wrap gap-5">
                     {imageGarden.length > 0 ? (
                       imageGarden.map((image, index) => (
-                        <div key={index} className="relative">
+                        <div
+                          key={index}
+                          className="relative p-10 border rounded-[10px]"
+                        >
                           <img
                             src={image.imageURL}
-                            className="object-cover w-[100px] h-[100px]"
+                            className="object-cover w-[130px] h-[130px]"
                             alt=""
                           />
                           <button
-                            className="absolute top-0 right-0 text-[#fff]"
+                            className="absolute top-0 right-2 text-[#f2f2f2] text-[30px]"
                             onClick={() => handleRemoveImage(index)}
                           >
                             <CloseCircleOutlined />
@@ -166,9 +190,6 @@ function CustomerGarden() {
                     "Bạn chỉ có thể thêm tối đa 4 ảnh"
                   )}
                   <div className="modal-action">
-                    <form method="dialog">
-                      <button className="btn">Đóng</button>
-                    </form>
                     <button className="btn" onClick={handleAddNewGarden}>
                       Đăng Vườn
                     </button>
@@ -231,10 +252,20 @@ function CustomerGarden() {
                             <button>Cây của cửa hàng</button>
                           </li>
                           <li>
-                            <button>Cây cá nhân</button>
+                            <button
+                              onClick={() => {
+                                setSelectedGardenId(garden.id);
+                                document
+                                  .getElementById("my_modal_2")
+                                  .showModal();
+                              }}
+                            >
+                              Cây cá nhân
+                            </button>
                           </li>
                         </ul>
                       </div>
+                      <ModalBonsaiCustomer {...props} />
                     </div>
                   </div>
                 </div>

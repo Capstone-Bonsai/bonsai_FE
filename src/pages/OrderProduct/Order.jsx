@@ -25,24 +25,9 @@ function Order() {
   });
 
   const bonsaiIdOrder = cartItems.map((item) => item.bonsaiId);
-  console.log(bonsaiIdOrder);
-  // const listBonsai = bonsaiIdOrder.map((bonsaiId, index) => ({
-  //   bonsaiId,
-  // }));
-  // console.log(listBonsai);
-
-  //calender
-  const onPanelChange = (value, mode) => {
-    console.log(value.format("YYYY-MM-DD"), mode);
-  };
-  // const { token } = theme.useToken();
-
 
   const [address, setAddress] = useState("");
-  const [confirmAddress, setConfirmAddress] = useState("");
   const [emailNotLogin, setEmailNotLogin] = useState("");
-  // const [expectedDeliveryDate, setExpectedDeliveryDate] = useState("");
-  const [dateToBE, setDateToBE] = useState("");
   const [note, setNote] = useState("");
   const [confirmNote, setConfirmNote] = useState("");
   const [fullNameNoneLogin, setFullNameNoneLogin] = useState("");
@@ -72,7 +57,6 @@ function Order() {
           : phoneNumberNoneLogin,
       },
       address: address,
-      // expectedDeliveryDate: dateToBE,
       note: note,
       listBonsai: bonsaiIdOrder,
     };
@@ -107,7 +91,7 @@ function Order() {
   const subTotal = () => {
     let totalPrice = 0;
     cartItems.forEach((item) => {
-      totalPrice += item.price ;
+      totalPrice += item.price;
     });
     return totalPrice;
   };
@@ -119,9 +103,9 @@ function Order() {
   const handleTotalOrder = () => {
     let totalPriceOrder = 0;
     totalPriceOrder = subTotal() + deliveryFee;
-    return totalPriceOrder
+    return totalPriceOrder;
   };
-  
+
   return (
     <MinHeight>
       <div className="m-auto w-[70%]">
@@ -154,9 +138,7 @@ function Order() {
                     </div>
                   </td>
                   <td className="font-medium">{item.price} ₫</td>
-                  <td className="font-medium">
-                    {item.price } ₫
-                  </td>
+                  <td className="font-medium">{item.price} ₫</td>
                   <td className="text-[20px] pr-5"></td>
                 </tr>
               ))}
