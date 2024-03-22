@@ -1,5 +1,6 @@
 import axios from "../../utils/axiosCustomize";
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+
 export const fetchCustomerGarden = createAsyncThunk(
   "bonsai/fetchCustomerGarden",
   async () => {
@@ -16,6 +17,15 @@ export const fetchCustomerGarden = createAsyncThunk(
 export const addCustomerGarden = async (formData) => {
   try {
     const response = await axios.post(`/CustomerGarden`, formData);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const addBonsaiIntoGarden = async (formData, gardenId) => {
+  try {
+    const response = await axios.post(`/CustomerBonsai/Customer/${gardenId}`, formData);
     console.log(response.data);
     return response.data;
   } catch (error) {
