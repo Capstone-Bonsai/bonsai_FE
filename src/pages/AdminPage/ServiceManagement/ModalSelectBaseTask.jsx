@@ -1,25 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PlusOutlined } from "@ant-design/icons";
 import {
   Tag,
-  Input,
   Modal,
-  Form,
-  InputNumber,
-  Select,
-  Upload,
   Table,
-  Space,
   Transfer,
 } from "antd";
-const { Search, TextArea } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
 import {
   allBaseTask,
-  allBaseTaskPagination,
 } from "../../../redux/slice/baseTaskSlice";
-import Loading from "../../../components/Loading";
 import difference from "lodash/difference";
 
 const TableTransfer = ({ leftColumns, rightColumns, ...restProps }) => (
@@ -75,11 +65,7 @@ const ModalSelectBaseTask = (props) => {
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const loading = useSelector((state) => state.baseTask?.loading);
   const listBaseTask = useSelector((state) => state.baseTask?.allBaseTaskDTO);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-  const paging = useSelector((state) => state.baseTask?.pagination);
 
   useEffect(() => {
     dispatch(allBaseTask());
@@ -88,7 +74,6 @@ const ModalSelectBaseTask = (props) => {
 
   const [listSelectedBaseTask, setListSelectedBaseTask] =
     useState(serviceBaseTask);
-  const formRef = useRef(null);
   const handleChange = (newTargetKeys, direction, moveKeys) => {
     console.log(newTargetKeys, direction, moveKeys);
     setListSelectedBaseTask(newTargetKeys);

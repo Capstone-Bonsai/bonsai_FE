@@ -1,26 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PlusOutlined } from "@ant-design/icons";
 import {
   Tag,
-  Input,
   Modal,
-  Form,
-  InputNumber,
-  Select,
-  Upload,
-  List,
   Tabs,
 } from "antd";
-const { Search, TextArea } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { postService, putService } from "../../../utils/serviceApi";
+import { putService } from "../../../utils/serviceApi";
 import { fetchAllService } from "../../../redux/slice/serviceSlice";
 import FormBonsaiCare from "./UpdateServiceForm/FormBonsaiCare";
 import FormGardenCare from "./UpdateServiceForm/FormGardenCare";
 import "./TabsBar.css";
-import { putBonsai } from "../../../utils/bonsaiApi";
 
 const ModalUpdateService = (props) => {
   const { show, setShow, service } = props;

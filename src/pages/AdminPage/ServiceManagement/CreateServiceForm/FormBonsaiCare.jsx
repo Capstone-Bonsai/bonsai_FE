@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import {
-  Tag,
   Input,
   Modal,
   Form,
-  InputNumber,
-  Select,
   Upload,
-  List,
 } from "antd";
-const { Search, TextArea } = Input;
+const { TextArea } = Input;
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -39,14 +35,6 @@ const FormBonsaiCare = ({
   onImageChange,
 }) => {
   const [form] = Form.useForm();
-  const [formData, setFormData] = useState({
-    Name: "",
-    Description: "",
-    StandardPrice: 0,
-    ServiceType: 0,
-    Image: "",
-    ServiceBaseTaskId: "",
-  });
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");

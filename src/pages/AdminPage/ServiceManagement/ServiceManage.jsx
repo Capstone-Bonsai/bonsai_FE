@@ -2,29 +2,12 @@ import React, { useState, useEffect } from "react";
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Space,
-  Tag,
   Table,
-  Input,
   Modal,
-  Button,
-  Cascader,
-  Checkbox,
-  ColorPicker,
-  DatePicker,
-  Form,
-  InputNumber,
-  Radio,
-  Select,
-  Slider,
-  Switch,
-  TreeSelect,
-  Upload,
 } from "antd";
-const { Search, TextArea } = Input;
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import { fetchAllService, allServiceType } from "../../../redux/slice/serviceSlice";
 import { deleteService } from "../../../utils/serviceApi";
@@ -42,7 +25,6 @@ function ServiceManage() {
   const [selectedUpdateService, setSelectedUpdateService] = useState();
 
   const allService = useSelector((state) => state.service?.listService?.items);
-  const allServiceTypes = useSelector((state) => state.service?.allServiceTypeDTO);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const paging = useSelector((state) => state.service?.pagination);
@@ -242,13 +224,6 @@ function ServiceManage() {
           setShow={handleCancelUpdate}
           service={selectedUpdateService}
         />
-        {/* <ModalUpdateProduct
-          show={openUpdateModal}
-          setShow={handleCancelUpdate}
-          bonsai={selectedUpdateBonsai}
-          listCategory={allCategories}
-          listStyle={allStyles}
-        /> */}
         <Modal
           title="Xóa sản phẩm"
           open={openDelete}

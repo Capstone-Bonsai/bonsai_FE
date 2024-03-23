@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import {
-  Tag,
   Input,
   Modal,
   Form,
-  InputNumber,
-  Select,
   Upload,
-  List,
 } from "antd";
-const { Search, TextArea } = Input;
+const { TextArea } = Input;
 
 const normFile = (e) => {
   if (Array.isArray(e)) {

@@ -6,16 +6,10 @@ import {
   Modal,
   Form,
   InputNumber,
-  Select,
   Upload,
   List,
 } from "antd";
-const { Search, TextArea } = Input;
-
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { postService } from "../../../../utils/serviceApi";
-import { fetchAllService } from "../../../../redux/slice/serviceSlice";
+const { TextArea } = Input;
 import ModalSelectBaseTask from "../ModalSelectBaseTask";
 
 const normFile = (e) => {
@@ -288,11 +282,6 @@ const FormGardenCare = ({
           ?.map((baseTask) => baseTask.baseTask)
           ?.map((SelectedBaseTask) => SelectedBaseTask.id)}
       />
-
-      {/* <ModalCreateStyle
-        show={openCreateStyle}
-        setShow={handleCancelCreateStyle}
-      /> */}
     </>
   );
 };

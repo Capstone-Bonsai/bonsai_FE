@@ -1,25 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PlusOutlined } from "@ant-design/icons";
 import {
-  Tag,
-  Input,
   Modal,
-  Form,
-  InputNumber,
-  Select,
-  Upload,
-  List,
   Tabs,
 } from "antd";
-const { Search, TextArea } = Input;
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { postService } from "../../../utils/serviceApi";
 import { fetchAllService } from "../../../redux/slice/serviceSlice";
-import ModalSelectBaseTask from "./ModalSelectBaseTask";
 import FormGardenCare from "./CreateServiceForm/FormGardenCare";
-import { setBaseTask } from "../../../redux/slice/baseTaskSlice";
 import FormBonsaiCare from "./CreateServiceForm/FormBonsaiCare";
 const ModalCreateService = (props) => {
   const { show, setShow } = props;
@@ -49,7 +38,7 @@ const ModalCreateService = (props) => {
     try {
       console.log(service);
       postService(service)
-        .then((data) => {
+        .then(() => {
           toast.success("Thêm dịch vụ thành công!");
           dispatch(
             fetchAllService({

@@ -1,21 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import {
-  Tag,
-  Input,
-  Modal,
-  Form,
-  InputNumber,
-  Select,
-  Upload,
-  List,
-} from "antd";
-const { Search, TextArea } = Input;
-
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { postService } from "../../../../utils/serviceApi";
-import { fetchAllService } from "../../../../redux/slice/serviceSlice";
+import { Tag, Input, Modal, Form, InputNumber, Upload, List } from "antd";
+const { TextArea } = Input;
 import ModalSelectBaseTask from "../ModalSelectBaseTask";
 
 const normFile = (e) => {
@@ -46,14 +32,6 @@ const FormGardenCare = ({
   onBaseTaskChange,
 }) => {
   const [form] = Form.useForm();
-  const [formData, setFormData] = useState({
-    Name: "",
-    Description: "",
-    StandardPrice: 0,
-    ServiceType: 0,
-    Image: "",
-    ServiceBaseTaskId: "",
-  });
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -102,7 +80,7 @@ const FormGardenCare = ({
   );
 
   const handleFormChange = (changedValues, allValues) => {
-    console.log(allValues)
+    console.log(allValues);
     onFormDataChange(allValues);
   };
 
@@ -125,7 +103,6 @@ const FormGardenCare = ({
   // modal select style
   const showModalSelectBaseTask = () => {
     setOpenSelectBaseTask(true);
-    
   };
 
   const handleCancelSelectBaseTask = () => {
@@ -146,30 +123,9 @@ const FormGardenCare = ({
         labelCol={{ span: 5 }}
         wrapperCol={{ span: 18 }}
         onValuesChange={handleFormChange}
-        initialValues={{ServiceType:2}}
+        initialValues={{ ServiceType: 2 }}
       >
-        {/* <Form.Item
-              label="Kiểu dáng"
-              rules={[
-                { required: true, message: "Phân loại không được để trống!" },
-              ]}
-            >
-              <div>
-                <Tag icon={<PlusOutlined />} onClick={showModalCreateStyle}>
-                  Thêm Kiểu mẫu
-                </Tag>
-                <Form.Item name="StyleId">
-                  <Select>
-                    {listStyle?.map((style, index) => (
-                      <Select.Option value={style.id} key={index}>
-                        {style.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </div>
-            </Form.Item> */}
-        <Form.Item name="ServiceType" style={{ display: 'none' }}>
+        <Form.Item name="ServiceType" style={{ display: "none" }}>
           <Input type="hidden" value="2" />
         </Form.Item>
         <Form.Item
