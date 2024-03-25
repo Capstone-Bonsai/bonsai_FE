@@ -2,33 +2,17 @@ import React, { useState, useEffect } from "react";
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Space,
-  Tag,
   Table,
-  Input,
   Modal,
-  Button,
-  Cascader,
-  Checkbox,
-  ColorPicker,
-  DatePicker,
-  Form,
-  InputNumber,
-  Radio,
-  Select,
-  Slider,
-  Switch,
-  TreeSelect,
-  Upload,
 } from "antd";
-const { Search, TextArea } = Input;
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import { fetchAllService, allServiceType } from "../../../redux/slice/serviceSlice";
 import { deleteService } from "../../../utils/serviceApi";
 import ModalCreateService from "./ModalCreateService";
+import ModalUpdateService from "./ModalUpdateService";
 
 function ServiceManage() {
   const dispatch = useDispatch();
@@ -38,10 +22,9 @@ function ServiceManage() {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [selectedService, setSelectedService] = useState();
-  const [selectedUpdateServie, setSelectedUpdateService] = useState();
+  const [selectedUpdateService, setSelectedUpdateService] = useState();
 
   const allService = useSelector((state) => state.service?.listService?.items);
-  const allServiceTypes = useSelector((state) => state.service?.allServiceTypeDTO);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const paging = useSelector((state) => state.service?.pagination);
@@ -235,16 +218,12 @@ function ServiceManage() {
         <ModalCreateService
           show={openCreateModal}
           setShow={handleCancelCreate}
-          listServiceType={allServiceTypes}
-          listBaseTask={allServiceTypes}
         />
-        {/* <ModalUpdateProduct
+        <ModalUpdateService
           show={openUpdateModal}
           setShow={handleCancelUpdate}
-          bonsai={selectedUpdateBonsai}
-          listCategory={allCategories}
-          listStyle={allStyles}
-        /> */}
+          service={selectedUpdateService}
+        />
         <Modal
           title="Xóa sản phẩm"
           open={openDelete}

@@ -1,25 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PlusOutlined } from "@ant-design/icons";
 import {
   Tag,
-  Input,
   Modal,
-  Form,
-  InputNumber,
-  Select,
-  Upload,
   Table,
-  Space,
   Transfer,
 } from "antd";
-const { Search, TextArea } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
 import {
   allBaseTask,
-  allBaseTaskPagination,
 } from "../../../redux/slice/baseTaskSlice";
-import Loading from "../../../components/Loading";
 import difference from "lodash/difference";
 
 const TableTransfer = ({ leftColumns, rightColumns, ...restProps }) => (
@@ -67,7 +57,7 @@ const TableTransfer = ({ leftColumns, rightColumns, ...restProps }) => (
 );
 
 const ModalSelectBaseTask = (props) => {
-  const { show, setShow, onSubmitForm } = props;
+  const { show, setShow, onSubmitForm, serviceBaseTask } = props;
   const handleClose = () => {
     setConfirmLoading(false);
     setShow(false);
@@ -75,19 +65,15 @@ const ModalSelectBaseTask = (props) => {
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const loading = useSelector((state) => state.baseTask?.loading);
   const listBaseTask = useSelector((state) => state.baseTask?.allBaseTaskDTO);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-  const paging = useSelector((state) => state.baseTask?.pagination);
 
   useEffect(() => {
     dispatch(allBaseTask());
     console.log(listBaseTask);
   }, []);
 
-  const [listSelectedBaseTask, setListSelectedBaseTask] = useState([]);
-  const formRef = useRef(null);
+  const [listSelectedBaseTask, setListSelectedBaseTask] =
+    useState(serviceBaseTask);
   const handleChange = (newTargetKeys, direction, moveKeys) => {
     console.log(newTargetKeys, direction, moveKeys);
     setListSelectedBaseTask(newTargetKeys);
@@ -112,7 +98,11 @@ const ModalSelectBaseTask = (props) => {
   ];
 
   const onSubmit = (i) => {
-    onSubmitForm(listSelectedBaseTask);
+    onSubmitForm(
+      listBaseTask.filter((baseTask) =>
+        listSelectedBaseTask?.includes(baseTask.id)
+      )
+    );
     handleClose();
   };
 
@@ -142,7 +132,7 @@ const ModalSelectBaseTask = (props) => {
             onChange={handleChange}
             leftColumns={leftTableColumns}
             rightColumns={rightTableColumns}
-            rowKey={(item) => item}
+            rowKey={(item) => item.id}
             filterOption={(inputValue, item) =>
               item.name.indexOf(inputValue) !== -1
             }

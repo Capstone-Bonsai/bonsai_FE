@@ -50,6 +50,11 @@ function PrivateRoute() {
       icon: <UploadOutlined />,
       label: <Link to={`/admin/order`}>Đơn hàng</Link>,
     },
+    {
+      key: "4",
+      icon: <UploadOutlined />,
+      label: <Link to={`/admin/service`}>Dịch vụ</Link>,
+    },
   ];
   return (
     <>
