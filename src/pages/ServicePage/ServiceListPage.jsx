@@ -11,19 +11,23 @@ function ServiceListPage() {
   const dispatch = useDispatch();
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
+  const serivceList = useSelector((state) => state.service?.listService?.items);
+  const isLoading = useSelector((state) => state.service?.loading);
+
   const onPageChange = (page) => {
     setCurrentPage(page);
   };
   useEffect(() => {
-    dispatch(fetchAllService({ pageIndex: currentPage - 1, pageSize: pageSize }));
-  }, [currentPage]);
-  const isLoading = useSelector((state) => state.service.loading);
+    if (!serivceList) {
+      dispatch(
+        fetchAllService({ pageIndex: currentPage - 1, pageSize: pageSize })
+      );
+    }
+  }, [currentPage, serivceList]);
   console.log(isLoading);
   const totalItems = useSelector(
-    (state) => state.service.listService.totalItemsCount
+    (state) => state.service?.listService?.totalItemsCount
   );
-  console.log(totalItems);
-  const serivceList = useSelector((state) => state.service.listService?.items);
   return (
     <>
       {isLoading ? (
@@ -42,7 +46,11 @@ function ServiceListPage() {
                 className="w-[90%] my-5 h-[300px] m-auto border border-[#f0f0f0] flex justify-between gap-4 "
               >
                 <div className=" w-[25%] p-4">
-                  <img src={service?.image} className="h-full w-full border drop-shadow-lg" alt="" />
+                  <img
+                    src={service?.image}
+                    className="h-full w-full border drop-shadow-lg"
+                    alt=""
+                  />
                 </div>
                 <div className="w-[50%]">
                   <div className="text-[15px] py-3">

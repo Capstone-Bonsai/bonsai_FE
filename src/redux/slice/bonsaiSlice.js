@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "./../../utils/axiosCustomize";
 
 const axiosCus = axios.create({
   baseURL: "https://capstoneb.azurewebsites.net/api/",
@@ -66,7 +66,16 @@ export const fetchAllBonsaiNoPagination = createAsyncThunk(
 
 export const allCategory = createAsyncThunk("product/subCategory", async () => {
   try {
-    const response = await axiosCus.get("/Category");
+    const response = await axios.get("/Category");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+});
+
+export const bonsaiBought = createAsyncThunk("bonsai/bonsaiBought", async () => {
+  try {
+    const response = await axios.get("/bonsai/BoughtBonsai");
     return response.data;
   } catch (error) {
     throw error;
@@ -138,6 +147,7 @@ const initialState = {
   bonsaiCayThong: [],
   allBonsaiDTO: {},
   allCategoryDTO: {},
+  boughtBonsai: [],
   tagDTO: {},
   bonsaiById: [],
   cart: [],
@@ -289,7 +299,20 @@ const bonsaiSlice = createSlice({
       .addCase(fetchBonsaiWithCateCayThong.rejected, (state) => {
         state.msg = "Error loading data";
         state.loading = false;
-      });
+      })
+    .addCase(bonsaiBought.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(bonsaiBought.fulfilled, (state, action) => {
+        state.boughtBonsai = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(bonsaiBought.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.loading = false;
+      })
   },
 });
 

@@ -9,40 +9,34 @@ const { Search } = Input;
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllTags } from "../../../redux/slice/tagSlice";
+import { fetchAllOrders } from "../../../redux/slice/orderSlice";
 import { deleteProduct } from "../../../utils/productApi";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
-import ModalUpdateTag from "./ModalUpdateTag";
 
-function TagManage() {
+function CustomerGardenManage() {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.tag.loading);
+  const loading = useSelector((state) => state.order.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
-  const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
-  const [selectedTag, setSelectedTag] = useState();
-  const [selectedUpdateTag, setSelectedUpdateTag] = useState();
+  const [selectedOrder, setSelectedOrder] = useState();
+  const [selectedUpdateOrder, setSelectedUpdateOrder] = useState();
 
-  const allTag = useSelector((state) => state.tag?.listTag?.items);
-  console.log(allTag);
+  const allOrder = useSelector((state) => state.order?.listOrder?.items);
+  console.log(allOrder);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const paging = useSelector((state) => state.tag?.pagination);
+  const paging = useSelector((state) => state.order?.pagination);
 
   useEffect(() => {
     dispatch(
-      fetchAllTags({
+      fetchAllOrders({
         pageIndex: currentPage - 1,
         pageSize: pageSize,
       })
     );
   }, []);
-
-  const showCreateModal = () => {
-    setOpenCreateModal(true);
-  };
 
   const showUpdateModal = () => {
     setOpenUpdateModal(true);
@@ -72,10 +66,6 @@ function TagManage() {
   const handleCancelDelete = () => {
     console.log("Clicked cancel button");
     setOpenDelete(false);
-  };
-
-  const handleCancelCreate = () => {
-    setOpenCreateModal(false);
   };
 
   const handleCancelUpdate = () => {
@@ -156,7 +146,7 @@ function TagManage() {
       key: "customer",
       render: (_, record) => (
         <>
-          <p>{record.customer.applicationUser.email}</p>
+          <p>{record.customer?.applicationUser?.email}</p>
         </>
       ),
     },
@@ -164,6 +154,16 @@ function TagManage() {
       title: "Địa chỉ",
       dataIndex: "address",
       key: "address",
+    },
+    {
+      title: "Loại giao",
+      dataIndex: "orderType",
+      key: "orderType",
+      render: (_, record) => (
+        <>
+          <Tag>{record.deliveryType}</Tag>
+        </>
+      ),
     },
     {
       title: "Ngày đặt",
@@ -263,7 +263,7 @@ function TagManage() {
         <Space size="middle">
           <button
             onClick={() => {
-              setSelectedTag(record.id);
+              setSelectedOrder(record.id);
               showModalDelete();
             }}
           >
@@ -271,7 +271,7 @@ function TagManage() {
           </button>
           <button
             onClick={() => {
-              setSelectedUpdateTag(record);
+              setSelectedUpdateOrder(record);
               showUpdateModal();
             }}
           >
@@ -292,12 +292,12 @@ function TagManage() {
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
               <div>
-                <button
+                {/* <button
                   className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
                   onClick={showCreateModal}
                 >
-                  <PlusCircleOutlined /> Thêm tag
-                </button>
+                  <PlusCircleOutlined /> Thêm sản phẩm
+                </button> */}
               </div>
               <div className="pr-0">
                 <Search
@@ -311,7 +311,7 @@ function TagManage() {
             <div className="mb-12">
               <Table
                 className="w-[100%]"
-                dataSource={allTag}
+                dataSource={allOrder}
                 columns={columns}
                 scroll={{ x: true }}
                 pagination={paging}
@@ -325,11 +325,6 @@ function TagManage() {
             </div>
           </div>
         </div>
-        <ModalUpdateTag
-          show={openUpdateModal}
-          setShow={handleCancelUpdate}
-          order={selectedUpdateTag}
-        />
         <Modal
           title="Xóa sản phẩm"
           open={openDelete}
@@ -345,4 +340,4 @@ function TagManage() {
   );
 }
 
-export default TagManage;
+export default CustomerGardenManage;

@@ -135,9 +135,9 @@ function BonsaiDetail() {
                   + Thêm vào Giỏ Hàng
                 </button>
               </div>
-              <div className="flex items-center justify-between py-5 gap-5">
+              <div className="flex justify-between py-5 gap-5">
                 <div className="flex flex-col items-center">
-                  <img src={carShip} className="w-[150px] " alt="" />
+                  <img src={carShip} className="w-[100px] " alt="" />
                   <div className="text-[15px]">0934534534</div>
                 </div>
                 <div>

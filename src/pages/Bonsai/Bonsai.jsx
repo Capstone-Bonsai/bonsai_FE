@@ -47,7 +47,7 @@ function Bonsai() {
     if (!styles) {
       dispatch(allStyle());
     }
-  }, [categories, styles]);
+  }, []);
 
   useEffect(() => {
     const payload = {
@@ -150,11 +150,11 @@ function Bonsai() {
                     height="250px"
                     src={bonsai.bonsaiImages[0]?.imageUrl}
                   />
-                  <div className="flex items-center justify-evenly">
-                    <div className="py-5 text-[18px] w-[70%] ">
+                  <div className="flex justify-evenly">
+                    <div className="py-5 text-[18px] w-[70%]">
                       <Link
-                        className="w-full 
-                      hover:text-[#3a9943]"
+                        className="w-full
+                      hover:text-[#3a9943] block overflow-hidden whitespace-nowrap overflow-ellipsis"
                         to={`/bonsaiDetail/${bonsai.id}`}
                       >
                         {bonsai.name}
@@ -187,7 +187,7 @@ function Bonsai() {
                           );
                         }
                       }}
-                      className="bg-[#f2f2f2] w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]"
+                      className="bg-[#f2f2f2] mt-5 w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]"
                     >
                       <ShoppingCartOutlined />
                     </button>
