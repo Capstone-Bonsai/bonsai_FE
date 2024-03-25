@@ -3,9 +3,11 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 
 export const fetchCustomerGarden = createAsyncThunk(
   "bonsai/fetchCustomerGarden",
-  async () => {
+  async ({ pageIndex, pageSize }) => {
     try {
-      const response = await axios.get(`/CustomerGarden/Customer`);
+      const response = await axios.get(
+        `/CustomerGarden/Customer?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      );
       console.log(response.data);
       return response.data;
     } catch (error) {
@@ -23,9 +25,26 @@ export const addCustomerGarden = async (formData) => {
     throw error;
   }
 };
+
+export const addBonsaiBuyFromStore = async (bonsaiId, customerGardenId) => {
+  try {
+    const response = await axios.post(`/CustomerBonsai/BoughtBonsai`, {
+      bonsaiId,
+      customerGardenId,
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const addBonsaiIntoGarden = async (formData, gardenId) => {
   try {
-    const response = await axios.post(`/CustomerBonsai/Customer/${gardenId}`, formData);
+    const response = await axios.post(
+      `/CustomerBonsai/Customer/${gardenId}`,
+      formData
+    );
     console.log(response.data);
     return response.data;
   } catch (error) {

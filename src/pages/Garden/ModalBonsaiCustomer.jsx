@@ -62,6 +62,16 @@ function ModalBonsaiCustomer(props) {
     try {
       await addBonsaiIntoGarden(formData, props.selectedGardenId);
       toast.success("Thêm vườn thành công thành Công");
+      setStyleId("");
+      setCateId("");
+      setImgBonsai([]);
+      setFile([]);
+      setBonsaiName("");
+      setBonsaiDescription("");
+      setYop("");
+      setTrunkDimenter("");
+      setHeight("");
+      setNumberOfTrunk("");
     } catch (error) {
       toast.error("Thêm vườn không thành công", error);
     }
@@ -227,10 +237,10 @@ function ModalBonsaiCustomer(props) {
           ) : (
             "Bạn chỉ có thể thêm tối đa 4 ảnh"
           )}
-          <div>
-            <button onClick={handleAddBonsai} className="btn">
-              Thêm cây
-            </button>
+          <div className="text-right">
+            <form onSubmit={handleAddBonsai} method="dialog">
+              <button className="btn">Thêm cây</button>
+            </form>
           </div>
         </div>
       </dialog>

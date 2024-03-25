@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MinHeight from "../../components/MinHeight";
 import NavbarUser from "../Auth/NavbarUser";
-import { Carousel } from "antd";
+import { Carousel, Pagination } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addCustomerGarden,
@@ -17,19 +17,29 @@ import square from "../../assets/square.png";
 import { allStyle } from "../../redux/slice/styleSlice";
 import { allCategory } from "../../redux/slice/categorySlice";
 import ModalBonsaiCustomer from "./ModalBonsaiCustomer";
+import ModalBuyFromStore from "./ModalBuyFromStore";
+import { bonsaiBought } from "../../redux/slice/bonsaiSlice";
 function CustomerGarden() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [newAddress, setNewAddress] = useState("");
   const [newSquare, setNewSquare] = useState("");
   const [imageGarden, setImageGarden] = useState([]);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(3);
+  const boughtBonsai = useSelector((state) => state.bonsai.boughtBonsai?.items);
 
   useEffect(() => {
     dispatch(allCategory());
     dispatch(allStyle());
+    dispatch(bonsaiBought());
     if (!gardens) {
+      const payload = {
+        pageIndex: pageIndex,
+        pageSize,
+      };
       setLoading(true);
-      dispatch(fetchCustomerGarden())
+      dispatch(fetchCustomerGarden(payload))
         .then(() => {
           setLoading(false);
         })
@@ -38,9 +48,8 @@ function CustomerGarden() {
           setLoading(false);
         });
     }
-  }, []);
+  }, [boughtBonsai]);
   const [file, setFile] = useState([]);
-  console.log(file);
   const handleImageChange = (e) => {
     const files = e.target.files;
     const updatedImageGarden = [...imageGarden];
@@ -82,8 +91,10 @@ function CustomerGarden() {
     updatedImageGarden.splice(index, 1);
     setImageGarden(updatedImageGarden);
   };
-
-  const [selectedGardenId, setSelectedGardenId] = useState();
+  const handlePageChange = (page) => {
+    setPageIndex(page);
+  };
+  const [selectedGardenId, setSelectedGardenId] = useState("");
 
   const { allStyleDTO } = useSelector((state) => state.style);
   const { allCategoryDTO } = useSelector((state) => state.category);
@@ -92,7 +103,11 @@ function CustomerGarden() {
     allStyleDTO,
     allCategoryDTO,
     selectedGardenId,
+    boughtBonsai,
+    dispatch,
   };
+  const { totalPagesCount } = useSelector((state) => state.garden.gardenDTO);
+
   return (
     <>
       {loading ? (
@@ -242,14 +257,23 @@ function CustomerGarden() {
                     <div className="text-end">
                       <div className="dropdown">
                         <div tabIndex={0} role="button" className="btn m-1">
-                          Thêm bonsai vào vườn
+                          Thêm cây vào vườn
                         </div>
                         <ul
                           tabIndex={0}
                           className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
                         >
                           <li>
-                            <button>Cây của cửa hàng</button>
+                            <button
+                              onClick={() => {
+                                setSelectedGardenId(garden.id);
+                                document
+                                  .getElementById("my_modal_3")
+                                  .showModal();
+                              }}
+                            >
+                              Cây của cửa hàng
+                            </button>
                           </li>
                           <li>
                             <button
@@ -265,6 +289,7 @@ function CustomerGarden() {
                           </li>
                         </ul>
                       </div>
+                      <ModalBuyFromStore {...props} />
                       <ModalBonsaiCustomer {...props} />
                     </div>
                   </div>
@@ -272,6 +297,12 @@ function CustomerGarden() {
               ))}
             </div>
           </div>
+          <Pagination
+            current={pageIndex}
+            total={totalPagesCount && pageSize ? totalPagesCount * pageSize : 0}
+            onChange={handlePageChange}
+            className="text-center mt-5"
+          />
         </MinHeight>
       )}
     </>

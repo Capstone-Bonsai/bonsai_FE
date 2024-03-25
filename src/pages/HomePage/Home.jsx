@@ -59,8 +59,6 @@ function Home() {
         data: bonsaiCayThong,
       },
     ];
-
-    // Duyệt qua mảng và dispatch các action cần thiết
     actions.forEach(({ action, data }) => {
       if (data.length < 1) {
         dispatch(
