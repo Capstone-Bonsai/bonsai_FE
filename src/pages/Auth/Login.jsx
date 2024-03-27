@@ -77,13 +77,7 @@ function Login() {
         <MinHeight>
           <div className="top-0 left-0 right-0 bottom-0 w-full h-full flex justify-center items-center my-10">
             <div className="bg-[#ffffff] w-[30%] drop-shadow-lg">
-              <form
-                action=""
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleLogin();
-                }}
-              >
+             
                 <div className="w-[90%] m-auto h-full mb-5 ">
                   <h2 className="underline text-[20px] font-bold">Đăng nhập</h2>
                   <div>
@@ -127,7 +121,7 @@ function Login() {
                   </div>
                   <div className="flex justify-between items-center">
                     <button
-                      // onClick={handleLogin}
+                      onClick={handleLogin}
                       className="uppercase bg-black rounded-[3px] text-[#ffffff] w-[140px] h-[36px]"
                     >
                       Đăng nhập
@@ -140,7 +134,6 @@ function Login() {
                     </Link>
                   </div>
                 </div>
-              </form>
             </div>
           </div>
         </MinHeight>

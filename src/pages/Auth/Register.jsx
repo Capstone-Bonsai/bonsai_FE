@@ -12,7 +12,7 @@ function Register() {
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState();
+  const [errorMessage, setErrorMessage] = useState([] || "");
   const [showPassword, setShowPassword] = useState(false);
   console.log(errorMessage);
   const handleSubmitRegister = async (e) => {
@@ -32,6 +32,7 @@ function Register() {
       setIsLoading(true);
       await register(registerData);
       toast.success("Đăng ký thành công");
+      setErrorMessage("")
     } catch (error) {
       setErrorMessage(error.response.data);
       toast.error("Đăng ký thất bại");
@@ -88,7 +89,7 @@ function Register() {
                       className=" w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
                     />
                     <button
-                      className=" absolute right-3 top-0 bottom-0 "  
+                      className=" absolute right-3 top-0 bottom-0 "
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -123,14 +124,6 @@ function Register() {
                     </div>
                   </div>
                 </div>
-                <div className="my-2">
-                  {errorMessage == [] &&
-                    errorMessage?.map((errMess, index) => (
-                      <Item key={index} className="text-[red]">
-                        {errMess}
-                      </Item>
-                    ))}
-                </div>
                 <div className="flex justify-between items-center">
                   <button
                     className="uppercase bg-black rounded-[3px] text-[#ffffff] w-[140px] h-[36px]"
@@ -144,14 +137,18 @@ function Register() {
                 </div>
               </div>
             </div>
-            {errorMessage != undefined ? (
-              <div className="absolute right-[17rem]">
+            {errorMessage.length > 0 ? (
+              <div className="absolute right-[23rem]">
                 <div className="text-[red] text-[20px]">Thông báo lỗi:</div>
-                {errorMessage?.map((errorItem, index) => (
-                  <div key={index}>
-                    <div className="text-[12px]">- {errorItem}</div>
-                  </div>
-                ))}
+                {Array.isArray(errorMessage) && errorMessage.length > 0 ? (
+                  errorMessage?.map((errorItem, index) => (
+                    <div key={index}>
+                      <div className="text-[12px]">- {errorItem}</div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-[12px]">- {errorMessage}</div>
+                )}
               </div>
             ) : (
               ""
