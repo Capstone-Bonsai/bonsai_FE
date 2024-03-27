@@ -6,8 +6,11 @@ import { toast } from "react-toastify";
 import { destination } from "../../redux/slice/orderSlice";
 import { orderBonsai } from "../../redux/slice/bonsaiSlice";
 import BarLoaderLoading from "../../components/BarLoaderLoading";
+import { useDispatch } from "react-redux";
+import { getProvince } from "../../redux/slice/address";
 
 function Order() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const cookies = new Cookies();
   const location = useLocation();
@@ -48,6 +51,18 @@ function Order() {
       }
     }
   }, [resultCode]);
+  const [provinceData, setProvinceData] = useState(null);
+  useEffect(() => {
+    const fetchProvinceAPI = async () => {
+      try {
+        const responseData = await getProvince();
+        setProvinceData(responseData);
+      } catch (error) {
+        console.error("Error fetching province data:", error);
+      }
+    };
+    fetchProvinceAPI();
+  }, []);
 
   const handleOrder = async () => {
     const dataOrder = {
@@ -113,7 +128,7 @@ function Order() {
   return (
     <>
       <MinHeight>
-        {isBarLoader ? <BarLoaderLoading loading={isBarLoader}/> : ""}
+        {isBarLoader ? <BarLoaderLoading loading={isBarLoader} /> : ""}
         <div className="m-auto w-[70%]">
           <div className=" mt-10 drop-shadow-lg bg-[#ffffff]">
             <table className="w-full border-collapse">
@@ -291,15 +306,15 @@ function Order() {
                     Tổng Giỏ Hàng
                   </div>
                   <div className="flex justify-between mb-4">
-                    <div>Tổng giá trị:</div>
+                    <div>Tổng giá trị</div>
                     <div>{subTotal()} ₫</div>
                   </div>
                   <div className="flex justify-between mb-4">
-                    <div>Phí vận chuyển:</div>
+                    <div>Phí vận chuyển</div>
                     <div>{deliveryFee} ₫</div>
                   </div>
                   <div className="flex justify-between border-t border-t-1 border-black font-bold text-[18px] pt-[9px]">
-                    <div className="">Grand Total</div>
+                    <div className="">Tổng</div>
                     <div>{handleTotalOrder()} ₫</div>
                   </div>
                 </div>

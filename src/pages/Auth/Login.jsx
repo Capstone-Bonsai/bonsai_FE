@@ -6,10 +6,12 @@ import { confirmEmail, loginUser } from "../../redux/slice/authSlice";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loading";
 import MinHeight from "../../components/MinHeight";
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const cookies = new Cookies();
   const navigate = useNavigate();
@@ -97,13 +99,23 @@ function Login() {
                   </div>
                   <div>
                     <label>Mật khẩu:</label>
-                    <div className="flex justify-center">
+                    <div className="flex justify-center relative">
                       <input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className=" w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
                       />
+                      <button
+                        className=" absolute right-3 top-0 bottom-0 "
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeInvisibleOutlined />
+                        ) : (
+                          <EyeOutlined />
+                        )}
+                      </button>
                     </div>
                   </div>
                   <div className="flex justify-between">
@@ -118,7 +130,7 @@ function Login() {
                       // onClick={handleLogin}
                       className="uppercase bg-black rounded-[3px] text-[#ffffff] w-[140px] h-[36px]"
                     >
-                      Login
+                      Đăng nhập
                     </button>
                     <Link
                       to="/register"

@@ -62,7 +62,7 @@ function SellProducts({
                   <div className="mb-3 h-[40px]">
                     <Link
                       to={`/bonsaiDetail/${office.id}`}
-                      className="text-[#333333] text-lg hover:text-[#1E7100]"
+                      className="text-[#333333] text-2xl hover:text-[#1E7100]"
                     >
                       {office.name}
                     </Link>
@@ -140,7 +140,7 @@ function SellProducts({
                   <div className="mb-3 h-[40px]">
                     <Link
                       to={`/bonsaiDetail/${office.id}`}
-                      className="text-[#333333] text-lg hover:text-[#1E7100]"
+                      className="text-[#333333] text-2xl hover:text-[#1E7100]"
                     >
                       {office.name}
                     </Link>
@@ -196,7 +196,7 @@ function SellProducts({
             </div>
           </div>
           <div className="flex flex-wrap justify-between">
-            {styleCount.map((styleCountItem) => (
+            {styleCount?.slice(0, 4)?.map((styleCountItem) => (
               <button
                 className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[355px] bg-local bg-no-repeat bg-cover hover:opacity-50"
                 onClick={() => handleFilterStyle(styleCountItem.id)}

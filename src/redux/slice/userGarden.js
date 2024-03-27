@@ -6,7 +6,7 @@ export const fetchCustomerGarden = createAsyncThunk(
   async ({ pageIndex, pageSize }) => {
     try {
       const response = await axios.get(
-        `/CustomerGarden/Customer?pageIndex=${pageIndex}&pageSize=${pageSize}`
+        `/CustomerGarden?pageIndex=${pageIndex}&pageSize=${pageSize}`
       );
       console.log(response.data);
       return response.data;

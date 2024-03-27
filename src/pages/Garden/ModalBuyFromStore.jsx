@@ -13,7 +13,6 @@ function ModalBuyFromStore(props) {
     } catch (error) {
       toast.error("Thêm cây không thành công", error);
     }
-  
   };
   return (
     <dialog id="my_modal_3" className="modal text-left">
@@ -23,20 +22,37 @@ function ModalBuyFromStore(props) {
             ✕
           </button>
         </form>
-        <h3 className="font-bold text-lg">Hello!</h3>
+        <h3 className="font-bold text-lg">Thêm cây của cửa hàng</h3>
         <div>{props.selectedGardenId}</div>
         {props.boughtBonsai?.map((bonsai) => (
-          <div key={bonsai.id} className="flex justify-between">
-            <div>
-              <div>{bonsai.name}</div>
+          <div
+            key={bonsai.id}
+            className="flex justify-between border-b border-[#3a9943] items-center p-2 my-2"
+          >
+            <div className="flex gap-5">
+              <div className="w-[100px] h-[100px]">
+                <img
+                  className="w-full h-full object-cover "
+                  src={bonsai?.bonsaiImages[0].imageUrl}
+                  alt=""
+                />
+              </div>
+              <div>
+                <div className="text-[#3a9943] text-xl font-bold">
+                  {bonsai.name}
+                </div>
+                <div className="opacity-70">{bonsai?.description}</div>
+              </div>
             </div>
-            {selectBonsai === bonsai.id ? (
-              <CheckCircleOutlined className="text-[#3e9943]" />
-            ) : (
-              <button onClick={() => setSelectBonsai(bonsai.id)}>
-                <PlusCircleOutlined />
-              </button>
-            )}
+            <div className="text-2xl">
+              {selectBonsai === bonsai.id ? (
+                <CheckCircleOutlined className="text-[#3e9943]" />
+              ) : (
+                <button onClick={() => setSelectBonsai(bonsai.id)}>
+                  <PlusCircleOutlined />
+                </button>
+              )}
+            </div>
           </div>
         ))}
         <div className="text-right">

@@ -87,7 +87,9 @@ function ModalBonsaiCustomer(props) {
           </form>
           <h3 className="font-bold text-lg">Thêm cây của bạn</h3>
           <div>{props.selectedGardenId}</div>
-          <div>
+          <div className="my-2">
+            <span className="font-bold">Loại cây</span>{" "}
+            <span className="text-red-500">*</span>
             <select
               className="w-full border outline-none py-2 px-2 mb-2 rounded-[10px]"
               onChange={handleCategoryChange}
@@ -103,13 +105,15 @@ function ModalBonsaiCustomer(props) {
               ))}
             </select>
           </div>
-          <div>
+          <div className="my-2">
+            <span className="font-bold">Dáng cây </span>
+            <span className="text-red-500">*</span>
             <select
               className="w-full border outline-none py-2 px-2 mb-2 rounded-[10px]"
               onChange={handleStyleChange}
               defaultValue=""
             >
-              <option disabled value="">
+              <option disabled value="" className="opacity-30">
                 Chọn dáng cây
               </option>
               {props.allStyleDTO.items.map((style) => (
@@ -119,71 +123,75 @@ function ModalBonsaiCustomer(props) {
               ))}
             </select>
           </div>
-          <div className="">
-            <div className="w-[70px]">Tên cây</div>
+          <div className="my-2">
+            <div className="font-bold">
+              Tên cây <span className="text-[red]">*</span>
+            </div>
             <input
               value={bonsaiName}
               required
               onChange={(e) => setBonsaiName(e.target.value)}
-              className="w-full border outline-none"
+              className="w-full border outline-none p-2 rounded-[10px]"
               type="text"
               name=""
               id=""
             />
           </div>
-          <div>
-            <div>Mô tả chi tiết</div>
+          <div className="my-2">
+            <div className="font-bold">
+              Mô tả chi tiết <span className="text-[red]">*</span>
+            </div>
             <input
               required
               value={bonsaiDescription}
               onChange={(e) => setBonsaiDescription(e.target.value)}
-              className="w-full border outline-none"
+              className="w-full border outline-none p-2 rounded-[10px]"
               type="text"
               name=""
               id=""
             />
           </div>
-          <div>
-            <div>Năm tuổi</div>
+          <div className="my-2">
+            <div className="font-bold">Năm tuổi</div>
             <input
               value={yop}
               onChange={(e) => setYop(e.target.value)}
-              className="w-full border outline-none"
+              className="w-full border outline-none p-2 rounded-[10px]"
               type="text"
               name=""
               id=""
             />
           </div>
-          <div>
-            <div>Kích thước thân</div>
+          <div className="my-2">
+            <div className="font-bold">Kích thước thân <span className="text-[red]">*</span></div>
             <input
               required
               value={trunkDimeter}
               onChange={(e) => setTrunkDimenter(e.target.value)}
-              className="w-full border outline-none"
+              className="w-full border outline-none p-2 rounded-[10px]"
               type="text"
               name=""
               id=""
             />
           </div>
-          <div>
-            <div>Chiều cao</div>
+          <div className="my-2">
+            <div className="font-bold">Chiều cao</div>
             <input
               value={height}
               onChange={(e) => setHeight(e.target.value)}
-              className="w-full border outline-none"
+              className="w-full border outline-none p-2 rounded-[10px]"
               type="text"
               name=""
               id=""
             />
           </div>
-          <div>
-            <div>Số thân</div>
+          <div className="my-2">
+            <div className="font-bold">Số thân <span className="text-[red]">*</span></div>
             <input
               required
               value={numberOfTrunk}
               onChange={(e) => setNumberOfTrunk(e.target.value)}
-              className="w-full border outline-none"
+              className="w-full border outline-none p-2 rounded-[10px]"
               type="text"
               name=""
               id=""
