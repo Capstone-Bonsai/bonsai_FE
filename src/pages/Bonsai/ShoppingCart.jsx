@@ -53,7 +53,6 @@ function ShoppingCart() {
     });
     return totalPrice;
   };
-  // Hàm định dạng giá tiền
   const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",

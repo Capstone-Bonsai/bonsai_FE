@@ -2,9 +2,6 @@ import Cookies from "universal-cookie";
 import { setCartFromCookie } from "../../redux/slice/bonsaiSlice";
 import { toast } from "react-toastify";
 
-const cookies = new Cookies();
-const userInfo = cookies.get("user");
-const idUser = userInfo?.id;
 export const addToCart = async (
   bonsaiId,
   bonsaiName,
@@ -13,11 +10,15 @@ export const addToCart = async (
   bonsaiSubCategory,
   dispatch
 ) => {
-  let cartItems =
-    userInfo != null
-      ? cookies.get(`cartId ${idUser}`) || []
-      : cookies.get("cartItems") || [];
-
+  const cookies = new Cookies();
+  const userInfo = cookies.get("user");
+  const idUser = userInfo?.id;
+  let cartItems;
+  if (!idUser) {
+    cartItems = cookies.get("cartItems") || [];
+  } else {
+    cartItems = cookies.get(`cartId ${idUser}`) || [];
+  }
   if (!Array.isArray(cartItems)) {
     cartItems = [];
   }
@@ -35,9 +36,7 @@ export const addToCart = async (
     subCategory: bonsaiSubCategory,
   });
   toast.success("Đã thêm sản phẩm vào giỏ hàng!");
-
-  const cartId = userInfo != null ? `cartId ${idUser}` : "cartItems";
-
+  const cartId = !idUser ? "cartItems" : `cartId ${idUser}`;
   await cookies.set(cartId, cartItems, { path: "/" });
 
   const itemCount = cartItems.length;
