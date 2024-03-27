@@ -153,7 +153,7 @@ function Bonsai() {
                   <div className="flex justify-evenly">
                     <div className="py-5 text-[18px] w-[70%]">
                       <Link
-                        className="w-full
+                        className="text-[25px]
                       hover:text-[#3a9943] block overflow-hidden whitespace-nowrap overflow-ellipsis"
                         to={`/bonsaiDetail/${bonsai.id}`}
                       >

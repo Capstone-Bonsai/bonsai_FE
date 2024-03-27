@@ -110,6 +110,23 @@ function BonsaiDetail() {
                     {formatPrice(bonsaiDetail.price)}
                   </div>
                 </div>
+                <div className="opacity-70 text-[15px]">
+                  <div>
+                    <span className="text-[#3a9943]">Hoành cây:</span> {bonsaiDetail.trunkDimenter}
+                  </div>
+                  <div>
+                    Chiều cao:{" "}
+                    {bonsaiDetail.height != null
+                      ? bonsaiDetail.height
+                      : "Không có thông tin"}
+                  </div>
+                  <div>
+                    Năm tuổi:{" "}
+                    {bonsaiDetail.yearOfPlanting != null
+                      ? bonsaiDetail.yearOfPlanting
+                      : "Không có thông tin"}
+                  </div>
+                </div>
               </div>
               <div className="py-5 border-b">{bonsaiDetail.description}</div>
               <div className="border-b py-5 flex items-center justify-between">
@@ -141,7 +158,9 @@ function BonsaiDetail() {
                   <div className="text-[15px]">0934534534</div>
                 </div>
                 <div>
-                  <div className="font-bold">372 Quốc lộ 20, Liên Nghĩa, Đức Trọng, Lâm Đồng</div>
+                  <div className="font-bold">
+                    372 Quốc lộ 20, Liên Nghĩa, Đức Trọng, Lâm Đồng
+                  </div>
                 </div>
               </div>
             </div>

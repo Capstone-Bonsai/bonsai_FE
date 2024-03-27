@@ -35,6 +35,14 @@ function ServiceListPage() {
       ) : (
         <div className="mb-12 pb-12 w-[80%] m-auto">
           <MinHeight>
+            <div className="text-center mt-5">
+              <ul className="steps">
+                <li className="step step-success">Danh sách dịch vụ</li>
+                <li className="step">Xem chi tiết</li>
+                <li className="step">Đăng ký</li>
+                <li className="step">Đợi duyệt</li>
+              </ul>
+            </div>
             <div className="">
               <div className="text-center text-3xl font-bold my-12">
                 Dịch vụ chăm sóc
@@ -74,8 +82,10 @@ function ServiceListPage() {
                             : "(Chăm sóc sân vườn)"}
                         </span>
                       </div>
-                      <div className="text-[24px] font-bold uppercase text-[#3e9943] py-4">
-                        {formatPrice(service.standardPrice)}
+                      <div className="text-[24px] font-bold  text-[#3e9943] py-4">
+                        {service.serviceType === "GardenCare"
+                          ? formatPrice(service.standardPrice)
+                          : "Xem xét cây"}
                       </div>
                     </div>
                     <div className="text-center mt-5">

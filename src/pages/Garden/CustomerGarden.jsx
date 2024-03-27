@@ -33,22 +33,20 @@ function CustomerGarden() {
     dispatch(allCategory());
     dispatch(allStyle());
     dispatch(bonsaiBought());
-    if (!gardens) {
-      const payload = {
-        pageIndex: pageIndex,
-        pageSize,
-      };
-      setLoading(true);
-      dispatch(fetchCustomerGarden(payload))
-        .then(() => {
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching order data:", error);
-          setLoading(false);
-        });
-    }
-  }, [boughtBonsai]);
+    const payload = {
+      pageIndex: pageIndex,
+      pageSize,
+    };
+    setLoading(true);
+    dispatch(fetchCustomerGarden(payload))
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching order data:", error);
+        setLoading(false);
+      });
+  }, [pageIndex]);
   const [file, setFile] = useState([]);
   const handleImageChange = (e) => {
     const files = e.target.files;
@@ -92,7 +90,7 @@ function CustomerGarden() {
     setImageGarden(updatedImageGarden);
   };
   const handlePageChange = (page) => {
-    setPageIndex(page);
+    setPageIndex(page - 1);
   };
   const [selectedGardenId, setSelectedGardenId] = useState("");
 
@@ -106,7 +104,7 @@ function CustomerGarden() {
     boughtBonsai,
     dispatch,
   };
-  const { totalPagesCount } = useSelector((state) => state.garden.gardenDTO);
+  const { totalItemsCount } = useSelector((state) => state.garden.gardenDTO);
 
   return (
     <>
@@ -252,7 +250,16 @@ function CustomerGarden() {
                       {garden.square} m²
                     </div>
                     <div className="flex">
-                      Bonsai: Trong vườn chưa có bonsai{" "}
+                      Bonsai:
+                      {(garden.customerBonsais).length > 0 ? (
+                        garden.customerBonsais.map((cusBonsai) => (
+                          <div key={cusBonsai.id}>
+                            <div>{cusBonsai.bonsai.name}</div>
+                          </div>
+                        ))
+                      ) : (
+                        <span>Không có cây trong vườn</span>
+                      )}
                     </div>
                     <div className="text-end">
                       <div className="dropdown">
@@ -298,8 +305,8 @@ function CustomerGarden() {
             </div>
           </div>
           <Pagination
-            current={pageIndex}
-            total={totalPagesCount && pageSize ? totalPagesCount * pageSize : 0}
+            current={pageIndex + 1}
+            total={totalItemsCount && pageSize ? totalItemsCount * pageSize : 0}
             onChange={handlePageChange}
             className="text-center mt-5"
           />
