@@ -4,8 +4,6 @@ import { addBonsaiBuyFromStore } from "../../redux/slice/userGarden";
 import { toast } from "react-toastify";
 function ModalBuyFromStore(props) {
   const [selectBonsai, setSelectBonsai] = useState("");
-  console.log(props.selectedGardenId);
-  console.log(selectBonsai);
   const handleBuyFromStore = async () => {
     try {
       await addBonsaiBuyFromStore(selectBonsai, props.selectedGardenId);
