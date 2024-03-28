@@ -28,6 +28,7 @@ function CustomerGarden() {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(3);
   const boughtBonsai = useSelector((state) => state.bonsai.boughtBonsai?.items);
+  const gardens = useSelector((state) => state.garden.gardenDTO?.items);
 
   useEffect(() => {
     dispatch(allCategory());
@@ -65,7 +66,6 @@ function CustomerGarden() {
   const handleUploadClick = () => {
     document.getElementById("upload-input").click();
   };
-  const gardens = useSelector((state) => state.garden.gardenDTO.items);
 
   const handleAddNewGarden = async () => {
     const formData = new FormData();
@@ -106,6 +106,8 @@ function CustomerGarden() {
   };
   const { totalItemsCount } = useSelector((state) => state.garden.gardenDTO);
 
+  const [bonsaiInGarden, setBonsaiInGarden] = useState("");
+  console.log(bonsaiInGarden);
   return (
     <>
       {loading ? (
@@ -250,16 +252,27 @@ function CustomerGarden() {
                       {garden.square} m²
                     </div>
                     <div className="flex">
-                      Bonsai:
-                      {(garden.customerBonsais).length > 0 ? (
-                        garden.customerBonsais.map((cusBonsai) => (
-                          <div key={cusBonsai.id}>
-                            <div>{cusBonsai.bonsai.name}</div>
-                          </div>
-                        ))
-                      ) : (
-                        <span>Không có cây trong vườn</span>
-                      )}
+                      <div className="pr-2">Bonsai: </div>
+                      <div className="text-start">
+                        {garden.customerBonsais.length > 0 ? (
+                          garden.customerBonsais
+                            .slice(0, 2)
+                            .map((cusBonsai, index) => (
+                              <div className="" key={cusBonsai.id}>
+                                <button
+                                  className="pr-2 hover:text-[#3a9943]"
+                                  onClick={() => {
+                                    setBonsaiInGarden(cusBonsai.id);
+                                  }}
+                                >
+                                  - {cusBonsai.bonsai.name}
+                                </button>
+                              </div>
+                            ))
+                        ) : (
+                          <span>Không có cây trong vườn</span>
+                        )}
+                      </div>
                     </div>
                     <div className="text-end">
                       <div className="dropdown">

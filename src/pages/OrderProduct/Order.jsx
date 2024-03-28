@@ -91,6 +91,7 @@ function Order() {
       console.log(res);
       window.location.href = res;
     } catch (error) {
+      setBarLoader(false);
       if (address.trim() === "") {
         toast.error("Vui lòng nhập địa chỉ.");
         return;

@@ -6,8 +6,21 @@ export const fetchCustomerGarden = createAsyncThunk(
   async ({ pageIndex, pageSize }) => {
     try {
       const response = await axios.get(
-        `/CustomerGarden?pageIndex=${pageIndex}&pageSize=${pageSize}`
+        `/CustomerGarden/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
       );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const getGardenNoPagination = createAsyncThunk(
+  "bonsai/gardenNoPagination",
+  async () => {
+    try {
+      const response = await axios.get(`/CustomerGarden`);
       console.log(response.data);
       return response.data;
     } catch (error) {
@@ -54,6 +67,7 @@ export const addBonsaiIntoGarden = async (formData, gardenId) => {
 
 const initialState = {
   gardenDTO: {},
+  gardenNoPagination: {},
   loading: false,
   msg: "",
   token: null,
@@ -81,6 +95,21 @@ const gardenSlice = createSlice({
       })
       .addCase(fetchCustomerGarden.rejected, (state) => {
         state.gardenDTO = [];
+        state.msg = "Không tìm thấy";
+        state.loading = false;
+      })
+      .addCase(getGardenNoPagination.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+
+      .addCase(getGardenNoPagination.fulfilled, (state, action) => {
+        state.gardenNoPagination = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(getGardenNoPagination.rejected, (state) => {
+        state.getGardenNoPagination = [];
         state.msg = "Không tìm thấy";
         state.loading = false;
       });

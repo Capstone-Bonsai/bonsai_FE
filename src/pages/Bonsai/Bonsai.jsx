@@ -16,6 +16,7 @@ import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { allCategory } from "../../redux/slice/categorySlice";
 import { allStyle } from "../../redux/slice/styleSlice";
 import { addToCart } from "./AddToCart";
+import { motion, useScroll } from "framer-motion";
 
 function Bonsai() {
   const location = useLocation();
@@ -137,12 +138,13 @@ function Bonsai() {
             </div>
           </div>
 
-          <div className="w-[75%] pl-10 flex flex-wrap">
+          <div className="w-[75%] flex flex-wrap gap-5">
             {allBonsai?.length > 0 ? (
               allBonsai?.map((bonsai) => (
-                <div
+                <motion.div
                   key={bonsai.id}
                   className="w-[255px] h-[355px] border mt-2 mx-5"
+                  whileHover={{ scale: 1.1 }}
                 >
                   <Image
                     className="bg-cover bg-no-repeat w-full h-[250px]"
@@ -192,7 +194,7 @@ function Bonsai() {
                       <ShoppingCartOutlined />
                     </button>
                   </div>
-                </div>
+                </motion.div>
               ))
             ) : (
               <div className="w-full flex flex-col justify-center items-center">

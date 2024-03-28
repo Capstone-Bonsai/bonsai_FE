@@ -1,16 +1,32 @@
 import React from "react";
-
-function SelectedGarden() {
+import { PlusCircleOutlined } from "@ant-design/icons";
+function SelectedGarden(props) {
+  console.log(props?.gardenNoPagin);
   return (
     <dialog id="my_modal_selectedGarden" className="modal">
-      <div className="modal-box">
+      <div className="modal-box ">
         <h3 className="font-bold text-lg">Hello!</h3>
-        <p className="py-4">Press ESC key or click the button below to close</p>
-        <div className="modal-action">
-          <form method="dialog">
-            <button className="btn">Thêm vườn</button>
-          </form>
-        </div>
+        {props.gardenNoPagin?.map((garden) => (
+          <div key={garden.id} className="border flex justify-between">
+            <div className="">
+              <img src="" alt="" />
+            </div>
+            <div className=" w-[70%]">
+              <div>{garden.address}</div>
+              <div>{garden.square}</div>
+            </div>
+            <div className="modal-action">
+              <form method="dialog">
+                <button
+                  className="outline-none"
+                  onClick={() => props.setGardenSelected(garden)}
+                >
+                  <PlusCircleOutlined />
+                </button>
+              </form>
+            </div>
+          </div>
+        ))}
       </div>
     </dialog>
   );

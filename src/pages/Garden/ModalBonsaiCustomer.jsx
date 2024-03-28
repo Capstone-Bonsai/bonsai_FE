@@ -4,14 +4,10 @@ import noImage from "../../assets/unImage.png";
 import { addBonsaiIntoGarden } from "../../redux/slice/userGarden";
 import { toast } from "react-toastify";
 function ModalBonsaiCustomer(props) {
-  console.log(props.allStyleDTO);
   const [styleId, setStyleId] = useState();
-  console.log(styleId);
   const [cateId, setCateId] = useState();
   const [imgBonsai, setImgBonsai] = useState([]);
-  console.log(imgBonsai);
   const [file, setFile] = useState([]);
-  console.log(file);
   const handleImageChange = (e) => {
     const files = e.target.files;
     const updatedImageBonsai = [...imgBonsai];
@@ -163,7 +159,9 @@ function ModalBonsaiCustomer(props) {
             />
           </div>
           <div className="my-2">
-            <div className="font-bold">Kích thước thân <span className="text-[red]">*</span></div>
+            <div className="font-bold">
+              Kích thước thân <span className="text-[red]">*</span>
+            </div>
             <input
               required
               value={trunkDimeter}
@@ -186,7 +184,9 @@ function ModalBonsaiCustomer(props) {
             />
           </div>
           <div className="my-2">
-            <div className="font-bold">Số thân <span className="text-[red]">*</span></div>
+            <div className="font-bold">
+              Số thân <span className="text-[red]">*</span>
+            </div>
             <input
               required
               value={numberOfTrunk}

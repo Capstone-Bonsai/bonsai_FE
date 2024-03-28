@@ -14,10 +14,41 @@ function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState([] || "");
   const [showPassword, setShowPassword] = useState(false);
+  const [errorTrim, setErrorTrim] = useState({
+    email: false,
+    userName: false,
+    password: false,
+    fullName: false,
+    phoneNumber: false,
+  });
   console.log(errorMessage);
   const handleSubmitRegister = async (e) => {
     e.preventDefault();
-    if (email.trim() === "" || password.trim() === "") {
+    setErrorTrim({
+      email: false,
+      userName: false,
+      password: false,
+      fullName: false,
+      phoneNumber: false,
+    });
+    const trimmedFields = {
+      email,
+      userName,
+      password,
+      fullName,
+      phoneNumber,
+    };
+    let hasTrimmedField = false;
+    for (const key in trimmedFields) {
+      if (trimmedFields[key].trim() === "") {
+        setErrorTrim((prevState) => ({
+          ...prevState,
+          [key]: true,
+        }));
+        hasTrimmedField = true;
+      }
+    }
+    if (hasTrimmedField) {
       toast.error("Bạn cần phải điền đầy đủ thông tin!");
       return;
     }
@@ -32,7 +63,7 @@ function Register() {
       setIsLoading(true);
       await register(registerData);
       toast.success("Đăng ký thành công");
-      setErrorMessage("")
+      setErrorMessage("");
     } catch (error) {
       setErrorMessage(error.response.data);
       toast.error("Đăng ký thất bại");
@@ -53,13 +84,19 @@ function Register() {
                 <h2 className="underline text-[20px] font-bold">Đăng ký</h2>
                 <div className="flex justify-between">
                   <div>
-                    <label>Họ và Tên</label>
+                    <label>
+                      Họ và Tên <span className="text-[red]">*</span>
+                    </label>
                     <div className="flex justify-center">
                       <input
                         type="text"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        className="w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
+                        className={`w-full border py-[10px] px-[20px] my-[15px] ${
+                          errorTrim.fullName
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        }`}
                       />
                     </div>
                   </div>
@@ -72,7 +109,11 @@ function Register() {
                         type="text"
                         value={userName}
                         onChange={(e) => setUsername(e.target.value)}
-                        className="w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
+                        className={`w-full border py-[10px] px-[20px] my-[15px] ${
+                          errorTrim.userName
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        }`}
                       />
                     </div>
                   </div>
@@ -86,7 +127,11 @@ function Register() {
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className=" w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
+                      className={`w-full border py-[10px] px-[20px] my-[15px] ${
+                        errorTrim.password
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      }`}
                     />
                     <button
                       className=" absolute right-3 top-0 bottom-0 "
@@ -109,17 +154,23 @@ function Register() {
                       <input
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className=" w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
+                        className={`w-full border py-[10px] px-[20px] my-[15px] ${
+                          errorTrim.email ? "border-red-500" : "border-gray-300"
+                        }`}
                       />
                     </div>
                   </div>
                   <div>
-                    <label>Số điện thoại</label>
+                    <label>Số điện thoại <span className="text-[red]">*</span></label>
                     <div className="flex justify-center">
                       <input
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
-                        className=" w-full border border-[#999999] py-[10px] px-[20px] my-[15px]"
+                        className={`w-full border py-[10px] px-[20px] my-[15px] ${
+                          errorTrim.phoneNumber
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        }`}
                       />
                     </div>
                   </div>
@@ -138,7 +189,7 @@ function Register() {
               </div>
             </div>
             {errorMessage.length > 0 ? (
-              <div className="absolute right-[23rem]">
+              <div className="absolute right-[10rem] w-[500px]">
                 <div className="text-[red] text-[20px]">Thông báo lỗi:</div>
                 {Array.isArray(errorMessage) && errorMessage.length > 0 ? (
                   errorMessage?.map((errorItem, index) => (
