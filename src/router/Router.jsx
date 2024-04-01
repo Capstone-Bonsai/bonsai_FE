@@ -124,7 +124,6 @@ function Router() {
     },
   ]);
   if (!element) return null;
-  console.log(location.pathname);
   return (
     <AnimatePresence mode="wait" initial={false}>
       {element}
