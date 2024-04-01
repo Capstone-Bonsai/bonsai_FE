@@ -72,6 +72,11 @@ function CustomerGardenManage() {
         render: (record) => <div>{record.bonsai?.name}</div>,
       },
       {
+        title: "Mã số",
+        key: "code",
+        render: (record) => <div>{record.bonsai?.code}</div>,
+      },
+      {
         title: "Giá tiền",
         key: "price",
         render: (record) => (
@@ -80,7 +85,7 @@ function CustomerGardenManage() {
               {new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: "VND",
-              }).format(record.price)}
+              }).format(record.bonsai?.price)}
             </p>
           </>
         ),

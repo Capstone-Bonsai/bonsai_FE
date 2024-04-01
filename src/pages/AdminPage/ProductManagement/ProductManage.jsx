@@ -66,7 +66,7 @@ function ProductManage() {
     dispatch(
       fetchAllBonsaiPagination({
         pageIndex: currentPage - 1,
-        pageSize: pageSize
+        pageSize: pageSize,
       })
     );
   }, []);
@@ -104,7 +104,7 @@ function ProductManage() {
         dispatch(
           fetchAllBonsaiPagination({
             pageIndex: currentPage - 1,
-            pageSize: pageSize
+            pageSize: pageSize,
           })
         );
         setOpenDelete(false);
@@ -162,6 +162,11 @@ function ProductManage() {
       title: "Sản phẩm",
       dataIndex: "name",
       key: "name",
+    },
+    {
+      title: "Mã số",
+      dataIndex: "code",
+      key: "code",
     },
     {
       title: "Năm trồng",
