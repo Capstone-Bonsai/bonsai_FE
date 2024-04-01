@@ -12,6 +12,18 @@ export const fetchCustomerGarden = createAsyncThunk(
     }
   }
 );
+export const getGardenNoPagination = createAsyncThunk(
+  "bonsai/gardenNoPagination",
+  async () => {
+    try {
+      const response = await axios.get(`/CustomerGarden`);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 export const fetchCustomerGardensManagers = createAsyncThunk(
   "garden/fetchCustomerGardensManagers",
@@ -30,6 +42,32 @@ export const fetchCustomerGardensManagers = createAsyncThunk(
 export const addCustomerGarden = async (formData) => {
   try {
     const response = await axios.post(`/CustomerGarden`, formData);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addBonsaiBuyFromStore = async (bonsaiId, customerGardenId) => {
+  try {
+    const response = await axios.post(`/CustomerBonsai/BoughtBonsai`, {
+      bonsaiId,
+      customerGardenId,
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addBonsaiIntoGarden = async (formData, gardenId) => {
+  try {
+    const response = await axios.post(
+      `/CustomerBonsai/Customer/${gardenId}`,
+      formData
+    );
     console.log(response.data);
     return response.data;
   } catch (error) {
