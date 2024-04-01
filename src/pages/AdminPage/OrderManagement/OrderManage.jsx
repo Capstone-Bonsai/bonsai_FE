@@ -4,7 +4,7 @@ import {
   ClockCircleOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
-import { Space, Tag, Table, Input, Modal } from "antd";
+import { Space, Tag, Table, Input, Modal, Badge } from "antd";
 const { Search } = Input;
 
 import { toast } from "react-toastify";
@@ -25,10 +25,11 @@ function OrderManage() {
   const [selectedUpdateOrder, setSelectedUpdateOrder] = useState();
 
   const allOrder = useSelector((state) => state.order?.listOrder?.items);
-  console.log(allOrder);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const paging = useSelector((state) => state.order?.pagination);
+
+  const [expended, setExpended] = useState();
 
   useEffect(() => {
     dispatch(
@@ -45,7 +46,6 @@ function OrderManage() {
 
   const showModalDelete = () => {
     setOpenDelete(true);
-    console.log(openDelete);
   };
 
   const handleDelete = () => {
@@ -74,48 +74,6 @@ function OrderManage() {
     setOpenUpdateModal(false);
   };
 
-  // const fetchListSubCategory = () => {
-  //   getListSubCategory()
-  //     .then((data) => {
-  //       setListSubCategory(data.data.items);
-  //       console.log(data.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       // if (
-  //       //   err &&
-  //       //   err.response &&
-  //       //   err.response.data &&
-  //       //   err.response.data.value
-  //       // ) {
-  //       //   toast.error(err.response.data.value);
-  //       // } else {
-  //       //   toast.error("Đã xảy ra lỗi!");
-  //       // }
-  //     });
-  // };
-
-  // const fetchListTag = () => {
-  //   getListTag()
-  //     .then((data) => {
-  //       setListTag(data.data);
-  //       console.log(data.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       // if (
-  //       //   err &&
-  //       //   err.response &&
-  //       //   err.response.data &&
-  //       //   err.response.data.value
-  //       // ) {
-  //       //   toast.error(err.response.data.value);
-  //       // } else {
-  //       //   toast.error("Đã xảy ra lỗi!");
-  //       // }
-  //     });
-  // };
-
   const getColor = (orderStatus) => {
     switch (orderStatus) {
       case "Paid":
@@ -140,6 +98,51 @@ function OrderManage() {
     );
   };
 
+  const expend = (i) => {
+    if (expended === i) setExpended(undefined);
+    else setExpended(i);
+  };
+
+  const expandedRowRender = (record) => {
+    const columns = [
+      {
+        title: "Bonsai",
+        key: "bonsai",
+        render: (record) => <div>{record.bonsai?.name}</div>,
+      },
+      {
+        title: "Giá tiền",
+        key: "price",
+        render: (record) => (
+          <>
+            <p>
+              {new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "VND",
+              }).format(record.price)}
+            </p>
+          </>
+        ),
+      },
+      {
+        title: "Ngày tạo",
+        key: "creationDate",
+        render: (_, record) => (
+          <>
+            <p>{new Date(record.creationDate).toLocaleDateString()}</p>
+          </>
+        ),
+      },
+    ];
+    return (
+      <Table
+        columns={columns}
+        rowKey="id"
+        dataSource={record.orderDetails}
+        pagination
+      />
+    );
+  };
   const columns = [
     {
       title: "Khách hàng",
@@ -242,6 +245,17 @@ function OrderManage() {
       ),
     },
     {
+      title: "Xem đơn hàng",
+      key: "orderDetails",
+      render: (_, record) => {
+        return (
+          <a onClick={() => expend(record.id)}>
+            {record.id === expended ? "Close Details" : "More Details"}
+          </a>
+        );
+      },
+    },
+    {
       title: "Trạng thái",
       dataIndex: "orderStatus",
       key: "orderStatus",
@@ -283,8 +297,6 @@ function OrderManage() {
     },
   ];
 
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
-
   return (
     <>
       <div className="flex justify-center">
@@ -303,7 +315,6 @@ function OrderManage() {
               <div className="pr-0">
                 <Search
                   placeholder="input search text"
-                  onSearch={onSearch}
                   className="w-[300px]"
                   allowClear
                 />
@@ -317,10 +328,15 @@ function OrderManage() {
                 scroll={{ x: true }}
                 pagination={paging}
                 onChange={handleTableChange}
-                rowKey="id"
+                rowKey={(record) => record.id}
                 loading={{
                   indicator: <Loading loading={loading} />,
                   spinning: loading,
+                }}
+                expandable={{
+                  expandedRowRender,
+                  expandedRowKeys: [expended],
+                  expandIcon: () => <></>,
                 }}
               />
             </div>

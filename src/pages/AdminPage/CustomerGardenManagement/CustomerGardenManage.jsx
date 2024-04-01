@@ -4,7 +4,7 @@ import {
   ClockCircleOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
-import { Space, Tag, Table, Input, Modal } from "antd";
+import { Space, Tag, Table, Input, Modal, Badge } from "antd";
 const { Search } = Input;
 
 import { toast } from "react-toastify";
@@ -13,129 +13,99 @@ import { fetchAllOrders } from "../../../redux/slice/orderSlice";
 import { deleteProduct } from "../../../utils/productApi";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
+import { fetchCustomerGardensManagers } from "../../../redux/slice/userGarden";
+import { fetchCustomerBonsaisByGardenId } from "../../../redux/slice/customerBonsaiSlice";
+import { useGetCustomerBonsais } from "./hook/hook";
 
 function CustomerGardenManage() {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.order.loading);
+  const loadingGarden = useSelector((state) => state.garden.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState();
   const [selectedUpdateOrder, setSelectedUpdateOrder] = useState();
+  const [selectedCustomerBonsais, setSelectedCustomerBonsais] = useState();
+  const { loading, customerBonsais } = useGetCustomerBonsais();
 
-  const allOrder = useSelector((state) => state.order?.listOrder?.items);
-  console.log(allOrder);
+  const allCustomerGarden = useSelector(
+    (state) => state.garden?.gardenManagerDTO?.items
+  );
+  console.log(allCustomerGarden);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const paging = useSelector((state) => state.order?.pagination);
+  const paging = useSelector((state) => state.garden?.pagination);
+
+  const [expended, setExpended] = useState();
 
   useEffect(() => {
     dispatch(
-      fetchAllOrders({
+      fetchCustomerGardensManagers({
         pageIndex: currentPage - 1,
         pageSize: pageSize,
       })
     );
-  }, []);
-
-  const showUpdateModal = () => {
-    setOpenUpdateModal(true);
-  };
-
-  const showModalDelete = () => {
-    setOpenDelete(true);
-    console.log(openDelete);
-  };
-
-  const handleDelete = () => {
-    setConfirmLoadingDelete(true);
-    deleteProduct(selectedOrder)
-      .then((data) => {
-        toast.success(data);
-        setOpenDelete(false);
-        setConfirmLoadingDelete(false);
-      })
-      .catch((err) => {
-        console.log(err.response.statusText);
-        toast.error(err.response.statusText);
-        setOpenDelete(false);
-        setConfirmLoadingDelete(false);
-      });
-  };
-
-  const handleCancelDelete = () => {
-    console.log("Clicked cancel button");
-    setOpenDelete(false);
-  };
-
-  const handleCancelUpdate = () => {
-    setSelectedUpdateOrder(undefined);
-    setOpenUpdateModal(false);
-  };
-
-  // const fetchListSubCategory = () => {
-  //   getListSubCategory()
-  //     .then((data) => {
-  //       setListSubCategory(data.data.items);
-  //       console.log(data.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       // if (
-  //       //   err &&
-  //       //   err.response &&
-  //       //   err.response.data &&
-  //       //   err.response.data.value
-  //       // ) {
-  //       //   toast.error(err.response.data.value);
-  //       // } else {
-  //       //   toast.error("Đã xảy ra lỗi!");
-  //       // }
-  //     });
-  // };
-
-  // const fetchListTag = () => {
-  //   getListTag()
-  //     .then((data) => {
-  //       setListTag(data.data);
-  //       console.log(data.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       // if (
-  //       //   err &&
-  //       //   err.response &&
-  //       //   err.response.data &&
-  //       //   err.response.data.value
-  //       // ) {
-  //       //   toast.error(err.response.data.value);
-  //       // } else {
-  //       //   toast.error("Đã xảy ra lỗi!");
-  //       // }
-  //     });
-  // };
-
-  const getColor = (orderStatus) => {
-    switch (orderStatus) {
-      case "Paid":
-        return { color: "success", icon: <CheckCircleOutlined /> };
-      case "Waiting":
-        return { color: "warning", icon: <ClockCircleOutlined /> };
-      case "Failed":
-        return { color: "error", icon: <CloseCircleOutlined /> };
-      default:
-        return "defaultColor";
-    }
-  };
+  }, [dispatch]);
 
   const handleTableChange = (pagination) => {
     console.log(pagination);
     const index = Number(pagination.current) - 1;
     dispatch(
-      fetchAllOrders({
+      fetchCustomerGardensManagers({
         pageIndex: index,
         pageSize: pageSize,
       })
+    );
+  };
+
+  const expend = (i) => {
+    dispatch(fetchCustomerBonsaisByGardenId(i));
+    if (expended === i) setExpended(undefined);
+    else setExpended(i);
+  };
+
+  const expandedRowRender = () => {
+    const columns = [
+      {
+        title: "Bonsai",
+        key: "bonsai",
+        render: (record) => <div>{record.bonsai?.name}</div>,
+      },
+      {
+        title: "Giá tiền",
+        key: "price",
+        render: (record) => (
+          <>
+            <p>
+              {new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "VND",
+              }).format(record.price)}
+            </p>
+          </>
+        ),
+      },
+      {
+        title: "Ngày tạo",
+        key: "creationDate",
+        render: (_, record) => (
+          <>
+            <p>{new Date(record.creationDate).toLocaleDateString()}</p>
+          </>
+        ),
+      },
+    ];
+    return (
+      <Table
+        columns={columns}
+        rowKey="id"
+        dataSource={customerBonsais}
+        pagination
+        loading={{
+          indicator: <Loading loading={loading} />,
+          spinning: loading,
+        }}
+      />
     );
   };
 
@@ -156,133 +126,17 @@ function CustomerGardenManage() {
       key: "address",
     },
     {
-      title: "Loại giao",
-      dataIndex: "orderType",
-      key: "orderType",
-      render: (_, record) => (
-        <>
-          <Tag>{record.deliveryType}</Tag>
-        </>
-      ),
-    },
-    {
-      title: "Ngày đặt",
-      dataIndex: "orderDate",
-      key: "orderDate",
-      render: (_, record) => (
-        <>
-          <p>{new Date(record.orderDate).toLocaleDateString()}</p>
-        </>
-      ),
-    },
-    {
-      title: "Ngày giao",
-      dataIndex: "expectedDeliveryDate",
-      key: "expectedDeliveryDate",
-      render: (_, record) => (
-        <>
-          <p>{new Date(record.expectedDeliveryDate).toLocaleDateString()}</p>
-        </>
-      ),
-    },
-    {
-      title: "Giá hàng",
-      dataIndex: "price",
-      key: "price",
-      render: (_, record) => (
-        <>
-          <p>
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "VND",
-            }).format(record.price)}
-          </p>
-        </>
-      ),
-    },
-    {
-      title: "Phí giao hàng",
-      dataIndex: "deliveryPrice",
-      key: "deliveryPrice",
-      render: (_, record) => (
-        <>
-          <p>
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "VND",
-            }).format(record.deliveryPrice)}
-          </p>
-        </>
-      ),
-    },
-    {
-      title: "Tổng cộng",
-      dataIndex: "totalPrice",
-      key: "totalPrice",
-      render: (_, record) => (
-        <>
-          <p>
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "VND",
-            }).format(record.totalPrice)}
-          </p>
-        </>
-      ),
-    },
-    {
-      title: "Loại đơn hàng",
-      dataIndex: "orderType",
-      key: "orderType",
-      render: (_, record) => (
-        <>
-          <Tag>{record.orderType}</Tag>
-        </>
-      ),
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "orderStatus",
-      key: "orderStatus",
-      render: (_, record) => (
-        <>
-          <Tag
-            color={getColor(record.orderStatus).color}
-            icon={getColor(record.orderStatus).icon}
-          >
-            {record.orderStatus}
-          </Tag>
-        </>
-      ),
-    },
-    {
-      title: "Hành động",
-      dataIndex: "hanhdong",
-      key: "hanhdong",
-      render: (_, record) => (
-        <Space size="middle">
-          <button
-            onClick={() => {
-              setSelectedOrder(record.id);
-              showModalDelete();
-            }}
-          >
-            Xóa
-          </button>
-          <button
-            onClick={() => {
-              setSelectedUpdateOrder(record);
-              showUpdateModal();
-            }}
-          >
-            Chỉnh sửa
-          </button>
-        </Space>
-      ),
+      title: "Xem chi tiết",
+      key: "customerBonsai",
+      render: (_, record) => {
+        return (
+          <a onClick={() => expend(record.id)}>
+            {record.id === expended ? "Close Details" : "More Details"}
+          </a>
+        );
+      },
     },
   ];
-
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
 
   return (
     <>
@@ -302,7 +156,6 @@ function CustomerGardenManage() {
               <div className="pr-0">
                 <Search
                   placeholder="input search text"
-                  onSearch={onSearch}
                   className="w-[300px]"
                   allowClear
                 />
@@ -311,30 +164,25 @@ function CustomerGardenManage() {
             <div className="mb-12">
               <Table
                 className="w-[100%]"
-                dataSource={allOrder}
+                dataSource={allCustomerGarden}
                 columns={columns}
                 scroll={{ x: true }}
                 pagination={paging}
                 onChange={handleTableChange}
-                rowKey="id"
+                rowKey={(record) => record.id}
                 loading={{
-                  indicator: <Loading loading={loading} />,
-                  spinning: loading,
+                  indicator: <Loading loading={loadingGarden} />,
+                  spinning: loadingGarden,
+                }}
+                expandable={{
+                  expandedRowRender,
+                  expandedRowKeys: [expended],
+                  expandIcon: () => <></>,
                 }}
               />
             </div>
           </div>
         </div>
-        <Modal
-          title="Xóa sản phẩm"
-          open={openDelete}
-          onOk={handleDelete}
-          okButtonProps={{ type: "default" }}
-          confirmLoading={confirmLoadingDelete}
-          onCancel={handleCancelDelete}
-        >
-          <div>Bạn có muốn xóa sản phẩm này không?</div>
-        </Modal>
       </div>
     </>
   );

@@ -8,7 +8,7 @@ export const fetchAllService = createAsyncThunk(
   async ({ pageIndex, pageSize }) => {
     try {
       const response = await axios.get(
-        `/Service?pageIndex=${pageIndex}&pageSize=${pageSize}`
+        `/Service?page=${pageIndex}&size=${pageSize}`
       );
       return response.data;
     } catch (error) {
@@ -45,6 +45,7 @@ const initialState = {
   listService: {},
   serviceById: {},
   allServiceTypeDTO: undefined,
+  pagination:{},
   loading: false,
   msg: "",
   token: null,

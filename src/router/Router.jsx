@@ -21,6 +21,7 @@ import ServiceManage from "../pages/AdminPage/ServiceManagement/ServiceManage";
 import ServiceDetailPage from "../pages/ServicePage/ServiceDetailPage";
 import CustomerGarden from "../pages/Garden/CustomerGarden";
 import Contact from "../pages/Contact/Contact";
+import CustomerGardenManage from "../pages/AdminPage/CustomerGardenManagement/CustomerGardenManage";
 function Router() {
   const element = useRoutes([
     {
@@ -89,51 +90,38 @@ function Router() {
       ],
     },
     {
+      path: "/admin/",
       element: <PrivateRoute />,
       children: [
         {
-          path: "/admin/user",
+          path: "user",
           element: <UserManage />,
         },
         {
-          path: "/admin/product",
+          path: "product",
           element: <ProductManage />,
         },
         {
-          path: "/admin/order",
-          element: <OrderManage />,
-        },
-      ],
-    },
-    {
-      element: <PrivateRoute />,
-      children: [
-        {
-          path: "/admin/user",
-          element: <UserManage />,
-        },
-        {
-          path: "/admin/product",
-          element: <ProductManage />,
-        },
-        {
-          path: "/admin/order",
+          path: "order",
           element: <OrderManage />,
         },
         {
-          path: "/admin/service",
+          path: "service",
           element: <ServiceManage />,
+        },
+        {
+          path: "customerGarden",
+          element: <CustomerGardenManage />,
         },
       ],
     },
   ]);
   if (!element) return null;
+  console.log(location.pathname);
   return (
-    <>
-      <AnimatePresence mode="wait" initial={false}>
-        {React.cloneElement(element, { key: location.pathname })}
-      </AnimatePresence>
-    </>
+    <AnimatePresence mode="wait" initial={false}>
+      {element}
+    </AnimatePresence>
   );
 }
 
