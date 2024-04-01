@@ -7,7 +7,6 @@ function CustomerRoute() {
   return (
     <>
       <ToastContainer />
-
       <Banner />
       <Outlet />
       <Footer />

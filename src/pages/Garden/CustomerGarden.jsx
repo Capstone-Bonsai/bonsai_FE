@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MinHeight from "../../components/MinHeight";
 import NavbarUser from "../Auth/NavbarUser";
-import { Carousel } from "antd";
+import { Carousel, Pagination } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addCustomerGarden,
@@ -14,27 +14,41 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import noImage from "../../assets/unImage.png";
 import address from "../../assets/address.jpg";
 import square from "../../assets/square.png";
+import { allStyle } from "../../redux/slice/styleSlice";
+import { allCategory } from "../../redux/slice/categorySlice";
+import ModalBonsaiCustomer from "./ModalBonsaiCustomer";
+import ModalBuyFromStore from "./ModalBuyFromStore";
+import { bonsaiBought } from "../../redux/slice/bonsaiSlice";
 function CustomerGarden() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [newAddress, setNewAddress] = useState("");
   const [newSquare, setNewSquare] = useState("");
   const [imageGarden, setImageGarden] = useState([]);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(3);
+  const boughtBonsai = useSelector((state) => state.bonsai.boughtBonsai?.items);
+  const gardens = useSelector((state) => state.garden.gardenDTO?.items);
+
   useEffect(() => {
-    if (!gardens) {
-      setLoading(true);
-      dispatch(fetchCustomerGarden())
-        .then(() => {
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching order data:", error);
-          setLoading(false);
-        });
-    }
-  }, []);
+    dispatch(allCategory());
+    dispatch(allStyle());
+    dispatch(bonsaiBought());
+    const payload = {
+      pageIndex: pageIndex,
+      pageSize,
+    };
+    setLoading(true);
+    dispatch(fetchCustomerGarden(payload))
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching order data:", error);
+        setLoading(false);
+      });
+  }, [pageIndex]);
   const [file, setFile] = useState([]);
-  console.log(file);
   const handleImageChange = (e) => {
     const files = e.target.files;
     const updatedImageGarden = [...imageGarden];
@@ -52,7 +66,6 @@ function CustomerGarden() {
   const handleUploadClick = () => {
     document.getElementById("upload-input").click();
   };
-  const gardens = useSelector((state) => state.garden.gardenDTO.items);
 
   const handleAddNewGarden = async () => {
     const formData = new FormData();
@@ -76,6 +89,25 @@ function CustomerGarden() {
     updatedImageGarden.splice(index, 1);
     setImageGarden(updatedImageGarden);
   };
+  const handlePageChange = (page) => {
+    setPageIndex(page - 1);
+  };
+  const [selectedGardenId, setSelectedGardenId] = useState("");
+
+  const { allStyleDTO } = useSelector((state) => state.style);
+  const { allCategoryDTO } = useSelector((state) => state.category);
+  const props = {
+    gardens,
+    allStyleDTO,
+    allCategoryDTO,
+    selectedGardenId,
+    boughtBonsai,
+    dispatch,
+  };
+  const { totalItemsCount } = useSelector((state) => state.garden.gardenDTO);
+
+  const [bonsaiInGarden, setBonsaiInGarden] = useState("");
+  console.log(bonsaiInGarden);
   return (
     <>
       {loading ? (
@@ -95,6 +127,11 @@ function CustomerGarden() {
               </button>
               <dialog id="my_modal_1" className="modal">
                 <div className="modal-box">
+                  <form method="dialog">
+                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                      ✕
+                    </button>
+                  </form>
                   <h3 className="font-bold text-lg">Thêm vườn của bạn</h3>
                   <div>
                     <div className="text-[#3a9943]">Địa chỉ</div>
@@ -120,7 +157,6 @@ function CustomerGarden() {
                     />
                   </div>
                   <div>
-                    {" "}
                     <input
                       type="file"
                       accept="image/*"
@@ -132,14 +168,17 @@ function CustomerGarden() {
                   <div className="flex flex-wrap gap-5">
                     {imageGarden.length > 0 ? (
                       imageGarden.map((image, index) => (
-                        <div key={index} className="relative">
+                        <div
+                          key={index}
+                          className="relative p-10 border rounded-[10px]"
+                        >
                           <img
                             src={image.imageURL}
-                            className="object-cover w-[100px] h-[100px]"
+                            className="object-cover w-[130px] h-[130px]"
                             alt=""
                           />
                           <button
-                            className="absolute top-0 right-0 text-[#fff]"
+                            className="absolute top-0 right-2 text-[#f2f2f2] text-[30px]"
                             onClick={() => handleRemoveImage(index)}
                           >
                             <CloseCircleOutlined />
@@ -166,9 +205,6 @@ function CustomerGarden() {
                     "Bạn chỉ có thể thêm tối đa 4 ảnh"
                   )}
                   <div className="modal-action">
-                    <form method="dialog">
-                      <button className="btn">Đóng</button>
-                    </form>
                     <button className="btn" onClick={handleAddNewGarden}>
                       Đăng Vườn
                     </button>
@@ -216,31 +252,77 @@ function CustomerGarden() {
                       {garden.square} m²
                     </div>
                     <div className="flex">
-                      Bonsai: Trong vườn chưa có bonsai{" "}
+                      <div className="pr-2">Bonsai: </div>
+                      <div className="text-start">
+                        {garden.customerBonsais.length > 0 ? (
+                          garden.customerBonsais
+                            .slice(0, 2)
+                            .map((cusBonsai, index) => (
+                              <div className="" key={cusBonsai.id}>
+                                <button
+                                  className="pr-2 hover:text-[#3a9943]"
+                                  onClick={() => {
+                                    setBonsaiInGarden(cusBonsai.id);
+                                  }}
+                                >
+                                  - {cusBonsai.bonsai.name}
+                                </button>
+                              </div>
+                            ))
+                        ) : (
+                          <span>Không có cây trong vườn</span>
+                        )}
+                      </div>
                     </div>
                     <div className="text-end">
                       <div className="dropdown">
                         <div tabIndex={0} role="button" className="btn m-1">
-                          Thêm bonsai vào vườn
+                          Thêm cây vào vườn
                         </div>
                         <ul
                           tabIndex={0}
                           className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
                         >
                           <li>
-                            <button>Cây của cửa hàng</button>
+                            <button
+                              onClick={() => {
+                                setSelectedGardenId(garden.id);
+                                document
+                                  .getElementById("my_modal_3")
+                                  .showModal();
+                              }}
+                            >
+                              Cây của cửa hàng
+                            </button>
                           </li>
                           <li>
-                            <button>Cây cá nhân</button>
+                            <button
+                              onClick={() => {
+                                setSelectedGardenId(garden.id);
+                                document
+                                  .getElementById("my_modal_2")
+                                  .showModal();
+                              }}
+                            >
+                              Cây cá nhân
+                            </button>
                           </li>
                         </ul>
                       </div>
+                      <ModalBuyFromStore {...props} />
+                      <ModalBonsaiCustomer {...props} />
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
+          <Pagination
+            current={pageIndex + 1}
+            total={totalItemsCount && pageSize ? totalItemsCount * pageSize : 0}
+            onChange={handlePageChange}
+            className="text-center mt-5"
+          />
         </MinHeight>
       )}
     </>

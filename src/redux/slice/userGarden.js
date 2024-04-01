@@ -39,6 +39,7 @@ export const addCustomerGarden = async (formData) => {
 
 const initialState = {
   gardenDTO: {},
+  gardenNoPagination: {},
   gardenManagerDTO: {},
   pagination: {},
   loading: false,
@@ -71,6 +72,21 @@ const gardenSlice = createSlice({
       })
       .addCase(fetchCustomerGarden.rejected, (state) => {
         state.gardenDTO = [];
+        state.msg = "Không tìm thấy";
+        state.loading = false;
+      })
+      .addCase(getGardenNoPagination.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+
+      .addCase(getGardenNoPagination.fulfilled, (state, action) => {
+        state.gardenNoPagination = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(getGardenNoPagination.rejected, (state) => {
+        state.getGardenNoPagination = [];
         state.msg = "Không tìm thấy";
         state.loading = false;
       });

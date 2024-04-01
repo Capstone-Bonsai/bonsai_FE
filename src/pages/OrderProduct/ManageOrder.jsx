@@ -19,9 +19,7 @@ function ManageOrder() {
     (state) => state.order.orderUser.totalItemsCount
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [loading, setLoading] = useState(false);
-  console.log(selectedOrderId);
   const pageSize = 5;
   console.log(totalItems);
   useEffect(() => {
@@ -127,7 +125,7 @@ function ManageOrder() {
                         </div>
                       </div>
                       {order.orderDetails.map((orderDetail) => (
-                        <div className="border-y p-3 flex">
+                        <div key={orderDetail.id} className="border-y p-3 flex">
                           <div className="w-[10%]">
                             <img
                               className="w-[82px] h-[82px]"

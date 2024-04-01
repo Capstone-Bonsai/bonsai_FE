@@ -11,19 +11,23 @@ function ServiceListPage() {
   const dispatch = useDispatch();
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
+  const serivceList = useSelector((state) => state.service?.listService?.items);
+  const isLoading = useSelector((state) => state.service?.loading);
+
   const onPageChange = (page) => {
     setCurrentPage(page);
   };
   useEffect(() => {
-    dispatch(fetchAllService({ pageIndex: currentPage - 1, pageSize: pageSize }));
-  }, [currentPage]);
-  const isLoading = useSelector((state) => state.service.loading);
+    if (!serivceList) {
+      dispatch(
+        fetchAllService({ pageIndex: currentPage - 1, pageSize: pageSize })
+      );
+    }
+  }, [currentPage, serivceList]);
   console.log(isLoading);
   const totalItems = useSelector(
-    (state) => state.service.listService.totalItemsCount
+    (state) => state.service?.listService?.totalItemsCount
   );
-  console.log(totalItems);
-  const serivceList = useSelector((state) => state.service.listService?.items);
   return (
     <>
       {isLoading ? (
@@ -31,6 +35,14 @@ function ServiceListPage() {
       ) : (
         <div className="mb-12 pb-12 w-[80%] m-auto">
           <MinHeight>
+            <div className="text-center mt-5">
+              <ul className="steps">
+                <li className="step step-success">Danh sách dịch vụ</li>
+                <li className="step">Xem chi tiết</li>
+                <li className="step">Đăng ký</li>
+                <li className="step">Đợi duyệt</li>
+              </ul>
+            </div>
             <div className="">
               <div className="text-center text-3xl font-bold my-12">
                 Dịch vụ chăm sóc
@@ -42,7 +54,11 @@ function ServiceListPage() {
                 className="w-[90%] my-5 h-[300px] m-auto border border-[#f0f0f0] flex justify-between gap-4 "
               >
                 <div className=" w-[25%] p-4">
-                  <img src={service?.image} className="h-full w-full border drop-shadow-lg" alt="" />
+                  <img
+                    src={service?.image}
+                    className="h-full w-full border drop-shadow-lg"
+                    alt=""
+                  />
                 </div>
                 <div className="w-[50%]">
                   <div className="text-[15px] py-3">
@@ -66,8 +82,10 @@ function ServiceListPage() {
                             : "(Chăm sóc sân vườn)"}
                         </span>
                       </div>
-                      <div className="text-[24px] font-bold uppercase text-[#3e9943] py-4">
-                        {formatPrice(service.standardPrice)}
+                      <div className="text-[24px] font-bold  text-[#3e9943] py-4">
+                        {service.serviceType === "GardenCare"
+                          ? formatPrice(service.standardPrice)
+                          : "Xem xét cây"}
                       </div>
                     </div>
                     <div className="text-center mt-5">

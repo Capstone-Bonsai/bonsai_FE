@@ -16,6 +16,7 @@ import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { allCategory } from "../../redux/slice/categorySlice";
 import { allStyle } from "../../redux/slice/styleSlice";
 import { addToCart } from "./AddToCart";
+import { motion, useScroll } from "framer-motion";
 
 function Bonsai() {
   const location = useLocation();
@@ -47,7 +48,7 @@ function Bonsai() {
     if (!styles) {
       dispatch(allStyle());
     }
-  }, [categories, styles]);
+  }, []);
 
   useEffect(() => {
     const payload = {
@@ -137,12 +138,13 @@ function Bonsai() {
             </div>
           </div>
 
-          <div className="w-[75%] pl-10 flex flex-wrap">
+          <div className="w-[75%] flex flex-wrap gap-5">
             {allBonsai?.length > 0 ? (
               allBonsai?.map((bonsai) => (
-                <div
+                <motion.div
                   key={bonsai.id}
                   className="w-[255px] h-[355px] border mt-2 mx-5"
+                  whileHover={{ scale: 1.1 }}
                 >
                   <Image
                     className="bg-cover bg-no-repeat w-full h-[250px]"
@@ -150,11 +152,11 @@ function Bonsai() {
                     height="250px"
                     src={bonsai.bonsaiImages[0]?.imageUrl}
                   />
-                  <div className="flex items-center justify-evenly">
-                    <div className="py-5 text-[18px] w-[70%] ">
+                  <div className="flex justify-evenly">
+                    <div className="py-5 text-[18px] w-[70%]">
                       <Link
-                        className="w-full 
-                      hover:text-[#3a9943]"
+                        className="text-[25px]
+                      hover:text-[#3a9943] block overflow-hidden whitespace-nowrap overflow-ellipsis"
                         to={`/bonsaiDetail/${bonsai.id}`}
                       >
                         {bonsai.name}
@@ -187,12 +189,12 @@ function Bonsai() {
                           );
                         }
                       }}
-                      className="bg-[#f2f2f2] w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]"
+                      className="bg-[#f2f2f2] mt-5 w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]"
                     >
                       <ShoppingCartOutlined />
                     </button>
                   </div>
-                </div>
+                </motion.div>
               ))
             ) : (
               <div className="w-full flex flex-col justify-center items-center">

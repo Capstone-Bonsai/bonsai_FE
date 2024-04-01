@@ -29,6 +29,16 @@ export const fetchServiceById = createAsyncThunk(
   }
 );
 
+export const postServiceGarden = async (payload) => {
+  try {
+    const response = await axios.post(`/ServiceGarden`, payload);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const allServiceType = createAsyncThunk(
   "service/allServiceType",
   async () => {

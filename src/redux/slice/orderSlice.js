@@ -45,7 +45,7 @@ export const fetchOrderDetail = createAsyncThunk(
 
 export const destination = async (address) => {
   try {
-    const response = await axios.get(`/DeliveryFee?destination=${address}`);
+    const response = await axios.get(`/DeliveryFee/CalculateFee?destination=${address}`);
     return response.data;
   } catch (error) {
     throw error;

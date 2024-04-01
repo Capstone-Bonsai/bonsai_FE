@@ -21,6 +21,7 @@ import ServiceManage from "../pages/AdminPage/ServiceManagement/ServiceManage";
 import ServiceDetailPage from "../pages/ServicePage/ServiceDetailPage";
 import CustomerGarden from "../pages/Garden/CustomerGarden";
 import Contact from "../pages/Contact/Contact";
+import CustomerPrivateRoute from "./CustomerPrivateRoute";
 import CustomerGardenManage from "../pages/AdminPage/CustomerGardenManagement/CustomerGardenManage";
 function Router() {
   const element = useRoutes([
@@ -68,24 +69,30 @@ function Router() {
           element: <ForgotPassword />,
         },
         {
-          path: "/Profile",
-          element: <ProfileUser />,
-        },
-        {
-          path: "/ManageOrder",
-          element: <ManageOrder />,
-        },
-        {
           path: "/api/Auth/ConfirmEmail",
           element: <Login />,
+        },
+
+        {
+          path: "/Contact",
+          element: <Contact />,
+        },
+      ],
+    },
+    {
+      element: <CustomerPrivateRoute />,
+      children: [
+        {
+          path: "/Profile",
+          element: <ProfileUser />,
         },
         {
           path: "/CustomerGarden",
           element: <CustomerGarden />,
         },
         {
-          path: "/Contact",
-          element: <Contact />,
+          path: "/ManageOrder",
+          element: <ManageOrder />,
         },
       ],
     },
