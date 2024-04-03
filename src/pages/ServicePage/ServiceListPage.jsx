@@ -35,14 +35,14 @@ function ServiceListPage() {
       ) : (
         <div className="mb-12 pb-12 w-[80%] m-auto">
           <MinHeight>
-            <div className="text-center mt-5">
+            {/* <div className="text-center mt-5">
               <ul className="steps">
                 <li className="step step-success">Danh sách dịch vụ</li>
                 <li className="step">Xem chi tiết</li>
                 <li className="step">Đăng ký</li>
                 <li className="step">Đợi duyệt</li>
               </ul>
-            </div>
+            </div> */}
             <div className="">
               <div className="text-center text-3xl font-bold my-12">
                 Dịch vụ chăm sóc

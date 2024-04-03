@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import {
   MenuFoldOutlined,
@@ -13,6 +13,17 @@ import logo from "../assets/logo_footer_final.png";
 import { Dropdown, Layout, Menu, Button, theme } from "antd";
 
 const { Header, Sider, Content } = Layout;
+
+function getItem(label, key, icon, children, type) {
+  return {
+    label,
+    key,
+    icon,
+    children,
+    type,
+  };
+}
+
 function PrivateRoute() {
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -35,26 +46,18 @@ function PrivateRoute() {
     },
   ];
   const SideBarItems = [
-    {
-      key: "1",
-      icon: <UserOutlined />,
-      label: <Link to={`/admin/user`}>Người dùng</Link>,
-    },
-    {
-      key: "2",
-      icon: <VideoCameraOutlined />,
-      label: <Link to={`/admin/product`}>Sản phẩm</Link>,
-    },
-    {
-      key: "3",
-      icon: <UploadOutlined />,
-      label: <Link to={`/admin/order`}>Đơn hàng</Link>,
-    },
-    {
-      key: "4",
-      icon: <UploadOutlined />,
-      label: <Link to={`/admin/service`}>Dịch vụ</Link>,
-    },
+    getItem(<Link to={`/admin/user`}>Người dùng</Link>, "1", <UserOutlined />),
+    getItem("Sản phẩm", "sub1", <VideoCameraOutlined />, [
+      getItem(<Link to={`/admin/product`}>Bonsai</Link>, "2"),
+      getItem(<Link to={`/admin/customerBonsai`}>Bonsai khach</Link>, "3"),
+      getItem(<Link to={`/admin/customerGarden`}>Sân vườn</Link>, "4"),
+    ]),
+    getItem(<Link to={`/admin/order`}>Đơn hàng</Link>, "5", <UploadOutlined />),
+    getItem("Dịch vụ", "sub2", <UploadOutlined />, [
+      getItem(<Link to={`/admin/service`}>Dịch vụ</Link>, "6"),
+      getItem(<Link to={`/admin/baseTask`}>Bonsai khach</Link>, "7"),
+      getItem(<Link to={`/admin/stepCare`}>Sân vườn</Link>, "9"),
+    ]),
   ];
   return (
     <>
@@ -64,7 +67,12 @@ function PrivateRoute() {
           <div className="demo-logo-vertical my-6 flex justify-center">
             <img src={logo} width={150} />
           </div>
-          <Menu className="text-base" theme="dark" mode="inline" items={SideBarItems} />
+          <Menu
+            className="text-base"
+            theme="dark"
+            mode="inline"
+            items={SideBarItems}
+          />
         </Sider>
         <Layout>
           <Header

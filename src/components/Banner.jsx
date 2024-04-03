@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBonsai, setCartFromCookie } from "../redux/slice/bonsaiSlice";
 import { profileUser } from "../redux/slice/authSlice";
 import { setAvatarUrlRedux } from "../redux/slice/avatarSlice";
-import "./Banner.css"
+import "./Banner.css";
 function Banner() {
   const { Search } = Input;
   const navLinks = [
@@ -81,8 +81,8 @@ function Banner() {
       <div className="bg-[#3a9943] py-5">
         <div className="w-[70%] h-[100%] m-auto">
           <div className="flex justify-between items-center border-b border-gray-200 border-opacity-50 pb-3">
-            <div className=" w-[220px] flex justify-between items-center text-[#ffffff]">
-              <div className="">Theo dõi chúng tôi</div>
+            <div className=" w-[220px] flex flex-col md:flex-row md:justify-between md:items-center text-[#ffffff] text-sm md:text-base">
+              <div className="hidden md:block">Theo dõi chúng tôi</div>
               <Link className="hover:text-[#ffdd20] flex items-center">
                 <FacebookOutlined className="hover:text-[#ffdd20]" />
               </Link>
@@ -112,8 +112,14 @@ function Banner() {
                 </div>
                 <div className="text-white pr-2">
                   <div className="dropdown">
-                    <div tabIndex={0} role="button" className="btn m-1">
-                      <span className="normal-case font-semibold">Hi</span>
+                    <div
+                      tabIndex={0}
+                      role="button"
+                      className="btn m-1 text-[10px] md:text-base"
+                    >
+                      <span className="normal-case font-semibold">
+                        Xin chào
+                      </span>
                       <span className="uppercase font-bold">
                         {userInfo?.fullName}
                       </span>
@@ -156,7 +162,7 @@ function Banner() {
               </div>
             )}
           </div>
-          <div className="flex items-center justify-between mt-5">
+          <div className="flex items-center justify-between mt-5 flex-wrap gap-1">
             <img src={logo} width={100} height={100} />
             <form
               action=""
@@ -169,13 +175,14 @@ function Banner() {
                 <input
                   onChange={(e) => setKeyword(e.target.value)}
                   placeholder="Nhập sản phẩm tại đây..."
-                  className="border-none w-[60vh] h-[50px] focus:outline-none active:border-none rounded-[5px] text-[#ffffff] text-[18px] placeholder-[#ffffff] bg-[#61ad69] pl-[40px] pr-[10px]"
+                  className="border-none w-full md:w-[60vh] h-[50px] focus:outline-none active:border-none rounded-[5px] text-[#ffffff] text-sm md:text-base placeholder-[#ffffff] bg-[#61ad69] pl-[40px] pr-[10px]"
                 />
-                <button className="absolute inset-y-0 right-5 flex items-center pl-2 text-[#ffffff] text-[30px] hover:text-[#ffdd20]">
+                <button className="absolute inset-y-0 right-5 flex items-center pl-2 text-[#ffffff] text-sm md:text-[30px] hover:text-[#ffdd20]">
                   <SearchOutlined />
                 </button>
               </div>
             </form>
+
             <div className="flex items-center">
               <img src={SPCus} alt="" />
               <div className="ml-3">
@@ -199,7 +206,10 @@ function Banner() {
       <div className="drop-shadow-md bg-[#ffffff]">
         <div className="flex w-[70%] h-[50px] items-center font-medium m-auto uppercase ">
           {navLinks.map((link, index) => (
-            <div key={index} className="pr-10 montserrat hover:text-[#54a65b]">
+            <div
+              key={index}
+              className="pr-10 montserrat hover:text-[#54a65b] text-[10px] md:text-base"
+            >
               <Link className="" to={link.to}>
                 {link.text}
               </Link>

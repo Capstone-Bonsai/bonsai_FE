@@ -88,14 +88,14 @@ function ServiceDetailPage() {
       ) : (
         <MinHeight>
           {isBarLoader ? <BarLoaderLoading loading={isBarLoader} /> : ""}
-          <div className="text-center mt-5">
+          {/* <div className="text-center mt-5">
             <ul className="steps">
               <li className="step step-success">Danh sách dịch vụ</li>
               <li className="step step-success">Xem chi tiết</li>
               <li className="step">Đăng ký</li>
               <li className="step">Đợi duyệt</li>
             </ul>
-          </div>
+          </div> */}
           <div className="m-auto w-[70%] mt-10 flex mb-5">
             <div className="w-full py-5 flex">
               <div className="w-[50%] flex justify-center">

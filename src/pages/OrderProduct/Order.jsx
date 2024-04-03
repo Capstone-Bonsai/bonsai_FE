@@ -7,11 +7,13 @@ import { destination } from "../../redux/slice/orderSlice";
 import { orderBonsai } from "../../redux/slice/bonsaiSlice";
 import BarLoaderLoading from "../../components/BarLoaderLoading";
 import { useDispatch } from "react-redux";
-import { getProvince } from "../../redux/slice/address";
-
+import { getDistrict, getProvince, getWard } from "../../redux/slice/address";
+import { formatPrice } from "../../components/formatPrice/FormatPrice";
+import AutoComplete from "react-google-autocomplete";
 function Order() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [confirmAddress, setConfirmAddress] = useState("");
   const cookies = new Cookies();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -30,7 +32,15 @@ function Order() {
   });
 
   const bonsaiIdOrder = cartItems.map((item) => item.bonsaiId);
-
+  const [provinceData, setProvinceData] = useState(null);
+  const [provinceName, setProvinceName] = useState("");
+  const [provinceId, setProvinceId] = useState(null);
+  const [districtData, setDistrictData] = useState(null);
+  const [districtName, setDistrictName] = useState("");
+  const [districtId, setDistrictId] = useState(null);
+  const [wardData, setWardData] = useState(null);
+  const [wardName, setWardName] = useState("");
+  const [street, setStreet] = useState("");
   const [address, setAddress] = useState("");
   const [emailNotLogin, setEmailNotLogin] = useState("");
   const [note, setNote] = useState("");
@@ -38,6 +48,7 @@ function Order() {
   const [fullNameNoneLogin, setFullNameNoneLogin] = useState("");
   const [phoneNumberNoneLogin, setPhoneNumberNoneLogin] = useState("");
   const [deliveryFee, setDeliveryFee] = useState(0);
+  
   useEffect(() => {
     if (resultCode === "0") {
       cookies.remove(userInfo ? `cartId ${idUser}` : "cartItems");
@@ -51,18 +62,58 @@ function Order() {
       }
     }
   }, [resultCode]);
-  const [provinceData, setProvinceData] = useState(null);
+
+  useEffect(() => {
+    if (provinceId && districtData) {
+      const defaultDistrict = districtData.data[0];
+      setDistrictId(defaultDistrict?.DistrictID);
+      setDistrictName(defaultDistrict?.DistrictName);
+    }
+    // if (districtId && wardData) {
+    //   const defaultWard = wardData.data[0];
+    //   setWardName(defaultWard.WardName);
+    // }
+  }, [provinceId, districtData]);
+
   useEffect(() => {
     const fetchProvinceAPI = async () => {
       try {
         const responseData = await getProvince();
         setProvinceData(responseData);
       } catch (error) {
-        console.error("Error fetching province data:", error);
+        // console.error("Error fetching province data:", error);
       }
     };
     fetchProvinceAPI();
   }, []);
+
+  useEffect(() => {
+    const fetchDistrictAPI = async () => {
+      try {
+        const responseData = await getDistrict({ provinceId });
+        const filteredData = responseData.data.filter(
+          (district) => district.DistrictID != "3451"
+          // && district.DistrictID != "3715"
+        );
+        setDistrictData({ ...responseData, data: filteredData });
+      } catch (error) {
+        // console.error("Error fetching province data:", error);
+      }
+    };
+    fetchDistrictAPI();
+  }, [provinceId]);
+
+  useEffect(() => {
+    const fetchWardAPI = async () => {
+      try {
+        const responseData = await getWard({ districtId });
+        setWardData(responseData);
+      } catch (error) {
+        // console.error("Error fetching province data:", error);
+      }
+    };
+    fetchWardAPI();
+  }, [districtId]);
 
   const handleOrder = async () => {
     const dataOrder = {
@@ -115,8 +166,10 @@ function Order() {
     });
     return totalPrice;
   };
-  const handleDeliveryFee = async (address) => {
-    const res = await destination(address);
+  const handleDeliveryFee = async (addressConfirm) => {
+    setAddress(addressConfirm);
+    console.log(addressConfirm);
+    const res = await destination(addressConfirm);
     const fee = res?.price;
     setDeliveryFee(fee);
   };
@@ -131,6 +184,10 @@ function Order() {
       <MinHeight>
         {isBarLoader ? <BarLoaderLoading loading={isBarLoader} /> : ""}
         <div className="m-auto w-[70%]">
+        <AutoComplete
+            apiKey="AIzaSyD-mpcsm8z3RzVow60KPO4rSNRvuozFmt0"
+            onPlaceSelected={(place) => console.log(place)}
+          />
           <div className=" mt-10 drop-shadow-lg bg-[#ffffff]">
             <table className="w-full border-collapse">
               <thead>
@@ -159,8 +216,8 @@ function Order() {
                         {item.subCategory}
                       </div>
                     </td>
-                    <td className="font-medium">{item.price} ₫</td>
-                    <td className="font-medium">{item.price} ₫</td>
+                    <td className="font-medium">{formatPrice(item.price)}</td>
+                    <td className="font-medium">{formatPrice(item.price)}</td>
                     <td className="text-[20px] pr-5"></td>
                   </tr>
                 ))}
@@ -168,7 +225,7 @@ function Order() {
             </table>
           </div>
           <div className="flex my-5 justify-between">
-            <div className=" w-[70%] p-5 border border-t-[2px] border-t-[#3e9943] rounded-b-[10px]">
+            <div className=" w-full p-5 border border-t-[2px] border-t-[#3e9943] rounded-b-[10px]">
               {userInfo == null ? (
                 <div className="mb-5">
                   <div className="text-[20px] leading-6 font-bold underline text-[#3e9943]">
@@ -207,19 +264,105 @@ function Order() {
                 <></>
               )}
               <div>
-                <div className="text-[24px] font-bold  text-[#3e9943]">
+                <div className="text-[24px] font-bold text-[#3e9943]">
                   Địa chỉ
                 </div>
-                <div id="geocoder"></div>
-                <div className="w-full flex">
-                  <input
-                    value={address}
-                    className="border border-black w-full px-5 h-[50px] rounded-[10px] outline-none"
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Nhập địa chỉ"
-                    required
-                    onBlur={() => handleDeliveryFee(address)}
-                  />
+                <div className="flex gap-5 items-center">
+                  <select
+                    onChange={(e) => {
+                      setProvinceId(e.target.value),
+                        setProvinceName(
+                          e.target.options[e.target.selectedIndex].getAttribute(
+                            "provincename"
+                          )
+                        );
+                    }}
+                    className="border outline-none rounded-[10px] h-[50px]"
+                    id=""
+                    name=""
+                  >
+                    {provinceData?.data.map((province) => (
+                      <option
+                        key={province.ProvinceID}
+                        value={province.ProvinceID}
+                        provincename={province.ProvinceName}
+                      >
+                        {province.ProvinceName}
+                      </option>
+                    ))}
+                  </select>
+                  {districtData != null ? (
+                    <select
+                      onChange={(e) => {
+                        setDistrictId(e.target.value),
+                          setDistrictName(
+                            e.target.options[
+                              e.target.selectedIndex
+                            ].getAttribute("districtname")
+                          );
+                      }}
+                      className="border outline-none rounded-[10px] h-[50px]"
+                      name=""
+                      id=""
+                    >
+                      {districtData?.data.map((district) => (
+                        <option
+                          key={district.DistrictID}
+                          value={district.DistrictID}
+                          districtname={district.DistrictName}
+                        >
+                          {district.DistrictName}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    ""
+                  )}
+                  {wardData != null && districtId != "3451" ? (
+                    <select
+                      defaultValue={wardData?.data[0]?.WardName}
+                      className="border outline-none rounded-[10px] h-[50px]"
+                      name=""
+                      id=""
+                      onChange={(e) =>
+                        setWardName(
+                          e.target.options[e.target.selectedIndex].getAttribute(
+                            "wardname"
+                          )
+                        )
+                      }
+                    >
+                      {wardData?.data.map((ward) => (
+                        <option
+                          key={ward.WardCode}
+                          value={ward.WardCode}
+                          wardname={ward.WardName}
+                        >
+                          {ward.WardName}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    ""
+                  )}
+                  {wardData != null ? (
+                    <div className="w-full flex">
+                      <input
+                        value={street}
+                        className="border w-full px-5 h-[50px] rounded-[10px] outline-none"
+                        onChange={(e) => setStreet(e.target.value)}
+                        placeholder="Nhập địa chỉ"
+                        required
+                        onBlur={() =>
+                          handleDeliveryFee(
+                            street + wardName + districtName + provinceName
+                          )
+                        }
+                      />
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
               <div className="mt-5">
@@ -236,25 +379,6 @@ function Order() {
                 />
               </div>
             </div>
-            {/* <div className=" pl-5 flex flex-col justify-center items-center w-[25%]">
-            <div className="bg-[#3e9943] p-2 rounded-[10px] text-[#ffffff]">
-              Thời gian giao hàng dự kiến
-            </div>
-            <div style={wrapperStyle} className=" mt-2">
-              <Calendar
-                fullscreen={false}
-                defaultValue={null}
-                className="border border-[#3e9943]"
-                onPanelChange={onPanelChange}
-                onSelect={(date, { source }) => {
-                  if (source === "date") {
-                    setExpectedDeliveryDate(date.format("DD-MM-YYYY"));
-                    setDateToBE(date.format("YYYY-MM-DD"));
-                  }
-                }}
-              />
-            </div>
-          </div> */}
           </div>
 
           <div className=" drop-shadow-lg bg-[#ffffff] my-5 border border-t-[2px] border-t-[#3e9943] pb-5">
@@ -308,15 +432,15 @@ function Order() {
                   </div>
                   <div className="flex justify-between mb-4">
                     <div>Tổng giá trị</div>
-                    <div>{subTotal()} ₫</div>
+                    <div>{formatPrice(subTotal())}</div>
                   </div>
                   <div className="flex justify-between mb-4">
                     <div>Phí vận chuyển</div>
-                    <div>{deliveryFee} ₫</div>
+                    <div>{formatPrice(deliveryFee)}</div>
                   </div>
                   <div className="flex justify-between border-t border-t-1 border-black font-bold text-[18px] pt-[9px]">
                     <div className="">Tổng</div>
-                    <div>{handleTotalOrder()} ₫</div>
+                    <div>{formatPrice(handleTotalOrder())}</div>
                   </div>
                 </div>
               </div>

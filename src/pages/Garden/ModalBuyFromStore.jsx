@@ -21,7 +21,6 @@ function ModalBuyFromStore(props) {
           </button>
         </form>
         <h3 className="font-bold text-lg">Thêm cây của cửa hàng</h3>
-        <div>{props.selectedGardenId}</div>
         {props.boughtBonsai?.map((bonsai) => (
           <div
             key={bonsai.id}
@@ -53,11 +52,15 @@ function ModalBuyFromStore(props) {
             </div>
           </div>
         ))}
-        <div className="text-right">
-          <form onSubmit={handleBuyFromStore} method="dialog">
-            <button className="btn">Thêm cây</button>
-          </form>
-        </div>
+        {props.boughtBonsai != undefined ? (
+          <div className="text-right">
+            <form onSubmit={handleBuyFromStore} method="dialog">
+              <button className="btn">Thêm cây</button>
+            </form>
+          </div>
+        ) : (
+          "Không có cây đã mua ở cửa hàng"
+        )}
       </div>
     </dialog>
   );
