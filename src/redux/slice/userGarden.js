@@ -2,9 +2,11 @@ import axios from "../../utils/axiosCustomize";
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 export const fetchCustomerGarden = createAsyncThunk(
   "bonsai/fetchCustomerGarden",
-  async () => {
+  async ({ pageIndex, pageSize }) => {
     try {
-      const response = await axios.get(`/CustomerGarden/Customer`);
+      const response = await axios.get(
+        `/CustomerGarden/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      );
       console.log(response.data);
       return response.data;
     } catch (error) {
