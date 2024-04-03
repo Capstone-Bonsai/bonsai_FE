@@ -131,6 +131,18 @@ function CustomerGardenManage() {
       key: "address",
     },
     {
+      title: "Hinh ảnh",
+      dataIndex: "image",
+      key: "image",
+      render: (_, record) => (
+        <>
+          <div>
+            <img src={record.customerGardenImages[0]?.image} width={200} height={200} />
+          </div>
+        </>
+      ),
+    },
+    {
       title: "Xem chi tiết",
       key: "customerBonsai",
       render: (_, record) => {

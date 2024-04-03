@@ -33,12 +33,12 @@ const { Search, TextArea } = Input;
 const { CheckableTag } = Tag;
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { putProduct } from "../../../utils/productApi";
-import { fetchAllProductPagination } from "../../../redux/slice/productSlice";
-import { putBonsai } from "../../../utils/bonsaiApi";
-import { fetchAllBonsaiPagination } from "../../../redux/slice/bonsaiSlice";
-import ModalCreateCategory from "./ModalCreateCategory";
-import ModalCreateStyle from "./ModalCreateStyle";
+import { putProduct } from "../../../../utils/productApi";
+import { fetchAllProductPagination } from "../../../../redux/slice/productSlice";
+import { putBonsai } from "../../../../utils/bonsaiApi";
+import { fetchAllBonsaiPagination } from "../../../../redux/slice/bonsaiSlice";
+import ModalCreateCategory from "../CategoryManagement/ModalCreateCategory";
+import ModalCreateStyle from "../StyleManagement/ModalCreateStyle";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {

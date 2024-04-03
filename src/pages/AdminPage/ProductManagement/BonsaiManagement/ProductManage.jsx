@@ -25,14 +25,14 @@ const { Search, TextArea } = Input;
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllBonsaiPagination } from "../../../redux/slice/bonsaiSlice";
-import ModalCreateProduct from "../ProductManagement/ModalCreateProduct";
+import { fetchAllBonsaiPagination } from "../../../../redux/slice/bonsaiSlice";
+import ModalCreateProduct from "./ModalCreateProduct";
 import { Link } from "react-router-dom";
 import ModalUpdateProduct from "./ModalUpdateProduct";
-import Loading from "../../../components/Loading";
-import { allCategory } from "../../../redux/slice/categorySlice";
-import { allStyle } from "../../../redux/slice/styleSlice";
-import { deleteBonsai } from "../../../utils/bonsaiApi";
+import Loading from "../../../../components/Loading";
+import { allCategory } from "../../../../redux/slice/categorySlice";
+import { allStyle } from "../../../../redux/slice/styleSlice";
+import { deleteBonsai } from "../../../../utils/bonsaiApi";
 
 function ProductManage() {
   const dispatch = useDispatch();

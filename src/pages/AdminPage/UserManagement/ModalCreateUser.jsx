@@ -62,7 +62,6 @@ const ModalCreateUser = (props) => {
       phone: "",
       fullname: "",
       email: "",
-      phone: "",
     });
     setFileList([]);
     setShow(false);
@@ -73,7 +72,6 @@ const ModalCreateUser = (props) => {
     phone: "",
     fullname: "",
     email: "",
-    phone: "",
   });
   const dispatch = useDispatch();
   const [error, setError] = useState([]);

@@ -25,6 +25,7 @@ const store = configureStore({
     garden: gardenReducer,
     baseTask: baseTaskReducer,
     customerBonsai: customerBonsaiReducer,
+    careStep: categoryReducer,
   },
 });
 
