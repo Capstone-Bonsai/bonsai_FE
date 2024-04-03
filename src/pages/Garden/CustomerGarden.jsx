@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addCustomerGarden,
   fetchCustomerGarden,
+  getBonsaiInGarden,
 } from "../../redux/slice/userGarden";
 import Loading from "../../components/Loading";
 import { UploadOutlined } from "@ant-design/icons";
@@ -19,6 +20,7 @@ import { allCategory } from "../../redux/slice/categorySlice";
 import ModalBonsaiCustomer from "./ModalBonsaiCustomer";
 import ModalBuyFromStore from "./ModalBuyFromStore";
 import { bonsaiBought } from "../../redux/slice/bonsaiSlice";
+import BonsaiInGarden from "./BonsaiInGarden";
 function CustomerGarden() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -29,7 +31,6 @@ function CustomerGarden() {
   const [pageSize, setPageSize] = useState(3);
   const boughtBonsai = useSelector((state) => state.bonsai.boughtBonsai?.items);
   const gardens = useSelector((state) => state.garden.gardenDTO?.items);
-
   useEffect(() => {
     dispatch(allCategory());
     dispatch(allStyle());
@@ -96,6 +97,12 @@ function CustomerGarden() {
 
   const { allStyleDTO } = useSelector((state) => state.style);
   const { allCategoryDTO } = useSelector((state) => state.category);
+  const [bonsaiInGarden, setBonsaiInGarden] = useState("");
+  const bonsaiData = useSelector(
+    (state) => state.garden.bonsaiInGarden?.bonsai
+  );
+  const [loadingBonsai, setLoadingBonsai] = useState(false);
+
   const props = {
     gardens,
     allStyleDTO,
@@ -103,11 +110,22 @@ function CustomerGarden() {
     selectedGardenId,
     boughtBonsai,
     dispatch,
+    bonsaiInGarden,
+    bonsaiData,
+    loadingBonsai,
   };
   const { totalItemsCount } = useSelector((state) => state.garden.gardenDTO);
+  const handleBonsaiInGarden = (bonsaiInGardenId) => {
+    try {
+      setLoadingBonsai(true);
+      dispatch(getBonsaiInGarden({ bonsaiInGardenId })).then(() => {
+        setLoadingBonsai(false);
+      });
+    } catch (error) {
+      console.log("data error" + error);
+    }
+  };
 
-  const [bonsaiInGarden, setBonsaiInGarden] = useState("");
-  console.log(bonsaiInGarden);
   return (
     <>
       {loading ? (
@@ -255,22 +273,26 @@ function CustomerGarden() {
                       <div className="pr-2">Bonsai: </div>
                       <div className="text-start">
                         {garden.customerBonsais.length > 0 ? (
-                          garden.customerBonsais
-                            .slice(0, 2)
-                            .map((cusBonsai, index) => (
-                              <div className="" key={cusBonsai.id}>
-                                <button
-                                  className="pr-2 hover:text-[#3a9943]"
-                                  onClick={() => {
-                                    setBonsaiInGarden(cusBonsai.id);
-                                  }}
-                                >
-                                  - {cusBonsai.bonsai.name}
-                                </button>
-                              </div>
-                            ))
+                          garden.customerBonsais.map((cusBonsai, index) => (
+                            <div className="" key={cusBonsai.id}>
+                              <button
+                                className="pr-2 hover:text-[#3a9943] outline-none"
+                                onClick={() => {
+                                  setBonsaiInGarden(cusBonsai.id);
+                                  handleBonsaiInGarden(cusBonsai.id);
+                                  document
+                                    .getElementById("bonsai_in_garden")
+                                    .showModal();
+                                }}
+                              >
+                                - {cusBonsai.bonsai.name}
+                              </button>
+                            </div>
+                          ))
                         ) : (
-                          <span>Không có cây trong vườn</span>
+                          <span className="opacity-70">
+                            Không có cây trong vườn
+                          </span>
                         )}
                       </div>
                     </div>
@@ -309,6 +331,7 @@ function CustomerGarden() {
                           </li>
                         </ul>
                       </div>
+                      <BonsaiInGarden {...props} />
                       <ModalBuyFromStore {...props} />
                       <ModalBonsaiCustomer {...props} />
                     </div>

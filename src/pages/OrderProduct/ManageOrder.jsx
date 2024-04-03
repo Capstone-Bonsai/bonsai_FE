@@ -48,6 +48,7 @@ function ManageOrder() {
       case "Delivered":
         return "text-green-500";
       case "Failed":
+      case "Canceled":
         return "text-[#ee4d2d]";
       case "Waiting":
         return "text-yellow-500";
@@ -109,6 +110,8 @@ function ManageOrder() {
                                   return "Đã thanh toán";
                                 case "Failed":
                                   return "Thất bại";
+                                case "Canceled":
+                                  return "Đã hủy";
                                 case "Waiting":
                                   return "Đang chờ";
                                 case "Preparing":

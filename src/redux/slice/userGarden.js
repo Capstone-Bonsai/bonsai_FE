@@ -29,6 +29,18 @@ export const getGardenNoPagination = createAsyncThunk(
   }
 );
 
+export const getBonsaiInGarden = createAsyncThunk(
+  "bonsai/bonsaiDetailInGarden",
+  async ({ bonsaiInGardenId }) => {
+    try {
+      const response = await axios.get(`/CustomerBonsai/${bonsaiInGardenId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const addCustomerGarden = async (formData) => {
   try {
     const response = await axios.post(`/CustomerGarden`, formData);
@@ -68,6 +80,7 @@ export const addBonsaiIntoGarden = async (formData, gardenId) => {
 const initialState = {
   gardenDTO: {},
   gardenNoPagination: {},
+  bonsaiInGarden: {},
   loading: false,
   msg: "",
   token: null,
@@ -87,7 +100,6 @@ const gardenSlice = createSlice({
         state.msg = "Loading...";
         state.loading = true;
       })
-
       .addCase(fetchCustomerGarden.fulfilled, (state, action) => {
         state.gardenDTO = action.payload;
         state.msg = "Data loaded successfully";
@@ -102,14 +114,28 @@ const gardenSlice = createSlice({
         state.msg = "Loading...";
         state.loading = true;
       })
-
       .addCase(getGardenNoPagination.fulfilled, (state, action) => {
         state.gardenNoPagination = action.payload;
         state.msg = "Data loaded successfully";
         state.loading = false;
       })
       .addCase(getGardenNoPagination.rejected, (state) => {
-        state.getGardenNoPagination = [];
+        state.gardenNoPagination = [];
+        state.msg = "Không tìm thấy";
+        state.loading = false;
+      })
+      .addCase(getBonsaiInGarden.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+
+      .addCase(getBonsaiInGarden.fulfilled, (state, action) => {
+        state.bonsaiInGarden = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(getBonsaiInGarden.rejected, (state) => {
+        state.bonsaiInGarden = {};
         state.msg = "Không tìm thấy";
         state.loading = false;
       });
