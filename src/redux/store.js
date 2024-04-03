@@ -10,6 +10,7 @@ import serviceReducer from "./slice/serviceSlice";
 import styleReducer from "./slice/styleSlice";
 import gardenReducer from "./slice/userGarden";
 import baseTaskReducer from "./slice/baseTaskSlice";
+import customerBonsaiReducer from "./slice/customerBonsaiSlice";
 
 const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ const store = configureStore({
     style: styleReducer,
     garden: gardenReducer,
     baseTask: baseTaskReducer,
+    customerBonsai: customerBonsaiReducer,
   },
 });
 

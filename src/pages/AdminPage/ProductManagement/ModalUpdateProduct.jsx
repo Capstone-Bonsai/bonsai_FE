@@ -39,7 +39,6 @@ import { putBonsai } from "../../../utils/bonsaiApi";
 import { fetchAllBonsaiPagination } from "../../../redux/slice/bonsaiSlice";
 import ModalCreateCategory from "./ModalCreateCategory";
 import ModalCreateStyle from "./ModalCreateStyle";
-import { blobCreationFromURL } from "../../../utils/setInitForm";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
