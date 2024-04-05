@@ -2,36 +2,49 @@ import React, { useState, useEffect, useRef } from "react";
 import { Tag, Input, Modal, Form } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { postCategory } from "../../../utils/categoryApi";
-import { allCategory } from "../../../redux/slice/categorySlice";
+import { putCategory } from "../../../../utils/categoryApi";
+import { allCategory } from "../../../../redux/slice/categorySlice";
 
-const ModalCreateCategory = (props) => {
+const ModalUpdateCategory = (props) => {
   const [form] = Form.useForm();
-  const { show, setShow } = props;
+  const { show, setShow, category } = props;
   const handleClose = () => {
     setFormData({
       name: "",
     });
     form.resetFields();
-    setConfirmLoadingCreateCategory(false);
+    setConfirmLoadingUpdateCategory(false);
     setShow(false);
   };
   const [formData, setFormData] = useState({
     name: "",
   });
   const dispatch = useDispatch();
-  const [confirmLoadingCreateCategory, setConfirmLoadingCreateCategory] =
+  const [confirmLoadingUpdateCategory, setConfirmLoadingUpdateCategory] =
     useState(false);
 
   const formRef = useRef(null);
+
+  useEffect(() => {
+    if (category != undefined) {
+      console.log(category);
+      setFormData({
+        name: category.name,
+      });
+    }
+  }, [category]);
+
+  useEffect(() => {
+    form.setFieldsValue(formData);
+  }, [form, formData]);
 
   const onSubmit = (i) => {
     console.log(formData);
     formRef.current
       .validateFields()
       .then(() => {
-        setConfirmLoadingCreateCategory(true);
-        handleCreateCategory();
+        setConfirmLoadingUpdateCategory(true);
+        handleUpdateCategory();
       })
       .catch((errorInfo) => {
         console.log(errorInfo);
@@ -43,18 +56,18 @@ const ModalCreateCategory = (props) => {
     setFormData(allValues);
   };
 
-  const handleCreateCategory = () => {
-    postCategory(formData)
+  const handleUpdateCategory = () => {
+    putCategory(category.id, formData)
       .then((data) => {
-        toast.success("Thêm loại cây thành công!");
+        toast.success("Cập nhật loại cây thành công!");
         dispatch(allCategory());
       })
       .catch((err) => {
-        console.log(err.response.statusText);
+        console.log(err.response);
         toast.error(err.response.statusText);
       })
       .finally(() => {
-        setConfirmLoadingCreateCategory(false);
+        setConfirmLoadingUpdateCategory(false);
         handleClose();
       });
   };
@@ -62,11 +75,11 @@ const ModalCreateCategory = (props) => {
   return (
     <>
       <Modal
-        title="Thêm loại cây"
+        title="Cập nhật kiểu mẫu"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
-        confirmLoading={confirmLoadingCreateCategory}
+        confirmLoading={confirmLoadingUpdateCategory}
         onCancel={handleClose}
         maskClosable={false}
       >
@@ -82,7 +95,9 @@ const ModalCreateCategory = (props) => {
             <Form.Item
               label="Tên loại cây"
               name="name"
-              rules={[{ required: true, message: "Tên không được để trống!" }]}
+              rules={[
+                { required: true, message: "Tên không được để trống!" },
+              ]}
             >
               <Input />
             </Form.Item>
@@ -93,4 +108,4 @@ const ModalCreateCategory = (props) => {
   );
 };
 
-export default ModalCreateCategory;
+export default ModalUpdateCategory;

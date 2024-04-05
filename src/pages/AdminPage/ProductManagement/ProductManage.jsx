@@ -107,12 +107,12 @@ function ProductManage() {
             pageSize: pageSize,
           })
         );
-        setOpenDelete(false);
-        setConfirmLoadingDelete(false);
       })
       .catch((err) => {
         console.log(err.response.statusText);
         toast.error(err.response.statusText);
+      })
+      .finally(() => {
         setOpenDelete(false);
         setConfirmLoadingDelete(false);
       });
