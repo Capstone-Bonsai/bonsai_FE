@@ -35,7 +35,9 @@ const ModalUpdateCategory = (props) => {
   }, [category]);
 
   useEffect(() => {
-    form.setFieldsValue(formData);
+    if (show === true) {
+      form.setFieldsValue(formData);
+    }
   }, [form, formData]);
 
   const onSubmit = (i) => {
@@ -95,9 +97,7 @@ const ModalUpdateCategory = (props) => {
             <Form.Item
               label="Tên loại cây"
               name="name"
-              rules={[
-                { required: true, message: "Tên không được để trống!" },
-              ]}
+              rules={[{ required: true, message: "Tên không được để trống!" }]}
             >
               <Input />
             </Form.Item>

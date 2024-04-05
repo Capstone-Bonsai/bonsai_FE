@@ -62,7 +62,7 @@ const ALLOWED_FILE_TYPES = [
 ];
 
 const ModalUpdateProduct = (props) => {
-  const [form1] = Form.useForm();
+  const [form] = Form.useForm();
   const { show, setShow, bonsai, listCategory, listStyle } = props;
   const handleClose = () => {
     setFormData({
@@ -77,7 +77,7 @@ const ModalUpdateProduct = (props) => {
       Price: 0,
       Image: "",
     });
-    form1.resetFields();
+    form.resetFields();
     setListImage([]);
     // setSelectedTags([]);
     setShow(false);
@@ -124,8 +124,10 @@ const ModalUpdateProduct = (props) => {
   }, [bonsai]);
 
   useEffect(() => {
-    form1.setFieldsValue(formData);
-  }, [form1, formData]);
+    if (show === true) {
+      form.setFieldsValue(formData);
+    }
+  }, [form, formData]);
 
   const handleChangeTagList = (tag, checked) => {
     const nextSelectedTags = checked
@@ -288,7 +290,7 @@ const ModalUpdateProduct = (props) => {
       >
         <div className="mt-9">
           <Form
-            form={form1}
+            form={form}
             ref={formRef}
             layout="horizontal"
             labelCol={{ span: 5 }}
@@ -438,9 +440,9 @@ const ModalUpdateProduct = (props) => {
                 {
                   type: "number",
                   min: 0,
-                  max: 100000000,
+                  max: 100000000000,
                   message:
-                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 100,000,000 Vnd!",
+                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 100,000,000,000 Vnd!",
                 },
               ]}
             >

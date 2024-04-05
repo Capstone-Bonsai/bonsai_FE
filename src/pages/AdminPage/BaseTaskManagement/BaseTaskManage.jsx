@@ -196,14 +196,14 @@ function BaseTaskManage() {
           baseTask={selectedUpdateBaseTask}
         />
         <Modal
-          title="Xóa sản phẩm"
+          title="Xóa công việc"
           open={openDelete}
           onOk={handleDelete}
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
         >
-          <div>Bạn có muốn xóa sản phẩm này không?</div>
+          <div>Bạn có muốn xóa công việc này không?</div>
         </Modal>
       </div>
     </>

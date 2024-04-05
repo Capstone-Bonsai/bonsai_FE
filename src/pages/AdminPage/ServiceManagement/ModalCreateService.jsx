@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Modal,
-  Tabs,
-} from "antd";
+import { Modal, Tabs } from "antd";
 
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
