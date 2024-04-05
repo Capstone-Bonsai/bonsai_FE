@@ -24,7 +24,6 @@ import Contact from "../pages/Contact/Contact";
 import CustomerPrivateRoute from "./CustomerPrivateRoute";
 import CustomerGardenManage from "../pages/AdminPage/CustomerGardenManagement/CustomerGardenManage";
 import BaseTaskManage from "../pages/AdminPage/BaseTaskManagement/BaseTaskManage";
-import CareStepManage from "../pages/AdminPage/CareStepManagement/CareStepManage";
 import ProductLayout from "../pages/AdminPage/ProductManagement/Layout";
 function Router() {
   const element = useRoutes([
@@ -126,10 +125,6 @@ function Router() {
         {
           path: "baseTask",
           element: <BaseTaskManage />,
-        },
-        {
-          path: "careStep",
-          element: <CareStepManage />,
         },
       ],
     },

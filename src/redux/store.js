@@ -11,6 +11,7 @@ import styleReducer from "./slice/styleSlice";
 import gardenReducer from "./slice/userGarden";
 import baseTaskReducer from "./slice/baseTaskSlice";
 import customerBonsaiReducer from "./slice/customerBonsaiSlice";
+import careStepReducer from "./slice/careStepSlice";
 
 const store = configureStore({
   reducer: {
@@ -25,7 +26,7 @@ const store = configureStore({
     garden: gardenReducer,
     baseTask: baseTaskReducer,
     customerBonsai: customerBonsaiReducer,
-    careStep: categoryReducer,
+    careStep: careStepReducer,
   },
 });
 

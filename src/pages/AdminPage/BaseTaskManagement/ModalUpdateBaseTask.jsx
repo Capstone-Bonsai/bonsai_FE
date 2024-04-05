@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import {
   PlusCircleOutlined,
@@ -29,7 +28,6 @@ import {
   Upload,
 } from "antd";
 const { Search, TextArea } = Input;
-
 const { CheckableTag } = Tag;
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -39,14 +37,14 @@ import { allBaseTaskPagination } from "../../../redux/slice/baseTaskSlice";
 import { putBaseTask } from "../../../utils/baseTaskApi";
 
 const ModalUpdateBaseTask = (props) => {
-  const [form1] = Form.useForm();
+  const [form] = Form.useForm();
   const { show, setShow, baseTask } = props;
   const handleClose = () => {
     setFormData({
       name: "",
       detail: "",
     });
-    form1.resetFields();
+    form.resetFields();
     setShow(false);
   };
   const [formData, setFormData] = useState({
@@ -69,8 +67,10 @@ const ModalUpdateBaseTask = (props) => {
   }, [baseTask]);
 
   useEffect(() => {
-    form1.setFieldsValue(formData);
-  }, [form1, formData]);
+    if (show === true) {
+      form.setFieldsValue(formData);
+    }
+  }, [form, formData]);
 
   const updateBaseTask = (data) => {
     try {
@@ -130,7 +130,7 @@ const ModalUpdateBaseTask = (props) => {
       >
         <div className="mt-9">
           <Form
-            form={form1}
+            form={form}
             ref={formRef}
             layout="horizontal"
             labelCol={{ span: 5 }}

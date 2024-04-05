@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Tag,
-  Modal,
-  Tabs,
-} from "antd";
+import { Tag, Modal, Tabs } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -11,7 +7,6 @@ import { putService } from "../../../utils/serviceApi";
 import { fetchAllService } from "../../../redux/slice/serviceSlice";
 import FormBonsaiCare from "./UpdateServiceForm/FormBonsaiCare";
 import FormGardenCare from "./UpdateServiceForm/FormGardenCare";
-import "./TabsBar.css";
 
 const ModalUpdateService = (props) => {
   const { show, setShow, service } = props;

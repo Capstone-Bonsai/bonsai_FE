@@ -31,6 +31,7 @@ import { allCategory } from "../../../../redux/slice/categorySlice";
 import { deleteCategory } from "../../../../utils/categoryApi";
 import ModalCreateCategory from "./ModalCreateCategory";
 import ModalUpdateCategory from "./ModalUpdateCategory";
+import ModalCareStepManage from "./CareStepManagement/ModalCareStepManage";
 
 function CategoryManage() {
   const dispatch = useDispatch();
@@ -39,9 +40,13 @@ function CategoryManage() {
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openCareStepModal, setOpenCareStepModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState();
+  const [selectedCareStepCategory, setSelectedCareStepCategory] = useState();
   const [selectedUpdateCategory, setSelectedUpdateCategory] = useState();
-  const allCategorys = useSelector((state) => state.category?.allCategoryDTO?.items);
+  const allCategorys = useSelector(
+    (state) => state.category?.allCategoryDTO?.items
+  );
 
   useEffect(() => {
     dispatch(allCategory());
@@ -53,6 +58,9 @@ function CategoryManage() {
 
   const showUpdateModal = () => {
     setOpenUpdateModal(true);
+  };
+  const showCareStepModal = () => {
+    setOpenCareStepModal(true);
   };
 
   const showModalDelete = () => {
@@ -86,8 +94,13 @@ function CategoryManage() {
     setOpenUpdateModal(false);
   };
 
+  const handleCancelCareStep = () => {
+    setSelectedCareStepCategory(undefined);
+    setOpenCareStepModal(false);
+  };
+
   const handleCancelDelete = () => {
-    console.log("Clicked cancel button");
+    setSelectedCategory(undefined);
     setOpenDelete(false);
   };
   const columns = [
@@ -117,6 +130,14 @@ function CategoryManage() {
             }}
           >
             Chỉnh sửa
+          </button>
+          <button
+            onClick={() => {
+              setSelectedCareStepCategory(record);
+              showCareStepModal();
+            }}
+          >
+            Xem các bước chăm sóc
           </button>
         </Space>
       ),
@@ -162,6 +183,11 @@ function CategoryManage() {
           show={openUpdateModal}
           setShow={handleCancelUpdate}
           category={selectedUpdateCategory}
+        />
+        <ModalCareStepManage
+          show={openCareStepModal}
+          setShow={handleCancelCareStep}
+          category={selectedCareStepCategory}
         />
         <Modal
           title="Xóa lọai cây"

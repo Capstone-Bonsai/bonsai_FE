@@ -16,7 +16,7 @@ import ModalUpdateService from "./ModalUpdateService";
 
 function ServiceManage() {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.service?.loading);
+  const loading = useSelector((state) => state.service?.listService?.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -24,7 +24,7 @@ function ServiceManage() {
   const [selectedService, setSelectedService] = useState();
   const [selectedUpdateService, setSelectedUpdateService] = useState();
 
-  const allService = useSelector((state) => state.service?.listService?.items);
+  const allService = useSelector((state) => state.service?.listService?.services?.items);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const paging = useSelector((state) => state.service?.pagination);

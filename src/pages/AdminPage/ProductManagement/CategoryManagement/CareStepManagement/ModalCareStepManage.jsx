@@ -26,36 +26,32 @@ const { Search, TextArea } = Input;
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Loading from "../../../components/Loading";
-import { allBaseTaskPagination } from "../../../redux/slice/baseTaskSlice";
-import { deleteBaseTask } from "../../../utils/baseTaskApi";
 import ModalUpdateCareStep from "./ModalUpdateCareStep";
 import ModalCreateCareStep from "./ModalCreateCareStep";
+import Loading from "../../../../../components/Loading";
+import { allCareStep } from "../../../../../redux/slice/careStepSlice";
+import { deleteCareStep } from "../../../../../utils/careStepApi";
 
-function CareStepManage() {
+const ModalCareStepManage = (props) => {
+  const { show, setShow, category } = props;
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.baseTask.loading);
+  const loading = useSelector((state) => state.careStep?.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
-  const [selectedBaseTask, setSelectedBaseTask] = useState();
-  const [selectedUpdateBaseTask, setSelectedUpdateBaseTask] = useState();
-  const allBaseTask = useSelector(
-    (state) => state.baseTask?.allBaseTaskDTOPagination?.items
+  const [selectedCareStep, setSelectedCareStep] = useState();
+  const [selectedUpdateCareStep, setSelectedUpdateCareStep] = useState();
+  const allCareSteps = useSelector(
+    (state) => state.careStep?.allCareStepDTO?.items
   );
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-  const paging = useSelector((state) => state.baseTask?.pagination);
 
   useEffect(() => {
     dispatch(
-      allBaseTaskPagination({
-        pageIndex: currentPage - 1,
-        pageSize: pageSize,
-      })
+      allCareStep(category?.id)
     );
-  }, []);
+    console.log(allCareSteps)
+  }, [category,dispatch]);
 
   const showCreateModal = () => {
     setOpenCreateModal(true);
@@ -72,14 +68,11 @@ function CareStepManage() {
 
   const handleDelete = () => {
     setConfirmLoadingDelete(true);
-    deleteBaseTask(selectedBaseTask)
+    deleteCareStep(selectedCareStep)
       .then((data) => {
         toast.success("Xóa thành công!");
         dispatch(
-          allBaseTaskPagination({
-            pageIndex: currentPage - 1,
-            pageSize: pageSize,
-          })
+          allCareStep(category.id)
         );
         setOpenDelete(false);
         setConfirmLoadingDelete(false);
@@ -96,7 +89,7 @@ function CareStepManage() {
   };
 
   const handleCancelUpdate = () => {
-    setSelectedUpdateBaseTask(undefined);
+    setSelectedUpdateCareStep(undefined);
     setOpenUpdateModal(false);
   };
 
@@ -105,26 +98,16 @@ function CareStepManage() {
     setOpenDelete(false);
   };
 
-  const handleTableChange = (pagination) => {
-    console.log(pagination);
-    const index = Number(pagination.current) - 1;
-    dispatch(
-      allBaseTaskPagination({
-        pageIndex: index,
-        pageSize: pageSize,
-      })
-    );
-  };
   const columns = [
     {
-      title: "Tên công việc",
-      dataIndex: "name",
-      key: "name",
+      title: "Thứ tự",
+      dataIndex: "orderStep",
+      key: "orderStep",
     },
     {
-      title: "Miêu tả",
-      dataIndex: "detail",
-      key: "detail",
+      title: "Tên bước chăm sóc",
+      dataIndex: "step",
+      key: "step",
     },
     {
       title: "Hành động",
@@ -134,7 +117,7 @@ function CareStepManage() {
         <Space size="middle">
           <button
             onClick={() => {
-              setSelectedBaseTask(record.id);
+              setSelectedCareStep(record.id);
               showModalDelete();
             }}
           >
@@ -142,7 +125,7 @@ function CareStepManage() {
           </button>
           <button
             onClick={() => {
-              setSelectedUpdateBaseTask(record);
+              setSelectedUpdateCareStep(record);
               showUpdateModal();
             }}
           >
@@ -153,39 +136,53 @@ function CareStepManage() {
     },
   ];
 
+  const handleClose = () => {
+    setShow(false);
+  };
+
   return (
     <>
       <div className="flex justify-center">
-        <div className="w-[100%]">
-          <div className="font-semibold mb-6">Công việc</div>
-          <div className="bg-[#ffffff] drop-shadow-2xl">
-            <div className="flex justify-between p-6">
-              <div>
-                <button
-                  className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
-                  onClick={showCreateModal}
-                >
-                  <PlusCircleOutlined /> Thêm công việc
-                </button>
+        <Modal
+          width={800}
+          title={`Bước chăm sóc của ${category?.name}`}
+          open={show}
+          cancelText="Hủy"
+          onCancel={handleClose}
+          maskClosable={false}
+        >
+          <div className="mt-9">
+            <div className="w-[100%]">
+              <div className="font-semibold mb-6">Bước chăm sóc</div>
+              <div className="bg-[#ffffff] drop-shadow-2xl">
+                <div className="flex justify-between p-6">
+                  <div>
+                    <button
+                      className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
+                      onClick={showCreateModal}
+                    >
+                      <PlusCircleOutlined /> Thêm bước chăm sóc
+                    </button>
+                  </div>
+                </div>
+                <div className="mb-12">
+                  <Table
+                    className="w-[100%]"
+                    dataSource={allCareSteps}
+                    columns={columns}
+                    scroll={{ x: true }}
+                    pagination={false}
+                    rowKey="id"
+                    loading={{
+                      indicator: <Loading loading={loading} />,
+                      spinning: loading,
+                    }}
+                  />
+                </div>
               </div>
             </div>
-            <div className="mb-12">
-              <Table
-                className="w-[100%]"
-                dataSource={allBaseTask}
-                columns={columns}
-                scroll={{ x: true }}
-                pagination={paging}
-                onChange={handleTableChange}
-                rowKey="id"
-                loading={{
-                  indicator: <Loading loading={loading} />,
-                  spinning: loading,
-                }}
-              />
-            </div>
           </div>
-        </div>
+        </Modal>
         <ModalCreateCareStep
           show={openCreateModal}
           setShow={handleCancelCreate}
@@ -193,21 +190,21 @@ function CareStepManage() {
         <ModalUpdateCareStep
           show={openUpdateModal}
           setShow={handleCancelUpdate}
-          baseTask={selectedUpdateBaseTask}
+          baseTask={selectedCareStep}
         />
         <Modal
-          title="Xóa sản phẩm"
+          title="Xóa bước chăm sóc"
           open={openDelete}
           onOk={handleDelete}
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
         >
-          <div>Bạn có muốn xóa sản phẩm này không?</div>
+          <div>Bạn có muốn xóa bước chăm sóc này không?</div>
         </Modal>
       </div>
     </>
   );
 }
 
-export default CareStepManage;
+export default ModalCareStepManage;

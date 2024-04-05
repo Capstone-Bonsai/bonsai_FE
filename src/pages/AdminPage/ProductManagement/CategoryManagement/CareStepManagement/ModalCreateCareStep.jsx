@@ -5,8 +5,6 @@ const { Search, TextArea } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { postBaseTask } from "../../../utils/baseTaskApi";
-import { allBaseTaskPagination } from "../../../redux/slice/baseTaskSlice";
 
 const ModalCreateCareStep = (props) => {
   const [form] = Form.useForm();

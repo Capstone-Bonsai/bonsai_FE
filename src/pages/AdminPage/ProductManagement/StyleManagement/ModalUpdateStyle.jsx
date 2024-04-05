@@ -36,7 +36,9 @@ const ModalUpdateStyle = (props) => {
   }, [style]);
 
   useEffect(() => {
-    form.setFieldsValue(formData);
+    if (show === true) {
+      form.setFieldsValue(formData);
+    }
   }, [form, formData]);
 
   const onSubmit = (i) => {

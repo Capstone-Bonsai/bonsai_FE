@@ -55,7 +55,6 @@ function PrivateRoute() {
     getItem("Dịch vụ", "sub2", <UploadOutlined />, [
       getItem(<Link to={`/admin/service`}>Dịch vụ</Link>, "5"),
       getItem(<Link to={`/admin/baseTask`}>Base Task</Link>, "6"),
-      getItem(<Link to={`/admin/stepCare`}>Bước chăm sóc</Link>, "7"),
     ]),
   ];
   return (

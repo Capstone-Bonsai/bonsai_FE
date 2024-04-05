@@ -5,8 +5,8 @@ export const allCareStep = createAsyncThunk(
   "careStep/allCareStep",
   async (categoryId) => {
     try {
-      console.log(categoryId);
       const response = await axios.get(`/CareStep/${categoryId}`);
+      console.log(response)
       return response.data;
     } catch (error) {
       onsole.log(error);
@@ -17,7 +17,6 @@ export const allCareStep = createAsyncThunk(
 
 const initialState = {
   allCareStepDTO: {},
-  pagination: {},
   loading: false,
   msg: "",
   token: null,
@@ -39,11 +38,6 @@ const careStepSlice = createSlice({
       })
       .addCase(allCareStep.fulfilled, (state, action) => {
         state.allCareStepDTO = action.payload;
-        state.pagination = {
-          current: action.payload.pageIndex + 1,
-          pageSize: action.payload.pageSize,
-          total: action.payload.totalItemsCount,
-        };
         state.msg = "Data loaded successfully";
         state.loading = false;
       })
