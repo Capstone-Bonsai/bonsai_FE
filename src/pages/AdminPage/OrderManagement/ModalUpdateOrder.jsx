@@ -13,14 +13,14 @@ import { getOrderStatus, putOrder } from "../../../utils/orderApi";
 import { fetchAllOrders } from "../../../redux/slice/orderSlice";
 
 const ModalUpdateOrder = (props) => {
-  const [form1] = Form.useForm();
+  const [form] = Form.useForm();
   const { show, setShow, order } = props;
   const handleClose = () => {
     setFormData({
       orderId: "",
       orderStatus: 0,
     });
-    form1.resetFields();
+    form.resetFields();
     setShow(false);
   };
   const [formData, setFormData] = useState({
@@ -47,8 +47,10 @@ const ModalUpdateOrder = (props) => {
   }, [order]);
 
   useEffect(() => {
-    form1.setFieldsValue(formData);
-  }, [form1, formData]);
+    if (show === true) {
+      form.setFieldsValue(formData);
+    }
+  }, [form, formData]);
 
   const updateOrder = (data) => {
     try {
@@ -57,7 +59,7 @@ const ModalUpdateOrder = (props) => {
         .then((data) => {
           setConfirmLoading(false);
           toast.success(data.data);
-          dispatch(fetchAllOrders({pageIndex: 0, pageSize: 5}));
+          dispatch(fetchAllOrders({ pageIndex: 0, pageSize: 5 }));
           handleClose();
         })
         .catch((err) => {
@@ -122,7 +124,7 @@ const ModalUpdateOrder = (props) => {
       >
         <div className="">
           <Form
-            form={form1}
+            form={form}
             ref={formRef}
             layout="horizontal"
             labelCol={{ span: 7 }}

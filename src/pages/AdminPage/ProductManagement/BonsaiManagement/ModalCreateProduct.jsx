@@ -5,10 +5,10 @@ const { Search, TextArea } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { fetchAllBonsaiPagination } from "../../../redux/slice/bonsaiSlice";
-import { postBonsai } from "../../../utils/bonsaiApi";
-import ModalCreateCategory from "./ModalCreateCategory";
-import ModalCreateStyle from "./ModalCreateStyle";
+import { fetchAllBonsaiPagination } from "../../../../redux/slice/bonsaiSlice";
+import { postBonsai } from "../../../../utils/bonsaiApi";
+import ModalCreateCategory from "../CategoryManagement/ModalCreateCategory";
+import ModalCreateStyle from "../StyleManagement/ModalCreateStyle";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -361,9 +361,9 @@ const ModalCreateProduct = (props) => {
                 {
                   type: "number",
                   min: 0,
-                  max: 100000000,
+                  max: 100000000000,
                   message:
-                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 100,000,000 Vnd!",
+                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 100,000,000,000 Vnd!",
                 },
               ]}
             >

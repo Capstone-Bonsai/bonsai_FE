@@ -1,49 +1,63 @@
 import React, { useState, useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Space,
+  Tag,
   Table,
+  Input,
   Modal,
+  Button,
+  Cascader,
+  Checkbox,
+  ColorPicker,
+  DatePicker,
+  Form,
+  InputNumber,
+  Radio,
+  Select,
+  Slider,
+  Switch,
+  TreeSelect,
+  Upload,
 } from "antd";
+const { Search, TextArea } = Input;
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
-import { fetchAllService, allServiceType } from "../../../redux/slice/serviceSlice";
-import { deleteService } from "../../../utils/serviceApi";
-import ModalCreateService from "./ModalCreateService";
-import ModalUpdateService from "./ModalUpdateService";
+import { allBaseTaskPagination } from "../../../redux/slice/baseTaskSlice";
+import { deleteBaseTask } from "../../../utils/baseTaskApi";
+import ModalUpdateBaseTask from "./ModalUpdateBaseTask";
+import ModalCreateBaseTask from "./ModalCreateBaseTask";
 
-function ServiceManage() {
+function BaseTaskManage() {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.service?.listService?.loading);
+  const loading = useSelector((state) => state.baseTask.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
-  const [selectedService, setSelectedService] = useState();
-  const [selectedUpdateService, setSelectedUpdateService] = useState();
-
-  const allService = useSelector((state) => state.service?.listService?.services?.items);
+  const [selectedBaseTask, setSelectedBaseTask] = useState();
+  const [selectedUpdateBaseTask, setSelectedUpdateBaseTask] = useState();
+  const allBaseTask = useSelector(
+    (state) => state.baseTask?.allBaseTaskDTOPagination?.items
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const paging = useSelector((state) => state.service?.pagination);
-  
+  const paging = useSelector((state) => state.baseTask?.pagination);
+
   useEffect(() => {
     dispatch(
-      fetchAllService({
+      allBaseTaskPagination({
         pageIndex: currentPage - 1,
         pageSize: pageSize,
       })
     );
   }, []);
 
-  useEffect(() => {
-    dispatch(allServiceType());
-  }, []);
-
   const showCreateModal = () => {
-    console.log("1111")
     setOpenCreateModal(true);
   };
 
@@ -58,21 +72,20 @@ function ServiceManage() {
 
   const handleDelete = () => {
     setConfirmLoadingDelete(true);
-    deleteService(selectedBonsai)
+    deleteBaseTask(selectedBaseTask)
       .then((data) => {
         toast.success("Xóa thành công!");
         dispatch(
-          fetchAllService({
+          allBaseTaskPagination({
             pageIndex: currentPage - 1,
             pageSize: pageSize,
           })
         );
-        setOpenDelete(false);
-        setConfirmLoadingDelete(false);
       })
       .catch((err) => {
-        console.log(err.response.statusText);
-        toast.error(err.response.statusText);
+        toast.error(err.response.data);
+      })
+      .finally(() => {
         setOpenDelete(false);
         setConfirmLoadingDelete(false);
       });
@@ -83,7 +96,7 @@ function ServiceManage() {
   };
 
   const handleCancelUpdate = () => {
-    setSelectedUpdateService(undefined);
+    setSelectedUpdateBaseTask(undefined);
     setOpenUpdateModal(false);
   };
 
@@ -96,60 +109,22 @@ function ServiceManage() {
     console.log(pagination);
     const index = Number(pagination.current) - 1;
     dispatch(
-      fetchAllService({
+      allBaseTaskPagination({
         pageIndex: index,
         pageSize: pageSize,
       })
     );
   };
-  
   const columns = [
     {
-      title: "Tên dịch vụ",
+      title: "Tên công việc",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Mô tả",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      title: "Giá tiêu chuẩn",
-      dataIndex: "standardPrice",
-      key: "standardPrice",
-      render: (_, record) => (
-        <>
-          <p>
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "VND",
-            }).format(record.standardPrice)}
-          </p>
-        </>
-      ),
-    },
-    {
-      title: "Loại dịch vụ",
-      dataIndex: "catserviceTypeegory",
-      key: "serviceType",
-      render: (_, record) => (
-        <>
-          <p>{record.serviceType}</p>
-        </>
-      ),
-    },
-    {
-      title: "Hinh ảnh",
-      dataIndex: "image",
-      key: "image",
-      render: (_, record) => (
-        <>
-          <div>
-            <img src={record.image} width={200} height={200} />
-          </div>
-        </>
-      ),
+      title: "Miêu tả",
+      dataIndex: "detail",
+      key: "detail",
     },
     {
       title: "Hành động",
@@ -159,7 +134,7 @@ function ServiceManage() {
         <Space size="middle">
           <button
             onClick={() => {
-              setSelectedService(record.id);
+              setSelectedBaseTask(record.id);
               showModalDelete();
             }}
           >
@@ -167,15 +142,12 @@ function ServiceManage() {
           </button>
           <button
             onClick={() => {
-              setSelectedUpdateService(record);
+              setSelectedUpdateBaseTask(record);
               showUpdateModal();
             }}
           >
             Chỉnh sửa
           </button>
-          {/* <Link to={`/admin/productDetail/${record.id}`} key={record.id}>
-            Xem thông tin
-          </Link> */}
         </Space>
       ),
     },
@@ -185,7 +157,7 @@ function ServiceManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Sản phẩm</div>
+          <div className="font-semibold mb-6">Công việc</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
               <div>
@@ -193,15 +165,14 @@ function ServiceManage() {
                   className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
                   onClick={showCreateModal}
                 >
-                  <PlusCircleOutlined /> Thêm Dịch vụ
+                  <PlusCircleOutlined /> Thêm công việc
                 </button>
               </div>
-              <div className="grid grid-cols-3 lg:grid-cols-3"></div>
             </div>
             <div className="mb-12">
               <Table
                 className="w-[100%]"
-                dataSource={allService}
+                dataSource={allBaseTask}
                 columns={columns}
                 scroll={{ x: true }}
                 pagination={paging}
@@ -215,28 +186,28 @@ function ServiceManage() {
             </div>
           </div>
         </div>
-        <ModalCreateService
+        <ModalCreateBaseTask
           show={openCreateModal}
           setShow={handleCancelCreate}
         />
-        <ModalUpdateService
+        <ModalUpdateBaseTask
           show={openUpdateModal}
           setShow={handleCancelUpdate}
-          service={selectedUpdateService}
+          baseTask={selectedUpdateBaseTask}
         />
         <Modal
-          title="Xóa sản phẩm"
+          title="Xóa công việc"
           open={openDelete}
           onOk={handleDelete}
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
         >
-          <div>Bạn có muốn xóa sản phẩm này không?</div>
+          <div>Bạn có muốn xóa công việc này không?</div>
         </Modal>
       </div>
     </>
   );
 }
 
-export default ServiceManage;
+export default BaseTaskManage;

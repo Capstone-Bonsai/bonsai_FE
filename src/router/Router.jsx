@@ -4,7 +4,7 @@ import React from "react";
 import Home from "../pages/HomePage/Home";
 import ShoppingCart from "../pages/Bonsai/ShoppingCart";
 import ServiceListPage from "../pages/ServicePage/ServiceListPage";
-import ProductManage from "../pages/AdminPage/ProductManagement/ProductManage";
+import ProductManage from "../pages/AdminPage/ProductManagement/BonsaiManagement/ProductManage";
 import CustomerRoute from "./CustomerRoute";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
@@ -23,6 +23,8 @@ import CustomerGarden from "../pages/Garden/CustomerGarden";
 import Contact from "../pages/Contact/Contact";
 import CustomerPrivateRoute from "./CustomerPrivateRoute";
 import CustomerGardenManage from "../pages/AdminPage/CustomerGardenManagement/CustomerGardenManage";
+import BaseTaskManage from "../pages/AdminPage/BaseTaskManagement/BaseTaskManage";
+import ProductLayout from "../pages/AdminPage/ProductManagement/Layout";
 function Router() {
   const element = useRoutes([
     {
@@ -106,7 +108,7 @@ function Router() {
         },
         {
           path: "product",
-          element: <ProductManage />,
+          element: <ProductLayout />,
         },
         {
           path: "order",
@@ -119,6 +121,10 @@ function Router() {
         {
           path: "customerGarden",
           element: <CustomerGardenManage />,
+        },
+        {
+          path: "baseTask",
+          element: <BaseTaskManage />,
         },
       ],
     },

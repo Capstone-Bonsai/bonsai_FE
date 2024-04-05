@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MinHeight from "../../components/MinHeight";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchServiceById,
@@ -10,14 +10,25 @@ import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import Loading from "../../components/Loading";
 import { PlusCircleOutlined, EditOutlined } from "@ant-design/icons";
 import SelectedGarden from "./SelectedGarden";
-import Cookies from "universal-cookie";
-import { getGardenNoPagination } from "../../redux/slice/userGarden";
+import { DatePicker, Space } from "antd";
+import {
+  getGardenNoPagination,
+  getListBonsaiInGarden,
+} from "../../redux/slice/userGarden";
 import { toast } from "react-toastify";
 import BarLoaderLoading from "../../components/BarLoaderLoading";
+import SelectedBonsai from "./SelectedBonsai";
+import Cookies from "universal-cookie";
+const { RangePicker } = DatePicker;
 
 function ServiceDetailPage() {
+  const cookies = new Cookies();
+  const userData = cookies.get("user");
+  const [dateRange, setDateRange] = useState([]);
+  console.log(dateRange);
   const { serviceId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isBarLoader, setBarLoader] = useState(false);
   const serviceDetail = useSelector((state) => state.service.serviceById);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,17 +44,16 @@ function ServiceDetailPage() {
   const gardenNoPagin = useSelector(
     (state) => state?.garden?.gardenNoPagination?.items
   );
-  const props = {
-    gardenNoPagin,
-    setGardenSelected,
-    gardenSelected,
-  };
-
   const handleRegisterService = async (e) => {
     e.preventDefault();
+    if (!userData) {
+      navigate("/login");
+    }
     const payload = {
       customerGardenId: gardenSelected.id,
       serviceId: serviceDetail.id,
+      startDate: dateRange[0],
+      endDate: dateRange[1],
       note: note,
     };
     if (!gardenSelected) {
@@ -62,11 +72,13 @@ function ServiceDetailPage() {
       toast.success("Đky thành công");
     } catch (error) {
       setBarLoader(false);
-      toast.error("Đky không thành công", error);
+      if (!userData) {
+        toast.error("Đăng ký dịch vụ cần phải đăng nhập", error);
+      } else {
+        toast.error("Đky không thành công", error);
+      }
     }
   };
-
-  console.log(serviceId);
   useEffect(() => {
     if (serviceId !== prevServiceId) {
       setIsLoading(true);
@@ -78,9 +90,34 @@ function ServiceDetailPage() {
           console.error("Error fetching service detail:", error);
         });
       setPrevServiceId(serviceId);
+    } else if (userData) {
+      dispatch(getGardenNoPagination());
     }
   }, [serviceId, prevServiceId]);
 
+  useEffect(() => {
+    const gardenId = gardenSelected.id;
+    dispatch(getListBonsaiInGarden({ gardenId }));
+  }, [gardenSelected]);
+  const bonsaiInGardenData = useSelector(
+    (state) => state.garden.listBonsaiInGarden
+  );
+  const props = {
+    gardenNoPagin,
+    setGardenSelected,
+    gardenSelected,
+    bonsaiInGardenData,
+    userData,
+  };
+  const handleDateChange = (dates, dateStrings) => {
+    console.log("Formatted Selected Range: ", dateStrings);
+    // Lưu giá trị của dates vào state hoặc bất kỳ đâu bạn muốn
+    setDateRange(dateStrings);
+  };
+  const disabledStartDate = (current) => {
+    const today = new Date();
+    return current && current < today.setHours(0, 0, 0, 0);
+  };
   return (
     <>
       {isLoading ? (
@@ -163,7 +200,8 @@ function ServiceDetailPage() {
                       ""
                     )}
                   </div>
-                  {serviceDetail.serviceType == "GardenCare" ? (
+                  {serviceDetail.serviceType == "GardenCare" ||
+                  !gardenSelected ? (
                     ""
                   ) : (
                     <div className="flex gap-3">
@@ -172,7 +210,7 @@ function ServiceDetailPage() {
                       </div>
                       <input required type="hidden" name="" id="" />
                       <button
-                        className="flex hover:text-[#3a9943] text-[18px]"
+                        className="flex hover:text-[#3a9943] text-[18px] outline-none"
                         onClick={() =>
                           document
                             .getElementById("my_modal_selectedBonsai")
@@ -181,6 +219,7 @@ function ServiceDetailPage() {
                       >
                         <PlusCircleOutlined />
                       </button>
+                      <SelectedBonsai {...props} />
                     </div>
                   )}
                 </div>
@@ -203,6 +242,13 @@ function ServiceDetailPage() {
                     Đăng ký ngay
                   </button>
                 </div>
+                <RangePicker
+                  className="border border-black"
+                  onChange={handleDateChange}
+                  allowClear={false}
+                  placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
+                  disabledDate={disabledStartDate}
+                />
                 <div>
                   Lưu ý: Giá này chỉ là giá dự kiến trước khi đi tham khảo sân
                   vườn

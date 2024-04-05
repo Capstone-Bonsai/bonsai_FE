@@ -9,15 +9,7 @@ export const allStyle = createAsyncThunk("bonsai/style", async () => {
     throw error;
   }
 });
-export const fetchStyle = createAsyncThunk("bonsai/fetchStyle", async () => {
-  try {
-    const response = await axios.get(`/Style`);
-    console.log(response.data);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-});
+
 export const fetchStyleCount = createAsyncThunk(
   "bonsai/fetchStyleCount",
   async () => {

@@ -79,21 +79,21 @@ const serviceSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchAllService.pending, (state) => {
       state.msg = "Loading...";
-      state.loading = true;
+      state.listService.loading = true;
     });
 
     builder.addCase(fetchAllService.fulfilled, (state, action) => {
-      state.listService = action.payload;
+      state.listService.services = action.payload;
       state.pagination = {
         current: action.payload.pageIndex + 1,
         pageSize: action.payload.pageSize,
         total: action.payload.totalItemsCount,
       };
-      state.loading = false;
+      state.listService.loading = false;
     });
     builder.addCase(fetchAllService.rejected, (state) => {
       toast.error("Bạn không có quyền truy cập vào tính năng này!");
-      state.loading = false;
+      state.listService.loading = false;
     });
     builder.addCase(fetchServiceById.pending, (state) => {
       state.loading = true;
