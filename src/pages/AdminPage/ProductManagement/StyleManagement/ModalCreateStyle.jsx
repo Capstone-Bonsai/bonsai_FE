@@ -1,14 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Tag,
-  Input,
-  Modal,
-  Form,
-} from "antd";
+import { Tag, Input, Modal, Form } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { postStyle } from "../../../utils/styleApi";
-import { allStyle } from "../../../redux/slice/styleSlice";
+import { postStyle } from "../../../../utils/styleApi";
+import { allStyle } from "../../../../redux/slice/styleSlice";
 
 const ModalCreateStyle = (props) => {
   const [form] = Form.useForm();
@@ -18,7 +13,6 @@ const ModalCreateStyle = (props) => {
       name: "",
     });
     form.resetFields();
-    setConfirmLoadingCreateStyle(false);
     setShow(false);
   };
   const [formData, setFormData] = useState({
@@ -27,7 +21,6 @@ const ModalCreateStyle = (props) => {
   const dispatch = useDispatch();
   const [confirmLoadingCreateStyle, setConfirmLoadingCreateStyle] =
     useState(false);
-  const [openCreateStyle, setOpenCreateStyle] = useState(false);
 
   const formRef = useRef(null);
 
@@ -36,8 +29,8 @@ const ModalCreateStyle = (props) => {
     formRef.current
       .validateFields()
       .then(() => {
+        setConfirmLoadingCreateStyle(true);
         handleCreateStyle();
-        handleClose();
       })
       .catch((errorInfo) => {
         console.log(errorInfo);
@@ -50,19 +43,18 @@ const ModalCreateStyle = (props) => {
   };
 
   const handleCreateStyle = () => {
-    setConfirmLoadingCreateStyle(true);
     postStyle(formData)
       .then((data) => {
-        console.log(data);
-        setOpenCreateStyle(false);
-        setConfirmLoadingCreateStyle(false);
+        toast.success("Thêm kiểu mẫu thành công!");
         dispatch(allStyle());
       })
       .catch((err) => {
         console.log(err.response.statusText);
         toast.error(err.response.statusText);
-        setOpenCreateStyle(false);
+      })
+      .finally(() => {
         setConfirmLoadingCreateStyle(false);
+        handleClose();
       });
   };
 

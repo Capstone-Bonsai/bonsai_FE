@@ -49,14 +49,13 @@ function PrivateRoute() {
     getItem(<Link to={`/admin/user`}>Người dùng</Link>, "1", <UserOutlined />),
     getItem("Sản phẩm", "sub1", <VideoCameraOutlined />, [
       getItem(<Link to={`/admin/product`}>Bonsai</Link>, "2"),
-      getItem(<Link to={`/admin/customerBonsai`}>Bonsai khach</Link>, "3"),
-      getItem(<Link to={`/admin/customerGarden`}>Sân vườn</Link>, "4"),
+      getItem(<Link to={`/admin/customerGarden`}>Sân vườn</Link>, "3"),
     ]),
-    getItem(<Link to={`/admin/order`}>Đơn hàng</Link>, "5", <UploadOutlined />),
+    getItem(<Link to={`/admin/order`}>Đơn hàng</Link>, "4", <UploadOutlined />),
     getItem("Dịch vụ", "sub2", <UploadOutlined />, [
-      getItem(<Link to={`/admin/service`}>Dịch vụ</Link>, "6"),
-      getItem(<Link to={`/admin/baseTask`}>Bonsai khach</Link>, "7"),
-      getItem(<Link to={`/admin/stepCare`}>Sân vườn</Link>, "9"),
+      getItem(<Link to={`/admin/service`}>Dịch vụ</Link>, "5"),
+      getItem(<Link to={`/admin/baseTask`}>Base Task</Link>, "6"),
+      getItem(<Link to={`/admin/stepCare`}>Bước chăm sóc</Link>, "7"),
     ]),
   ];
   return (

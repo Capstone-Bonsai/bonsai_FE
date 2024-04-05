@@ -5,10 +5,10 @@ const { Search, TextArea } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { fetchAllBonsaiPagination } from "../../../redux/slice/bonsaiSlice";
-import { postBonsai } from "../../../utils/bonsaiApi";
-import ModalCreateCategory from "./ModalCreateCategory";
-import ModalCreateStyle from "./ModalCreateStyle";
+import { fetchAllBonsaiPagination } from "../../../../redux/slice/bonsaiSlice";
+import { postBonsai } from "../../../../utils/bonsaiApi";
+import ModalCreateCategory from "../CategoryManagement/ModalCreateCategory";
+import ModalCreateStyle from "../StyleManagement/ModalCreateStyle";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
