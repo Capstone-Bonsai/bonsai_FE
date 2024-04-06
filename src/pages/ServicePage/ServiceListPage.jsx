@@ -11,8 +11,8 @@ function ServiceListPage() {
   const dispatch = useDispatch();
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
-  const serivceList = useSelector((state) => state.service?.listService?.items);
-  const isLoading = useSelector((state) => state.service?.loading);
+  const serivceList = useSelector((state) => state.service?.listService?.services?.items);
+  const isLoading = useSelector((state) => state.service?.listService.loading);
 
   const onPageChange = (page) => {
     setCurrentPage(page);
@@ -28,6 +28,7 @@ function ServiceListPage() {
   const totalItems = useSelector(
     (state) => state.service?.listService?.totalItemsCount
   );
+
   return (
     <>
       {isLoading ? (

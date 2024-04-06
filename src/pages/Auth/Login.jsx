@@ -74,7 +74,7 @@ function Login() {
       console.log(response);
       if (response.role == "Customer") {
         navigate("/");
-      } else if (response.role == "Manager") {
+      } else if (response.role == "Manager" || response.role == "Staff") {
         navigate("/admin/product");
       }
     } catch (error) {
@@ -95,7 +95,9 @@ function Login() {
               <div className="w-[90%] m-auto h-full mb-5 ">
                 <h2 className="underline text-[20px] font-bold">Đăng nhập </h2>
                 <div>
-                  <label>Tài khoản <span className="text-[red]">*</span></label>
+                  <label>
+                    Tài khoản <span className="text-[red]">*</span>
+                  </label>
                   <div className="flex justify-center">
                     <input
                       type="text"
@@ -110,7 +112,9 @@ function Login() {
                   </div>
                 </div>
                 <div>
-                  <label>Mật khẩu <span className="text-[red]">*</span></label>
+                  <label>
+                    Mật khẩu <span className="text-[red]">*</span>
+                  </label>
                   <div className="flex justify-center relative">
                     <input
                       type={showPassword ? "text" : "password"}

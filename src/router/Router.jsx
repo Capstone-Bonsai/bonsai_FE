@@ -25,6 +25,9 @@ import CustomerPrivateRoute from "./CustomerPrivateRoute";
 import CustomerGardenManage from "../pages/AdminPage/CustomerGardenManagement/CustomerGardenManage";
 import BaseTaskManage from "../pages/AdminPage/BaseTaskManagement/BaseTaskManage";
 import ProductLayout from "../pages/AdminPage/ProductManagement/Layout";
+import ManageService from "../pages/ServicePage/ManageService";
+import Contract from "../pages/StaffPage/Contract";
+import ContractDetail from "../pages/StaffPage/ContractDetail";
 function Router() {
   const element = useRoutes([
     {
@@ -96,6 +99,10 @@ function Router() {
           path: "/ManageOrder",
           element: <ManageOrder />,
         },
+        {
+          path: "/ManageService",
+          element: <ManageService />,
+        },
       ],
     },
     {
@@ -125,6 +132,14 @@ function Router() {
         {
           path: "baseTask",
           element: <BaseTaskManage />,
+        },
+        {
+          path: "contract",
+          element: <Contract />,
+        },
+        {
+          path: "contractDetail",
+          element: <ContractDetail />,
         },
       ],
     },
