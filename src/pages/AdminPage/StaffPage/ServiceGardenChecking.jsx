@@ -12,12 +12,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import {
+  allServiceGarden,
   contractByServiceId,
 } from "../../../redux/slice/contractSlice";
 import { formatPrice } from "../../../components/formatPrice/FormatPrice";
-import ModalContractDetail from "./ModalContractDetail";
+import ModalServiceGardenCheking from "./ModalServiceGardenCheking";
 
-function Contract() {
+function ServiceGardenChecking() {
   const dispatch = useDispatch();
   const cookies = new Cookies();
   const userInfo = cookies?.get("user");
@@ -28,7 +29,7 @@ function Contract() {
   const [openInfo, setOpenInfo] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [selectedContractDetail, setSelectedContractDetail] = useState();
-  const allContracts = useSelector(
+  const allServiceGardens = useSelector(
     (state) => state.contract?.allContractDTO?.contracts?.items
   );
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,7 +49,7 @@ function Contract() {
 
   useEffect(() => {
     dispatch(
-      allContract({
+        allServiceGarden({
         pageIndex: currentPage - 1,
         pageSize: pageSize,
       })
@@ -81,7 +82,7 @@ function Contract() {
     console.log(pagination);
     const index = Number(pagination.current) - 1;
     dispatch(
-      allContract({
+      allServiceGarden({
         pageIndex: index,
         pageSize: pageSize,
       })
@@ -195,7 +196,7 @@ function Contract() {
       key: "contractStatus",
       render: (_, record) => <>{record.serviceGardenStatus}</>,
     },
-  
+
     {
       title: "Số lượng gardener",
       dataIndex: "numberOfGardener",
@@ -264,7 +265,7 @@ function Contract() {
             <div className="mb-12">
               <Table
                 className="w-[100%]"
-                dataSource={allContracts}
+                dataSource={allServiceGardens}
                 columns={columns}
                 scroll={{ x: true }}
                 pagination={paging}
@@ -287,7 +288,7 @@ function Contract() {
         >
           <div>Bạn có muốn xóa hợp đồng này không?</div>
         </Modal>
-        <ModalContractDetail
+        <ModalServiceGardenCheking
           show={openInfo}
           setShow={handleCancelInfo}
           contractDetail={selectedContractDetail}
@@ -305,4 +306,4 @@ function Contract() {
   );
 }
 
-export default Contract;
+export default ServiceGardenChecking;
