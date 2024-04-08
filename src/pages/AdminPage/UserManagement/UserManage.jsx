@@ -45,7 +45,7 @@ const UserManage = () => {
 
   const allUsers = useSelector((state) => state.user?.listUser);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.user?.pagination);
   useEffect(() => {
     const index = currentPage - 1;

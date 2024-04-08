@@ -149,7 +149,7 @@ const ModalCreateUser = (props) => {
       //   .then((data) => {
       //     setConfirmLoading(false);
       //     toast.success(data.data);
-      //     dispatch(fetchAllUsers({ pageIndex: 0, pageSize: 20 }));
+      //     dispatch(fetchAllUsers({ pageIndex: 0, pageSize: 10 }));
       //     handleClose();
       //   })
       //   .catch((err) => {
