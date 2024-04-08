@@ -6,3 +6,6 @@
   .ant-tabs-tab {
     justify-content: center;
   }
+.ant-btn-primary {
+  background-color: #1677ff;
+}

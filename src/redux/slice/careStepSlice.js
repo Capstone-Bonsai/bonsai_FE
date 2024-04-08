@@ -6,7 +6,6 @@ export const allCareStep = createAsyncThunk(
   async (categoryId) => {
     try {
       const response = await axios.get(`/CareStep/${categoryId}`);
-      console.log(response)
       return response.data;
     } catch (error) {
       onsole.log(error);

@@ -224,6 +224,18 @@ function ProductManage() {
       ),
     },
     {
+      title: "Hinh ảnh",
+      dataIndex: "image",
+      key: "image",
+      render: (_, record) => (
+        <>
+          <div>
+            <img src={record.bonsaiImages[0]?.imageUrl} width={200} height={200} />
+          </div>
+        </>
+      ),
+    },
+    {
       title: "Hành động",
       dataIndex: "hanhdong",
       key: "hanhdong",

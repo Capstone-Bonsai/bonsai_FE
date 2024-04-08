@@ -33,7 +33,7 @@ function CustomerGardenManage() {
   );
   console.log(allCustomerGarden);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.garden?.pagination);
 
   const [expended, setExpended] = useState();
