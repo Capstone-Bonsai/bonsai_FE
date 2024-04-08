@@ -7,6 +7,7 @@ import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
+  FileDoneOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
 import logo from "../assets/logo_footer_final.png";
@@ -55,6 +56,10 @@ function PrivateRoute() {
     getItem("Dịch vụ", "sub2", <UploadOutlined />, [
       getItem(<Link to={`/admin/service`}>Dịch vụ</Link>, "5"),
       getItem(<Link to={`/admin/baseTask`}>Base Task</Link>, "6"),
+    ]),
+    getItem("Hợp Đồng", "sub3", <FileDoneOutlined />, [
+      getItem(<Link to={`/admin/serviceGardenChecking`}>Đơn đợi duyệt</Link>, "7"),
+      getItem(<Link to={`/admin/contract`}><FileDoneOutlined /> Hợp đồng</Link>, "8"),
     ]),
   ];
   return (

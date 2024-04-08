@@ -17,6 +17,28 @@ export const fetchAllService = createAsyncThunk(
   }
 );
 
+export const cancelServiceGarden = async (serviceGardenId) => {
+  try {
+    const response = await axios.put(
+      `/ServiceGarden/cancellation/${serviceGardenId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const acceptServiceGarden = async (serviceGardenId) => {
+  try {
+    const response = await axios.put(
+      `/ServiceGarden/acception/${serviceGardenId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const fetchServiceById = createAsyncThunk(
   "service/fetchServiceById",
   async (serviceId) => {
@@ -29,15 +51,18 @@ export const fetchServiceById = createAsyncThunk(
   }
 );
 
-export const postServiceGarden = async (payload) => {
-  try {
-    const response = await axios.post(`/ServiceGarden`, payload);
-    console.log(response.data);
-    return response.data;
-  } catch (error) {
-    throw error;
+export const postServiceGarden = createAsyncThunk(
+  "service/postService",
+  async (payload) => {
+    try {
+      const response = await axios.post(`/ServiceGarden`, payload);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
-};
+);
 
 export const allServiceType = createAsyncThunk(
   "service/allServiceType",
@@ -51,11 +76,27 @@ export const allServiceType = createAsyncThunk(
   }
 );
 
+export const manageServiceCustomer = createAsyncThunk(
+  "service/manageServiceCustomer",
+  async ({ pageIndex, pageSize }) => {
+    try {
+      const response = await axios.get(
+        `/ServiceGarden?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 const initialState = {
   listService: {},
   serviceById: {},
+  manageService: {},
   allServiceTypeDTO: undefined,
-  pagination:{},
+  serviceTempPrice: {},
+  pagination: {},
   loading: false,
   msg: "",
   token: null,
@@ -81,7 +122,6 @@ const serviceSlice = createSlice({
       state.msg = "Loading...";
       state.listService.loading = true;
     });
-
     builder.addCase(fetchAllService.fulfilled, (state, action) => {
       state.listService.services = action.payload;
       state.pagination = {
@@ -118,6 +158,35 @@ const serviceSlice = createSlice({
       state.msg = "Error loading data";
       state.loading = false;
     });
+    builder
+      .addCase(postServiceGarden.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(postServiceGarden.fulfilled, (state, action) => {
+        state.serviceTempPrice = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(postServiceGarden.rejected, (state) => {
+        state.serviceTempPrice = {};
+        state.msg = "Không tìm thấy";
+        state.loading = false;
+      })
+      .addCase(manageServiceCustomer.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(manageServiceCustomer.fulfilled, (state, action) => {
+        state.manageService = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(manageServiceCustomer.rejected, (state) => {
+        state.manageService = {};
+        state.msg = "Không tìm thấy";
+        state.loading = false;
+      });
   },
 });
 const { reducer: serviceReducer, actions } = serviceSlice;

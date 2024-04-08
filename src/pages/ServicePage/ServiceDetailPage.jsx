@@ -19,6 +19,11 @@ import { toast } from "react-toastify";
 import BarLoaderLoading from "../../components/BarLoaderLoading";
 import SelectedBonsai from "./SelectedBonsai";
 import Cookies from "universal-cookie";
+import {
+  acceptServiceGarden,
+  cancelServiceGarden,
+} from "../../redux/slice/serviceSlice";
+import ConfirmTempPrice from "./ConfirmTempPrice";
 const { RangePicker } = DatePicker;
 
 function ServiceDetailPage() {
@@ -44,7 +49,10 @@ function ServiceDetailPage() {
   const gardenNoPagin = useSelector(
     (state) => state?.garden?.gardenNoPagination?.items
   );
-  const handleRegisterService = async (e) => {
+  const { serviceTempPrice } = useSelector((state) => state.service);
+  const loadingTempPrice = useSelector((state) => state.service.loading);
+  console.log(loadingTempPrice);
+  const handleRegisterService = (e) => {
     e.preventDefault();
     if (!userData) {
       navigate("/login");
@@ -67,9 +75,10 @@ function ServiceDetailPage() {
     }
     try {
       setBarLoader(true);
-      await postServiceGarden(payload);
+      dispatch(postServiceGarden(payload));
       setBarLoader(false);
-      toast.success("Đky thành công");
+      toast.success("Đăng ký dịch vụ thành công");
+      document.getElementById("confirm_temp_price").showModal();
     } catch (error) {
       setBarLoader(false);
       if (!userData) {
@@ -77,6 +86,22 @@ function ServiceDetailPage() {
       } else {
         toast.error("Đky không thành công", error);
       }
+    }
+  };
+  const cancelService = async (serviceGardenId) => {
+    try {
+      await cancelServiceGarden(serviceGardenId);
+      toast.error("Đã hủy bỏ dịch vụ");
+    } catch (error) {
+      toast.error("Lỗi", error);
+    }
+  };
+  const acceptService = async (serviceGardenId) => {
+    try {
+      await acceptServiceGarden(serviceGardenId);
+      toast.success("Đã chấp nhận dịch vụ");
+    } catch (error) {
+      toast.error("Lỗi", error);
     }
   };
   useEffect(() => {
@@ -108,10 +133,13 @@ function ServiceDetailPage() {
     gardenSelected,
     bonsaiInGardenData,
     userData,
+    serviceTempPrice,
+    loadingTempPrice,
+    cancelService,
+    acceptService
   };
   const handleDateChange = (dates, dateStrings) => {
     console.log("Formatted Selected Range: ", dateStrings);
-    // Lưu giá trị của dates vào state hoặc bất kỳ đâu bạn muốn
     setDateRange(dateStrings);
   };
   const disabledStartDate = (current) => {
@@ -223,6 +251,7 @@ function ServiceDetailPage() {
                     </div>
                   )}
                 </div>
+                <ConfirmTempPrice {...props} />
                 <div className=" py-5 flex items-center justify-between">
                   <div>
                     <input
