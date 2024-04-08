@@ -31,22 +31,35 @@ import {
 } from "antd";
 const { Search } = Input;
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllUsers } from "../../../redux/slice/userSlice";
 import ModalCreateUser from "./ModalCreateUser";
-import Loading from "../../../components/Loading";
-const UserManage = () => {
-  const dispatch = useDispatch();
-  const loading = useSelector((state) => state.user?.loading);
-  const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [openUnlock, setOpenUnlock] = useState(false);
-  const [openLock, setOpenLock] = useState(false);
+import { fetchAllUsers } from "../../../redux/slice/userSlice";
 
+const normFile = (e) => {
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return [e.file];
+};
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
+function UserManage() {
+  const dispatch = useDispatch();
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
+  const [fileList, setFileList] = useState([]);
 
   const allUsers = useSelector((state) => state.user?.listUser);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const paging = useSelector((state) => state.user?.pagination);
+
   useEffect(() => {
     const index = currentPage - 1;
     dispatch(fetchAllUsers({ pageIndex: currentPage - 1, pageSize: pageSize }));
@@ -64,12 +77,9 @@ const UserManage = () => {
     }, 2000);
   };
 
-  const showModalLock = () => {
-    setOpenLock(true);
-  };
-  const showModalUnlock = () => {
-    setOpenUnlock(true);
-  };
+  // const showModalDelete = () => {
+  //   setOpenDelete(true);
+  // };
 
   // const handleDelete = () => {
   //   setConfirmLoadingDelete(true);
@@ -82,15 +92,10 @@ const UserManage = () => {
   const handleCancelCreate = () => {
     setOpenCreateModal(false);
   };
-  const handleCancelLock = () => {
-    console.log("Clicked cancel button");
-    setOpenLock(false);
-  };
-  const handleCancelUnLock = () => {
-    console.log("Clicked cancel button");
-    setOpenUnlock(false);
-  };
-
+  // const handleCancelDelete = () => {
+  //   console.log("Clicked cancel button");
+  //   setOpenDelete(false);
+  // };
   const getColor = (role) => {
     switch (role) {
       case "Manager":
@@ -105,7 +110,6 @@ const UserManage = () => {
         return "defaultColor";
     }
   };
-
   const handleTableChange = (pagination) => {
     console.log(pagination);
     const index = Number(pagination.current) - 1;
@@ -188,7 +192,7 @@ const UserManage = () => {
               <Button
                 type="text"
                 icon={<LockOutlined style={{ color: "red" }} />}
-                onClick={setOpenLock}
+                //onClick={showModalDelete}
               />
             </Tooltip>
           ) : (
@@ -196,12 +200,12 @@ const UserManage = () => {
               <Button
                 type="text"
                 icon={<UnlockOutlined style={{ color: "green" }} />}
-                onClick={setOpenUnlock}
+                //onClick={showModalDelete}
               />
             </Tooltip>
           )}
 
-          <Tooltip title="Chỉnh sửa">
+          <Tooltip title="Mở khóa">
             <Button
               type="text"
               icon={<EditOutlined style={{ color: "orange" }} />}
@@ -223,8 +227,8 @@ const UserManage = () => {
 
   return (
     <>
-      <div className="flex justify-center">
-        <div className="w-[100%]">
+      <div className="flex justify-center mt-12">
+        <div className="w-[70%]">
           <div className="font-semibold mb-6">Quản lý người dùng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
@@ -254,38 +258,24 @@ const UserManage = () => {
                 pagination={paging}
                 onChange={handleTableChange}
                 rowKey="id"
-                loading={{
-                  indicator: <Loading loading={loading} />,
-                  spinning: loading,
-                }}
               />
             </div>
           </div>
         </div>
         <ModalCreateUser show={openCreateModal} setShow={handleCancelCreate} />
-        <Modal
-          title="Khóa tài khoản người dùng"
-          open={openLock}
-          //onOk={handleDelete}
+        {/* <Modal
+          title="Xóa sản phẩm"
+          open={openDelete}
+          onOk={handleDelete}
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
-          onCancel={handleCancelLock}
+          onCancel={handleCancelDelete}
         >
-          <div>Bạn có muốn khóa tài khoản người dùng này không?</div>
-        </Modal>
-        <Modal
-          title="Mỏ khóa tài khoản người dùng"
-          open={openUnlock}
-          //onOk={handleDelete}
-          okButtonProps={{ type: "default" }}
-          confirmLoading={confirmLoadingDelete}
-          onCancel={handleCancelUnLock}
-        >
-          <div>Bạn có muốn mở khóa tài khoản người dùng này không?</div>
-        </Modal>
+          <div>Bạn có muốn xóa sản phẩm này không?</div>
+        </Modal> */}
       </div>
     </>
   );
-};
+}
 
 export default UserManage;

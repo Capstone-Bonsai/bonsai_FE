@@ -30,8 +30,8 @@ const { Search } = Input;
 import { useDispatch, useSelector } from "react-redux";
 import { getListRole } from "../../../utils/apiService";
 import { toast } from "react-toastify";
-import { fetchAllUsers } from "../../../redux/userSlice";
 import { postCreateNewUser } from "../../../utils/apiService";
+import { fetchAllUsers } from "../../../redux/slice/userSlice";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
