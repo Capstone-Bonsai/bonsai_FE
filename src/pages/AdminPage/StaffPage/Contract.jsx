@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import {
-  contractByServiceId,
+  serviceGardenByServiceId,
 } from "../../../redux/slice/contractSlice";
 import { formatPrice } from "../../../components/formatPrice/FormatPrice";
 import ModalContractDetail from "./ModalContractDetail";
@@ -40,7 +40,7 @@ function Contract() {
   const showModalInfo = (serviceId) => {
     setOpenInfo(true);
     try {
-      dispatch(contractByServiceId(serviceId));
+      dispatch(serviceGardenByServiceId(serviceId));
     } catch (error) {
       console.log("Lỗi r", error);
     }

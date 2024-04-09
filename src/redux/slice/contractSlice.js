@@ -15,8 +15,17 @@ export const allServiceGarden = createAsyncThunk(
   }
 );
 
-export const contractByServiceId = createAsyncThunk(
-  "contract/contractByServiceId",
+export const createContract = async (payload) => {
+  try {
+    const response = await axios.post(`Contract`, payload);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const serviceGardenByServiceId = createAsyncThunk(
+  "contract/serviceGardenByServiceId",
   async (serviceId) => {
     try {
       const response = await axios.get(`/ServiceGarden/${serviceId}`);
@@ -64,16 +73,16 @@ const contractSlice = createSlice({
         state.msg = "Error loading data";
         state.allContractDTO.loading = false;
       })
-      .addCase(contractByServiceId.pending, (state) => {
+      .addCase(serviceGardenByServiceId.pending, (state) => {
         state.msg = "Loading...";
         state.loading = true;
       })
-      .addCase(contractByServiceId.fulfilled, (state, action) => {
+      .addCase(serviceGardenByServiceId.fulfilled, (state, action) => {
         state.allContractDTO.contracts = action.payload;
         state.msg = "Data loaded successfully";
         state.contractServiceDetail.loading = false;
       })
-      .addCase(contractByServiceId.rejected, (state) => {
+      .addCase(serviceGardenByServiceId.rejected, (state) => {
         state.msg = "Error loading data";
         state.contractServiceDetail.loading = false;
       });

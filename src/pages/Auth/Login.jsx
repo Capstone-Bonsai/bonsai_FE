@@ -23,6 +23,9 @@ function Login() {
   const userInfo = cookies?.get("user");
 
   const location = useLocation();
+  const registerService = location.state;
+  console.log(registerService);
+
   const searchParams = new URLSearchParams(location.search);
   const userId = searchParams.get("userId");
   const code = searchParams.get("code");

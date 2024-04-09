@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import {
   allServiceGarden,
-  contractByServiceId,
+  serviceGardenByServiceId,
 } from "../../../redux/slice/contractSlice";
 import { formatPrice } from "../../../components/formatPrice/FormatPrice";
 import ModalServiceGardenCheking from "./ModalServiceGardenCheking";
@@ -23,14 +23,15 @@ function ServiceGardenChecking() {
   const cookies = new Cookies();
   const userInfo = cookies?.get("user");
   const loading = useSelector(
-    (state) => state.contract?.allContractDTO?.loading
+    (state) => state.contract?.allServiceGardenDTO?.loading
   );
   const [openDelete, setOpenDelete] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
-  const [selectedContractDetail, setSelectedContractDetail] = useState();
+  const [selectedServiceGardenDetail, setSelectedServiceGardenDetail] =
+    useState("");
   const allServiceGardens = useSelector(
-    (state) => state.contract?.allContractDTO?.contracts?.items
+    (state) => state.contract?.allServiceGardenDTO?.contracts?.items
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
@@ -38,18 +39,18 @@ function ServiceGardenChecking() {
   const showModalDelete = () => {
     setOpenDelete(true);
   };
-  const showModalInfo = (serviceId) => {
+  const showModalInfo = () => {
     setOpenInfo(true);
-    try {
-      dispatch(contractByServiceId(serviceId));
-    } catch (error) {
-      console.log("Lỗi r", error);
-    }
+    // try {
+    //   dispatch(serviceGardenByServiceId(serviceId));
+    // } catch (error) {
+    //   console.log("Lỗi r", error);
+    // }
   };
 
   useEffect(() => {
     dispatch(
-        allServiceGarden({
+      allServiceGarden({
         pageIndex: currentPage - 1,
         pageSize: pageSize,
       })
@@ -96,7 +97,7 @@ function ServiceGardenChecking() {
       key: "customerName",
       render: (_, record) => (
         <>
-          <p>{record?.customerGarden?.customerId}</p>
+          <p>{record?.customerGarden?.customer.applicationUser.fullname}</p>
         </>
       ),
     },
@@ -106,20 +107,11 @@ function ServiceGardenChecking() {
       key: "customerPhoneNumber",
       render: (_, record) => (
         <>
-          <p>{record?.customerPhoneNumber}</p>
+          <p>{record?.customerGarden?.customer.applicationUser.phoneNumber}</p>
         </>
       ),
     },
-    {
-      title: "Khoảng cách",
-      dataIndex: "distance",
-      key: "distance",
-      render: (_, record) => (
-        <>
-          <p>{record.distance}</p>
-        </>
-      ),
-    },
+
     {
       title: "Ngày bắt đầu",
       dataIndex: "startDate",
@@ -146,7 +138,7 @@ function ServiceGardenChecking() {
       key: "gardenSquare",
       render: (_, record) => (
         <>
-          <p>{record?.customerGarden?.square} m2</p>
+          <p>{record?.customerGarden?.square} m<sup>2</sup></p>
         </>
       ),
     },
@@ -225,7 +217,7 @@ function ServiceGardenChecking() {
             <button
               className="outline-none"
               onClick={() => {
-                setSelectedContractDetail(record);
+                setSelectedServiceGardenDetail(record);
                 showModalInfo();
               }}
             >
@@ -246,14 +238,7 @@ function ServiceGardenChecking() {
           <div className="font-semibold mb-6">Hợp đồng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
-              <div>
-                {/* <button
-                  className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
-                  onClick={showCreateModal}
-                >
-                  <PlusCircleOutlined /> Thêm sản phẩm
-                </button> */}
-              </div>
+              <div></div>
               <div className="pr-0">
                 <Search
                   placeholder="input search text"
@@ -291,16 +276,8 @@ function ServiceGardenChecking() {
         <ModalServiceGardenCheking
           show={openInfo}
           setShow={handleCancelInfo}
-          contractDetail={selectedContractDetail}
+          contractDetail={selectedServiceGardenDetail}
         />
-        {/* <Modal
-          title="Thông tin hợp đồng"
-          open={openInfo}
-          okButtonProps={{ type: "default" }}
-          onCancel={handleCancelInfo}
-        >
-          <div>Thông tin hợp đồng</div>
-        </Modal> */}
       </div>
     </>
   );
