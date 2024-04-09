@@ -9,7 +9,7 @@ function CustomerPrivateRoute() {
   const userInfo = cookies.get("user");
   return (
     <>
-      {userInfo ? (
+      {userInfo.role == "Customer" ? (
         <>
           <ToastContainer />
           <Banner />

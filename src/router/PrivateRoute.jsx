@@ -14,7 +14,7 @@ import logo from "../assets/logo_footer_final.png";
 import { Dropdown, Layout, Menu, Button, theme } from "antd";
 import { profileUser } from "../redux/slice/authSlice";
 import Cookies from "universal-cookie";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const { Header, Sider, Content } = Layout;
 
@@ -30,8 +30,9 @@ function getItem(label, key, icon, children, type) {
 
 function PrivateRoute() {
   const cookies = new Cookies();
+  const dispatch = useDispatch();
   const userInfo = cookies.get("user");
-  const avatarUrl = useSelector((state) => state.avatar.avatarUrlRedux);
+  const avatarUrl = useSelector((state) => state.avatar?.avatarUrlRedux);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -97,17 +98,25 @@ function PrivateRoute() {
       getItem(<Link to={`/admin/baseTask`}>Base Task</Link>, "6"),
     ]),
     getItem("Hợp Đồng", "sub3", <FileDoneOutlined />, [
-      getItem(<Link to={`/admin/serviceGardenChecking`}>Đơn đợi duyệt</Link>, "7"),
-      getItem(<Link to={`/admin/contract`}><FileDoneOutlined /> Hợp đồng</Link>, "8"),
+      getItem(
+        <Link to={`/admin/serviceGardenChecking`}>Đơn đợi duyệt</Link>,
+        "7"
+      ),
+      getItem(
+        <Link to={`/admin/contract`}>
+          <FileDoneOutlined /> Hợp đồng
+        </Link>,
+        "8"
+      ),
     ]),
   ];
 
   useEffect(() => {
     if (userInfo) {
-      console.log(userInfo)
+      console.log(userInfo);
       profileUser()
         .then((data) => {
-          console.log(data)
+          console.log(data);
           cookies.set("userData", data);
           const newAvt = data?.avatarUrl;
           dispatch(setAvatarUrlRedux(newAvt));
