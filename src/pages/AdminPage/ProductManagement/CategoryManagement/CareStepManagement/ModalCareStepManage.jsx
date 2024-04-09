@@ -185,7 +185,7 @@ const ModalCareStepManage = (props) => {
         <ModalCreateCareStep
           show={openCreateModal}
           setShow={handleCancelCreate}
-          categoryId={category.id}
+          categoryId={category?.id}
         />
         {/* <ModalUpdateCareStep
           show={openUpdateModal}
