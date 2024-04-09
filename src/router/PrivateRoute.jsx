@@ -96,11 +96,10 @@ function PrivateRoute() {
       getItem(<Link to={`/admin/service`}>Dịch vụ</Link>, "5"),
       getItem(<Link to={`/admin/baseTask`}>Base Task</Link>, "6"),
     ]),
-    getItem(
-      <Link to={`/admin/contract`}>Hợp đồng</Link>,
-      "7",
-      <FileDoneOutlined />
-    ),
+    getItem("Hợp Đồng", "sub3", <FileDoneOutlined />, [
+      getItem(<Link to={`/admin/serviceGardenChecking`}>Đơn đợi duyệt</Link>, "7"),
+      getItem(<Link to={`/admin/contract`}><FileDoneOutlined /> Hợp đồng</Link>, "8"),
+    ]),
   ];
 
   useEffect(() => {

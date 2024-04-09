@@ -39,15 +39,17 @@ function CustomerGarden() {
       pageIndex: pageIndex,
       pageSize,
     };
-    setLoading(true);
-    dispatch(fetchCustomerGarden(payload))
-      .then(() => {
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching order data:", error);
-        setLoading(false);
-      });
+    if (!gardens) {
+      setLoading(true);
+      dispatch(fetchCustomerGarden(payload))
+        .then(() => {
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching order data:", error);
+          setLoading(false);
+        });
+    }
   }, [pageIndex]);
   const [file, setFile] = useState([]);
   const handleImageChange = (e) => {
