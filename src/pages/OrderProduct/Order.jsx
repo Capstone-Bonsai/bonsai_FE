@@ -104,17 +104,16 @@ function Order() {
   //   fetchDistrictAPI();
   // }, [provinceId]);
 
-  // useEffect(() => {
-  //   const fetchWardAPI = async () => {
-  //     try {
-  //       const responseData = await getWard({ districtId });
-  //       setWardData(responseData);
-  //     } catch (error) {
-  //       // console.error("Error fetching province data:", error);
-  //     }
-  //   };
-  //   fetchWardAPI();
-  // }, [districtId]);
+  useEffect(() => {
+    const fetchDeliveryFee = async () => {
+      try {
+        handleDeliveryFee(address);
+      } catch (error) {
+        // console.error("Error fetching province data:", error);
+      }
+    };
+    fetchDeliveryFee();
+  }, [address]);
 
   const handleOrder = async () => {
     const dataOrder = {
