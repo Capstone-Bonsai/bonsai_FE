@@ -1,15 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Tag,
-  Modal,
-  Table,
-  Transfer,
-} from "antd";
+import { Tag, Modal, Table, Transfer } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  allBaseTask,
-} from "../../../redux/slice/baseTaskSlice";
+import { allBaseTask } from "../../../redux/slice/baseTaskSlice";
 import difference from "lodash/difference";
 
 const TableTransfer = ({ leftColumns, rightColumns, ...restProps }) => (
@@ -125,7 +118,7 @@ const ModalSelectBaseTask = (props) => {
       >
         <div className="mt-12">
           <TableTransfer
-            titles={["Chọn task", "Task"]}
+            titles={["Chọn công việc", "Công việc"]}
             showSearch
             dataSource={listBaseTask}
             targetKeys={listSelectedBaseTask}
@@ -136,6 +129,8 @@ const ModalSelectBaseTask = (props) => {
             filterOption={(inputValue, item) =>
               item.name.indexOf(inputValue) !== -1
             }
+            operations={["left", "right"]}
+            operationStyle={{ color: "black"}}
           />
         </div>
       </Modal>

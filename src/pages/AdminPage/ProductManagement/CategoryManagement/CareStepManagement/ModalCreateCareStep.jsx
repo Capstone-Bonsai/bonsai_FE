@@ -1,24 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PlusOutlined } from "@ant-design/icons";
-import { Tag, Input, Modal, Form, InputNumber, Select, Upload } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
+import { Tag, Input, Modal, Form, InputNumber, Select, Upload, Space, Button} from "antd";
 const { Search, TextArea } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { allCareStep } from "../../../../../redux/slice/careStepSlice";
+import { postCareStep } from "../../../../../utils/careStepApi";
 
 const ModalCreateCareStep = (props) => {
   const [form] = Form.useForm();
-  const { show, setShow } = props;
+  const { show, setShow, categoryId } = props;
   const handleClose = () => {
     setFormData({
-      name: "",
-      detail: "",
+      categoryId: "",
+      careSteps: [],
     });
     form.resetFields();
     setShow(false);
   };
   const [formData, setFormData] = useState({
-    name: "",
+    categoryId: categoryId,
     detail: "",
   });
   const dispatch = useDispatch();
@@ -26,17 +28,14 @@ const ModalCreateCareStep = (props) => {
 
   const formRef = useRef(null);
 
-  const createBaseTask = (input) => {
+  const createCareStep = (input) => {
     try {
       console.log(input);
-      postBaseTask(input)
+      postCareStep(input)
         .then((data) => {
           toast.success("Thêm công việc thành công!");
           dispatch(
-            allBaseTaskPagination({
-              pageIndex: 0,
-              pageSize: 5,
-            })
+            allCareStep(categoryId)
           );
           handleClose();
         })
@@ -56,7 +55,7 @@ const ModalCreateCareStep = (props) => {
       .validateFields()
       .then(() => {
         setConfirmLoading(true);
-        createBaseTask(formData);
+        createCareStep(formData);
       })
       .catch((errorInfo) => {
         toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
@@ -71,7 +70,7 @@ const ModalCreateCareStep = (props) => {
     <>
       <Modal
         width={800}
-        title="Thêm công việc"
+        title="Thêm bước chăm sóc"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
@@ -90,21 +89,39 @@ const ModalCreateCareStep = (props) => {
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
           >
-            <Form.Item
-              label="Tên công việc"
-              name="name"
-              rules={[{ required: true, message: "Tên không được để trống!" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Miêu tả"
-              name="detail"
-              rules={[
-                { required: true, message: "Miêu tả không được để trống!" },
-              ]}
-            >
-              <Input />
+            <Form.Item label="Tên bước chăm sóc">
+              <Form.List name="careSteps">
+                {(fields, { add, remove }) => (
+                  <div
+                    style={{
+                      display: "flex",
+                      rowGap: 20,
+                      flexDirection: "column",
+                    }}
+                  >
+                    {fields.map((field) => (
+                      <Space>
+                        <div>
+                          <Form.Item name={[field.name]} noStyle>
+                            <Input />
+                          </Form.Item>
+                        </div>
+                        <div
+                          onClick={() => {
+                            remove(field.name);
+                          }}
+                        >
+                          <CloseOutlined />
+                        </div>
+                      </Space>
+                    ))}
+
+                    <Button type="dashed" onClick={() => add()} block>
+                      + Thêm bước
+                    </Button>
+                  </div>
+                )}
+              </Form.List>
             </Form.Item>
           </Form>
         </div>

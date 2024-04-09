@@ -125,8 +125,7 @@ const ModalCareStepManage = (props) => {
           </button>
           <button
             onClick={() => {
-              setSelectedUpdateCareStep(record);
-              showUpdateModal();
+              showCreateModal();
             }}
           >
             Chỉnh sửa
@@ -186,12 +185,13 @@ const ModalCareStepManage = (props) => {
         <ModalCreateCareStep
           show={openCreateModal}
           setShow={handleCancelCreate}
+          categoryId={category?.id}
         />
-        <ModalUpdateCareStep
+        {/* <ModalUpdateCareStep
           show={openUpdateModal}
           setShow={handleCancelUpdate}
           baseTask={selectedCareStep}
-        />
+        /> */}
         <Modal
           title="Xóa bước chăm sóc"
           open={openDelete}

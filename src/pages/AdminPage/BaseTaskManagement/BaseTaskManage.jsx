@@ -45,7 +45,7 @@ function BaseTaskManage() {
     (state) => state.baseTask?.allBaseTaskDTOPagination?.items
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.baseTask?.pagination);
 
   useEffect(() => {

@@ -30,8 +30,8 @@ const { Search } = Input;
 import { useDispatch, useSelector } from "react-redux";
 import { getListRole } from "../../../utils/apiService";
 import { toast } from "react-toastify";
-import { fetchAllUsers } from "../../../redux/slice/userSlice";
 import { postCreateNewUser } from "../../../utils/apiService";
+import { fetchAllUsers } from "../../../redux/slice/userSlice";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -62,6 +62,7 @@ const ModalCreateUser = (props) => {
       phone: "",
       fullname: "",
       email: "",
+      phone: "",
     });
     setFileList([]);
     setShow(false);
@@ -72,6 +73,7 @@ const ModalCreateUser = (props) => {
     phone: "",
     fullname: "",
     email: "",
+    phone: "",
   });
   const dispatch = useDispatch();
   const [error, setError] = useState([]);
@@ -144,17 +146,16 @@ const ModalCreateUser = (props) => {
       postData.append("PhoneNumber", formData.phone);
       postData.append("Avatar", fileList[0] ? fileList[0].originFileObj : null);
 
-      console.log(fileList[0] ? fileList[0].originFileObj : null)
-      // postCreateNewUser(postData)
-      //   .then((data) => {
-      //     setConfirmLoading(false);
-      //     toast.success(data.data);
-      //     dispatch(fetchAllUsers({ pageIndex: 0, pageSize: 20 }));
-      //     handleClose();
-      //   })
-      //   .catch((err) => {
-      //     toast.error(err.response.data);
-      //   });
+      postCreateNewUser(postData)
+        .then((data) => {
+          setConfirmLoading(false);
+          toast.success(data.data);
+          dispatch(fetchAllUsers({ pageIndex: 0, pageSize: 10 }));
+          handleClose();
+        })
+        .catch((err) => {
+          toast.error(err.response.data);
+        });
     } catch (error) {
       console.log(error);
     }

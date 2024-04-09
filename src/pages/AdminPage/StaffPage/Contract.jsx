@@ -32,7 +32,7 @@ function Contract() {
     (state) => state.contract?.allContractDTO?.contracts?.items
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.contract?.pagination);
   const showModalDelete = () => {
     setOpenDelete(true);

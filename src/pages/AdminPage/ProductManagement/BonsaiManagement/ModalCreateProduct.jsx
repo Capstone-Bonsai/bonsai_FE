@@ -114,7 +114,7 @@ const ModalCreateProduct = (props) => {
           dispatch(
             fetchAllBonsaiPagination({
               pageIndex: 0,
-              pageSize: 5,
+              pageSize: 10,
               keyword: "",
             })
           );

@@ -43,7 +43,7 @@ const ModalUpdateService = (props) => {
           dispatch(
             fetchAllService({
               pageIndex: 0,
-              pageSize: 5,
+              pageSize: 10,
             })
           );
           handleClose();
