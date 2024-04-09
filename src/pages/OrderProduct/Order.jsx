@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { getDistrict, getProvince, getWard } from "../../redux/slice/address";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import AutoComplete from "react-google-autocomplete";
+import CompletedAddress from "./CompletedAddress";
 function Order() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ function Order() {
   const [fullNameNoneLogin, setFullNameNoneLogin] = useState("");
   const [phoneNumberNoneLogin, setPhoneNumberNoneLogin] = useState("");
   const [deliveryFee, setDeliveryFee] = useState(0);
-  
+
   useEffect(() => {
     if (resultCode === "0") {
       cookies.remove(userInfo ? `cartId ${idUser}` : "cartItems");
@@ -63,57 +64,57 @@ function Order() {
     }
   }, [resultCode]);
 
-  useEffect(() => {
-    if (provinceId && districtData) {
-      const defaultDistrict = districtData.data[0];
-      setDistrictId(defaultDistrict?.DistrictID);
-      setDistrictName(defaultDistrict?.DistrictName);
-    }
-    // if (districtId && wardData) {
-    //   const defaultWard = wardData.data[0];
-    //   setWardName(defaultWard.WardName);
-    // }
-  }, [provinceId, districtData]);
+  // useEffect(() => {
+  //   if (provinceId && districtData) {
+  //     const defaultDistrict = districtData.data[0];
+  //     setDistrictId(defaultDistrict?.DistrictID);
+  //     setDistrictName(defaultDistrict?.DistrictName);
+  //   }
+  //   // if (districtId && wardData) {
+  //   //   const defaultWard = wardData.data[0];
+  //   //   setWardName(defaultWard.WardName);
+  //   // }
+  // }, [provinceId, districtData]);
 
-  useEffect(() => {
-    const fetchProvinceAPI = async () => {
-      try {
-        const responseData = await getProvince();
-        setProvinceData(responseData);
-      } catch (error) {
-        // console.error("Error fetching province data:", error);
-      }
-    };
-    fetchProvinceAPI();
-  }, []);
+  // useEffect(() => {
+  //   const fetchProvinceAPI = async () => {
+  //     try {
+  //       const responseData = await getProvince();
+  //       setProvinceData(responseData);
+  //     } catch (error) {
+  //       // console.error("Error fetching province data:", error);
+  //     }
+  //   };
+  //   fetchProvinceAPI();
+  // }, []);
 
-  useEffect(() => {
-    const fetchDistrictAPI = async () => {
-      try {
-        const responseData = await getDistrict({ provinceId });
-        const filteredData = responseData.data.filter(
-          (district) => district.DistrictID != "3451"
-          // && district.DistrictID != "3715"
-        );
-        setDistrictData({ ...responseData, data: filteredData });
-      } catch (error) {
-        // console.error("Error fetching province data:", error);
-      }
-    };
-    fetchDistrictAPI();
-  }, [provinceId]);
+  // useEffect(() => {
+  //   const fetchDistrictAPI = async () => {
+  //     try {
+  //       const responseData = await getDistrict({ provinceId });
+  //       const filteredData = responseData.data.filter(
+  //         (district) => district.DistrictID != "3451"
+  //         // && district.DistrictID != "3715"
+  //       );
+  //       setDistrictData({ ...responseData, data: filteredData });
+  //     } catch (error) {
+  //       // console.error("Error fetching province data:", error);
+  //     }
+  //   };
+  //   fetchDistrictAPI();
+  // }, [provinceId]);
 
-  useEffect(() => {
-    const fetchWardAPI = async () => {
-      try {
-        const responseData = await getWard({ districtId });
-        setWardData(responseData);
-      } catch (error) {
-        // console.error("Error fetching province data:", error);
-      }
-    };
-    fetchWardAPI();
-  }, [districtId]);
+  // useEffect(() => {
+  //   const fetchWardAPI = async () => {
+  //     try {
+  //       const responseData = await getWard({ districtId });
+  //       setWardData(responseData);
+  //     } catch (error) {
+  //       // console.error("Error fetching province data:", error);
+  //     }
+  //   };
+  //   fetchWardAPI();
+  // }, [districtId]);
 
   const handleOrder = async () => {
     const dataOrder = {
@@ -184,7 +185,7 @@ function Order() {
       <MinHeight>
         {isBarLoader ? <BarLoaderLoading loading={isBarLoader} /> : ""}
         <div className="m-auto w-[70%]">
-        <AutoComplete
+          <AutoComplete
             apiKey="AIzaSyD-mpcsm8z3RzVow60KPO4rSNRvuozFmt0"
             onPlaceSelected={(place) => console.log(place)}
           />
@@ -267,7 +268,7 @@ function Order() {
                 <div className="text-[24px] font-bold text-[#3e9943]">
                   Địa chỉ
                 </div>
-                <div className="flex gap-5 items-center">
+                {/* <div className="flex gap-5 items-center">
                   <select
                     onChange={(e) => {
                       setProvinceId(e.target.value),
@@ -291,6 +292,7 @@ function Order() {
                       </option>
                     ))}
                   </select>
+
                   {districtData != null ? (
                     <select
                       onChange={(e) => {
@@ -363,7 +365,8 @@ function Order() {
                   ) : (
                     ""
                   )}
-                </div>
+                </div> */}
+                <CompletedAddress setAddress={setAddress} />
               </div>
               <div className="mt-5">
                 <div className="text-[24px] font-bold  text-[#3e9943]">
