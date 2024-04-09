@@ -20,7 +20,7 @@ export const createContract = async (payload) => {
     const response = await axios.post(`Contract`, payload);
     return response.data;
   } catch (error) {
-    throw error;
+    throw error;  
   }
 };
 
