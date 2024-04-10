@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Tag, Input, Modal, Form, InputNumber, Select, Upload } from "antd";
 import { format } from "date-fns";
+import { useDispatch, useSelector } from "react-redux";
+import { freeGardener } from "../../../redux/slice/gardener";
 function ModalContractDetail(props) {
   const { show, setShow, contractDetail } = props;
+  const dispatch = useDispatch();
+  const contractId = contractDetail?.id;
+  console.log(contractId);
+  useEffect(() => {
+    const payload = {
+      pageIndex: 0,
+      pageSize: 10,
+      contractId: contractId,
+    };
+    dispatch(freeGardener(payload));
+  }, [contractDetail]);
   console.log(contractDetail);
   return (
     <>

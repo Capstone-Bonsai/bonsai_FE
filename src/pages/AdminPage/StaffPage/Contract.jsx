@@ -38,13 +38,8 @@ function Contract() {
   const showModalDelete = () => {
     setOpenDelete(true);
   };
-  const showModalInfo = (serviceId) => {
+  const showModalInfo = () => {
     setOpenInfo(true);
-    try {
-      dispatch(serviceGardenByServiceId(serviceId));
-    } catch (error) {
-      console.log("Lỗi r", error);
-    }
   };
 
   useEffect(() => {

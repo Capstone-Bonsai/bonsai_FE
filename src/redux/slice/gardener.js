@@ -2,10 +2,10 @@ import axios from "../../utils/axiosCustomize";
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 export const freeGardener = createAsyncThunk(
   "garden/freeGardener",
-  async ({ pageIndex, pageSize }) => {
+  async ({ pageIndex, pageSize, contractId }) => {
     try {
       const response = await axios.get(
-        `/User/FreeGardener/pageIndex=${pageIndex}&pageSize=${pageSize}`
+        `/User/FreeGardener?pageIndex=${pageIndex}&pageSize=${pageSize}&contractId=${contractId}`
       );
       return response.data;
     } catch (error) {
