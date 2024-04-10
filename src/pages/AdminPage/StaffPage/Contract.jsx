@@ -11,7 +11,10 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
-import { serviceGardenByServiceId } from "../../../redux/slice/contractSlice";
+import {
+  listAllContract,
+  serviceGardenByServiceId,
+} from "../../../redux/slice/contractSlice";
 import { formatPrice } from "../../../components/formatPrice/FormatPrice";
 import ModalContractDetail from "./ModalContractDetail";
 
@@ -27,7 +30,7 @@ function Contract() {
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [selectedContractDetail, setSelectedContractDetail] = useState();
   const allContracts = useSelector(
-    (state) => state.contract?.allContractDTO?.contracts?.items
+    (state) => state.contract?.listContractDTO?.items
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -44,14 +47,14 @@ function Contract() {
     }
   };
 
-  // useEffect(() => {
-  //   dispatch(
-  //     allContract({
-  //       pageIndex: currentPage - 1,
-  //       pageSize: pageSize,
-  //     })
-  //   );
-  // }, []);
+  useEffect(() => {
+    dispatch(
+      listAllContract({
+        pageIndex: currentPage - 1,
+        pageSize: pageSize,
+      })
+    );
+  }, []);
 
   const handleCancelDelete = () => {
     console.log("Clicked cancel button");
