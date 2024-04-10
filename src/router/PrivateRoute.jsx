@@ -9,12 +9,13 @@ import {
   VideoCameraOutlined,
   FileDoneOutlined,
   SmileOutlined,
+  SnippetsOutlined,
 } from "@ant-design/icons";
 import logo from "../assets/logo_footer_final.png";
 import { Dropdown, Layout, Menu, Button, theme } from "antd";
 import { profileUser } from "../redux/slice/authSlice";
 import Cookies from "universal-cookie";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const { Header, Sider, Content } = Layout;
 
@@ -30,7 +31,6 @@ function getItem(label, key, icon, children, type) {
 
 function PrivateRoute() {
   const cookies = new Cookies();
-  const dispatch = useDispatch();
   const userInfo = cookies.get("user");
   const avatarUrl = useSelector((state) => state.avatar?.avatarUrlRedux);
   const [collapsed, setCollapsed] = useState(false);
@@ -46,20 +46,7 @@ function PrivateRoute() {
   const NavBarItems = [
     {
       key: "1",
-      label:
-        avatarUrl != null ? (
-          <div>
-            <Image
-              src={avatarUrl}
-              className=" rounded-full"
-              alt=""
-              width={40}
-              height={40}
-            />
-          </div>
-        ) : (
-          <UserOutlined />
-        ),
+      label: <UserOutlined />,
       children:
         userInfo != null
           ? [
@@ -99,7 +86,9 @@ function PrivateRoute() {
     ]),
     getItem("Hợp Đồng", "sub3", <FileDoneOutlined />, [
       getItem(
-        <Link to={`/admin/serviceGardenChecking`}>Đơn đợi duyệt</Link>,
+        <Link to={`/admin/serviceGardenChecking`}>
+          <SnippetsOutlined /> Đơn đợi duyệt
+        </Link>,
         "7"
       ),
       getItem(
@@ -119,7 +108,7 @@ function PrivateRoute() {
           console.log(data);
           cookies.set("userData", data);
           const newAvt = data?.avatarUrl;
-          dispatch(setAvatarUrlRedux(newAvt));
+          //dispatch(setAvatarUrlRedux(newAvt));
         })
         .catch((error) => {
           console.error("Error while fetching profile data:", error);

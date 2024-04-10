@@ -11,9 +11,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
-import {
-  serviceGardenByServiceId,
-} from "../../../redux/slice/contractSlice";
+import { serviceGardenByServiceId } from "../../../redux/slice/contractSlice";
 import { formatPrice } from "../../../components/formatPrice/FormatPrice";
 import ModalContractDetail from "./ModalContractDetail";
 
@@ -46,14 +44,14 @@ function Contract() {
     }
   };
 
-  useEffect(() => {
-    dispatch(
-      allContract({
-        pageIndex: currentPage - 1,
-        pageSize: pageSize,
-      })
-    );
-  }, []);
+  // useEffect(() => {
+  //   dispatch(
+  //     allContract({
+  //       pageIndex: currentPage - 1,
+  //       pageSize: pageSize,
+  //     })
+  //   );
+  // }, []);
 
   const handleCancelDelete = () => {
     console.log("Clicked cancel button");
@@ -77,16 +75,16 @@ function Contract() {
     }
   };
 
-  const handleTableChange = (pagination) => {
-    console.log(pagination);
-    const index = Number(pagination.current) - 1;
-    dispatch(
-      allContract({
-        pageIndex: index,
-        pageSize: pageSize,
-      })
-    );
-  };
+  // const handleTableChange = (pagination) => {
+  //   console.log(pagination);
+  //   const index = Number(pagination.current) - 1;
+  //   dispatch(
+  //     allContract({
+  //       pageIndex: index,
+  //       pageSize: pageSize,
+  //     })
+  //   );
+  // };
 
   const columns = [
     {
@@ -195,7 +193,7 @@ function Contract() {
       key: "contractStatus",
       render: (_, record) => <>{record.serviceGardenStatus}</>,
     },
-  
+
     {
       title: "Số lượng gardener",
       dataIndex: "numberOfGardener",
@@ -268,12 +266,8 @@ function Contract() {
                 columns={columns}
                 scroll={{ x: true }}
                 pagination={paging}
-                onChange={handleTableChange}
+                // onChange={handleTableChange}
                 rowKey={(record) => record.id}
-                loading={{
-                  indicator: <Loading loading={loading} />,
-                  spinning: loading,
-                }}
               />
             </div>
           </div>

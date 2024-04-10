@@ -27,9 +27,9 @@ import BaseTaskManage from "../pages/AdminPage/BaseTaskManagement/BaseTaskManage
 import ProductLayout from "../pages/AdminPage/ProductManagement/Layout";
 import ManageService from "../pages/ServicePage/ManageService";
 import Contract from "../pages/AdminPage/StaffPage/Contract";
-import ContractDetail from "../pages/AdminPage/StaffPage/ContractDetail";
 import ServiceGardenChecking from "../pages/AdminPage/StaffPage/ServiceGardenChecking";
 import ContractUser from "../pages/ManageContractForUser/ContractUser";
+import ContractUserDetail from "../pages/ManageContractForUser/ContractUserDetail";
 function Router() {
   const element = useRoutes([
     {
@@ -108,6 +108,10 @@ function Router() {
         {
           path: "/ManageContractUser",
           element: <ContractUser />,
+        },
+        {
+          path: "/ManageContractDetail",
+          element: <ContractUserDetail />,
         },
       ],
     },

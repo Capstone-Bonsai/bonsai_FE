@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function NavbarUser() {
@@ -14,10 +14,17 @@ function NavbarUser() {
     menuItems.find((item) => item.path === location.pathname)
   );
   const navigate = useNavigate();
+  useEffect(() => {
+    setSelectedItem(menuItems.find((item) => item.path === location.pathname));
+  }, [location.pathname]);
+
   const handleNavigation = (path) => {
     navigate(path);
-    setSelectedItem(path);
+    if (selectedItem?.path !== path) {
+      setSelectedItem(menuItems.find((item) => item.path === path));
+    }
   };
+
   return (
     <nav className="border w-[20%] h-[400px]">
       <ul className=" w-full">

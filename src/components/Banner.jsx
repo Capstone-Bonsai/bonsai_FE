@@ -20,7 +20,7 @@ function Banner() {
   const { Search } = Input;
   const navLinks = [
     { text: "Trang chủ", to: "/" },
-    { text: "Sản phẩm", to: "/bonsai" },
+    { text: "Bonsai", to: "/bonsai" },
     { text: "Chăm sóc cây cảnh", to: "/service" },
     { text: "Liên hệ", to: "/contact" },
   ];
