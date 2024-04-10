@@ -15,12 +15,26 @@ export const allServiceGarden = createAsyncThunk(
   }
 );
 
+export const listAllContract = createAsyncThunk(
+  "contract/allContract",
+  async ({ pageIndex, pageSize }) => {
+    try {
+      const response = await axios.get(
+        `/Contract/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const createContract = async (payload) => {
   try {
     const response = await axios.post(`Contract`, payload);
     return response.data;
   } catch (error) {
-    throw error;  
+    throw error;
   }
 };
 
@@ -37,6 +51,7 @@ export const serviceGardenByServiceId = createAsyncThunk(
 );
 
 const initialState = {
+  listContractDTO: {},
   allContractDTO: {},
   allServiceGardenDTO: {},
   pagination: {},
@@ -80,12 +95,25 @@ const contractSlice = createSlice({
       .addCase(serviceGardenByServiceId.fulfilled, (state, action) => {
         state.allContractDTO.contracts = action.payload;
         state.msg = "Data loaded successfully";
-        state.contractServiceDetail.loading = false;
+        state.allContractDTO.contracts.loading = false;
       })
       .addCase(serviceGardenByServiceId.rejected, (state) => {
         state.msg = "Error loading data";
-        state.contractServiceDetail.loading = false;
-      });
+        state.allContractDTO.contracts.loading = false;
+      })
+      .addCase(listAllContract.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(listAllContract.fulfilled, (state, action) => {
+        state.listContractDTO = action.payload;
+        state.msg = "Data loaded successfully";
+        state.listContractDTO.loading = false;
+      })
+      .addCase(listAllContract.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.listContractDTO.loading = false;
+      })
   },
 });
 const { reducer: contractReducer, actions } = contractSlice;

@@ -29,6 +29,7 @@ import ManageService from "../pages/ServicePage/ManageService";
 import Contract from "../pages/AdminPage/StaffPage/Contract";
 import ContractDetail from "../pages/AdminPage/StaffPage/ContractDetail";
 import ServiceGardenChecking from "../pages/AdminPage/StaffPage/ServiceGardenChecking";
+import ContractUser from "../pages/ManageContractForUser/ContractUser";
 function Router() {
   const element = useRoutes([
     {
@@ -103,6 +104,10 @@ function Router() {
         {
           path: "/ManageService",
           element: <ManageService />,
+        },
+        {
+          path: "/ManageContractUser",
+          element: <ContractUser />,
         },
       ],
     },

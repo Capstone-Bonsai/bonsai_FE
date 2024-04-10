@@ -81,7 +81,7 @@ export const manageServiceCustomer = createAsyncThunk(
   async ({ pageIndex, pageSize }) => {
     try {
       const response = await axios.get(
-        `/ServiceGarden?pageIndex=${pageIndex}&pageSize=${pageSize}`
+        `/ServiceGarden/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
       );
       return response.data;
     } catch (error) {
