@@ -174,10 +174,9 @@ function ServiceDetailPage() {
                 />
               </div>
               <div className="border p-5">
-                <div className="flex items-center justify-between border-b mb-3 py-3">
-                  <div className="w-[70%] text-3xl">{serviceDetail.name}</div>
-                  <div>
-                    {" "}
+                <div className="border-b mb-3 py-3">
+                  <div className="text-3xl">{serviceDetail.name}</div>
+                  <div>             
                     <span className="text-[#3e9943]">
                       {serviceDetail.serviceType === "BonsaiCare"
                         ? "Chăm sóc cây cảnh"

@@ -17,14 +17,14 @@ import { allCategory } from "../../redux/slice/categorySlice";
 import { allStyle } from "../../redux/slice/styleSlice";
 import { addToCart } from "./AddToCart";
 import { motion, useScroll } from "framer-motion";
-
+import noImage from "../../assets/unImage.png";
 function Bonsai() {
   const location = useLocation();
   const dispatch = useDispatch();
 
   const [priceRange, setPriceRange] = useState([]);
   const [pageIndex, setPageIndex] = useState(1);
-  const [pageSize, setPageSize] = useState(6);
+  const [pageSize, setPageSize] = useState(12);
   const [selectedCategories, setSelectedCategories] = useState();
   const styleId = location.state?.styleId;
 
@@ -32,7 +32,7 @@ function Bonsai() {
 
   const allBonsai = useSelector((state) => state.bonsai.allBonsaiDTO?.items);
   const countPageBonsai = useSelector(
-    (state) => state.bonsai.allBonsaiDTO.totalPagesCount
+    (state) => state.bonsai.allBonsaiDTO.totalItemsCount
   );
   const categories = useSelector(
     (state) => state.category.allCategoryDTO?.items
@@ -150,18 +150,26 @@ function Bonsai() {
                     className="bg-cover bg-no-repeat w-full h-[250px]"
                     width="100%"
                     height="250px"
-                    src={bonsai.bonsaiImages[0]?.imageUrl}
+                    src={
+                      (bonsai?.bonsaiImages).length > 0
+                        ? bonsai.bonsaiImages[0]?.imageUrl
+                        : noImage
+                    }
                   />
                   <div className="flex justify-evenly">
-                    <div className="py-5 text-[18px] w-[70%]">
+                    <div className="py-2 text-[18px] w-[70%]">
                       <Link
-                        className="text-[25px]
+                        className="text-[20px]
                       hover:text-[#3a9943] block overflow-hidden whitespace-nowrap overflow-ellipsis"
                         to={`/bonsaiDetail/${bonsai.id}`}
                       >
                         {bonsai.name}
                       </Link>
-                      <div className="text-[#3a9943]">
+                      <div className="text-[12px] opacity-70">
+                        Code:{" "}
+                        {bonsai.code != "" ? bonsai.code : "đang cập nhật"}
+                      </div>
+                      <div className="text-[#3a9943] text-[16px]">
                         {formatPrice(bonsai.price)}
                       </div>
                     </div>
@@ -210,7 +218,7 @@ function Bonsai() {
       )}
       <Pagination
         current={pageIndex}
-        total={countPageBonsai && pageSize ? countPageBonsai * pageSize : 0}
+        total={countPageBonsai}
         onChange={handlePageChange}
         className="text-center mt-5"
       />
