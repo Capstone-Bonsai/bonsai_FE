@@ -1,4 +1,4 @@
-const handleAddNewGarden = async () => {
+export const handleAddNewGarden = async () => {
   const formData = new FormData();
   formData.append("Address", newAddress);
   formData.append("Square", newSquare);
