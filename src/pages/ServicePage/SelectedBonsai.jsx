@@ -1,5 +1,5 @@
 import React from "react";
-import { PlusCircleOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 function SelectedBonsai(props) {
   console.log(props.bonsaiInGardenData);
   const listBonsai = props.bonsaiInGardenData?.items;
@@ -17,6 +17,20 @@ function SelectedBonsai(props) {
             {listBonsai?.map((bonsai) => (
               <div key={bonsai.bonsaiId}>
                 <div>{bonsai.bonsai.name}</div>
+                <div className="modal-action">
+                  <form method="dialog">
+                    {props.treeSelected?.id != bonsai?.id ? (
+                      <button
+                        className="outline-none"
+                        onClick={() => props.setTreeSelected(bonsai)}
+                      >
+                        <PlusCircleOutlined />
+                      </button>
+                    ) : (
+                      <CheckCircleOutlined className="text-[#3a9943]" />
+                    )}
+                  </form>
+                </div>
               </div>
             ))}
           </>

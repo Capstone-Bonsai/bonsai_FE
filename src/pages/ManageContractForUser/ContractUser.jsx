@@ -35,12 +35,30 @@ function ContractUser() {
         setLoading(false);
       });
   }, [currentPage]);
-  const handleNavigate = () => {
-    navigate("/ContractDetail");
-  };
+
   const props = {
     contractId,
     setSelectedDetail,
+  };
+  const getStatusText = (status) => {
+    switch (status) {
+      case 1:
+        return "Đang chờ";
+      case 2:
+        return "Đã thanh toán";
+      case 3:
+        return "Đang thực hiện";
+      case 4:
+        return "Thất bại";
+      case 5:
+        return "Đã hủy";
+      case 6:
+        return "Hoàn thành";
+      case 7:
+        return "Phản hồi";
+      default:
+        return "Trạng thái không xác định";
+    }
   };
   return (
     <MinHeight>
@@ -66,7 +84,20 @@ function ContractUser() {
                         </div>
                       </div>
                       <div>{contract.address}</div>
-                      <div>Tình trạng: </div>
+                      <div>
+                        Tình trạng:{" "}
+                        <span
+                          className={`${
+                            contract.contractStatus == 1 ||
+                            contract.contractStatus == 4 ||
+                            contract.contractStatus == 5
+                              ? "text-[red]"
+                              : "text-[#3a9943]"
+                          }`}
+                        >
+                          {getStatusText(contract?.contractStatus)}
+                        </span>
+                      </div>
                     </div>
                   </div>
                   <div className="w-full border-b flex items-center">

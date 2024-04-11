@@ -16,9 +16,11 @@ function BonsaiInGarden(props) {
                 ✕
               </button>
             </form>
-            <h3 className="font-bold text-lg">{props.bonsaiInGarden}</h3>
             <div>
-              <div>{bonsaiDetail?.name}</div>
+              <div className="font-bold text-lg">{bonsaiDetail?.name}</div>
+              <div>Mô tả: {bonsaiDetail?.description}</div>
+              <div>Năm tuổi: {bonsaiDetail?.yearOfPlanting} năm</div>
+              <div>{bonsaiDetail?.trunkDimenter}</div>
             </div>
           </>
         )}
