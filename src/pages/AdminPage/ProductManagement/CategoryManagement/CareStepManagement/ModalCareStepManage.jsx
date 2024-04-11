@@ -26,7 +26,6 @@ const { Search, TextArea } = Input;
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import ModalUpdateCareStep from "./ModalUpdateCareStep";
 import ModalCreateCareStep from "./ModalCreateCareStep";
 import Loading from "../../../../../components/Loading";
 import { allCareStep } from "../../../../../redux/slice/careStepSlice";
@@ -125,8 +124,7 @@ const ModalCareStepManage = (props) => {
           </button>
           <button
             onClick={() => {
-              setSelectedUpdateCareStep(record);
-              showUpdateModal();
+              showCreateModal();
             }}
           >
             Chỉnh sửa
@@ -186,12 +184,13 @@ const ModalCareStepManage = (props) => {
         <ModalCreateCareStep
           show={openCreateModal}
           setShow={handleCancelCreate}
+          categoryId={category?.id}
         />
-        <ModalUpdateCareStep
+        {/* <ModalUpdateCareStep
           show={openUpdateModal}
           setShow={handleCancelUpdate}
           baseTask={selectedCareStep}
-        />
+        /> */}
         <Modal
           title="Xóa bước chăm sóc"
           open={openDelete}

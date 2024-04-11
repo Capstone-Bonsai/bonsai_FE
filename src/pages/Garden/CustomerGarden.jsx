@@ -27,7 +27,7 @@ function CustomerGarden() {
   const [newAddress, setNewAddress] = useState("");
   const [newSquare, setNewSquare] = useState("");
   const [imageGarden, setImageGarden] = useState([]);
-  const [pageIndex, setPageIndex] = useState(0);
+  const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(3);
   const boughtBonsai = useSelector((state) => state.bonsai.boughtBonsai?.items);
   const gardens = useSelector((state) => state.garden.gardenDTO?.items);
@@ -36,7 +36,7 @@ function CustomerGarden() {
     dispatch(allStyle());
     dispatch(bonsaiBought());
     const payload = {
-      pageIndex: pageIndex,
+      pageIndex: pageIndex - 1,
       pageSize,
     };
     if (!gardens) {
@@ -96,7 +96,6 @@ function CustomerGarden() {
     setPageIndex(page - 1);
   };
   const [selectedGardenId, setSelectedGardenId] = useState("");
-
   const { allStyleDTO } = useSelector((state) => state.style);
   const { allCategoryDTO } = useSelector((state) => state.category);
   const [bonsaiInGarden, setBonsaiInGarden] = useState("");
@@ -343,8 +342,9 @@ function CustomerGarden() {
             </div>
           </div>
           <Pagination
-            current={pageIndex + 1}
-            total={totalItemsCount && pageSize ? totalItemsCount * pageSize : 0}
+            current={pageIndex}
+            pageSize={pageSize}
+            total={totalItemsCount}
             onChange={handlePageChange}
             className="text-center mt-5"
           />

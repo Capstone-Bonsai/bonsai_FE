@@ -59,7 +59,7 @@ function ProductManage() {
   );
   const allStyles = useSelector((state) => state.style?.allStyleDTO?.items);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.bonsai?.pagination);
 
   useEffect(() => {
@@ -138,7 +138,7 @@ function ProductManage() {
     dispatch(
       fetchAllBonsaiPagination({
         pageIndex: 0,
-        pageSize: 5,
+        pageSize: 10,
         keyword: filter.keyword,
         category: filter.category,
         style: filter.style,
@@ -220,6 +220,18 @@ function ProductManage() {
       render: (_, record) => (
         <>
           <p>{record?.style?.name}</p>
+        </>
+      ),
+    },
+    {
+      title: "Hinh ảnh",
+      dataIndex: "image",
+      key: "image",
+      render: (_, record) => (
+        <>
+          <div>
+            <img src={record.bonsaiImages[0]?.imageUrl} width={200} height={200} />
+          </div>
         </>
       ),
     },

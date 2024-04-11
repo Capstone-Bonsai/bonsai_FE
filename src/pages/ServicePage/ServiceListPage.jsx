@@ -11,7 +11,9 @@ function ServiceListPage() {
   const dispatch = useDispatch();
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
-  const serivceList = useSelector((state) => state.service?.listService?.services?.items);
+  const serivceList = useSelector(
+    (state) => state.service?.listService?.services?.items
+  );
   const isLoading = useSelector((state) => state.service?.listService.loading);
 
   const onPageChange = (page) => {
@@ -77,17 +79,29 @@ function ServiceListPage() {
                     <div className="">
                       <div className="text-[14px] text-[#666] font-[300]">
                         Dịch vụ:
-                        <span className="text-[#3e9943]">
+                        <span className="text-[#3e9943] pl-2">
                           {service.serviceType === "BonsaiCare"
-                            ? "(Chăm sóc cây cảnh)"
-                            : "(Chăm sóc sân vườn)"}
+                            ? "Chăm sóc cây cảnh"
+                            : "Chăm sóc sân vườn"}
                         </span>
                       </div>
                       <div className="text-[24px] font-bold  text-[#3e9943] py-4">
-                        {service.serviceType === "GardenCare"
-                          ? formatPrice(service.standardPrice)
-                          : "Xem xét cây"}
+                        {service.serviceType == "GardenCare" ? (
+                          <div>
+                            {formatPrice(service.standardPrice)}/m<sup>2</sup>
+                          </div>
+                        ) : (
+                          "Dựa vào bonsai"
+                        )}
                       </div>
+                      {service.serviceType == "GardenCare" ? (
+                        <div className="text-[14px] opacity-70">
+                          Đây là giá dự kiến, giá thực tế sẽ được nhân viên đưa
+                          ra khi làm việc trực tiếp
+                        </div>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                     <div className="text-center mt-5">
                       <Link

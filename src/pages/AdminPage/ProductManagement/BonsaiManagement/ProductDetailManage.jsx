@@ -70,7 +70,6 @@ function ProductDetailManage() {
         <Loading loading={loading} />
       ) : (
         <div className="">
-          <ToastContainer />
           {/* <div className="border-b py-2">
             <div className="w-[70%] m-auto mt-2">Trang chủ &gt; Sản phẩm</div>
           </div> */}

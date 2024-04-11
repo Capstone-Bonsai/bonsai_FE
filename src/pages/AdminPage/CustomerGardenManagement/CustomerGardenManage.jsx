@@ -33,7 +33,7 @@ function CustomerGardenManage() {
   );
   console.log(allCustomerGarden);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.garden?.pagination);
 
   const [expended, setExpended] = useState();
@@ -159,16 +159,16 @@ function CustomerGardenManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Đơn hàng</div>
+          <div className="font-semibold mb-6">Sân vườn của khách hàng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
-            <div className="flex justify-between p-6">
+            {/* <div className="flex justify-between p-6">
               <div>
-                {/* <button
+                <button
                   className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
                   onClick={showCreateModal}
                 >
                   <PlusCircleOutlined /> Thêm sản phẩm
-                </button> */}
+                </button>
               </div>
               <div className="pr-0">
                 <Search
@@ -177,7 +177,7 @@ function CustomerGardenManage() {
                   allowClear
                 />
               </div>
-            </div>
+            </div> */}
             <div className="mb-12">
               <Table
                 className="w-[100%]"

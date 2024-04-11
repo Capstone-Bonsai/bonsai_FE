@@ -12,7 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import {
-  contractByServiceId,
+  listAllContract,
+  serviceGardenByServiceId,
 } from "../../../redux/slice/contractSlice";
 import { formatPrice } from "../../../components/formatPrice/FormatPrice";
 import ModalContractDetail from "./ModalContractDetail";
@@ -29,26 +30,21 @@ function Contract() {
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [selectedContractDetail, setSelectedContractDetail] = useState();
   const allContracts = useSelector(
-    (state) => state.contract?.allContractDTO?.contracts?.items
+    (state) => state.contract?.listContractDTO?.items
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.contract?.pagination);
   const showModalDelete = () => {
     setOpenDelete(true);
   };
-  const showModalInfo = (serviceId) => {
+  const showModalInfo = () => {
     setOpenInfo(true);
-    try {
-      dispatch(contractByServiceId(serviceId));
-    } catch (error) {
-      console.log("Lỗi r", error);
-    }
   };
 
   useEffect(() => {
     dispatch(
-      allContract({
+      listAllContract({
         pageIndex: currentPage - 1,
         pageSize: pageSize,
       })
@@ -77,16 +73,16 @@ function Contract() {
     }
   };
 
-  const handleTableChange = (pagination) => {
-    console.log(pagination);
-    const index = Number(pagination.current) - 1;
-    dispatch(
-      allContract({
-        pageIndex: index,
-        pageSize: pageSize,
-      })
-    );
-  };
+  // const handleTableChange = (pagination) => {
+  //   console.log(pagination);
+  //   const index = Number(pagination.current) - 1;
+  //   dispatch(
+  //     allContract({
+  //       pageIndex: index,
+  //       pageSize: pageSize,
+  //     })
+  //   );
+  // };
 
   const columns = [
     {
@@ -195,7 +191,7 @@ function Contract() {
       key: "contractStatus",
       render: (_, record) => <>{record.serviceGardenStatus}</>,
     },
-  
+
     {
       title: "Số lượng gardener",
       dataIndex: "numberOfGardener",
@@ -268,12 +264,8 @@ function Contract() {
                 columns={columns}
                 scroll={{ x: true }}
                 pagination={paging}
-                onChange={handleTableChange}
+                // onChange={handleTableChange}
                 rowKey={(record) => record.id}
-                loading={{
-                  indicator: <Loading loading={loading} />,
-                  spinning: loading,
-                }}
               />
             </div>
           </div>

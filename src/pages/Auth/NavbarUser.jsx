@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function NavbarUser() {
@@ -7,16 +7,24 @@ function NavbarUser() {
     { name: "Quản lý đặt hàng", path: "/ManageOrder" },
     { name: "Vườn của bạn", path: "/CustomerGarden" },
     { name: "Đơn đăng ký dịch vụ", path: "/ManageService" },
+    { name: "Hợp đồng đợi thanh toán", path: "/ManageContractUser" },
   ];
   const location = useLocation();
   const [selectedItem, setSelectedItem] = useState(
     menuItems.find((item) => item.path === location.pathname)
   );
   const navigate = useNavigate();
+  useEffect(() => {
+    setSelectedItem(menuItems.find((item) => item.path === location.pathname));
+  }, [location.pathname]);
+
   const handleNavigation = (path) => {
     navigate(path);
-    setSelectedItem(path);
+    if (selectedItem?.path !== path) {
+      setSelectedItem(menuItems.find((item) => item.path === path));
+    }
   };
+
   return (
     <nav className="border w-[20%] h-[400px]">
       <ul className=" w-full">

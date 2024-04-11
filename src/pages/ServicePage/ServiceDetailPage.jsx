@@ -52,10 +52,12 @@ function ServiceDetailPage() {
   const { serviceTempPrice } = useSelector((state) => state.service);
   const loadingTempPrice = useSelector((state) => state.service.loading);
   console.log(loadingTempPrice);
+
   const handleRegisterService = (e) => {
     e.preventDefault();
     if (!userData) {
       navigate("/login");
+      toast.error("Đăng nhập để có thể đăng ký dịch vụ");
     }
     const payload = {
       customerGardenId: gardenSelected.id,
@@ -64,28 +66,29 @@ function ServiceDetailPage() {
       endDate: dateRange[1],
       note: note,
     };
-    if (!gardenSelected) {
+    if (!gardenSelected && userData) {
       setIsGardenEmpty(true);
+      toast.error("Vui lòng chọn vườn");
     }
     if (!treeSelected && serviceDetail.serviceType == "BonsaiCare") {
       setIsTreeEmpty(true);
     }
     if (serviceDetail.serviceType == "BonsaiCare") {
       payload.customerBonsaiId = treeSelected.id;
+    } else if (userData && dateRange.length <= 1) {
+      toast.error("Vui lòng chọn ngày");
     }
     try {
-      setBarLoader(true);
-      dispatch(postServiceGarden(payload));
-      setBarLoader(false);
-      toast.success("Đăng ký dịch vụ thành công");
-      document.getElementById("confirm_temp_price").showModal();
+      if (userData && gardenSelected && dateRange.length > 1) {
+        setBarLoader(true);
+        dispatch(postServiceGarden(payload));
+        setBarLoader(false);
+        toast.success("Vui lòng xác nhận");
+        document.getElementById("confirm_temp_price").showModal();
+      }
     } catch (error) {
       setBarLoader(false);
-      if (!userData) {
-        toast.error("Đăng ký dịch vụ cần phải đăng nhập", error);
-      } else {
-        toast.error("Đky không thành công", error);
-      }
+      toast.error("Đăng ký không thành công", error);
     }
   };
   const cancelService = async (serviceGardenId) => {
@@ -136,7 +139,7 @@ function ServiceDetailPage() {
     serviceTempPrice,
     loadingTempPrice,
     cancelService,
-    acceptService
+    acceptService,
   };
   const handleDateChange = (dates, dateStrings) => {
     console.log("Formatted Selected Range: ", dateStrings);
@@ -171,14 +174,13 @@ function ServiceDetailPage() {
                 />
               </div>
               <div className="border p-5">
-                <div className="flex items-center justify-between border-b mb-3 py-3">
-                  <div className="text-3xl ">{serviceDetail.name}</div>
-                  <div>
-                    {" "}
+                <div className="border-b mb-3 py-3">
+                  <div className="text-3xl">{serviceDetail.name}</div>
+                  <div>             
                     <span className="text-[#3e9943]">
                       {serviceDetail.serviceType === "BonsaiCare"
-                        ? "(Chăm sóc cây cảnh)"
-                        : "(Chăm sóc sân vườn)"}
+                        ? "Chăm sóc cây cảnh"
+                        : "Chăm sóc sân vườn"}
                     </span>
                   </div>
                 </div>
@@ -191,9 +193,9 @@ function ServiceDetailPage() {
                   ))}
                 </div>
                 <div className="py-2">
-                  Giá dự tính:{" "}
+                  Giá dự tính:
                   <span className=" text-[#3a9943]">
-                    {formatPrice(serviceDetail.standardPrice)}
+                    {formatPrice(serviceDetail.standardPrice)}/m<sup>2</sup>
                   </span>
                 </div>
                 <div className="border-y py-2">
@@ -202,7 +204,7 @@ function ServiceDetailPage() {
                       <div>{gardenSelected.address}</div>
                     ) : (
                       <div className={`${isGardenEmpty ? "text-[red]" : ""}`}>
-                        Chọn Vườn{" "}
+                        Chọn Vườn
                       </div>
                     )}
                     <input required type="hidden" name="" id="" />
@@ -215,11 +217,15 @@ function ServiceDetailPage() {
                       }
                       className="flex outline-none hover:text-[#3a9943] text-[18px]"
                     >
-                      <PlusCircleOutlined />
+                      {!gardenSelected ? (
+                        <PlusCircleOutlined />
+                      ) : (
+                        <EditOutlined />
+                      )}
                     </button>
                   </div>
                   <div className="text-[12px] text-black">
-                    {isGardenEmpty ? (
+                    {isGardenEmpty && !gardenSelected ? (
                       <span>
                         (Vui lòng chọn vườn
                         <span className="text-[red]">*</span>)
@@ -253,7 +259,7 @@ function ServiceDetailPage() {
                 </div>
                 <ConfirmTempPrice {...props} />
                 <div className=" py-5 flex items-center justify-between">
-                  <div>
+                  <div className="flex flex-col gap-2">
                     <input
                       value={note}
                       onChange={(e) => setNote(e.target.value)}
@@ -263,7 +269,15 @@ function ServiceDetailPage() {
                       name=""
                       id=""
                     />
+                    <RangePicker
+                      className="border border-black"
+                      onChange={handleDateChange}
+                      allowClear={false}
+                      placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
+                      disabledDate={disabledStartDate}
+                    />
                   </div>
+
                   <button
                     onClick={handleRegisterService}
                     className="bg-[#3e9943] text-[#ffffff] p-2 rounded-[10px] "
@@ -271,22 +285,16 @@ function ServiceDetailPage() {
                     Đăng ký ngay
                   </button>
                 </div>
-                <RangePicker
-                  className="border border-black"
-                  onChange={handleDateChange}
-                  allowClear={false}
-                  placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
-                  disabledDate={disabledStartDate}
-                />
+
                 <div>
-                  Lưu ý: Giá này chỉ là giá dự kiến trước khi đi tham khảo sân
-                  vườn
+                  Lưu ý<span className="text-[red]">*</span>: Giá này chỉ là giá
+                  dự kiến trước khi đi tham khảo sân vườn
                 </div>
               </div>
             </div>
           </div>
         </MinHeight>
-      )}{" "}
+      )}
     </>
   );
 }

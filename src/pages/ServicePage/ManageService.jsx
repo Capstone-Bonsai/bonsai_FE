@@ -49,16 +49,28 @@ function ManageService() {
           <NavbarUser />
           <div className="border w-[75%] flex flex-col items-center p-4">
             {listCusService?.map((ser) => (
-              <div key={ser.id} className="border-b flex w-full gap-2">
-                <div className="flex gap-2">
-                  Thời gian làm từ
-                  <div>{new Date(ser.startDate).toLocaleDateString()}</div>
-                  đến ngày
-                  <div>{new Date(ser.endDate).toLocaleDateString()}</div>
+              <div
+                key={ser.id}
+                className="border-b w-full gap-2 flex items-center"
+              >
+                <div className=" w-[80%]">
+                  <div className="flex gap-2 text-[14px]">
+                    Thời gian làm:
+                    <div>{new Date(ser.startDate).toLocaleDateString()}</div>-
+                    <div>{new Date(ser.endDate).toLocaleDateString()}</div>
+                  </div>
+                  <div className="">
+                    <div className="">
+                      Địa chỉ: {ser.customerGarden.address}
+                    </div>
+                    <div className="opacity-70 text-[14px]">
+                      Phụ phí dự kiến:{" "}
+                      {formatPrice(ser.temporarySurchargePrice)}
+                    </div>
+                  </div>
                 </div>
-                <div className="w-[40%]">Địa chỉ: {ser.customerGarden.address}</div>
-                <div>
-                  <div>Phụ phí: {formatPrice(ser.temporarySurchargePrice)}</div>
+                <div className="text-[#3a9943] w-[15%] flex-end text-[14px]">
+                  {formatPrice(ser.temporaryTotalPrice)}
                 </div>
               </div>
             ))}
