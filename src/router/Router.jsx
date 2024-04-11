@@ -69,18 +69,6 @@ function Router() {
         ...(userInfo?.role == "Customer"
           ? [
               {
-                path: "/ServiceDetail/:serviceId",
-                element: <ServiceDetailPage />,
-              },
-              {
-                path: "/service",
-                element: <ServiceListPage />,
-              },
-              {
-                path: "/ForgotPassword",
-                element: <ForgotPassword />,
-              },
-              {
                 path: "*",
                 element: <HomeNavigate />,
               },
@@ -107,6 +95,18 @@ function Router() {
               {
                 path: "/Order",
                 element: <Order />,
+              },
+              {
+                path: "/ServiceDetail/:serviceId",
+                element: <ServiceDetailPage />,
+              },
+              {
+                path: "/service",
+                element: <ServiceListPage />,
+              },
+              {
+                path: "/ForgotPassword",
+                element: <ForgotPassword />,
               },
               {
                 path: "/Contact",
