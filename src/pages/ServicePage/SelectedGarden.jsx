@@ -15,7 +15,7 @@ function SelectedGarden(props) {
         {props.userData ? (
           <>
             <h3 className="font-bold text-lg">Hello!</h3>
-            {props.gardenNoPagin?.map((garden) => (
+            {props.gardenNoPagin?.length > 0 ? props.gardenNoPagin?.map((garden) => (
               <div
                 key={garden.id}
                 className="border-b flex justify-between py-3 items-center"
@@ -56,7 +56,7 @@ function SelectedGarden(props) {
                   </div>
                 </div>
               </div>
-            ))}{" "}
+            )): <Link to="/CustomerGarden" className="hover:text-[#3a9943]">Vui lòng thêm vườn</Link>}{" "}
           </>
         ) : (
           <>
