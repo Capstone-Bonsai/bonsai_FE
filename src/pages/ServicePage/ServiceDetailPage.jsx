@@ -147,7 +147,8 @@ function ServiceDetailPage() {
   };
   const disabledStartDate = (current) => {
     const today = new Date();
-    return current && current < today.setHours(0, 0, 0, 0);
+    const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    return current && current < nextWeek.setHours(0, 0, 0, 0);
   };
   return (
     <>
@@ -176,7 +177,7 @@ function ServiceDetailPage() {
               <div className="border p-5">
                 <div className="border-b mb-3 py-3">
                   <div className="text-3xl">{serviceDetail.name}</div>
-                  <div>             
+                  <div>
                     <span className="text-[#3e9943]">
                       {serviceDetail.serviceType === "BonsaiCare"
                         ? "Chăm sóc cây cảnh"

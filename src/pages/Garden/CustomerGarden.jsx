@@ -28,28 +28,29 @@ function CustomerGarden() {
   const [newSquare, setNewSquare] = useState("");
   const [imageGarden, setImageGarden] = useState([]);
   const [pageIndex, setPageIndex] = useState(1);
-  const [pageSize, setPageSize] = useState(3);
+  const [pageSize, setPageSize] = useState(10);
   const boughtBonsai = useSelector((state) => state.bonsai.boughtBonsai?.items);
   const gardens = useSelector((state) => state.garden.gardenDTO?.items);
   useEffect(() => {
     dispatch(allCategory());
     dispatch(allStyle());
     dispatch(bonsaiBought());
+  }, []);
+  useEffect(() => {
     const payload = {
       pageIndex: pageIndex - 1,
       pageSize,
     };
-    if (!gardens) {
-      setLoading(true);
-      dispatch(fetchCustomerGarden(payload))
-        .then(() => {
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching order data:", error);
-          setLoading(false);
-        });
-    }
+
+    setLoading(true);
+    dispatch(fetchCustomerGarden(payload))
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching order data:", error);
+        setLoading(false);
+      });
   }, [pageIndex]);
   const [file, setFile] = useState([]);
   const handleImageChange = (e) => {
@@ -71,6 +72,10 @@ function CustomerGarden() {
   };
 
   const handleAddNewGarden = async () => {
+    const payload = {
+      pageIndex: pageIndex - 1,
+      pageSize,
+    };
     const formData = new FormData();
     formData.append("Address", newAddress);
     formData.append("Square", newSquare);
@@ -79,21 +84,23 @@ function CustomerGarden() {
     });
     // setLoading(true);
     try {
+      setLoading(true);
       await addCustomerGarden(formData);
-      fetchCustomerGarden();
+      dispatch(fetchCustomerGarden(payload));
       setLoading(false);
       toast.success("Thêm vườn thành công thành Công");
     } catch (error) {
-      toast.error("Update không thành công", error);
+      toast.error("Thêm vườn không thành công", error);
     }
   };
+
   const handleRemoveImage = (index) => {
     const updatedImageGarden = [...imageGarden];
     updatedImageGarden.splice(index, 1);
     setImageGarden(updatedImageGarden);
   };
   const handlePageChange = (page) => {
-    setPageIndex(page - 1);
+    setPageIndex(page);
   };
   const [selectedGardenId, setSelectedGardenId] = useState("");
   const { allStyleDTO } = useSelector((state) => state.style);
@@ -170,7 +177,8 @@ function CustomerGarden() {
                       value={newSquare}
                       onChange={(e) => setNewSquare(e.target.value)}
                       className="border outline-none w-[90%] h-[40px] my-2 mb-5"
-                      type="text"
+                      type="number"
+                      min={0}
                       name=""
                       id=""
                     />
@@ -224,9 +232,11 @@ function CustomerGarden() {
                     "Bạn chỉ có thể thêm tối đa 4 ảnh"
                   )}
                   <div className="modal-action">
-                    <button className="btn" onClick={handleAddNewGarden}>
-                      Đăng Vườn
-                    </button>
+                    <form method="dialog">
+                      <button className="btn" onClick={handleAddNewGarden}>
+                        Thêm Vườn
+                      </button>
+                    </form>
                   </div>
                 </div>
               </dialog>

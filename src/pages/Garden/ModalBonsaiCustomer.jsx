@@ -82,7 +82,6 @@ function ModalBonsaiCustomer(props) {
             </button>
           </form>
           <h3 className="font-bold text-lg">Thêm cây của bạn</h3>
-          <div>{props.selectedGardenId}</div>
           <div className="my-2">
             <span className="font-bold">Loại cây</span>{" "}
             <span className="text-red-500">*</span>
@@ -153,7 +152,8 @@ function ModalBonsaiCustomer(props) {
               value={yop}
               onChange={(e) => setYop(e.target.value)}
               className="w-full border outline-none p-2 rounded-[10px]"
-              type="text"
+              type="number"
+              min={0}
               name=""
               id=""
             />
@@ -167,7 +167,8 @@ function ModalBonsaiCustomer(props) {
               value={trunkDimeter}
               onChange={(e) => setTrunkDimenter(e.target.value)}
               className="w-full border outline-none p-2 rounded-[10px]"
-              type="text"
+              type="number"
+              min={0}
               name=""
               id=""
             />
@@ -178,7 +179,8 @@ function ModalBonsaiCustomer(props) {
               value={height}
               onChange={(e) => setHeight(e.target.value)}
               className="w-full border outline-none p-2 rounded-[10px]"
-              type="text"
+              type="number"
+              min={0}
               name=""
               id=""
             />
@@ -192,7 +194,8 @@ function ModalBonsaiCustomer(props) {
               value={numberOfTrunk}
               onChange={(e) => setNumberOfTrunk(e.target.value)}
               className="w-full border outline-none p-2 rounded-[10px]"
-              type="text"
+              type="number"
+              min={0}
               name=""
               id=""
             />
