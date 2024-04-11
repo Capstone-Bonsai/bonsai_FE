@@ -38,6 +38,17 @@ export const createContract = async (payload) => {
   }
 };
 
+export const paymentContract = async (contractId) => {
+  try {
+    const res = await axios.get(`/Contract/Payment?ContractId=${contractId}`);
+    return res.data;
+  } catch (err) {
+    const errMessage = err.response;
+    console.log(errMessage);
+    throw (err, errMessage);
+  }
+};
+
 export const serviceGardenByServiceId = createAsyncThunk(
   "contract/serviceGardenByServiceId",
   async (serviceId) => {
