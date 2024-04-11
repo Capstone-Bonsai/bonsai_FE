@@ -18,7 +18,9 @@ function ModalServiceGardenChecking(props) {
   const endDate = dayjs(contractDetail?.endDate).format("YYYY-MM-DD");
   console.log(startDate);
   const [dateRange, setDateRange] = useState([]);
-  const [editSurcharge, setEditSurcharge] = useState();
+  const [editSurcharge, setEditSurcharge] = useState(
+    contractDetailne?.temporarySurchargePrice
+  );
   const [editNumberOfGardener, setEditNumberOfGardener] = useState();
   const [editedPrice, setEditedPrice] = useState(
     contractDetailne?.temporaryPrice
@@ -95,17 +97,17 @@ function ModalServiceGardenChecking(props) {
         onCancel={() => {
           setShow(false), handleCancelEdit();
         }}
-        okText="Cập nhật"
+        okText="Tạo hợp đồng"
         onOk={handleOk}
         okButtonProps={{ type: "default" }}
         open={show}
         cancelText="Hủy"
         maskClosable={false}
       >
-        <div className="flex">
+        <div className="flex items-center gap-2">
           <div>Thông tin đơn hàng</div>
           {isEditing ? (
-            <div className="flex">
+            <div className="flex gap-2">
               <Button onClick={handleSaveEdit}>Lưu</Button>
               <Button onClick={handleCancelEdit}>Hủy</Button>
             </div>
@@ -122,20 +124,22 @@ function ModalServiceGardenChecking(props) {
         <div className="">
           <div className="flex items-center">
             {isEditing ? (
-              <div className="">
-                Thời gian làm việc:
-                <RangePicker
-                  defaultValue={[
-                    dayjs(contractDetail?.startDate),
-                    dayjs(contractDetail?.endDate),
-                  ]}
-                  className="border border-black"
-                  onChange={handleDateChange}
-                  allowClear={false}
-                  placeholder="Chọn ngày"
-                  disabledDate={disabledStartDate}
-                />
-                <div>
+              <div className="my-2">
+                <div className="flex items-center gap-2">
+                  Thời gian làm việc:
+                  <RangePicker
+                    defaultValue={[
+                      dayjs(contractDetail?.startDate),
+                      dayjs(contractDetail?.endDate),
+                    ]}
+                    className="border border-black"
+                    onChange={handleDateChange}
+                    allowClear={false}
+                    placeholder="Chọn ngày"
+                    disabledDate={disabledStartDate}
+                  />
+                </div>
+                <div className="my-2">
                   Giá:
                   <InputNumber
                     className="w-[30%] ml-2"
@@ -143,7 +147,15 @@ function ModalServiceGardenChecking(props) {
                     onChange={(value) => setEditedPrice(value)}
                   />
                 </div>
-                <div>
+                <div className="my-2">
+                  Phụ phí:
+                  <InputNumber
+                    className="w-[30%] ml-2"
+                    value={editSurcharge}
+                    onChange={(value) => setEditSurcharge(value)}
+                  />
+                </div>
+                <div className="my-2">
                   Số lượng người chăm vườn:
                   <InputNumber
                     className="w-[30%] ml-2"
@@ -163,13 +175,13 @@ function ModalServiceGardenChecking(props) {
                   </div>
                 </div>
                 <div>Giá: {formatPrice(editedPrice)}</div>
+                <div>Phụ phí: {formatPrice(editSurcharge)}</div>
                 <div>
                   Số lượng người chăm vườn: {editNumberOfGardener} người
                 </div>
               </div>
             )}
           </div>
-          <div>{contractDetail?.id}</div>
         </div>
       </Modal>
     </>

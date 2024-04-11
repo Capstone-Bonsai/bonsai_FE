@@ -77,8 +77,10 @@ function Login() {
       console.log(response);
       if (response.role == "Customer") {
         navigate("/");
-      } else if (response.role == "Manager" || response.role == "Staff") {
+      } else if (response.role == "Manager") {
         navigate("/admin/product");
+      } else if (response.role == "Staff") {
+        navigate("/admin/serviceGardenChecking");
       }
     } catch (error) {
       toast.error("Sai tài khoản hoặc mật khẩu");

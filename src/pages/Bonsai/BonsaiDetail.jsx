@@ -112,7 +112,7 @@ function BonsaiDetail() {
                 </div>
                 <div className="opacity-70 text-[15px]">
                   <div>
-                    <span className="text-[#3a9943]">Hoành cây:</span> {bonsaiDetail.trunkDimenter}
+                    <span className="">Hoành cây:</span> {bonsaiDetail.trunkDimenter}
                   </div>
                   <div>
                     Chiều cao:{" "}
@@ -126,6 +126,7 @@ function BonsaiDetail() {
                       ? bonsaiDetail.yearOfPlanting
                       : "Không có thông tin"}
                   </div>
+                  <div>Code: {bonsaiDetail.code != "" ? bonsaiDetail.code : "Đang cập nhật"}</div>
                 </div>
               </div>
               <div className="py-5 border-b">{bonsaiDetail.description}</div>

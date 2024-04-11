@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "@goongmaps/goong-js/dist/goong-js.css";
 import "@goongmaps/goong-geocoder/dist/goong-geocoder.css";
 import GoongGeocoder from "@goongmaps/goong-geocoder/dist/goong-geocoder.min.js";
-import "es6-promise/dist/es6-promise.auto.min.js"; // Promise polyfill
+import "es6-promise/dist/es6-promise.auto.min.js"; 
 
 class CompletedAddress extends Component {
   constructor(props) {
