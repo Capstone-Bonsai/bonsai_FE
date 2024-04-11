@@ -99,15 +99,11 @@ const ModalSelectBaseTask = (props) => {
     handleClose();
   };
 
-  const handleFormChange = (changedValues, allValues) => {
-    setFormData(allValues);
-  };
-
   return (
     <>
       <Modal
         width={1000}
-        title="Thêm task"
+        title="Thêm công việc"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
@@ -129,8 +125,6 @@ const ModalSelectBaseTask = (props) => {
             filterOption={(inputValue, item) =>
               item.name.indexOf(inputValue) !== -1
             }
-            operations={["left", "right"]}
-            operationStyle={{ color: "black"}}
           />
         </div>
       </Modal>

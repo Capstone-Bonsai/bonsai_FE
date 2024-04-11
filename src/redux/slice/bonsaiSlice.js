@@ -9,7 +9,7 @@ export const fetchAllBonsaiPagination = createAsyncThunk(
   "bonsai/fetchAllBonsaiPagination",
   async ({ pageIndex, pageSize, keyword, category, style }) => {
     try {
-      const response = await axiosCus.post(
+      const response = await axios.post(
         `/Bonsai/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
         { keyword, category, style }
       );

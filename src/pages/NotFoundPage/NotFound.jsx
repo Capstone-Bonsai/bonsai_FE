@@ -12,5 +12,13 @@ function LoginNavigate() {
 function ProductManagetNavigate() {
   return <Navigate to={{ pathname: "/admin/product" }} />;
 }
+function ContractNavigate() {
+  return <Navigate to={{ pathname: "/admin/contract" }} />;
+}
 
-export { HomeNavigate, LoginNavigate, ProductManagetNavigate };
+export {
+  HomeNavigate,
+  LoginNavigate,
+  ProductManagetNavigate,
+  ContractNavigate,
+};

@@ -1,40 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
-import {
-  PlusCircleOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
-import {
-  Tooltip,
-  Space,
-  Tag,
-  Table,
-  Input,
-  Modal,
-  Button,
-  Cascader,
-  Checkbox,
-  ColorPicker,
-  DatePicker,
-  Form,
-  InputNumber,
-  Radio,
-  Select,
-  Slider,
-  Switch,
-  TreeSelect,
-  Upload,
-} from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { Tag, Input, Modal, Form, InputNumber, Select, Upload } from "antd";
 const { Search, TextArea } = Input;
 
-const { CheckableTag } = Tag;
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { putProduct } from "../../../../utils/productApi";
-import { fetchAllProductPagination } from "../../../../redux/slice/productSlice";
 import { putBonsai } from "../../../../utils/bonsaiApi";
 import { fetchAllBonsaiPagination } from "../../../../redux/slice/bonsaiSlice";
 import ModalCreateCategory from "../CategoryManagement/ModalCreateCategory";

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CloseOutlined } from "@ant-design/icons";
-import { Tag, Input, Modal, Form, InputNumber, Select, Upload, Space, Button} from "antd";
-const { Search, TextArea } = Input;
+import { Input, Modal, Form, Space, Button } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -34,9 +33,7 @@ const ModalCreateCareStep = (props) => {
       postCareStep(input)
         .then((data) => {
           toast.success("Thêm công việc thành công!");
-          dispatch(
-            allCareStep(categoryId)
-          );
+          dispatch(allCareStep(categoryId));
           handleClose();
         })
         .catch((err) => {

@@ -1,31 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import {
-  Space,
-  Tag,
-  Table,
-  Input,
-  Modal,
-  Button,
-  Cascader,
-  Checkbox,
-  ColorPicker,
-  DatePicker,
-  Form,
-  InputNumber,
-  Radio,
-  Select,
-  Slider,
-  Switch,
-  TreeSelect,
-  Upload,
-} from "antd";
+import { Space, Table, Input, Modal } from "antd";
 const { Search, TextArea } = Input;
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import ModalCreateCareStep from "./ModalCreateCareStep";
 import Loading from "../../../../../components/Loading";
 import { allCareStep } from "../../../../../redux/slice/careStepSlice";
@@ -46,11 +25,9 @@ const ModalCareStepManage = (props) => {
   );
 
   useEffect(() => {
-    dispatch(
-      allCareStep(category?.id)
-    );
-    console.log(allCareSteps)
-  }, [category,dispatch]);
+    dispatch(allCareStep(category?.id));
+    console.log(allCareSteps);
+  }, [category, dispatch]);
 
   const showCreateModal = () => {
     setOpenCreateModal(true);
@@ -70,9 +47,7 @@ const ModalCareStepManage = (props) => {
     deleteCareStep(selectedCareStep)
       .then((data) => {
         toast.success("Xóa thành công!");
-        dispatch(
-          allCareStep(category.id)
-        );
+        dispatch(allCareStep(category.id));
         setOpenDelete(false);
         setConfirmLoadingDelete(false);
       })
@@ -186,11 +161,6 @@ const ModalCareStepManage = (props) => {
           setShow={handleCancelCreate}
           categoryId={category?.id}
         />
-        {/* <ModalUpdateCareStep
-          show={openUpdateModal}
-          setShow={handleCancelUpdate}
-          baseTask={selectedCareStep}
-        /> */}
         <Modal
           title="Xóa bước chăm sóc"
           open={openDelete}
@@ -204,6 +174,6 @@ const ModalCareStepManage = (props) => {
       </div>
     </>
   );
-}
+};
 
 export default ModalCareStepManage;

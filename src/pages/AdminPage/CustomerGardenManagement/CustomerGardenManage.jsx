@@ -1,17 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-  CloseCircleOutlined,
-} from "@ant-design/icons";
-import { Space, Tag, Table, Input, Modal, Badge } from "antd";
-const { Search } = Input;
-
-import { toast } from "react-toastify";
+import { Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllOrders } from "../../../redux/slice/orderSlice";
-import { deleteProduct } from "../../../utils/productApi";
-import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import { fetchCustomerGardensManagers } from "../../../redux/slice/userGarden";
 import { fetchCustomerBonsaisByGardenId } from "../../../redux/slice/customerBonsaiSlice";
@@ -20,12 +9,6 @@ import { useGetCustomerBonsais } from "./hook/hook";
 function CustomerGardenManage() {
   const dispatch = useDispatch();
   const loadingGarden = useSelector((state) => state.garden.loading);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
-  const [openUpdateModal, setOpenUpdateModal] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState();
-  const [selectedUpdateOrder, setSelectedUpdateOrder] = useState();
-  const [selectedCustomerBonsais, setSelectedCustomerBonsais] = useState();
   const { loading, customerBonsais } = useGetCustomerBonsais();
 
   const allCustomerGarden = useSelector(
@@ -137,7 +120,11 @@ function CustomerGardenManage() {
       render: (_, record) => (
         <>
           <div>
-            <img src={record.customerGardenImages[0]?.image} width={200} height={200} />
+            <img
+              src={record.customerGardenImages[0]?.image}
+              width={200}
+              height={200}
+            />
           </div>
         </>
       ),
@@ -161,23 +148,6 @@ function CustomerGardenManage() {
         <div className="w-[100%]">
           <div className="font-semibold mb-6">Sân vườn của khách hàng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
-            {/* <div className="flex justify-between p-6">
-              <div>
-                <button
-                  className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
-                  onClick={showCreateModal}
-                >
-                  <PlusCircleOutlined /> Thêm sản phẩm
-                </button>
-              </div>
-              <div className="pr-0">
-                <Search
-                  placeholder="input search text"
-                  className="w-[300px]"
-                  allowClear
-                />
-              </div>
-            </div> */}
             <div className="mb-12">
               <Table
                 className="w-[100%]"

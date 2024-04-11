@@ -31,7 +31,12 @@ import ServiceGardenChecking from "../pages/AdminPage/StaffPage/ServiceGardenChe
 import ContractUser from "../pages/ManageContractForUser/ContractUser";
 import ContractUserDetail from "../pages/ManageContractForUser/ContractUserDetail";
 import Cookies from "universal-cookie";
-import { HomeNavigate, LoginNavigate } from "../pages/NotFoundPage/NotFound";
+import {
+  ContractNavigate,
+  HomeNavigate,
+  LoginNavigate,
+  ProductManagetNavigate,
+} from "../pages/NotFoundPage/NotFound";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -151,7 +156,7 @@ function Router() {
     {
       element: <PrivateRoute />,
       children: [
-        ...(userInfo?.role == "Manager" || userInfo?.role == "Staff"
+        ...(userInfo?.role == "Manager"
           ? [
               {
                 path: "/admin/user",
@@ -177,9 +182,13 @@ function Router() {
                 path: "/admin/baseTask",
                 element: <BaseTaskManage />,
               },
+              {
+                path: "*",
+                element: <ProductManagetNavigate />,
+              },
             ]
           : []),
-        ...(userInfo?.role == "Staff"
+        ...(userInfo?.role == "Manager" || userInfo?.role == "Staff"
           ? [
               {
                 path: "/admin/contract",
@@ -188,6 +197,14 @@ function Router() {
               {
                 path: "/admin/serviceGardenChecking",
                 element: <ServiceGardenChecking />,
+              },
+            ]
+          : []),
+        ...(userInfo?.role == "Staff"
+          ? [
+              {
+                path: "*",
+                element: <ContractNavigate />,
               },
             ]
           : []),

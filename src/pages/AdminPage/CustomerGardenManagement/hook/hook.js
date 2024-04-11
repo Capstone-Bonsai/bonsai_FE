@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 export const useGetCustomerBonsais = () => {
   const loading = useSelector((state) => state.customerBonsai?.loading);
   const getCustomerBonsais = useSelector(
@@ -7,6 +7,6 @@ export const useGetCustomerBonsais = () => {
 
   return {
     loading: loading,
-    customerBonsais: getCustomerBonsais
+    customerBonsais: getCustomerBonsais,
   };
 };

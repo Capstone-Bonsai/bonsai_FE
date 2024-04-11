@@ -1,38 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ErrorMessage } from "@hookform/error-message";
-import {
-  PlusCircleOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
-import {
-  Tooltip,
-  Space,
-  Tag,
-  Table,
-  Input,
-  Modal,
-  Button,
-  Cascader,
-  Checkbox,
-  ColorPicker,
-  DatePicker,
-  Form,
-  InputNumber,
-  Radio,
-  Select,
-  Slider,
-  Switch,
-  TreeSelect,
-  Upload,
-} from "antd";
-const { Search, TextArea } = Input;
-const { CheckableTag } = Tag;
+import { Input, Modal, Form } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { putBonsai } from "../../../utils/bonsaiApi";
-import { fetchAllBonsaiPagination } from "../../../redux/slice/bonsaiSlice";
 import { allBaseTaskPagination } from "../../../redux/slice/baseTaskSlice";
 import { putBaseTask } from "../../../utils/baseTaskApi";
 
