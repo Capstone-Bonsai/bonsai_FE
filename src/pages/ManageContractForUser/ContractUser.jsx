@@ -35,13 +35,12 @@ function ContractUser() {
         setLoading(false);
       });
   }, [currentPage]);
-  const handleNavigate = () => {
-    navigate("/ContractDetail");
-  };
+ 
   const props = {
     contractId,
     setSelectedDetail,
   };
+  
   return (
     <MinHeight>
       <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">

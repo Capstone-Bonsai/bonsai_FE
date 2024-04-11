@@ -50,10 +50,23 @@ export const serviceGardenByServiceId = createAsyncThunk(
   }
 );
 
+export const contractDetailById = createAsyncThunk(
+  "contract/contractDetail",
+  async (contractId) => {
+    try {
+      const response = await axios.get(`/Contract/${contractId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 const initialState = {
   listContractDTO: {},
   allContractDTO: {},
   allServiceGardenDTO: {},
+  contractDetail: {},
   pagination: {},
   contractServiceDetail: {},
   msg: "",
@@ -114,6 +127,19 @@ const contractSlice = createSlice({
         state.msg = "Error loading data";
         state.listContractDTO.loading = false;
       })
+      .addCase(contractDetailById.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(contractDetailById.fulfilled, (state, action) => {
+        state.contractDetail = action.payload;
+        state.msg = "Data loaded successfully";
+        state.contractDetail.loading = false;
+      })
+      .addCase(contractDetailById.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.contractDetail.loading = false;
+      });
   },
 });
 const { reducer: contractReducer, actions } = contractSlice;
