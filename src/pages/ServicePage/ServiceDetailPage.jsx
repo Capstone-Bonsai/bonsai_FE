@@ -170,7 +170,6 @@ function ServiceDetailPage() {
   const handleCategoryChange = (e) => {
     setSelectedCategoryId(e.target.value);
   };
-  const [errCareStep, setErrCareStep] = useState("");
   const [careSteps, setCareSteps] = useState("");
   console.log(careSteps);
   useEffect(() => {

@@ -17,16 +17,18 @@ import {
 } from "../../../redux/slice/contractSlice";
 import { formatPrice } from "../../../components/formatPrice/FormatPrice";
 import ModalContractDetail from "./ModalContractDetail";
+import ModalAddGardener from "./ModalAddGardener";
 
 function Contract() {
   const dispatch = useDispatch();
   const cookies = new Cookies();
   const userInfo = cookies?.get("user");
   const loading = useSelector(
-    (state) => state.contract?.allContractDTO?.loading
+    (state) => state.contract?.listContractDTO?.loading
   );
   const [openDelete, setOpenDelete] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
+  const [openGardener, setOpenGardener] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [selectedContractDetail, setSelectedContractDetail] = useState();
   const allContracts = useSelector(
@@ -37,6 +39,9 @@ function Contract() {
   const paging = useSelector((state) => state.contract?.pagination);
   const showModalDelete = () => {
     setOpenDelete(true);
+  };
+  const showModalGardener = () => {
+    setOpenGardener(true);
   };
   const showModalInfo = () => {
     setOpenInfo(true);
@@ -58,8 +63,10 @@ function Contract() {
     setOpenDelete(false);
   };
   const handleCancelInfo = () => {
-    console.log("Clicked cancel button");
     setOpenInfo(false);
+  };
+  const handleCancelGardener = () => {
+    setOpenGardener(false);
   };
 
   const getColor = (orderStatus) => {
@@ -189,6 +196,18 @@ function Contract() {
       render: (_, record) => <>{record.contractStatus}</>,
     },
     {
+      title: "Tình trạng",
+      dataIndex: "enoughGardener",
+      key: "enoughGardener",
+      render: (_, record) => (
+        <>
+          {record.numberOfGardener == record.contractGardeners.length
+            ? "Đủ người"
+            : "Thiếu người"}
+        </>
+      ),
+    },
+    {
       title: "Loại dịch vụ",
       dataIndex: "serviceType",
       key: "serviceType",
@@ -206,7 +225,7 @@ function Contract() {
       key: "numberOfGardener",
       render: (_, record) => (
         <>
-          <p>{record?.temporaryGardener} người</p>
+          <p>{record?.numberOfGardener} người</p>
         </>
       ),
     },
@@ -233,6 +252,15 @@ function Contract() {
               }}
             >
               Xem thông tin
+            </button>
+            <button
+              className="outline-none"
+              onClick={() => {
+                setSelectedContractDetail(record);
+                showModalGardener();
+              }}
+            >
+              Thêm người làm vườn
             </button>
           </Space>
         ),
@@ -278,7 +306,7 @@ function Contract() {
                 }}
                 onChange={handleTableChange}
                 rowKey={(record) => record.id}
-                 loading={{
+                loading={{
                   indicator: <Loading loading={loading} />,
                   spinning: loading,
                 }}
@@ -295,6 +323,12 @@ function Contract() {
         >
           <div>Bạn có muốn xóa hợp đồng này không?</div>
         </Modal>
+        <ModalAddGardener
+          show={openGardener}
+          setShow={handleCancelGardener}
+          contractDetail={selectedContractDetail}
+        />
+
         <ModalContractDetail
           show={openInfo}
           setShow={handleCancelInfo}

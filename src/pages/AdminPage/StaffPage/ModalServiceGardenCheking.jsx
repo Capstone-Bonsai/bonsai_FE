@@ -97,7 +97,7 @@ function ModalServiceGardenChecking(props) {
         onCancel={() => {
           setShow(false), handleCancelEdit();
         }}
-        okText="Cập nhật"
+        okText="Tạo hợp đồng"
         onOk={handleOk}
         okButtonProps={{ type: "default" }}
         open={show}
