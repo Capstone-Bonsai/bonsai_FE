@@ -59,7 +59,11 @@ export const postServiceGarden = createAsyncThunk(
       console.log(response.data);
       return response.data;
     } catch (error) {
-      throw error;
+       if (error.response) {
+        throw error.response.data; 
+      } else {
+        throw error; 
+      }
     }
   }
 );
