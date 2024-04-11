@@ -79,12 +79,14 @@ function AddCustomerGarden(propsAddGarden) {
           "Bạn chỉ có thể thêm tối đa 4 ảnh"
         )}
         <div className="modal-action">
-          <button
-            className="btn"
-            onClick={() => propsAddGarden.handleAddNewGarden()}
-          >
-            Đăng Vườn
-          </button>
+          <form method="dialog">
+            <button
+              className="btn"
+              onClick={() => propsAddGarden.handleAddNewGarden()}
+            >
+              Đăng Vườn
+            </button>{" "}
+          </form>
         </div>
       </div>
     </dialog>

@@ -23,7 +23,7 @@ function Contract() {
   const cookies = new Cookies();
   const userInfo = cookies?.get("user");
   const loading = useSelector(
-    (state) => state.contract?.listContractDTO?.loading
+    (state) => state.contract?.allContractDTO?.loading
   );
   const [openDelete, setOpenDelete] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
@@ -278,7 +278,7 @@ function Contract() {
                 }}
                 onChange={handleTableChange}
                 rowKey={(record) => record.id}
-                loading={{
+                 loading={{
                   indicator: <Loading loading={loading} />,
                   spinning: loading,
                 }}
