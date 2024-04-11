@@ -6,7 +6,7 @@ export const allServiceGarden = createAsyncThunk(
   async ({ pageIndex, pageSize }) => {
     try {
       const response = await axios.get(
-        `/ServiceGarden/Manager/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
+        `/ServiceGarden/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
       );
       return response.data;
     } catch (error) {
@@ -22,6 +22,18 @@ export const listAllContract = createAsyncThunk(
       const response = await axios.get(
         `/Contract/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
       );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const listTask = createAsyncThunk(
+  "contract/listTaskInContract",
+  async (contractId) => {
+    try {
+      const response = await axios.get(`/Task/${contractId}`);
       return response.data;
     } catch (error) {
       throw error;
@@ -76,6 +88,7 @@ export const contractDetailById = createAsyncThunk(
 const initialState = {
   listContractDTO: {},
   allContractDTO: {},
+  listTaskDTO: {},
   allServiceGardenDTO: {},
   contractDetail: {},
   pagination: {},
@@ -127,7 +140,7 @@ const contractSlice = createSlice({
       })
       .addCase(listAllContract.pending, (state) => {
         state.msg = "Loading...";
-        state.loading = true;
+        state.listContractDTO.loading = true;
       })
       .addCase(listAllContract.fulfilled, (state, action) => {
         state.listContractDTO = action.payload;
@@ -150,6 +163,19 @@ const contractSlice = createSlice({
       .addCase(contractDetailById.rejected, (state) => {
         state.msg = "Error loading data";
         state.contractDetail.loading = false;
+      })
+      .addCase(listTask.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(listTask.fulfilled, (state, action) => {
+        state.listTaskDTO = action.payload;
+        state.msg = "Data loaded successfully";
+        state.listTaskDTO.loading = false;
+      })
+      .addCase(listTask.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.listTaskDTO.loading = false;
       });
   },
 });

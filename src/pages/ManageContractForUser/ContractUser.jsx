@@ -13,10 +13,18 @@ function ContractUser() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  console.log(currentPage);
+  const [pageSize, setPageSize] = useState(3);
   const contracts = useSelector(
     (state) => state.contract?.listContractDTO?.items
   );
+  console.log(contracts);
+  const { totalItemsCount } = useSelector(
+    (state) => state.contract.listContractDTO
+  );
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   const [selectedDetail, setSelectedDetail] = useState(false);
   const [contractId, setContractId] = useState("");
   console.log(contractId);
@@ -69,76 +77,86 @@ function ContractUser() {
             <ContractUserDetail {...props} />
           ) : (
             <>
-              {contracts?.map((contract) => (
-                <div className="w-full relative" key={contract.id}>
-                  <div className="">
-                    <div className="flex justify-between">
-                      <div className="flex gap-2">
-                        Thời gian làm:
-                        <div>
-                          {new Date(contract.startDate).toLocaleDateString()}
+              {contracts ? (
+                contracts?.map((contract) => (
+                  <div className="w-full relative" key={contract.id}>
+                    <div className="">
+                      <div className="flex justify-between">
+                        <div className="flex gap-2">
+                          Thời gian làm:
+                          <div>
+                            {new Date(contract.startDate).toLocaleDateString()}
+                          </div>
+                          -
+                          <div>
+                            {new Date(contract.endDate).toLocaleDateString()}
+                          </div>
                         </div>
-                        -
+                        <div>{contract.address}</div>
                         <div>
-                          {new Date(contract.endDate).toLocaleDateString()}
+                          Tình trạng:{" "}
+                          <span
+                            className={`${
+                              contract.contractStatus == 1 ||
+                              contract.contractStatus == 4 ||
+                              contract.contractStatus == 5
+                                ? "text-[red]"
+                                : "text-[#3a9943]"
+                            }`}
+                          >
+                            {getStatusText(contract?.contractStatus)}
+                          </span>
                         </div>
                       </div>
-                      <div>{contract.address}</div>
-                      <div>
-                        Tình trạng:{" "}
-                        <span
-                          className={`${
-                            contract.contractStatus == 1 ||
-                            contract.contractStatus == 4 ||
-                            contract.contractStatus == 5
-                              ? "text-[red]"
-                              : "text-[#3a9943]"
-                          }`}
-                        >
-                          {getStatusText(contract?.contractStatus)}
-                        </span>
+                    </div>
+                    <div className="w-full border-b flex items-center">
+                      <div className="w-[75%]">
+                        <div>
+                          Diện tích: {contract.gardenSquare}m <sup>2</sup>
+                        </div>
+                        <div>
+                          Số lượng người làm vườn: {contract.numberOfGardener}{" "}
+                          người
+                        </div>
+                        <div>
+                          Giá chuẩn: {formatPrice(contract.standardPrice)}
+                        </div>
+                        <div>
+                          Phụ phí: {formatPrice(contract.surchargePrice)}
+                        </div>
                       </div>
+                      <div className="text-[#3a9943] w-[15%]">
+                        {formatPrice(contract.totalPrice)}
+                      </div>
+                      <button
+                        onClick={() => {
+                          setSelectedDetail(true), setContractId(contract.id);
+                        }}
+                        className="text-[12px] absolute bottom-0 right-0 pl-5 hover:text-[#3a9943]"
+                      >
+                        Xem chi tiết
+                      </button>
                     </div>
                   </div>
-                  <div className="w-full border-b flex items-center">
-                    <div className="w-[75%]">
-                      <div>
-                        Diện tích: {contract.gardenSquare}m <sup>2</sup>
-                      </div>
-                      <div>
-                        Số lượng người làm vườn: {contract.numberOfGardener}{" "}
-                        người
-                      </div>
-                      <div>
-                        Giá chuẩn: {formatPrice(contract.standardPrice)}
-                      </div>
-                      <div>Phụ phí: {formatPrice(contract.surchargePrice)}</div>
-                    </div>
-                    <div className="text-[#3a9943] w-[15%]">
-                      {formatPrice(contract.totalPrice)}
-                    </div>
-                    <button
-                      onClick={() => {
-                        setSelectedDetail(true), setContractId(contract.id);
-                      }}
-                      className="text-[12px] absolute bottom-0 right-0 pl-5 hover:text-[#3a9943]"
-                    >
-                      Xem chi tiết
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <div className="">Không có hợp đồng</div>
+              )}
             </>
           )}
         </div>
       </div>
-      {/* <Pagination
+      {selectedDetail || !contracts ? (
+        ""
+      ) : (
+        <Pagination
           current={currentPage}
           pageSize={pageSize}
           total={totalItemsCount}
           onChange={handlePageChange}
           className="text-center mt-5"
-        /> */}
+        />
+      )}
     </MinHeight>
   );
 }

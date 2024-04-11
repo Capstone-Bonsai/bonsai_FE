@@ -26,7 +26,7 @@ function ServiceManage() {
 
   const allService = useSelector((state) => state.service?.listService?.services?.items);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const paging = useSelector((state) => state.service?.pagination);
   
   useEffect(() => {

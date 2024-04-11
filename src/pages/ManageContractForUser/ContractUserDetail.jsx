@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { LeftCircleOutlined } from "@ant-design/icons";
 import {
   contractDetailById,
+  listTask,
   paymentContract,
 } from "../../redux/slice/contractSlice";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
@@ -17,8 +18,13 @@ function ContractUserDetail(props) {
     dispatch(contractDetailById(contractId));
   }, [contractId]);
   const { contractDetail } = useSelector((state) => state.contract);
-  console.log(contractDetail);
-  
+  const tasks = useSelector(
+    (state) => state.contract?.listTaskDTO?.taskOfContracts
+  );
+  console.log(tasks);
+  useEffect(() => {
+    dispatch(listTask(contractId));
+  }, [contractId]);
   const handlePaymentContract = async (contractId) => {
     try {
       const res = await paymentContract(contractId);
@@ -63,13 +69,32 @@ function ContractUserDetail(props) {
           </div>
         </div>
         <div className="flex justify-end mt-2">
-          <button
-            onClick={() => handlePaymentContract(contractDetail.id)}
-            className="btn hover:bg-[#3a9943] hover:text-[#ffffff]"
-          >
-            Tiến hành thanh toán
-          </button>
+          {contractDetail.contractStatus == 1 ||
+          contractDetail.contractStatus == 4 ? (
+            <button
+              onClick={() => handlePaymentContract(contractDetail.id)}
+              className="btn hover:bg-[#3a9943] hover:text-[#ffffff]"
+            >
+              Tiến hành thanh toán
+            </button>
+          ) : (
+            ""
+          )}
         </div>
+        {contractDetail.contractStatus == 1 ||
+        contractDetail.contractStatus == 4 ||
+        contractDetail.contractStatus == 5 ? (
+          ""
+        ) : (
+          <>
+            <div className="font-bold">Đang thực hiện:</div>
+            {tasks?.map((task) => (
+              <div key={task.id}>
+                <div>-{task.name}</div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
