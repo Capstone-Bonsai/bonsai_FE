@@ -12,6 +12,7 @@ import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { addToCart } from "../Bonsai/AddToCart";
 import { useDispatch } from "react-redux";
 import { motion, useScroll } from "framer-motion";
+import { Image } from "antd";
 
 function SellProducts({
   topProductDTO,
@@ -45,8 +46,10 @@ function SellProducts({
                 whileHover={{ scale: 1.1 }}
                 key={office.id}
               >
-                <img
-                  className="h-[70%] w-[100%]"
+                <Image
+                  className="object-cover"
+                  width="100%"
+                  height="250px"
                   src={
                     office.bonsaiImages.length == 0
                       ? ""
@@ -59,13 +62,16 @@ function SellProducts({
                   }}
                 />
                 <div className="pt-3 px-3">
-                  <div className="mb-3 h-[40px]">
+                  <div className="">
                     <Link
                       to={`/bonsaiDetail/${office.id}`}
                       className="text-[#333333] text-2xl hover:text-[#1E7100]"
                     >
                       {office.name}
                     </Link>
+                  </div>
+                  <div>
+                    Code: {office.code != "" ? office.code : "Đang cập nhật"}
                   </div>
                   <div className="grid grid-cols-3">
                     <div className="flex items-center">
@@ -123,8 +129,10 @@ function SellProducts({
                 className="mt-5 w-[270px] drop-shadow-lg bg-[#ffffff] h-[370px] "
                 key={office.id}
               >
-                <img
-                  className="h-[70%] w-[100%]"
+                <Image
+                  className="object-cover"
+                  width="100%"
+                  height="250px"
                   src={
                     office.bonsaiImages.length == 0
                       ? ""
@@ -137,13 +145,16 @@ function SellProducts({
                   }}
                 />
                 <div className="pt-3 px-3">
-                  <div className="mb-3 h-[40px]">
+                  <div className="">
                     <Link
                       to={`/bonsaiDetail/${office.id}`}
                       className="text-[#333333] text-2xl hover:text-[#1E7100]"
                     >
                       {office.name}
                     </Link>
+                  </div>
+                  <div>
+                    Code: {office.code != "" ? office.code : "Đang cập nhật"}
                   </div>
                   <div className="grid grid-cols-3">
                     <div className="flex items-center">

@@ -148,7 +148,7 @@ function ManageService() {
                   >
                     Hủy
                   </button>
-                ) : ser.serviceGardenStatus == 5 ? (
+                ) : ser.serviceGardenStatus == 5 || ser.serviceGardenStatus == 1 ? (
                   <button
                     onClick={() => handleAcceptAgain(ser.id)}
                     className="absolute right-0 bottom-0 outline-none"

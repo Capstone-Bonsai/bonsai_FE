@@ -33,6 +33,9 @@ function ServiceGardenChecking() {
   const allServiceGardens = useSelector(
     (state) => state.contract?.allServiceGardenDTO?.contracts?.items
   );
+  const totalItemsCount = useSelector(
+    (state) => state.contract?.allServiceGardenDTO?.contracts?.totalItemsCount
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const paging = useSelector((state) => state.contract?.pagination);
@@ -55,7 +58,7 @@ function ServiceGardenChecking() {
         pageSize: pageSize,
       })
     );
-  }, []);
+  }, [currentPage]);
 
   const handleCancelDelete = () => {
     console.log("Clicked cancel button");
@@ -81,13 +84,8 @@ function ServiceGardenChecking() {
 
   const handleTableChange = (pagination) => {
     console.log(pagination);
-    const index = Number(pagination.current) - 1;
-    dispatch(
-      allServiceGarden({
-        pageIndex: index,
-        pageSize: pageSize,
-      })
-    );
+    const index = Number(pagination.current);
+    setCurrentPage(index);
   };
 
   const columns = [
@@ -138,7 +136,9 @@ function ServiceGardenChecking() {
       key: "gardenSquare",
       render: (_, record) => (
         <>
-          <p>{record?.customerGarden?.square} m<sup>2</sup></p>
+          <p>
+            {record?.customerGarden?.square} m<sup>2</sup>
+          </p>
         </>
       ),
     },
@@ -253,7 +253,11 @@ function ServiceGardenChecking() {
                 dataSource={allServiceGardens}
                 columns={columns}
                 scroll={{ x: true }}
-                pagination={paging}
+                pagination={{
+                  total: totalItemsCount,
+                  pageSize: pageSize,
+                  current: currentPage,
+                }}
                 onChange={handleTableChange}
                 rowKey={(record) => record.id}
                 loading={{
