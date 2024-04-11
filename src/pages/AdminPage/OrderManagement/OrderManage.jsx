@@ -233,16 +233,6 @@ function OrderManage() {
       ),
     },
     {
-      title: "Loại đơn hàng",
-      dataIndex: "orderType",
-      key: "orderType",
-      render: (_, record) => (
-        <>
-          <Tag>{record.orderType}</Tag>
-        </>
-      ),
-    },
-    {
       title: "Xem đơn hàng",
       key: "orderDetails",
       render: (_, record) => {
