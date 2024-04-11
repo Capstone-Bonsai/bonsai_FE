@@ -21,6 +21,7 @@ import ModalBonsaiCustomer from "./ModalBonsaiCustomer";
 import ModalBuyFromStore from "./ModalBuyFromStore";
 import { bonsaiBought } from "../../redux/slice/bonsaiSlice";
 import BonsaiInGarden from "./BonsaiInGarden";
+import AddCustomerGarden from "./AddCustomerGarden";
 function CustomerGarden() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -28,29 +29,28 @@ function CustomerGarden() {
   const [newSquare, setNewSquare] = useState("");
   const [imageGarden, setImageGarden] = useState([]);
   const [pageIndex, setPageIndex] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(3);
   const boughtBonsai = useSelector((state) => state.bonsai.boughtBonsai?.items);
   const gardens = useSelector((state) => state.garden.gardenDTO?.items);
   useEffect(() => {
     dispatch(allCategory());
     dispatch(allStyle());
     dispatch(bonsaiBought());
-  }, []);
-  useEffect(() => {
     const payload = {
       pageIndex: pageIndex - 1,
       pageSize,
     };
-
-    setLoading(true);
-    dispatch(fetchCustomerGarden(payload))
-      .then(() => {
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching order data:", error);
-        setLoading(false);
-      });
+    if (!gardens) {
+      setLoading(true);
+      dispatch(fetchCustomerGarden(payload))
+        .then(() => {
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching order data:", error);
+          setLoading(false);
+        });
+    }
   }, [pageIndex]);
   const [file, setFile] = useState([]);
   const handleImageChange = (e) => {
@@ -72,10 +72,6 @@ function CustomerGarden() {
   };
 
   const handleAddNewGarden = async () => {
-    const payload = {
-      pageIndex: pageIndex - 1,
-      pageSize,
-    };
     const formData = new FormData();
     formData.append("Address", newAddress);
     formData.append("Square", newSquare);
@@ -84,23 +80,21 @@ function CustomerGarden() {
     });
     // setLoading(true);
     try {
-      setLoading(true);
       await addCustomerGarden(formData);
-      dispatch(fetchCustomerGarden(payload));
+      fetchCustomerGarden();
       setLoading(false);
       toast.success("Thêm vườn thành công thành Công");
     } catch (error) {
-      toast.error("Thêm vườn không thành công", error);
+      toast.error("Update không thành công", error);
     }
   };
-
   const handleRemoveImage = (index) => {
     const updatedImageGarden = [...imageGarden];
     updatedImageGarden.splice(index, 1);
     setImageGarden(updatedImageGarden);
   };
   const handlePageChange = (page) => {
-    setPageIndex(page);
+    setPageIndex(page - 1);
   };
   const [selectedGardenId, setSelectedGardenId] = useState("");
   const { allStyleDTO } = useSelector((state) => state.style);
@@ -121,6 +115,20 @@ function CustomerGarden() {
     bonsaiInGarden,
     bonsaiData,
     loadingBonsai,
+  };
+  const propsAddGarden = {
+    setNewAddress,
+    newAddress,
+    newSquare,
+    setNewSquare,
+    handleImageChange,
+    imageGarden,
+    handleRemoveImage,
+    CloseCircleOutlined,
+    noImage,
+    UploadOutlined,
+    handleUploadClick,
+    handleAddNewGarden,
   };
   const { totalItemsCount } = useSelector((state) => state.garden.gardenDTO);
   const handleBonsaiInGarden = (bonsaiInGardenId) => {
@@ -151,95 +159,7 @@ function CustomerGarden() {
               >
                 Thêm vườn của bạn
               </button>
-              <dialog id="my_modal_1" className="modal">
-                <div className="modal-box">
-                  <form method="dialog">
-                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                      ✕
-                    </button>
-                  </form>
-                  <h3 className="font-bold text-lg">Thêm vườn của bạn</h3>
-                  <div>
-                    <div className="text-[#3a9943]">Địa chỉ</div>
-                    <input
-                      className="border outline-none w-[90%] h-[40px] my-2 px-2"
-                      value={newAddress}
-                      placeholder="Địa chỉ"
-                      onChange={(e) => setNewAddress(e.target.value)}
-                      type="text"
-                      name=""
-                      id=""
-                    />
-                  </div>
-                  <div>
-                    <div className="text-[#3a9943]">Diện tích</div>
-                    <input
-                      value={newSquare}
-                      onChange={(e) => setNewSquare(e.target.value)}
-                      className="border outline-none w-[90%] h-[40px] my-2 mb-5"
-                      type="number"
-                      min={0}
-                      name=""
-                      id=""
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      style={{ display: "none" }}
-                      id="upload-input"
-                    />
-                  </div>
-                  <div className="flex flex-wrap gap-5">
-                    {imageGarden.length > 0 ? (
-                      imageGarden.map((image, index) => (
-                        <div
-                          key={index}
-                          className="relative p-10 border rounded-[10px]"
-                        >
-                          <img
-                            src={image.imageURL}
-                            className="object-cover w-[130px] h-[130px]"
-                            alt=""
-                          />
-                          <button
-                            className="absolute top-0 right-2 text-[#f2f2f2] text-[30px]"
-                            onClick={() => handleRemoveImage(index)}
-                          >
-                            <CloseCircleOutlined />
-                          </button>
-                        </div>
-                      ))
-                    ) : (
-                      <img
-                        src={noImage}
-                        className="object-cover w-[100px] h-[100px]"
-                        alt="No Image"
-                      />
-                    )}
-                  </div>
-                  {imageGarden.length < 4 ? (
-                    <button
-                      onClick={handleUploadClick}
-                      className="border p-1 rounded-lg my-5 outline-none"
-                    >
-                      <UploadOutlined />
-                      Thêm hình ảnh
-                    </button>
-                  ) : (
-                    "Bạn chỉ có thể thêm tối đa 4 ảnh"
-                  )}
-                  <div className="modal-action">
-                    <form method="dialog">
-                      <button className="btn" onClick={handleAddNewGarden}>
-                        Thêm Vườn
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </dialog>
+              <AddCustomerGarden {...propsAddGarden} />
               {gardens?.map((garden) => (
                 <div key={garden.id} className="flex p-4 gap-10">
                   <div className=" h-[250px] w-[45%]">
