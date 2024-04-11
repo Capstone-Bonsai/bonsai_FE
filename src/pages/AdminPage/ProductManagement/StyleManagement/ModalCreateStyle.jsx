@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Tag, Input, Modal, Form } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { Input, Modal, Form } from "antd";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { postStyle } from "../../../../utils/styleApi";
 import { allStyle } from "../../../../redux/slice/styleSlice";

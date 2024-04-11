@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Tag, Input, Modal, Form } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { Input, Modal, Form } from "antd";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { postStyle, putStyle } from "../../../../utils/styleApi";
+import { putStyle } from "../../../../utils/styleApi";
 import { allStyle } from "../../../../redux/slice/styleSlice";
 
 const ModalUpdateStyle = (props) => {
@@ -22,7 +22,6 @@ const ModalUpdateStyle = (props) => {
   const dispatch = useDispatch();
   const [confirmLoadingUpdateStyle, setConfirmLoadingUpdateStyle] =
     useState(false);
-  const [openUpdateStyle, setOpenUpdateStyle] = useState(false);
 
   const formRef = useRef(null);
 

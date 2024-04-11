@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  PlusCircleOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
-import { Tag, Input, Modal, Form, InputNumber, Select, Upload } from "antd";
-const { Search, TextArea } = Input;
+import { Tag, Modal, Form, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { getOrderStatus, putOrder } from "../../../utils/orderApi";
@@ -133,7 +126,7 @@ const ModalUpdateOrder = (props) => {
             initialValues={formData}
           >
             <Form.Item label="Khách hàng">
-              <p>{order?.customer.applicationUser?.email}</p>
+              <p>{order?.customer?.applicationUser?.email}</p>
             </Form.Item>
             <Form.Item label="Sản phẩm">
               <p>{order?.orderDetails[0]?.bonsai?.name}</p>
@@ -191,8 +184,8 @@ const ModalUpdateOrder = (props) => {
             >
               <Select value={order?.orderStatus}>
                 {listOrderStatus?.map((orderStatus, index) => (
-                  <Select.Option value={orderStatus.value} key={index}>
-                    {orderStatus.display}
+                  <Select.Option value={orderStatus?.value} key={index}>
+                    {orderStatus?.display}
                   </Select.Option>
                 ))}
               </Select>

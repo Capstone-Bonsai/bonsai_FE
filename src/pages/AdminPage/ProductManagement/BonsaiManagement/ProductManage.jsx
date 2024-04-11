@@ -1,26 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import {
-  Space,
-  Tag,
-  Table,
-  Input,
-  Modal,
-  Button,
-  Cascader,
-  Checkbox,
-  ColorPicker,
-  DatePicker,
-  Form,
-  InputNumber,
-  Radio,
-  Select,
-  Slider,
-  Switch,
-  TreeSelect,
-  Upload,
-} from "antd";
+import { Space, Table, Input, Modal, Select } from "antd";
 const { Search, TextArea } = Input;
 
 import { toast } from "react-toastify";
@@ -230,7 +210,11 @@ function ProductManage() {
       render: (_, record) => (
         <>
           <div>
-            <img src={record.bonsaiImages[0]?.imageUrl} width={200} height={200} />
+            <img
+              src={record.bonsaiImages[0]?.imageUrl}
+              width={200}
+              height={200}
+            />
           </div>
         </>
       ),

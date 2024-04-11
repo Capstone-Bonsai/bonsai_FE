@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Tag, Input, Modal, Form } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { Input, Modal, Form } from "antd";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { putCategory } from "../../../../utils/categoryApi";
 import { allCategory } from "../../../../redux/slice/categorySlice";

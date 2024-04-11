@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Col, InputNumber, Row, Slider, Space } from "antd";
+import { InputNumber } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductById, setCartFromCookie } from "../../../../redux/slice/productSlice";
+import {
+  fetchProductById,
+  setCartFromCookie,
+} from "../../../../redux/slice/productSlice";
 import Cookies from "universal-cookie";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../../../../components/Loading";
 

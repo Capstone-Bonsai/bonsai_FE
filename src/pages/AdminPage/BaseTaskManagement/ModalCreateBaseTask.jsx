@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PlusOutlined } from "@ant-design/icons";
-import { Tag, Input, Modal, Form, InputNumber, Select, Upload } from "antd";
-const { Search, TextArea } = Input;
+import { Input, Modal, Form } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";

@@ -1,31 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import {
-  Space,
-  Tag,
-  Table,
-  Input,
-  Modal,
-  Button,
-  Cascader,
-  Checkbox,
-  ColorPicker,
-  DatePicker,
-  Form,
-  InputNumber,
-  Radio,
-  Select,
-  Slider,
-  Switch,
-  TreeSelect,
-  Upload,
-} from "antd";
-const { Search, TextArea } = Input;
+import { Space, Table, Modal } from "antd";
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import Loading from "../../../../components/Loading";
 import { allStyle } from "../../../../redux/slice/styleSlice";
 import { deleteStyle } from "../../../../utils/styleApi";
