@@ -133,6 +133,14 @@ function Router() {
                 element: <ManageService />,
               },
               {
+                path: "/ManageContract",
+                element: <ManageService />,
+              },
+              {
+                path: "/ManageContractUser",
+                element: <ContractUser />,
+              },
+              {
                 path: "/ManageContractDetail",
                 element: <ContractUserDetail />,
               },
