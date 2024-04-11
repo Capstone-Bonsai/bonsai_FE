@@ -4,20 +4,18 @@ import {
   ClockCircleOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
-import { Space, Tag, Table, Input, Modal, Badge } from "antd";
-const { Search } = Input;
+import { Space, Tag, Table, Modal } from "antd";
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllOrders } from "../../../redux/slice/orderSlice";
 import { deleteProduct } from "../../../utils/productApi";
-import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import ModalUpdateOrder from "./ModalUpdateOrder";
 
 function OrderManage() {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.order.loading);
+  const loading = useSelector((state) => state.order?.loading);
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -303,23 +301,6 @@ function OrderManage() {
         <div className="w-[100%]">
           <div className="font-semibold mb-6">Đơn hàng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
-            {/* <div className="flex justify-between p-6">
-              <div>
-                <button
-                  className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
-                  onClick={showCreateModal}
-                >
-                  <PlusCircleOutlined /> Thêm sản phẩm
-                </button>
-              </div>
-              <div className="pr-0">
-                <Search
-                  placeholder="input search text"
-                  className="w-[300px]"
-                  allowClear
-                />
-              </div>
-            </div> */}
             <div className="mb-12">
               <Table
                 className="w-[100%]"
@@ -348,14 +329,14 @@ function OrderManage() {
           order={selectedUpdateOrder}
         />
         <Modal
-          title="Xóa sản phẩm"
+          title="Xóa đơn hàng"
           open={openDelete}
           onOk={handleDelete}
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
         >
-          <div>Bạn có muốn xóa sản phẩm này không?</div>
+          <div>Bạn có muốn xóa đơn hàng này không?</div>
         </Modal>
       </div>
     </>

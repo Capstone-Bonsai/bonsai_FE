@@ -74,16 +74,28 @@ function PrivateRoute() {
     },
   ];
   const SideBarItems = [
-    getItem(<Link to={`/admin/user`}>Người dùng</Link>, "1", <UserOutlined />),
-    getItem("Sản phẩm", "sub1", <VideoCameraOutlined />, [
-      getItem(<Link to={`/admin/product`}>Bonsai</Link>, "2"),
-      getItem(<Link to={`/admin/customerGarden`}>Sân vườn</Link>, "3"),
-    ]),
-    getItem(<Link to={`/admin/order`}>Đơn hàng</Link>, "4", <UploadOutlined />),
-    getItem("Dịch vụ", "sub2", <UploadOutlined />, [
-      getItem(<Link to={`/admin/service`}>Dịch vụ</Link>, "5"),
-      getItem(<Link to={`/admin/baseTask`}>Base Task</Link>, "6"),
-    ]),
+    ...(userInfo?.role == "Manager"
+      ? [
+          getItem(
+            <Link to={`/admin/user`}>Người dùng</Link>,
+            "1",
+            <UserOutlined />
+          ),
+          getItem("Sản phẩm", "sub1", <VideoCameraOutlined />, [
+            getItem(<Link to={`/admin/product`}>Bonsai</Link>, "2"),
+            getItem(<Link to={`/admin/customerGarden`}>Sân vườn</Link>, "3"),
+          ]),
+          getItem(
+            <Link to={`/admin/order`}>Đơn hàng</Link>,
+            "4",
+            <UploadOutlined />
+          ),
+          getItem("Dịch vụ", "sub2", <UploadOutlined />, [
+            getItem(<Link to={`/admin/service`}>Dịch vụ</Link>, "5"),
+            getItem(<Link to={`/admin/baseTask`}>Base Task</Link>, "6"),
+          ]),
+        ]
+      : []),
     getItem("Hợp Đồng", "sub3", <FileDoneOutlined />, [
       getItem(
         <Link to={`/admin/serviceGardenChecking`}>

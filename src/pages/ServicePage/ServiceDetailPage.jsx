@@ -42,8 +42,8 @@ function ServiceDetailPage() {
   );
   const [note, setNote] = useState("");
   const [gardenSelected, setGardenSelected] = useState("");
-  console.log(gardenSelected);
   const [treeSelected, setTreeSelected] = useState("");
+  console.log(treeSelected);
   const [isGardenEmpty, setIsGardenEmpty] = useState(false);
   const [isTreeEmpty, setIsTreeEmpty] = useState(false);
   const gardenNoPagin = useSelector(
@@ -53,7 +53,7 @@ function ServiceDetailPage() {
   const loadingTempPrice = useSelector((state) => state.service.loading);
   console.log(loadingTempPrice);
 
-  const handleRegisterService = (e) => {
+  const handleRegisterService = async (e) => {
     e.preventDefault();
     if (!userData) {
       navigate("/login");
@@ -81,10 +81,15 @@ function ServiceDetailPage() {
     try {
       if (userData && gardenSelected && dateRange.length > 1) {
         setBarLoader(true);
-        dispatch(postServiceGarden(payload));
+        const response = await dispatch(postServiceGarden(payload));
+        console.log(response);
         setBarLoader(false);
-        toast.success("Vui lòng xác nhận");
-        document.getElementById("confirm_temp_price").showModal();
+        if (response?.error) {
+          toast.error(response.error.message);
+        } else {
+          toast.success("Vui lòng xác nhận");
+          document.getElementById("confirm_temp_price").showModal();
+        }
       }
     } catch (error) {
       setBarLoader(false);
@@ -133,6 +138,8 @@ function ServiceDetailPage() {
   const props = {
     gardenNoPagin,
     setGardenSelected,
+    setTreeSelected,
+    treeSelected,
     gardenSelected,
     bonsaiInGardenData,
     userData,
@@ -147,7 +154,8 @@ function ServiceDetailPage() {
   };
   const disabledStartDate = (current) => {
     const today = new Date();
-    return current && current < today.setHours(0, 0, 0, 0);
+    const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    return current && current < nextWeek.setHours(0, 0, 0, 0);
   };
   return (
     <>
@@ -176,7 +184,7 @@ function ServiceDetailPage() {
               <div className="border p-5">
                 <div className="border-b mb-3 py-3">
                   <div className="text-3xl">{serviceDetail.name}</div>
-                  <div>             
+                  <div>
                     <span className="text-[#3e9943]">
                       {serviceDetail.serviceType === "BonsaiCare"
                         ? "Chăm sóc cây cảnh"
@@ -239,10 +247,16 @@ function ServiceDetailPage() {
                     ""
                   ) : (
                     <div className="flex gap-3">
-                      <div className={`${isTreeEmpty ? "text-[red]" : ""}`}>
-                        Chọn cây cảnh
-                      </div>
-                      <input required type="hidden" name="" id="" />
+                      {treeSelected?.id ? (
+                        <div>{treeSelected.bonsai.name}</div>
+                      ) : (
+                        <div>
+                          <div className={`${isTreeEmpty ? "text-[red]" : ""}`}>
+                            Chọn cây cảnh
+                          </div>
+                          <input required type="hidden" name="" id="" />
+                        </div>
+                      )}
                       <button
                         className="flex hover:text-[#3a9943] text-[18px] outline-none"
                         onClick={() =>
@@ -251,7 +265,11 @@ function ServiceDetailPage() {
                             .showModal()
                         }
                       >
-                        <PlusCircleOutlined />
+                        {!treeSelected ? (
+                          <PlusCircleOutlined />
+                        ) : (
+                          <EditOutlined />
+                        )}
                       </button>
                       <SelectedBonsai {...props} />
                     </div>

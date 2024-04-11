@@ -23,7 +23,7 @@ function Contract() {
   const cookies = new Cookies();
   const userInfo = cookies?.get("user");
   const loading = useSelector(
-    (state) => state.contract?.allContractDTO?.loading
+    (state) => state.contract?.listContractDTO?.loading
   );
   const [openDelete, setOpenDelete] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
@@ -33,7 +33,7 @@ function Contract() {
     (state) => state.contract?.listContractDTO?.items
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const paging = useSelector((state) => state.contract?.pagination);
   const showModalDelete = () => {
     setOpenDelete(true);
@@ -41,7 +41,9 @@ function Contract() {
   const showModalInfo = () => {
     setOpenInfo(true);
   };
-
+  const totalItemsCount = useSelector(
+    (state) => state.contract?.listContractDTO?.totalItemsCount
+  );
   useEffect(() => {
     dispatch(
       listAllContract({
@@ -49,7 +51,7 @@ function Contract() {
         pageSize: pageSize,
       })
     );
-  }, []);
+  }, [currentPage]);
 
   const handleCancelDelete = () => {
     console.log("Clicked cancel button");
@@ -73,16 +75,11 @@ function Contract() {
     }
   };
 
-  // const handleTableChange = (pagination) => {
-  //   console.log(pagination);
-  //   const index = Number(pagination.current) - 1;
-  //   dispatch(
-  //     allContract({
-  //       pageIndex: index,
-  //       pageSize: pageSize,
-  //     })
-  //   );
-  // };
+  const handleTableChange = (pagination) => {
+    console.log(pagination);
+    const index = Number(pagination.current);
+    setCurrentPage(index);
+  };
 
   const columns = [
     {
@@ -91,7 +88,7 @@ function Contract() {
       key: "customerName",
       render: (_, record) => (
         <>
-          <p>{record?.customerGarden?.customerId}</p>
+          <p>{record?.customerName}</p>
         </>
       ),
     },
@@ -141,7 +138,7 @@ function Contract() {
       key: "gardenSquare",
       render: (_, record) => (
         <>
-          <p>{record?.customerGarden?.square} m2</p>
+          <p>{record?.gardenSquare} m2</p>
         </>
       ),
     },
@@ -151,17 +148,17 @@ function Contract() {
       key: "address",
       render: (_, record) => (
         <>
-          <p>{record?.customerGarden?.address}</p>
+          <p>{record?.address}</p>
         </>
       ),
     },
     {
-      title: "Giá tạm tính",
+      title: "Giá dịch vụ",
       dataIndex: "temporaryPrice",
       key: "temporaryPrice",
       render: (_, record) => (
         <>
-          <p>{formatPrice(record?.temporaryPrice)}</p>
+          <p>{formatPrice(record?.standardPrice)}</p>
         </>
       ),
     },
@@ -171,7 +168,7 @@ function Contract() {
       key: "surchargePrice",
       render: (_, record) => (
         <>
-          <p>{formatPrice(record?.temporarySurchargePrice)}</p>
+          <p>{formatPrice(record?.surchargePrice)}</p>
         </>
       ),
     },
@@ -181,7 +178,7 @@ function Contract() {
       key: "temporaryTotalPrice",
       render: (_, record) => (
         <>
-          <p>{formatPrice(record.temporaryTotalPrice)}</p>
+          <p>{formatPrice(record?.totalPrice)}</p>
         </>
       ),
     },
@@ -189,9 +186,20 @@ function Contract() {
       title: "Trạng thái",
       dataIndex: "contractStatus",
       key: "contractStatus",
-      render: (_, record) => <>{record.serviceGardenStatus}</>,
+      render: (_, record) => <>{record.contractStatus}</>,
     },
-
+    {
+      title: "Loại dịch vụ",
+      dataIndex: "serviceType",
+      key: "serviceType",
+      render: (_, record) => {
+        if (record.serviceType === 1) {
+          return <>Dịch vụ chăm vườn</>;
+        } else if (record.serviceType === 2) {
+          return <>Dịch vụ chăm cây</>;
+        }
+      },
+    },
     {
       title: "Số lượng gardener",
       dataIndex: "numberOfGardener",
@@ -263,9 +271,17 @@ function Contract() {
                 dataSource={allContracts}
                 columns={columns}
                 scroll={{ x: true }}
-                pagination={paging}
-                // onChange={handleTableChange}
+                pagination={{
+                  total: totalItemsCount,
+                  pageSize: pageSize,
+                  current: currentPage,
+                }}
+                onChange={handleTableChange}
                 rowKey={(record) => record.id}
+                loading={{
+                  indicator: <Loading loading={loading} />,
+                  spinning: loading,
+                }}
               />
             </div>
           </div>
