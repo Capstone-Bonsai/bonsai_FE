@@ -89,12 +89,14 @@ function PrivateRoute() {
             "4",
             <UploadOutlined />
           ),
-          getItem("Dịch vụ", "sub2", <UploadOutlined />, [
-            getItem(<Link to={`/admin/service`}>Dịch vụ</Link>, "5"),
-            getItem(<Link to={`/admin/baseTask`}>Base Task</Link>, "6"),
-          ]),
         ]
       : []),
+    getItem("Dịch vụ", "sub2", <UploadOutlined />, [
+      getItem(<Link to={`/admin/service`}>Dịch vụ</Link>, "5"),
+      ...(userInfo?.role == "Manager"
+        ? [getItem(<Link to={`/admin/baseTask`}>Base Task</Link>, "6")]
+        : []),
+    ]),
     getItem("Hợp Đồng", "sub3", <FileDoneOutlined />, [
       getItem(
         <Link to={`/admin/serviceGardenChecking`}>
