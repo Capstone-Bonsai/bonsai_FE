@@ -50,10 +50,6 @@ function BonsaiDetail() {
   );
   return (
     <>
-      <motion.div
-        className="progress-bar"
-        style={{ scaleX: scrollYProgress, height: progressBarHeight }}
-      />
       {loading ? (
         <Loading loading={loading} />
       ) : (
@@ -63,7 +59,11 @@ function BonsaiDetail() {
               <div className="flex">
                 <div className="w-full h-[450px] lg:w-[450px] drop-shadow-lg">
                   <Image
-                    src={bonsaiDetail.bonsaiImages?.[0]?.imageUrl}
+                    src={
+                      bonsaiDetail.bonsaiImages?.find(
+                        (image) => image.id === currentImage
+                      )?.imageUrl || ""
+                    }
                     alt=""
                     width="100%"
                     height="100%"
@@ -112,7 +112,8 @@ function BonsaiDetail() {
                 </div>
                 <div className="opacity-70 text-[15px]">
                   <div>
-                    <span className="">Hoành cây:</span> {bonsaiDetail.trunkDimenter}
+                    <span className="">Hoành cây:</span>{" "}
+                    {bonsaiDetail.trunkDimenter}
                   </div>
                   <div>
                     Chiều cao:{" "}
@@ -126,7 +127,12 @@ function BonsaiDetail() {
                       ? bonsaiDetail.yearOfPlanting
                       : "Không có thông tin"}
                   </div>
-                  <div>Code: {bonsaiDetail.code != "" ? bonsaiDetail.code : "Đang cập nhật"}</div>
+                  <div>
+                    Code:{" "}
+                    {bonsaiDetail.code != ""
+                      ? bonsaiDetail.code
+                      : "Đang cập nhật"}
+                  </div>
                 </div>
               </div>
               <div className="py-5 border-b">{bonsaiDetail.description}</div>

@@ -12,7 +12,7 @@ import Loading from "../../components/Loading";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
-
+import noService from '../../assets/noService.png'
 function ManageService() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -101,82 +101,96 @@ function ManageService() {
         <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
           <NavbarUser />
           <div className="border w-[75%] flex flex-col items-center p-4">
-          <>
-            {loading ? (
-              <Loading loading={loading} isRelative={true} />
-            ) : (
-              <>
-            {listCusService?.map((ser) => (
-              <div key={ser.id} className="border-b relative w-full gap-2 py-5">
-                <div className=" flex justify-between">
-                  <div className="flex gap-2 text-[14px]">
-                    Thời gian làm:
-                    <div>{new Date(ser.startDate).toLocaleDateString()}</div>-
-                    <div>{new Date(ser.endDate).toLocaleDateString()}</div>
-                  </div>
-                  <div>
-                    Tình trạng:{" "}
-                    <span
-                      className={`${
-                        ser.serviceGardenStatus == 1 ||
-                        ser.serviceGardenStatus == 4 ||
-                        ser.serviceGardenStatus == 5
-                          ? "text-[red]"
-                          : "text-[#3a9943]"
-                      }`}
+            <>
+              {loading ? (
+                <Loading loading={loading} isRelative={true} />
+              ) : (
+                <>
+                {!listCusService ? <div className="my-3"><img src={noService} className="m-auto w-[30%]" alt="" /></div> : ""}
+                  {listCusService?.map((ser) => (
+                    <div
+                      key={ser.id}
+                      className="border-b relative w-full gap-2 py-5"
                     >
-                      {" "}
-                      {getStatusText(ser.serviceGardenStatus)}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <div className=" w-[80%]">
-                    <div className="">
-                      <div className="">
-                        Địa chỉ: {ser.customerGarden.address}
+                      <div className=" flex justify-between">
+                        <div className="flex gap-2 text-[14px]">
+                          Thời gian làm:
+                          <div>
+                            {new Date(ser.startDate).toLocaleDateString()}
+                          </div>
+                          -
+                          <div>
+                            {new Date(ser.endDate).toLocaleDateString()}
+                          </div>
+                        </div>
+                        <div>
+                          Tình trạng:{" "}
+                          <span
+                            className={`${
+                              ser.serviceGardenStatus == 1 ||
+                              ser.serviceGardenStatus == 4 ||
+                              ser.serviceGardenStatus == 5
+                                ? "text-[red]"
+                                : "text-[#3a9943]"
+                            }`}
+                          >
+                            {" "}
+                            {getStatusText(ser.serviceGardenStatus)}
+                          </span>
+                        </div>
                       </div>
-                      <div className="opacity-70 text-[14px]">
-                        Phụ phí dự kiến:{" "}
-                        {formatPrice(ser.temporarySurchargePrice)}
+                      <div className="flex items-center">
+                        <div className=" w-[80%]">
+                          <div className="">
+                            <div className="">
+                              Địa chỉ: {ser.customerGarden.address}
+                            </div>
+                            <div className="opacity-70 text-[14px]">
+                              Phụ phí dự kiến:{" "}
+                              {formatPrice(ser.temporarySurchargePrice)}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-[#3a9943] w-[15%] flex-end text-[14px]">
+                          {formatPrice(ser.temporaryTotalPrice)}
+                        </div>
                       </div>
+                      {ser.serviceGardenStatus == 2 ? (
+                        <button
+                          onClick={() => handleCancelAgain(ser.id)}
+                          className="absolute right-0 bottom-0 outline-none"
+                        >
+                          Hủy
+                        </button>
+                      ) : ser.serviceGardenStatus == 5 ||
+                        ser.serviceGardenStatus == 1 ? (
+                        <button
+                          onClick={() => handleAcceptAgain(ser.id)}
+                          className="absolute right-0 bottom-0 outline-none"
+                        >
+                          Chấp nhận
+                        </button>
+                      ) : (
+                        ""
+                      )}
                     </div>
-                  </div>
-                  <div className="text-[#3a9943] w-[15%] flex-end text-[14px]">
-                    {formatPrice(ser.temporaryTotalPrice)}
-                  </div>
-                </div>
-                {ser.serviceGardenStatus == 2 ? (
-                  <button
-                    onClick={() => handleCancelAgain(ser.id)}
-                    className="absolute right-0 bottom-0 outline-none"
-                  >
-                    Hủy
-                  </button>
-                ) : ser.serviceGardenStatus == 5 || ser.serviceGardenStatus == 1 ? (
-                  <button
-                    onClick={() => handleAcceptAgain(ser.id)}
-                    className="absolute right-0 bottom-0 outline-none"
-                  >
-                    Chấp nhận
-                  </button>
-                ) : (
-                  ""
-                )}
-              </div>
-            ))}
-              </>
-            )}
-          </>
+                  ))}
+                </>
+              )}
+            </>
           </div>
         </div>
-        <Pagination
-          current={currentPage}
-          pageSize={pageSize}
-          total={totalItemsCount}
-          onChange={handlePageChange}
-          className="text-center mt-5"
-        />
+        {listCusService ? (
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={totalItemsCount}
+            onChange={handlePageChange}
+            className="text-center mt-5"
+          />
+        ) : (
+          ""
+        )}
       </MinHeight>
     </>
   );

@@ -9,7 +9,6 @@ import BarLoaderLoading from "../../components/BarLoaderLoading";
 import { useDispatch } from "react-redux";
 import { getDistrict, getProvince, getWard } from "../../redux/slice/address";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
-import AutoComplete from "react-google-autocomplete";
 import CompletedAddress from "./CompletedAddress";
 function Order() {
   const dispatch = useDispatch();
@@ -184,10 +183,6 @@ function Order() {
       <MinHeight>
         {isBarLoader ? <BarLoaderLoading loading={isBarLoader} /> : ""}
         <div className="m-auto w-[70%]">
-          <AutoComplete
-            apiKey="AIzaSyD-mpcsm8z3RzVow60KPO4rSNRvuozFmt0"
-            onPlaceSelected={(place) => console.log(place)}
-          />
           <div className=" mt-10 drop-shadow-lg bg-[#ffffff]">
             <table className="w-full border-collapse">
               <thead>
@@ -205,7 +200,7 @@ function Order() {
                   <tr key={item.bonsaiId} className="ml-5 text-center h-[70px]">
                     <td className="flex justify-center items-center h-[70px]">
                       <div>
-                        <img src={item?.image} alt="" width={50} height={50} />
+                        <img src={item?.image} alt="" className="w-[50px] h-[50px] object-cover" />
                       </div>
                     </td>
                     <td className="">

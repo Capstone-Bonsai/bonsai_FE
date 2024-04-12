@@ -22,6 +22,8 @@ import ModalBuyFromStore from "./ModalBuyFromStore";
 import { bonsaiBought } from "../../redux/slice/bonsaiSlice";
 import BonsaiInGarden from "./BonsaiInGarden";
 import AddCustomerGarden from "./AddCustomerGarden";
+import noGardener from "../../assets/noGardener.png";
+
 function CustomerGarden() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -142,14 +144,14 @@ function CustomerGarden() {
   };
 
   return (
-    <>
-      {loading ? (
-        <Loading loading={loading} />
-      ) : (
-        <MinHeight>
-          <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
-            <NavbarUser />
-            <div className=" border text-center w-[75%] pt-5">
+    <MinHeight>
+      <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
+        <NavbarUser />
+        <div className=" border text-center w-[75%] pt-5">
+          {loading ? (
+            <Loading loading={loading} isRelative={true} />
+          ) : (
+            <>
               <button
                 className="bg-[#f2f2f2] text-black p-5 rounded-[5px] hover:bg-[#3A994A] hover:text-[#fff]"
                 onClick={() =>
@@ -158,6 +160,17 @@ function CustomerGarden() {
               >
                 Thêm vườn của bạn
               </button>
+              {!gardens ? (
+                <div className="">
+                  <img
+                    className="w-[30%] m-auto my-5"
+                    src={noGardener}
+                    alt=""
+                  />
+                </div>
+              ) : (
+                ""
+              )}
               <AddCustomerGarden {...propsAddGarden} />
               {gardens?.map((garden) => (
                 <div key={garden.id} className="flex p-4 gap-10">
@@ -268,18 +281,22 @@ function CustomerGarden() {
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-          <Pagination
-            current={pageIndex}
-            pageSize={pageSize}
-            total={totalItemsCount}
-            onChange={handlePageChange}
-            className="text-center mt-5"
-          />
-        </MinHeight>
+            </>
+          )}
+        </div>
+      </div>
+      {gardens ? (
+        <Pagination
+          current={pageIndex}
+          pageSize={pageSize}
+          total={totalItemsCount}
+          onChange={handlePageChange}
+          className="text-center mt-5"
+        />
+      ) : (
+        ""
       )}
-    </>
+    </MinHeight>
   );
 }
 
