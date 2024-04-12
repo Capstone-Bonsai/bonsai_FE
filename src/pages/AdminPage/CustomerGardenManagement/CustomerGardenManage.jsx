@@ -15,6 +15,7 @@ function CustomerGardenManage() {
     (state) => state.garden?.gardenManagerDTO?.items
   );
   console.log(allCustomerGarden);
+  console.log(customerBonsais);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.garden?.pagination);
@@ -60,6 +61,26 @@ function CustomerGardenManage() {
         render: (record) => <div>{record.bonsai?.code}</div>,
       },
       {
+        title: "Năm trồng",
+        key: "yearOfPlanting",
+        render: (record) => <div>{record.bonsai?.yearOfPlanting} năm</div>,
+      },
+      {
+        title: "Hoành cây",
+        key: "trunkDimenter",
+        render: (record) => <div>{record.bonsai?.trunkDimenter}</div>,
+      },
+      {
+        title: "Chiều cao ",
+        key: "height",
+        render: (record) => <div>{record.bonsai?.height} m</div>,
+      },
+      {
+        title: "Số thân",
+        key: "numberOfTrunk",
+        render: (record) => <div>{record.bonsai?.numberOfTrunk}</div>,
+      },
+      {
         title: "Giá tiền",
         key: "price",
         render: (record) => (
@@ -82,13 +103,28 @@ function CustomerGardenManage() {
           </>
         ),
       },
+      {
+        title: "Hinh ảnh",
+        dataIndex: "image",
+        key: "image",
+        render: (_, record) => (
+          <>
+            <div className="h-[200px] w-[200px]">
+              <img
+                src={record.bonsai?.bonsaiImages[0]?.imageUrl}
+                style={{ width: "200px", height: "200px" }}
+              />
+            </div>
+          </>
+        ),
+      },
     ];
     return (
       <Table
         columns={columns}
         rowKey="id"
         dataSource={customerBonsais}
-        pagination
+        pagination={false}
         loading={{
           indicator: <Loading loading={loading} />,
           spinning: loading,
@@ -99,12 +135,32 @@ function CustomerGardenManage() {
 
   const columns = [
     {
-      title: "Khách hàng",
-      dataIndex: "customer",
-      key: "customer",
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
       render: (_, record) => (
         <>
           <p>{record.customer?.applicationUser?.email}</p>
+        </>
+      ),
+    },
+    {
+      title: "Tên khách hàng",
+      dataIndex: "fullname",
+      key: "fullname",
+      render: (_, record) => (
+        <>
+          <p>{record.customer?.applicationUser?.fullname}</p>
+        </>
+      ),
+    },
+    {
+      title: "Số điện thoại",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+      render: (_, record) => (
+        <>
+          <p>{record.customer?.applicationUser?.phoneNumber}</p>
         </>
       ),
     },
@@ -119,11 +175,10 @@ function CustomerGardenManage() {
       key: "image",
       render: (_, record) => (
         <>
-          <div>
+          <div className="h-[200px] w-[200px]">
             <img
               src={record.customerGardenImages[0]?.image}
-              width={200}
-              height={200}
+              style={{ width: "200px", height: "200px" }}
             />
           </div>
         </>
