@@ -37,6 +37,7 @@ import {
   LoginNavigate,
   ProductManagetNavigate,
 } from "../pages/NotFoundPage/NotFound";
+import DeliveryFeeTable from "../pages/DeliveryFee/DeliveryFeeTable";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -111,6 +112,10 @@ function Router() {
               {
                 path: "/Contact",
                 element: <Contact />,
+              },
+              {
+                path: "/delivery",
+                element: <DeliveryFeeTable />,
               },
             ]
           : []),
