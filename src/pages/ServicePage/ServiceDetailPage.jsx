@@ -24,6 +24,7 @@ import {
   cancelServiceGarden,
 } from "../../redux/slice/serviceSlice";
 import ConfirmTempPrice from "./ConfirmTempPrice";
+import { allCategory, careStep } from "../../redux/slice/categorySlice";
 const { RangePicker } = DatePicker;
 
 function ServiceDetailPage() {
@@ -53,6 +54,9 @@ function ServiceDetailPage() {
   const loadingTempPrice = useSelector((state) => state.service.loading);
   console.log(loadingTempPrice);
 
+  useEffect(() => {
+    dispatch(allCategory());
+  }, []);
   const handleRegisterService = async (e) => {
     e.preventDefault();
     if (!userData) {
@@ -75,7 +79,8 @@ function ServiceDetailPage() {
     }
     if (serviceDetail.serviceType == "BonsaiCare") {
       payload.customerBonsaiId = treeSelected.id;
-    } else if (userData && dateRange.length <= 1) {
+    }
+    if (userData && dateRange.length <= 1) {
       toast.error("Vui lòng chọn ngày");
     }
     try {
@@ -157,6 +162,28 @@ function ServiceDetailPage() {
     const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
     return current && current < nextWeek.setHours(0, 0, 0, 0);
   };
+  const categories = useSelector(
+    (state) => state.category.allCategoryDTO.items
+  );
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  console.log(selectedCategoryId);
+  const handleCategoryChange = (e) => {
+    setSelectedCategoryId(e.target.value);
+  };
+  const [careSteps, setCareSteps] = useState("");
+  console.log(careSteps);
+  useEffect(() => {
+    const getCareStep = async () => {
+      try {
+        const response = await careStep(selectedCategoryId);
+        setCareSteps(response);
+      } catch (error) {
+        const errorRes = error;
+        setCareSteps(errorRes);
+      }
+    };
+    getCareStep();
+  }, [selectedCategoryId]);
   return (
     <>
       {isLoading ? (
@@ -193,7 +220,43 @@ function ServiceDetailPage() {
                   </div>
                 </div>
                 <div className="border-b">
-                  <div className="text-xl">Chi tiết dịch vụ:</div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="text-xl">Chi tiết dịch vụ:</div>
+                    {serviceDetail.serviceType == "BonsaiCare" ? (
+                      <div className="">
+                        <select
+                          name="category"
+                          onChange={handleCategoryChange}
+                          value={selectedCategoryId}
+                          className="border outline-none py-2 rounded-[10px]"
+                        >
+                          <option value="" disabled={selectedCategoryId !== ""}>
+                            Chọn loại cây
+                          </option>
+                          {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                              {category.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  {!careSteps?.items ? (
+                    <div>{careSteps}</div>
+                  ) : (
+                    <div>
+                      {careSteps?.items?.map((careStep) => (
+                        <div key={careStep.id}>
+                          <div>
+                            Bước {careStep.orderStep}: {careStep.step}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                   {serviceDetail.serviceBaseTasks?.map((serviceBT) => (
                     <div className="text-[15px]" key={serviceBT.baseTaskId}>
                       - {serviceBT.baseTask.name}
@@ -203,7 +266,13 @@ function ServiceDetailPage() {
                 <div className="py-2">
                   Giá dự tính:
                   <span className=" text-[#3a9943]">
-                    {formatPrice(serviceDetail.standardPrice)}/m<sup>2</sup>
+                    {serviceDetail.serviceType == "GardenCare" ? (
+                      <>
+                        {formatPrice(serviceDetail.standardPrice)}/m<sup>2</sup>
+                      </>
+                    ) : (
+                      <>Tùy tuộc vào cây</>
+                    )}
                   </span>
                 </div>
                 <div className="border-y py-2">

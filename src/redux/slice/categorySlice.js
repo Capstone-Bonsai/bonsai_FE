@@ -10,6 +10,19 @@ export const allCategory = createAsyncThunk("bonsai/category", async () => {
   }
 });
 
+export const careStep = async (categoryId) => {
+  try {
+    const response = await axios.get(`/CareStep/${categoryId}`);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response.data;
+    } else {
+      throw error;
+    }
+  }
+};
+
 const initialState = {
   allCategoryDTO: {},
   loading: false,
@@ -43,7 +56,5 @@ const categorySlice = createSlice({
   },
 });
 const { reducer: categoryReducer, actions } = categorySlice;
-export const {
-  setCategory
-} = actions;
+export const { setCategory } = actions;
 export { categoryReducer as default };

@@ -14,6 +14,15 @@ export const freeGardener = createAsyncThunk(
   }
 );
 
+export const addGardener = async (payload) => {
+  try {
+    const response = await axios.post(`/ContractGardener`, payload);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const initialState = {
   freeGardenerDTO: {},
   loading: false,
