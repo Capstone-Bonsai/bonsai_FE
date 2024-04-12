@@ -65,7 +65,7 @@ function SellProducts({
                   <div className="">
                     <Link
                       to={`/bonsaiDetail/${office.id}`}
-                      className="text-[#333333] text-2xl hover:text-[#1E7100]"
+                      className="text-[#333333] block overflow-hidden whitespace-nowrap overflow-ellipsis text-2xl hover:text-[#1E7100]"
                     >
                       {office.name}
                     </Link>
@@ -148,7 +148,7 @@ function SellProducts({
                   <div className="">
                     <Link
                       to={`/bonsaiDetail/${office.id}`}
-                      className="text-[#333333] text-2xl hover:text-[#1E7100]"
+                      className="text-[#333333] block overflow-hidden whitespace-nowrap overflow-ellipsis text-2xl hover:text-[#1E7100]"
                     >
                       {office.name}
                     </Link>

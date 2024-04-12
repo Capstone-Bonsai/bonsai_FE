@@ -271,7 +271,7 @@ function ServiceDetailPage() {
                         {formatPrice(serviceDetail.standardPrice)}/m<sup>2</sup>
                       </>
                     ) : (
-                      <>Tùy tuộc vào cây</>
+                      <>Tùy thuộc vào cây</>
                     )}
                   </span>
                 </div>
