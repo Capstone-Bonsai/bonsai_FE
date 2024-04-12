@@ -62,7 +62,7 @@ function ShoppingCart() {
   const totalCountItems = cartItems.length;
   return (
     <MinHeight>
-      {cartItems.length === 0 ? (
+      {cartItems?.length === 0 ? (
         <div className="m-auto w-[70%] my-10 drop-shadow-lg bg-[#ffffff]">
           <table className="w-full border-collapse">
             <thead>
@@ -103,7 +103,7 @@ function ShoppingCart() {
                 >
                   <td className="flex justify-center items-center h-[170px]">
                     <div>
-                      <img src={item?.image} alt="" width={120} height={120} />
+                      <img src={item?.image} alt="" className="w-[120px] h-[120px] object-cover" />
                     </div>
                   </td>
                   <td className="">
