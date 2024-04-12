@@ -6,10 +6,16 @@ import { DatePicker, Space } from "antd";
 import { parse } from "date-fns";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
-import { createContract } from "../../../redux/slice/contractSlice";
+import {
+  allServiceGarden,
+  createContract,
+} from "../../../redux/slice/contractSlice";
+import { useDispatch } from "react-redux";
 const { RangePicker } = DatePicker;
 function ModalServiceGardenChecking(props) {
   const { show, setShow, contractDetail } = props;
+  const dispatch = useDispatch();
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const [contractDetailne, setContractDetailne] = useState();
   const tempPriceService = contractDetail?.temporaryPrice;
   const surchargePriceService = contractDetail?.temporarySurchargePrice;
@@ -82,12 +88,24 @@ function ModalServiceGardenChecking(props) {
     if (tempPriceService !== contractDetail?.temporaryPrice) {
       console.log("Temp price updated:", tempPriceService);
     }
-    try {
-      await createContract(payload);
-      toast.success("Tạo hợp đồng thành công");
-    } catch (error) {
-      toast.error("Lỗi tạo hợp đồng!!!", error);
-    }
+    setConfirmLoading(true);
+    await createContract(payload)
+      .then((data) => {
+        toast.success("Tạo hợp đồng thành công");
+        dispatch(
+          allServiceGarden({
+            pageIndex: 0,
+            pageSize: 10,
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Lỗi tạo hợp đồng!!!", err);
+      })
+      .finally(() => {
+        setConfirmLoading(false);
+      });
     setShow(false);
   };
 
@@ -97,11 +115,12 @@ function ModalServiceGardenChecking(props) {
         onCancel={() => {
           setShow(false), handleCancelEdit();
         }}
-        okText="Tạo hợp đồng"
         onOk={handleOk}
         okButtonProps={{ type: "default" }}
         open={show}
+        okText={confirmLoading ? "Đang tạo" : "Tạo hợp đồng"}
         cancelText="Hủy"
+        confirmLoading={confirmLoading}
         maskClosable={false}
       >
         <div className="flex items-center gap-2">

@@ -299,7 +299,7 @@ const ModalUpdateProduct = (props) => {
             <Form.Item
               label="Kiểu dáng"
               rules={[
-                { required: true, message: "Phân loại không được để trống!" },
+                { required: true, message: "Kiểu dáng không được để trống!" },
               ]}
             >
               <div>
@@ -324,9 +324,7 @@ const ModalUpdateProduct = (props) => {
             <Form.Item
               label="Tên sản phẩm"
               name="Name"
-              rules={[
-                { required: true, message: "Phân loại không được để trống!" },
-              ]}
+              rules={[{ required: true, message: "Tên không được để trống!" }]}
             >
               <Input />
             </Form.Item>
@@ -343,10 +341,6 @@ const ModalUpdateProduct = (props) => {
               label="Số năm trồng"
               name="YearOfPlanting"
               rules={[
-                {
-                  required: true,
-                  message: "Số năm trồng không được để trống!",
-                },
                 {
                   type: "number",
                   message: "Số năm trồng phải là một số!",
@@ -372,7 +366,6 @@ const ModalUpdateProduct = (props) => {
               label="Chiều cao"
               name="Height"
               rules={[
-                { required: true, message: "Chiều cao không được để trống!" },
                 {
                   type: "number",
                   message: "Chiều cao phải là một số!",

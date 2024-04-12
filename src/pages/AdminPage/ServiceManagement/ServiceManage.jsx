@@ -185,7 +185,7 @@ function ServiceManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Sản phẩm</div>
+          <div className="font-semibold mb-6">Dịch vụ</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
               <div>

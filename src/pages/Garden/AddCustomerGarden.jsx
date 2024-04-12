@@ -1,5 +1,5 @@
 import React from "react";
-
+import CompletedAddress from "../OrderProduct/CompletedAddress";
 function AddCustomerGarden(propsAddGarden) {
   return (
     <dialog id="my_modal_1" className="modal">
@@ -12,7 +12,7 @@ function AddCustomerGarden(propsAddGarden) {
         <h3 className="font-bold text-lg">Thêm vườn của bạn</h3>
         <div>
           <div className="text-[#3a9943]">Địa chỉ</div>
-          <input
+          {/* <input
             className="border outline-none w-[90%] h-[40px] my-2 px-2"
             value={propsAddGarden.newAddress}
             placeholder="Địa chỉ"
@@ -20,7 +20,10 @@ function AddCustomerGarden(propsAddGarden) {
             type="text"
             name=""
             id=""
-          />
+          /> */}
+          <div className="w-full">
+            <CompletedAddress className="" setAddress={propsAddGarden.setNewAddress} />
+          </div>
         </div>
         <div>
           <div className="text-[#3a9943]">Diện tích</div>
@@ -28,7 +31,7 @@ function AddCustomerGarden(propsAddGarden) {
             value={propsAddGarden.newSquare}
             onChange={(e) => propsAddGarden.setNewSquare(e.target.value)}
             className="border outline-none w-[90%] h-[40px] my-2 mb-5"
-            type="text"
+            type="number"
             name=""
             id=""
           />
@@ -84,7 +87,7 @@ function AddCustomerGarden(propsAddGarden) {
               className="btn"
               onClick={() => propsAddGarden.handleAddNewGarden()}
             >
-              Đăng Vườn
+              Thêm vườn
             </button>{" "}
           </form>
         </div>

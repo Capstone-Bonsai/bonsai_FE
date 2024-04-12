@@ -209,11 +209,10 @@ function ProductManage() {
       key: "image",
       render: (_, record) => (
         <>
-          <div>
+          <div className="h-[200px] w-[200px]">
             <img
               src={record.bonsaiImages[0]?.imageUrl}
-              width={200}
-              height={200}
+              style={{ width: "200px", height: "200px" }}
             />
           </div>
         </>
@@ -241,9 +240,6 @@ function ProductManage() {
           >
             Chỉnh sửa
           </button>
-          <Link to={`/admin/productDetail/${record.id}`} key={record.id}>
-            Xem thông tin
-          </Link>
         </Space>
       ),
     },
