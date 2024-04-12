@@ -57,7 +57,7 @@ function ModalBonsaiCustomer(props) {
     });
     try {
       await addBonsaiIntoGarden(formData, props.selectedGardenId);
-      toast.success("Thêm vườn thành công thành Công");
+      toast.success("Thêm bonsai thành công");
       setStyleId("");
       setCateId("");
       setImgBonsai([]);

@@ -11,6 +11,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 import NavbarUser from "../Auth/NavbarUser";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import cayTung from "../../assets/cay-tung.png";
+import noImage from "../../assets/unImage.png";
 function ManageOrder() {
   const dispatch = useDispatch();
   const cookies = new Cookies();
@@ -23,18 +24,16 @@ function ManageOrder() {
   const pageSize = 5;
   console.log(totalItems);
   useEffect(() => {
-    if (!orderList) {
-      setLoading(true);
-      dispatch(fetchOrderUser({ pageIndex: currentPage - 1, pageSize }))
-        .then(() => {
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching order data:", error);
-          setLoading(false);
-        });
-    }
-  }, [currentPage, orderList]);
+    setLoading(true);
+    dispatch(fetchOrderUser({ pageIndex: currentPage - 1, pageSize }))
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching order data:", error);
+        setLoading(false);
+      });
+  }, [currentPage]);
 
   const onPageChange = (page) => {
     setCurrentPage(page);
@@ -58,20 +57,20 @@ function ManageOrder() {
   };
 
   return (
-    <>
-      {loading ? (
-        <Loading loading={loading} />
-      ) : (
-        <MinHeight>
-          <div className="m-auto w-[70%] mt-10 flex justify-between bg-[#ffffff] mb-5">
-            <NavbarUser />
-            <div className=" w-[75%] ">
+    <MinHeight>
+      <div className="m-auto w-[70%] mt-10 flex justify-between bg-[#ffffff] mb-5">
+        <NavbarUser />
+        <div className=" w-[75%] ">
+          {loading ? (
+            <Loading loading={loading} isRelative={true} />
+          ) : (
+            <>
               <div className="">
                 {orderList?.length > 0 ? (
                   orderList?.map((order) => (
                     <div
                       key={order.id}
-                      className="bg-[#ffffff] border drop-shadow-lg my-2 p-5"
+                      className="bg-[#ffffff] border drop-shadow-lg my-2 p-5 relative"
                     >
                       <div className="flex justify-between my-2">
                         <div>
@@ -131,14 +130,27 @@ function ManageOrder() {
                         <div key={orderDetail.id} className="border-y p-3 flex">
                           <div className="w-[10%]">
                             <img
-                              className="w-[82px] h-[82px]"
-                              src={cayTung}
+                              className="w-[82px] h-[82px] object-cover"
+                              src={
+                                orderDetail.bonsai?.bonsaiImages?.length > 0
+                                  ? orderDetail.bonsai?.bonsaiImages[0]
+                                      ?.imageUrl
+                                  : noImage
+                              }
                               alt=""
                             />
                           </div>
                           <div className="w-[70%]">
-                            <div>{orderDetail.bonsai.name}</div>
-                            <div className="opacity-50">Dáng xiên</div>
+                            <div className="text-[18px] font-bold">
+                              {orderDetail.bonsai.name}
+                            </div>
+                            {/* <div className="opacity-50">Dáng xiên</div> */}
+                            <div className="opacity-70">
+                              Code:{" "}
+                              {orderDetail.bonsai.code != ""
+                                ? orderDetail.bonsai.code
+                                : "Đang cập nhật"}
+                            </div>
                           </div>
                           <div className="flex justify-center w-[20%] items-center">
                             <div className="text-[#3e9943] ">
@@ -147,33 +159,43 @@ function ManageOrder() {
                           </div>
                         </div>
                       ))}
-                      <div className=" mt-5 flex items-center justify-end">
-                        <span className="text-[14px]">Đơn hàng trị giá:</span>
+                      <div className="text-end my-2">
+                        Phí giao hàng:{" "}
+                        <span className="text-[#3a9943]">
+                          {formatPrice(order.deliveryPrice)}
+                        </span>
+                      </div>
+                      <div className=" flex items-center justify-end">
+                        {/* <span className="text-[14px]">Đơn hàng trị giá:</span> */}
                         <span className="text-[24px] font-bold text-[#3e9943] pl-5">
-                          {formatPrice(order.price)}
+                          {formatPrice(order.totalPrice)}
                         </span>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="text-center flex flex-col justify-center items-center h-[400px]">
-                    <ShoppingCartOutlined className="text-[50px] mt-5 " />
+                  <div className="opacity-70 text-[50px] text-center border flex flex-col justify-center items-center h-[400px]">
+                    <ShoppingCartOutlined className="text-[100px] mt-5 " />
                     <div className="font-bold">Bạn chưa mua hàng</div>
                   </div>
                 )}
               </div>
-              <Pagination
-                current={currentPage}
-                pageSize={pageSize}
-                total={totalItems}
-                onChange={onPageChange}
-                className="text-center mt-5"
-              />
-            </div>
-          </div>
-        </MinHeight>
-      )}
-    </>
+              {totalItems.length > 0 ? (
+                <Pagination
+                  current={currentPage}
+                  pageSize={pageSize}
+                  total={totalItems}
+                  onChange={onPageChange}
+                  className="text-center mt-5"
+                />
+              ) : (
+                ""
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    </MinHeight>
   );
 }
 

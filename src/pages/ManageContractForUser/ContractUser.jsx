@@ -8,7 +8,7 @@ import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ContractUserDetail from "./ContractUserDetail";
 import Loading from "../../components/Loading";
-
+import { AuditOutlined } from "@ant-design/icons";
 function ContractUser() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -151,7 +151,10 @@ function ContractUser() {
                         </div>
                       ))
                     ) : (
-                      <div className="">Không có hợp đồng</div>
+                      <div className="opacity-70 text-[50px] text-center">
+                        <AuditOutlined className="text-[100px]" />
+                        <div>Không có hợp đồng</div>
+                      </div>
                     )}
                   </div>
                 )}
