@@ -14,8 +14,6 @@ function CustomerGardenManage() {
   const allCustomerGarden = useSelector(
     (state) => state.garden?.gardenManagerDTO?.items
   );
-  console.log(allCustomerGarden);
-  console.log(customerBonsais);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.garden?.pagination);

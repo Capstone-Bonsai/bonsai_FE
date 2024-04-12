@@ -172,7 +172,10 @@ function Contract() {
       render: (_, record) => (
         <>
           <p>
-            {record?.gardenSquare} m<sup>2</sup>
+            {record?.gardenSquare.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}{" "}
+            m<sup>2</sup>
           </p>
         </>
       ),

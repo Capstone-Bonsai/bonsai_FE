@@ -23,7 +23,6 @@ function OrderManage() {
   const [selectedUpdateOrder, setSelectedUpdateOrder] = useState();
 
   const allOrder = useSelector((state) => state.order?.listOrder?.items);
-  console.log(allOrder);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.order?.pagination);
