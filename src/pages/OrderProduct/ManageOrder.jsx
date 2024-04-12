@@ -180,7 +180,7 @@ function ManageOrder() {
                   </div>
                 )}
               </div>
-              {totalItems.length > 0 ? (
+              {totalItems?.length > 0 ? (
                 <Pagination
                   current={currentPage}
                   pageSize={pageSize}
