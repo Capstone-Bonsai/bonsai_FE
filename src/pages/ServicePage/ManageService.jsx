@@ -26,13 +26,13 @@ function ManageService() {
       case 1:
         return "Chưa chấp nhận";
       case 2:
-        return "Đã chấp nhận";
+        return "Hủy";
       case 3:
-        return "Đã được duyệt";
+        return "Đã chấp nhận";
       case 4:
-        return "Đã bị từ chối";
+        return "Đã được duyệt";
       case 5:
-        return "Đã hủy";
+        return "Từ chối";
       case 6:
         return "Hoàn thành";
       default:
@@ -128,7 +128,7 @@ function ManageService() {
                           <span
                             className={`${
                               ser.serviceGardenStatus == 1 ||
-                              ser.serviceGardenStatus == 4 ||
+                              ser.serviceGardenStatus == 2 ||
                               ser.serviceGardenStatus == 5
                                 ? "text-[red]"
                                 : "text-[#3a9943]"
@@ -155,14 +155,14 @@ function ManageService() {
                           {formatPrice(ser.temporaryTotalPrice)}
                         </div>
                       </div>
-                      {ser.serviceGardenStatus == 2 ? (
+                      {ser.serviceGardenStatus == 3 ? (
                         <button
                           onClick={() => handleCancelAgain(ser.id)}
                           className="absolute right-0 bottom-0 outline-none"
                         >
                           Hủy
                         </button>
-                      ) : ser.serviceGardenStatus == 5 ||
+                      ) : ser.serviceGardenStatus == 2 ||
                         ser.serviceGardenStatus == 1 ? (
                         <button
                           onClick={() => handleAcceptAgain(ser.id)}
