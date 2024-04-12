@@ -169,9 +169,6 @@ const ModalUpdateOrder = (props) => {
                 }).format(order?.totalPrice)}
               </p>
             </Form.Item>
-            <Form.Item label="Loại đơn hàng">
-              <Tag>{order?.orderType}</Tag>
-            </Form.Item>
             <Form.Item
               label="Trạng thái đơn hàng"
               name="orderStatus"
