@@ -33,6 +33,7 @@ const { Search } = Input;
 import { useDispatch, useSelector } from "react-redux";
 import ModalCreateUser from "./ModalCreateUser";
 import { fetchAllUsers } from "../../../redux/slice/userSlice";
+import Loading from "../../../components/Loading";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -55,6 +56,7 @@ function UserManage() {
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [fileList, setFileList] = useState([]);
 
+  const loading = useSelector((state) => state.user?.loading)
   const allUsers = useSelector((state) => state.user?.listUser);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
@@ -258,6 +260,10 @@ function UserManage() {
                 pagination={paging}
                 onChange={handleTableChange}
                 rowKey="id"
+                loading={{
+                  indicator: <Loading loading={loading} />,
+                  spinning: loading,
+                }}
               />
             </div>
           </div>

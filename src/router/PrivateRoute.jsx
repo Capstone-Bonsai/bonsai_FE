@@ -47,30 +47,29 @@ function PrivateRoute() {
     {
       key: "1",
       label: <UserOutlined />,
-      children:
-        userInfo != null
-          ? [
-              getItem(
-                <Link to="/login" className="text-black" onClick={handleLogout}>
-                  Đăng xuất
-                </Link>,
-                "1",
-                "",
-                [],
-                "group"
-              ),
-            ]
-          : [
-              getItem(
-                <Link to="/login" className="text-black">
-                  Đăng nhập
-                </Link>,
-                "1",
-                "",
-                [],
-                "group"
-              ),
-            ],
+      children: userInfo
+        ? [
+            getItem(
+              <Link to="/login" className="text-black" onClick={handleLogout}>
+                Đăng xuất
+              </Link>,
+              "1",
+              "",
+              [],
+              "group"
+            ),
+          ]
+        : [
+            getItem(
+              <Link to="/login" className="text-black">
+                Đăng nhập
+              </Link>,
+              "1",
+              "",
+              [],
+              "group"
+            ),
+          ],
     },
   ];
   const SideBarItems = [

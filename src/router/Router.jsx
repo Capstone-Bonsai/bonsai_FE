@@ -171,10 +171,6 @@ function Router() {
                 element: <OrderManage />,
               },
               {
-                path: "/admin/service",
-                element: <ServiceManage />,
-              },
-              {
                 path: "/admin/customerGarden",
                 element: <CustomerGardenManage />,
               },
@@ -190,6 +186,10 @@ function Router() {
           : []),
         ...(userInfo?.role == "Manager" || userInfo?.role == "Staff"
           ? [
+              {
+                path: "/admin/service",
+                element: <ServiceManage />,
+              },
               {
                 path: "/admin/contract",
                 element: <Contract />,
