@@ -135,7 +135,7 @@ function CustomerGardenManage() {
       render: (_, record) => {
         return (
           <a onClick={() => expend(record.id)}>
-            {record.id === expended ? "Close Details" : "More Details"}
+            {record.id === expended ? "Đóng" : "Thêm chi tiết"}
           </a>
         );
       },

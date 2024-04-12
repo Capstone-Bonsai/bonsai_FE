@@ -5,7 +5,7 @@ import {
 } from "../../../redux/slice/contractSlice";
 import { LeftOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { Space, Table, Tag } from "antd";
+import { Divider, Space, Table, Tag } from "antd";
 import Loading from "../../../components/Loading";
 import ModalUpdateComplaint from "./ModalUpdateComplaint";
 
@@ -38,7 +38,7 @@ function ContractDetail(props) {
     setOpenUpdateModal(false);
   };
 
-  const getStatusText = (status) => {
+  const getConplaintStatusText = (status) => {
     switch (status) {
       case 1:
         return "Yêu cầu";
@@ -48,6 +48,27 @@ function ContractDetail(props) {
         return "Đã hủy";
       case 4:
         return "Hoàn thành";
+      default:
+        return "Trạng thái không xác định";
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch (status) {
+      case 1:
+        return "Đang chờ";
+      case 2:
+        return "Đã thanh toán";
+      case 3:
+        return "Đang thực hiện";
+      case 4:
+        return "Thất bại";
+      case 5:
+        return "Đã hủy";
+      case 6:
+        return "Hoàn thành";
+      case 7:
+        return "Phản hồi";
       default:
         return "Trạng thái không xác định";
     }
@@ -102,7 +123,7 @@ function ContractDetail(props) {
               record?.complaintStatus == 3 ? "text-[red]" : "text-[#3a9943]"
             }`}
           >
-            {getStatusText(record?.complaintStatus)}
+            {getConplaintStatusText(record?.complaintStatus)}
           </div>
         </>
       ),
@@ -145,72 +166,104 @@ function ContractDetail(props) {
       <div className="bg-[#ffffff] drop-shadow-2xl">
         <div className="p-6 ">
           <div className="font-medium">1. Thông tin hợp đồng</div>
-          <div className="flex justify-center w-[50%]">
-            <div className="p-4 mb-6 w-[60%]">
-              <div className="font-medium grid grid-cols-2">
-                <div>Tên khách hàng:</div>{" "}
-                <div>{contractDetail?.customerName}</div>
-              </div>
-              <div className="font-medium grid grid-cols-2">
-                <div>Số điện thoại:</div>
-                <div>{contractDetail?.customerPhoneNumber}</div>
-              </div>
-              <div className="font-medium grid grid-cols-2">
-                <div>Khoảng cách:</div>
+          <div className="flex justify-center w-[100%]">
+            <div className="p-4 mb-6 w-[100%]">
+              <div className="grid grid-cols-2 w-[100%]">
+                <div className="font-medium grid grid-cols-2">
+                  <div>Tên khách hàng:</div>{" "}
+                  <div>{contractDetail?.customerName}</div>
+                </div>
+                <div className="font-medium grid grid-cols-2">
+                  <div>Số điện thoại:</div>
+                  <div>{contractDetail?.customerPhoneNumber}</div>
+                </div>
+                <div className="font-medium grid grid-cols-2">
+                  <div>Địa chỉ:</div> <div>{contractDetail?.address}</div>
+                </div>
+                <div className="font-medium grid grid-cols-2">
+                  <div>Khoảng cách:</div>
+                  <div>
+                    {contractDetail?.distance?.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    m
+                  </div>
+                </div>
+                <div className="font-medium grid grid-cols-2">
+                  <div>Ngày bắt đầu:</div>
+                  <div>
+                    {new Date(contractDetail?.startDate).toLocaleDateString()}
+                  </div>
+                </div>
+                <div className="font-medium grid grid-cols-2">
+                  <div>Ngày hết hạn:</div>
+                  <div>
+                    {new Date(contractDetail?.endDate).toLocaleDateString()}
+                  </div>
+                </div>
                 <div>
-                  {contractDetail?.distance?.toLocaleString(undefined, {
-                    maximumFractionDigits: 2,
-                  })}{" "}
-                  km
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Trạng thái:</div>{" "}
+                    <div
+                      className={`${
+                        contractDetail?.contractStatus == 1 ||
+                        contractDetail?.contractStatus == 4 ||
+                        contractDetail?.contractStatus == 5
+                          ? "text-[red]"
+                          : "text-[#3a9943]"
+                      }`}
+                    >
+                      {getStatusText(contractDetail?.contractStatus)}
+                    </div>
+                  </div>
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Diện tích sân vườn:</div>
+                    <div>
+                      {contractDetail?.gardenSquare} m<sup>2</sup>
+                    </div>
+                  </div>
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Số lượng người làm vườn:</div>
+                    <div>{contractDetail?.numberOfGardener} người</div>
+                  </div>
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Giá tiêu chuẩn:</div>
+                    <div>
+                      {new Intl.NumberFormat("en-US", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(contractDetail?.standardPrice)}
+                    </div>
+                  </div>
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Phụ phí:</div>
+                    <div>
+                      {new Intl.NumberFormat("en-US", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(contractDetail?.surchargePrice)}
+                    </div>
+                  </div>
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Tổng chi phí:</div>
+                    <div>
+                      {new Intl.NumberFormat("en-US", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(contractDetail?.totalPrice)}
+                    </div>
+                  </div>
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Loại dịch vụ:</div>
+                    {record.serviceType === 1 ? (
+                      <div>Dịch vụ chăm vườn</div>
+                    ) : (
+                      <div>Dịch vụ chăm cây</div>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className="font-medium grid grid-cols-2">
-                <div>Ngày bắt đầu:</div>
-                <div>
-                  {new Date(contractDetail?.startDate).toLocaleDateString()}
-                </div>
-              </div>
-              <div className="font-medium grid grid-cols-2">
-                <div>Ngày hết hạn:</div>
-                <div>
-                  {new Date(contractDetail?.endDate).toLocaleDateString()}
-                </div>
-              </div>
-              <div className="font-medium grid grid-cols-2">
-                <div>Diện tích sân vườn:</div>
-                <div>{contractDetail?.gardenSquare} m2</div>
-              </div>
-              <div className="font-medium grid grid-cols-2">
-                <div>Số lượng người làm vườn:</div>
-                <div>{contractDetail?.numberOfGardener} người</div>
-              </div>
-              <div className="font-medium grid grid-cols-2">
-                <div>Giá tiêu chuẩn:</div>
-                <div>
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(contractDetail?.standardPrice)}
-                </div>
-              </div>
-              <div className="font-medium grid grid-cols-2">
-                <div>Phụ phí:</div>
-                <div>
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(contractDetail?.surchargePrice)}
-                </div>
-              </div>
-              <div className="font-medium grid grid-cols-2">
-                <div>Tổng chi phí:</div>
-                <div>
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(contractDetail?.totalPrice)}
-                </div>
-              </div>
+              <Divider type="vertical" />
             </div>
           </div>
 
