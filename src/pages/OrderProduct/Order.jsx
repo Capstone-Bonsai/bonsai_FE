@@ -200,7 +200,7 @@ function Order() {
                   <tr key={item.bonsaiId} className="ml-5 text-center h-[70px]">
                     <td className="flex justify-center items-center h-[70px]">
                       <div>
-                        <img src={item?.image} alt="" width={50} height={50} />
+                        <img src={item?.image} alt="" className="w-[50px] h-[50px] object-cover" />
                       </div>
                     </td>
                     <td className="">
