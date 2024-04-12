@@ -1,10 +1,12 @@
 import React from "react";
 import { BeatLoader } from "react-spinners";
 
-function Loading({ loading }) {
+function Loading({ loading, isRelative }) {
   return (
     <div
-      className={`w-[100%] h-[100%] absolute inset-0 z-auto flex justify-center items-center ${
+      className={`w-full h-full ${
+        isRelative ? "relative" : "absolute inset-0"
+      }  z-auto flex justify-center items-center ${
         loading ? "bg-[#ffffff] opacity-90" : "hidden"
       }`}
     >

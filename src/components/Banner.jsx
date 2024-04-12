@@ -22,6 +22,7 @@ function Banner() {
     { text: "Trang chủ", to: "/" },
     { text: "Bonsai", to: "/bonsai" },
     { text: "Chăm sóc cây cảnh", to: "/service" },
+    { text: "Bảng giá giao hàng", to: "/delivery" },
     { text: "Liên hệ", to: "/contact" },
   ];
   const cookies = new Cookies();

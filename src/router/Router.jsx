@@ -37,6 +37,7 @@ import {
   LoginNavigate,
   ProductManagetNavigate,
 } from "../pages/NotFoundPage/NotFound";
+import DeliveryFeeTable from "../pages/DeliveryFee/DeliveryFeeTable";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -69,18 +70,6 @@ function Router() {
         ...(userInfo?.role == "Customer"
           ? [
               {
-                path: "/ServiceDetail/:serviceId",
-                element: <ServiceDetailPage />,
-              },
-              {
-                path: "/service",
-                element: <ServiceListPage />,
-              },
-              {
-                path: "/ForgotPassword",
-                element: <ForgotPassword />,
-              },
-              {
                 path: "*",
                 element: <HomeNavigate />,
               },
@@ -109,8 +98,24 @@ function Router() {
                 element: <Order />,
               },
               {
+                path: "/ServiceDetail/:serviceId",
+                element: <ServiceDetailPage />,
+              },
+              {
+                path: "/service",
+                element: <ServiceListPage />,
+              },
+              {
+                path: "/ForgotPassword",
+                element: <ForgotPassword />,
+              },
+              {
                 path: "/Contact",
                 element: <Contact />,
+              },
+              {
+                path: "/delivery",
+                element: <DeliveryFeeTable />,
               },
             ]
           : []),
@@ -171,10 +176,6 @@ function Router() {
                 element: <OrderManage />,
               },
               {
-                path: "/admin/service",
-                element: <ServiceManage />,
-              },
-              {
                 path: "/admin/customerGarden",
                 element: <CustomerGardenManage />,
               },
@@ -190,6 +191,10 @@ function Router() {
           : []),
         ...(userInfo?.role == "Manager" || userInfo?.role == "Staff"
           ? [
+              {
+                path: "/admin/service",
+                element: <ServiceManage />,
+              },
               {
                 path: "/admin/contract",
                 element: <Contract />,
