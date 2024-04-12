@@ -101,6 +101,11 @@ function ManageService() {
         <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
           <NavbarUser />
           <div className="border w-[75%] flex flex-col items-center p-4">
+          <>
+            {loading ? (
+              <Loading loading={loading} isRelative={true} />
+            ) : (
+              <>
             {listCusService?.map((ser) => (
               <div key={ser.id} className="border-b relative w-full gap-2 py-5">
                 <div className=" flex justify-between">
@@ -160,6 +165,9 @@ function ManageService() {
                 )}
               </div>
             ))}
+              </>
+            )}
+          </>
           </div>
         </div>
         <Pagination

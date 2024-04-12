@@ -7,6 +7,7 @@ import { listAllContract } from "../../redux/slice/contractSlice";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ContractUserDetail from "./ContractUserDetail";
+import Loading from "../../components/Loading";
 
 function ContractUser() {
   const dispatch = useDispatch();
@@ -73,77 +74,90 @@ function ContractUser() {
       <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
         <NavbarUser />
         <div className="border w-[75%] flex flex-col items-center p-4">
-          {selectedDetail ? (
-            <ContractUserDetail {...props} />
-          ) : (
-            <>
-              {contracts ? (
-                contracts?.map((contract) => (
-                  <div className="w-full relative" key={contract.id}>
-                    <div className="">
-                      <div className="flex justify-between">
-                        <div className="flex gap-2">
-                          Thời gian làm:
-                          <div>
-                            {new Date(contract.startDate).toLocaleDateString()}
+          <>
+            {loading ? (
+              <Loading loading={loading} isRelative={true} />
+            ) : (
+              <>
+                {selectedDetail ? (
+                  <ContractUserDetail {...props} />
+                ) : (
+                  <div className="w-full">
+                    {contracts ? (
+                      contracts?.map((contract) => (
+                        <div className="w-full relative" key={contract.id}>
+                          <div className="">
+                            <div className="flex justify-between">
+                              <div className="flex gap-2">
+                                Thời gian làm:
+                                <div>
+                                  {new Date(
+                                    contract.startDate
+                                  ).toLocaleDateString()}
+                                </div>
+                                -
+                                <div>
+                                  {new Date(
+                                    contract.endDate
+                                  ).toLocaleDateString()}
+                                </div>
+                              </div>
+                              <div>{contract.address}</div>
+                              <div>
+                                Tình trạng:{" "}
+                                <span
+                                  className={`${
+                                    contract.contractStatus == 1 ||
+                                    contract.contractStatus == 4 ||
+                                    contract.contractStatus == 5
+                                      ? "text-[red]"
+                                      : "text-[#3a9943]"
+                                  }`}
+                                >
+                                  {getStatusText(contract?.contractStatus)}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                          -
-                          <div>
-                            {new Date(contract.endDate).toLocaleDateString()}
+                          <div className="w-full border-b flex items-center">
+                            <div className="w-[75%]">
+                              <div>
+                                Diện tích: {contract.gardenSquare}m <sup>2</sup>
+                              </div>
+                              <div>
+                                Số lượng người làm vườn:{" "}
+                                {contract.numberOfGardener} người
+                              </div>
+                              <div>
+                                Giá chuẩn: {formatPrice(contract.standardPrice)}
+                              </div>
+                              <div>
+                                Phụ phí: {formatPrice(contract.surchargePrice)}
+                              </div>
+                            </div>
+                            <div className="text-[#3a9943] w-[15%]">
+                              {formatPrice(contract.totalPrice)}
+                            </div>
+                            <button
+                              onClick={() => {
+                                setSelectedDetail(true),
+                                  setContractId(contract.id);
+                              }}
+                              className="text-[12px] absolute bottom-0 right-0 pl-5 hover:text-[#3a9943]"
+                            >
+                              Xem chi tiết
+                            </button>
                           </div>
                         </div>
-                        <div>{contract.address}</div>
-                        <div>
-                          Tình trạng:{" "}
-                          <span
-                            className={`${
-                              contract.contractStatus == 1 ||
-                              contract.contractStatus == 4 ||
-                              contract.contractStatus == 5
-                                ? "text-[red]"
-                                : "text-[#3a9943]"
-                            }`}
-                          >
-                            {getStatusText(contract?.contractStatus)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="w-full border-b flex items-center">
-                      <div className="w-[75%]">
-                        <div>
-                          Diện tích: {contract.gardenSquare}m <sup>2</sup>
-                        </div>
-                        <div>
-                          Số lượng người làm vườn: {contract.numberOfGardener}{" "}
-                          người
-                        </div>
-                        <div>
-                          Giá chuẩn: {formatPrice(contract.standardPrice)}
-                        </div>
-                        <div>
-                          Phụ phí: {formatPrice(contract.surchargePrice)}
-                        </div>
-                      </div>
-                      <div className="text-[#3a9943] w-[15%]">
-                        {formatPrice(contract.totalPrice)}
-                      </div>
-                      <button
-                        onClick={() => {
-                          setSelectedDetail(true), setContractId(contract.id);
-                        }}
-                        className="text-[12px] absolute bottom-0 right-0 pl-5 hover:text-[#3a9943]"
-                      >
-                        Xem chi tiết
-                      </button>
-                    </div>
+                      ))
+                    ) : (
+                      <div className="">Không có hợp đồng</div>
+                    )}
                   </div>
-                ))
-              ) : (
-                <div className="">Không có hợp đồng</div>
-              )}
-            </>
-          )}
+                )}
+              </>
+            )}
+          </>
         </div>
       </div>
       {selectedDetail || !contracts ? (

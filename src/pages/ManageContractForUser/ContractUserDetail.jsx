@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import NavbarUser from "../Auth/NavbarUser";
 import MinHeight from "../../components/MinHeight";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,21 +10,26 @@ import {
 } from "../../redux/slice/contractSlice";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Loading from "../../components/Loading";
+import ModalComplain from "./ModalComplain";
 function ContractUserDetail(props) {
   const dispatch = useDispatch();
   const contractId = props.contractId;
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
+  console.log(loading);
+
   useEffect(() => {
-    dispatch(contractDetailById(contractId));
+    setLoading(true);
+    dispatch(contractDetailById(contractId))
+      .then(() => setLoading(false))
+      .catch((error) => {
+        console.error("Error fetching contract detail:", error);
+        setLoading(false);
+      });
   }, [contractId]);
   const { contractDetail } = useSelector((state) => state.contract);
-  const tasks = useSelector(
-    (state) => state.contract?.listTaskDTO?.taskOfContracts
-  );
-  console.log(tasks);
-  useEffect(() => {
-    dispatch(listTask(contractId));
-  }, [contractId]);
+
   const handlePaymentContract = async (contractId) => {
     try {
       const res = await paymentContract(contractId);
@@ -34,69 +39,121 @@ function ContractUserDetail(props) {
     }
   };
   return (
-    <div className="w-full relative">
-      <button
-        className="absolute top-[-10px] left-[-10px]"
-        onClick={() => props.setSelectedDetail(false)}
-      >
-        <LeftCircleOutlined className="text-[20px]" />
-      </button>
-      <div className="mt-3 h-full">
-        <div className="flex gap-2 border-b">
-          Thời gian làm việc:
-          <div>{new Date(contractDetail.startDate).toLocaleDateString()}</div>-
-          <div>{new Date(contractDetail.endDate).toLocaleDateString()}</div>
-        </div>
-        <div>Khoảng cách: {contractDetail?.distance}m</div>
-        <div>
-          Diện tích vườn: {contractDetail.gardenSquare}m<sup>2</sup>
-        </div>
-        <div className="flex justify-end">
-          <div className="border w-[30%] p-2  rounded-[10px]">
-            <div className="border-b">
+    <>
+      {/* {loading ? (
+        <Loading loading={loading} isRelative={true} />
+      ) : ( */}
+      <div className="w-full relative">
+        <button
+          className="absolute top-[-10px] left-[-10px]"
+          onClick={() => props.setSelectedDetail(false)}
+        >
+          <LeftCircleOutlined className="text-[20px]" />
+        </button>
+        <div className="mt-3 h-full">
+          <div className="text-center text-lg font-bold">Hợp đồng</div>
+          <div className="text-center underline">{contractDetail.id}</div>
+          <div className="font-bold">1. Thông tin hợp đồng: </div>
+          <div className="border p-3">
+            <div className="flex gap-2 border-b">
+              Thời gian làm việc:
               <div>
-                Chi phí dịch vụ: {formatPrice(contractDetail.standardPrice)}
+                {new Date(contractDetail.startDate).toLocaleDateString()}
               </div>
-              <div>Phụ phí: {formatPrice(contractDetail.surchargePrice)}</div>
+              -
+              <div>{new Date(contractDetail.endDate).toLocaleDateString()}</div>
             </div>
+            <div>Khoảng cách: {contractDetail?.distance}m</div>
             <div>
-              Tổng:{" "}
-              <span className="text-[#3a9943]">
-                {" "}
-                {formatPrice(contractDetail.totalPrice)}
-              </span>
+              Diện tích vườn: {contractDetail.gardenSquare}m<sup>2</sup>
+            </div>
+            <div className="flex justify-end">
+              <div className="border w-[30%] p-2  rounded-[10px]">
+                <div className="border-b">
+                  <div>
+                    Chi phí dịch vụ: {formatPrice(contractDetail.standardPrice)}
+                  </div>
+                  <div>
+                    Phụ phí: {formatPrice(contractDetail.surchargePrice)}
+                  </div>
+                </div>
+                <div>
+                  Tổng:{" "}
+                  <span className="text-[#3a9943]">
+                    {" "}
+                    {formatPrice(contractDetail.totalPrice)}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex justify-end mt-2">
+          <div className="flex justify-end mt-2">
+            {contractDetail.contractStatus == 1 ||
+            contractDetail.contractStatus == 4 ? (
+              <button
+                onClick={() => handlePaymentContract(contractDetail.id)}
+                className="btn hover:bg-[#3a9943] hover:text-[#ffffff]"
+              >
+                Tiến hành thanh toán
+              </button>
+            ) : (
+              ""
+            )}
+          </div>
           {contractDetail.contractStatus == 1 ||
-          contractDetail.contractStatus == 4 ? (
-            <button
-              onClick={() => handlePaymentContract(contractDetail.id)}
-              className="btn hover:bg-[#3a9943] hover:text-[#ffffff]"
-            >
-              Tiến hành thanh toán
-            </button>
-          ) : (
+          contractDetail.contractStatus == 4 ||
+          contractDetail.contractStatus == 5 ? (
             ""
+          ) : (
+            <>
+              <div className="font-bold">Tiến độ công việc: </div>
+              <div className="overflow-x-auto">
+                <table className="w-full table border">
+                  {/* <colgroup className="border">
+                      <col className="w-[20%]" />
+                      <col className="w-[40%]" />
+                      <col className="w-[40%]" />
+                    </colgroup> */}
+                  <thead>
+                    <tr className="font-bold text-lg">
+                      <th className="">STT</th>
+                      <th>Tên công việc</th>
+                      <th>Thời gian hoàn thành</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {contractDetail?.taskOfContracts?.map((task, index) => (
+                      <tr key={task.id} className="">
+                        <td>{index + 1}</td>
+                        <td>{task.name}</td>
+                        <td>
+                          {task?.completedTime != null
+                            ? task?.completedTime
+                            : "Chưa hoàn thành"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="flex justify-between mt-3 items-center">
+                <div className="font-bold">Khiếu nại: </div>
+                <button
+                  onClick={() =>
+                    document.getElementById("modal_complain").showModal()
+                  }
+                  className="btn font-normal hover:text-[#fff] hover:bg-[#3a9943] mr-[100px]"
+                >
+                  Thêm khiếu nại
+                </button>
+                <ModalComplain />
+              </div>
+            </>
           )}
         </div>
-        {contractDetail.contractStatus == 1 ||
-        contractDetail.contractStatus == 4 ||
-        contractDetail.contractStatus == 5 ? (
-          ""
-        ) : (
-          <>
-            <div className="font-bold">Đang thực hiện:</div>
-            {tasks?.map((task) => (
-              <div key={task.id}>
-                <div>-{task.name}</div>
-              </div>
-            ))}
-          </>
-        )}
       </div>
-    </div>
+      {/* )} */}
+    </>
   );
 }
 
