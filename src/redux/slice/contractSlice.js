@@ -61,6 +61,17 @@ export const paymentContract = async (contractId) => {
   }
 };
 
+export const addComplaint = async (formData) => {
+  try {
+    const res = await axios.post(`/Complaint`, formData);
+    return res.data;
+  } catch (err) {
+    const errMessage = err.response;
+    console.log(errMessage);
+    throw (err, errMessage);
+  }
+};
+
 export const serviceGardenByServiceId = createAsyncThunk(
   "contract/serviceGardenByServiceId",
   async (serviceId) => {
