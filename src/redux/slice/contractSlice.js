@@ -153,7 +153,7 @@ const contractSlice = createSlice({
       })
       .addCase(contractDetailById.pending, (state) => {
         state.msg = "Loading...";
-        state.loading = true;
+        state.contractDetail.loading = true;
       })
       .addCase(contractDetailById.fulfilled, (state, action) => {
         state.contractDetail = action.payload;
@@ -166,7 +166,7 @@ const contractSlice = createSlice({
       })
       .addCase(listTask.pending, (state) => {
         state.msg = "Loading...";
-        state.loading = true;
+        state.listTaskDTO.loading = true;
       })
       .addCase(listTask.fulfilled, (state, action) => {
         state.listTaskDTO = action.payload;
