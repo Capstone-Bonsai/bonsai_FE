@@ -136,7 +136,12 @@ function Contract() {
       key: "distance",
       render: (_, record) => (
         <>
-          <p>{record.distance}</p>
+          <p>
+            {record?.distance?.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}{" "}
+            m
+          </p>
         </>
       ),
     },
@@ -166,7 +171,9 @@ function Contract() {
       key: "gardenSquare",
       render: (_, record) => (
         <>
-          <p>{record?.gardenSquare} m2</p>
+          <p>
+            {record?.gardenSquare} m<sup>2</sup>
+          </p>
         </>
       ),
     },

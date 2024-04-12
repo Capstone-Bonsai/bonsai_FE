@@ -3,10 +3,11 @@ import { Input, Modal, Form, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { putComplaint } from "../../../utils/complaintApi";
+import { contractDetailById } from "../../../redux/slice/contractSlice";
 
 const ModalUpdateComplaint = (props) => {
   const [form] = Form.useForm();
-  const { show, setShow, complaint } = props;
+  const { show, setShow, complaint, contractId } = props;
   const complaintStatuses = [
     { key: 1, name: "Yêu cầu" },
     { key: 2, name: "Đang thực hiện" },
@@ -56,6 +57,7 @@ const ModalUpdateComplaint = (props) => {
       putComplaint(complaint?.id, data)
         .then((data) => {
           toast.success("Cập nhật thành công!");
+          dispatch(contractDetailById(contractId));
           handleClose();
         })
         .catch((err) => {
@@ -117,7 +119,10 @@ const ModalUpdateComplaint = (props) => {
               ]}
             >
               <Form.Item name="complaintStatus">
-                <Select value={complaint?.complaintStatus} onChange={(value) => setSelectingStatus(value)}>
+                <Select
+                  value={complaint?.complaintStatus}
+                  onChange={(value) => setSelectingStatus(value)}
+                >
                   {complaintStatuses?.map((complaintStatus, index) => (
                     <Select.Option value={complaintStatus.key} key={index}>
                       {complaintStatus.name}
