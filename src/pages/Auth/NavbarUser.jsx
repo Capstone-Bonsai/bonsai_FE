@@ -7,7 +7,7 @@ function NavbarUser() {
     { name: "Quản lý đặt hàng", path: "/ManageOrder" },
     { name: "Vườn của bạn", path: "/CustomerGarden" },
     { name: "Đơn đăng ký dịch vụ", path: "/ManageService" },
-    { name: "Hợp đồng đợi thanh toán", path: "/ManageContractUser" },
+    { name: "Quản lý hợp đồng", path: "/ManageContractUser" },
   ];
   const location = useLocation();
   const [selectedItem, setSelectedItem] = useState(
