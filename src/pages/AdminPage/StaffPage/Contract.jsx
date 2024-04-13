@@ -264,9 +264,9 @@ function Contract() {
       key: "serviceType",
       render: (_, record) => {
         if (record.serviceType === 1) {
-          return <>Dịch vụ chăm vườn</>;
-        } else if (record.serviceType === 2) {
           return <>Dịch vụ chăm cây</>;
+        } else if (record.serviceType === 2) {
+          return <>Dịch vụ chăm vườn</>;
         }
       },
     },
