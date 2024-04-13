@@ -68,11 +68,11 @@ function ContractUser() {
       case 8:
         return "Phản hồi";
       case 9:
-        return "Đang xử lý phản hồi";
+        return "Đang xử lý khiếu nại";
       case 10:
-        return "Đã xử lý phản hồi";
+        return "Đã xử lý khiếu nại";
       case 11:
-        return "Hoàn thành phản hồi";
+        return "Hoàn thành xử lý khiếu nại";
       default:
         return "Trạng thái không xác định";
     }

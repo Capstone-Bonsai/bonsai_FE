@@ -40,6 +40,48 @@ function ContractUserDetail(props) {
       console.log("loi r", error);
     }
   };
+  const getStatusText = (status) => {
+    switch (status) {
+      case 1:
+        return "Đang chờ";
+      case 2:
+        return "Đã thanh toán";
+      case 3:
+        return "Đang thực hiện nhiệm vụ";
+      case 4:
+        return "Thất bại";
+      case 5:
+        return "Đã hủy";
+      case 6:
+        return "Hoàn thành nhiệm vụ";
+      case 7:
+        return "Hoàn thành hợp đồng";
+      case 8:
+        return "Phản hồi";
+      case 9:
+        return "Đang xử lý khiếu nại";
+      case 10:
+        return "Đã xử lý khiếu nại";
+      case 11:
+        return "Hoàn thành xử lý khiếu nại";
+      default:
+        return "Trạng thái không xác định";
+    }
+  };
+  const getStatusComplaintText = (status) => {
+    switch (status) {
+      case 1:
+        return "Yêu cầu";
+      case 2:
+        return "Đang xử lý";
+      case 3:
+        return "Đã bị từ chối";
+      case 4:
+        return "Đã hoàn thành";
+      default:
+        return "Trạng thái không xác định";
+    }
+  };
   return (
     <>
       {loading ? (
@@ -67,28 +109,47 @@ function ContractUserDetail(props) {
                   {new Date(contractDetail.endDate).toLocaleDateString()}
                 </div>
               </div>
-              <div className="">
-                {" "}
-                <span className="font-bold">Tên khách hàng:</span>{" "}
-                {contractDetail?.customerName}
-              </div>
-              <div>
-                <span className="font-bold">Số điện thoại:</span>{" "}
-                {contractDetail?.customerPhoneNumber}
-              </div>
-              <div>
-                <span className="font-bold">Địa chỉ:</span>{" "}
-                {contractDetail?.address}
-              </div>
-              <div>
-                <span className="font-bold">Loại dịch vụ: </span>{" "}
-                {contractDetail?.serviceType == 1
-                  ? "Chăm sóc cây cảnh"
-                  : "Chăm sóc sân vườn"}
-              </div>
-              <div>Khoảng cách: {contractDetail?.distance}m</div>
-              <div>
-                Diện tích vườn: {contractDetail.gardenSquare}m<sup>2</sup>
+              <div className="flex justify-between">
+                <div className="">
+                  <div className="">
+                    {" "}
+                    <span className="font-bold">Tên khách hàng:</span>{" "}
+                    {contractDetail?.customerName}
+                  </div>
+                  <div>
+                    <span className="font-bold">Số điện thoại:</span>{" "}
+                    {contractDetail?.customerPhoneNumber}
+                  </div>
+                  <div>
+                    <span className="font-bold">Địa chỉ:</span>{" "}
+                    {contractDetail?.address}
+                  </div>
+                  <div>
+                    <span className="font-bold">Loại dịch vụ: </span>{" "}
+                    {contractDetail?.serviceType == 1
+                      ? "Chăm sóc cây cảnh"
+                      : "Chăm sóc sân vườn"}
+                  </div>
+                  <div>Khoảng cách: {contractDetail?.distance}m</div>
+                  <div>
+                    Diện tích vườn: {contractDetail.gardenSquare}m<sup>2</sup>
+                  </div>
+                </div>
+                <div>
+                  Trạng thái:{" "}
+                  <span
+                    className={`${
+                      contractDetail?.contractStatus == 1 ||
+                      contractDetail?.contractStatus == 4 ||
+                      contractDetail?.contractStatus == 5
+                        ? "text-[red]"
+                        : "text-[#3a9943]"
+                    }`}
+                  >
+                    {" "}
+                    {getStatusText(contractDetail?.contractStatus)}
+                  </span>
+                </div>
               </div>
               <div className="flex justify-end">
                 <div className="border w-[30%] p-2  rounded-[10px]">
@@ -155,6 +216,8 @@ function ContractUserDetail(props) {
                               ? new Date(
                                   task?.completedTime
                                 ).toLocaleDateString()
+                              : contractDetail.contractStatus == 9
+                              ? "Đang xử lý khiếu nại"
                               : "Chưa hoàn thành"}
                           </td>
                         </tr>
@@ -178,6 +241,10 @@ function ContractUserDetail(props) {
                     setApiContractLoading={setApiContractLoading}
                   />
                 </div>
+                <div>
+                  Chú ý: Hạn khiếu nại là 3 ngày , còn hạn xử lý khiếu nại là 5
+                  ngày{" "}
+                </div>
                 {contractDetail?.complaints?.length > 0 ? (
                   <table className="w-full table">
                     <thead>
@@ -195,7 +262,11 @@ function ContractUserDetail(props) {
                           <tr key={complaint?.id}>
                             <td>{index + 1}</td>
                             <td>{complaint?.detail}</td>
-                            <td>{complaint?.complaintStatus}</td>
+                            <td>
+                              {getStatusComplaintText(
+                                complaint?.complaintStatus
+                              )}
+                            </td>
                             <td>{complaint?.cancelReason}</td>
                             <td>
                               {/* {complaint?.complaintImages.map(
@@ -214,8 +285,8 @@ function ContractUserDetail(props) {
                                 width={200}
                                 height={200}
                                 src={
-                                  complaint?.complaintImages > 0
-                                    ? complaint?.complaintImages[0].image
+                                  complaint?.complaintImages?.length > 0
+                                    ? complaint?.complaintImages[0]?.image
                                     : ""
                                 }
                               />

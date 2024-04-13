@@ -130,7 +130,7 @@ const ModalCreateService = (props) => {
             items={[
               {
                 key: "1",
-                label: `Form Garden Care`,
+                label: `Mẫu chăm sóc sân vườn`,
                 children: (
                   <FormGardenCare
                     onFormInstanceReady={(instance) => {
@@ -144,7 +144,7 @@ const ModalCreateService = (props) => {
               },
               {
                 key: "2",
-                label: `Form Bonsai Care`,
+                label: `Mẫu chăm sóc Bonsai`,
                 children: (
                   <FormBonsaiCare
                     onFormInstanceReady={(instance) => {

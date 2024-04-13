@@ -112,6 +112,7 @@ function ModalServiceGardenChecking(props) {
   return (
     <>
       <Modal
+        width="60%"
         onCancel={() => {
           setShow(false), handleCancelEdit();
         }}
@@ -194,7 +195,7 @@ function ModalServiceGardenChecking(props) {
                   Hình ảnh:
                   <img
                     src={contractDetail?.service?.image}
-                    style={{ width: "200px", height: "200px" }}
+                    style={{ width: "150px", height: "150px" }}
                   />
                 </div>
                 <div className="flex items-center gap-2">

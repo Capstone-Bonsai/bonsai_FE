@@ -140,7 +140,7 @@ const ModalUpdateService = (props) => {
               {
                 disabled: service?.serviceType == "BonsaiCare",
                 key: "1",
-                label: `Form Garden Care`,
+                label: `Mẫu chăm sóc sân vườn`,
                 children: (
                   <FormGardenCare
                     onFormInstanceReady={(instance) => {
@@ -156,7 +156,7 @@ const ModalUpdateService = (props) => {
               {
                 disabled: service?.serviceType == "GardenCare",
                 key: "2",
-                label: `Form Bonsai Care`,
+                label: `Mẫu chăm sóc Bonsai`,
                 children: (
                   <FormBonsaiCare
                     onFormInstanceReady={(instance) => {
