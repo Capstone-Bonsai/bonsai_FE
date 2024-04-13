@@ -144,6 +144,59 @@ function ModalServiceGardenChecking(props) {
           <div className="flex items-center">
             {isEditing ? (
               <div className="my-2">
+                <div className="my-2">
+                  Tên khách hàng:{" "}
+                  {
+                    contractDetail?.customerGarden?.customer?.applicationUser
+                      ?.fullname
+                  }
+                </div>
+                <div className="my-2">
+                  Email:{" "}
+                  {
+                    contractDetail?.customerGarden?.customer?.applicationUser
+                      ?.email
+                  }
+                </div>
+                <div className="my-2">
+                  Số điện thoại:{" "}
+                  {
+                    contractDetail?.customerGarden?.customer?.applicationUser
+                      ?.phoneNumber
+                  }
+                </div>
+                <div className="my-2">
+                  Địa chỉ vườn: {contractDetail?.customerGarden?.address}
+                </div>
+                <div className="my-2">
+                  Diện tích vườn:
+                  {contractDetail?.customerGarden?.square.toLocaleString(
+                    undefined,
+                    {
+                      maximumFractionDigits: 2,
+                    }
+                  )}
+                  m<sup>2</sup>
+                </div>
+                <div className="my-2">
+                  Tên dịch vụ: {contractDetail?.service?.name}
+                </div>
+                <div className="my-2">
+                  Mô tả: {contractDetail?.service?.description}
+                </div>
+                <div className="my-2">
+                  Loại dịch vụ:{" "}
+                  {contractDetail?.service?.serviceType == 1
+                    ? "Chắm sóc Bonsai"
+                    : "Chăm sóc sân vườn"}
+                </div>
+                <div className="my-2 h-[200px] w-[200px]">
+                  Hình ảnh:
+                  <img
+                    src={contractDetail?.service?.image}
+                    style={{ width: "200px", height: "200px" }}
+                  />
+                </div>
                 <div className="flex items-center gap-2">
                   Thời gian làm việc:
                   <RangePicker

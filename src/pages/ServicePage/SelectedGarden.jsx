@@ -14,7 +14,7 @@ function SelectedGarden(props) {
         </form>
         {props.userData ? (
           <>
-            <h3 className="font-bold text-lg">Hello!</h3>
+            <h3 className="font-bold text-lg">Vui vườn của bạn</h3>
             {props.gardenNoPagin?.length > 0 ? props.gardenNoPagin?.map((garden) => (
               <div
                 key={garden.id}

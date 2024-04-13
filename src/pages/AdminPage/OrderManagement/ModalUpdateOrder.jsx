@@ -34,7 +34,7 @@ const ModalUpdateOrder = (props) => {
       console.log(order);
       setFormData({
         orderId: order.id,
-        orderStatus: order.orderStatus,
+        orderStatus: getStatusText(order.orderStatus),
       });
     }
   }, [order]);
@@ -50,13 +50,15 @@ const ModalUpdateOrder = (props) => {
       console.log(data);
       putOrder(order.id, formData.orderStatus)
         .then((data) => {
-          setConfirmLoading(false);
           toast.success(data.data);
           dispatch(fetchAllOrders({ pageIndex: 0, pageSize: 10 }));
-          handleClose();
         })
         .catch((err) => {
           toast.error(err.response.data);
+        })
+        .finally(() => {
+          setConfirmLoading(false);
+          handleClose();
         });
     } catch (err) {
       toast.error(err.response.data);
@@ -94,14 +96,30 @@ const ModalUpdateOrder = (props) => {
       .catch((errorInfo) => {
         console.log(errorInfo);
         toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
-      })
-      .finally(() => {
-        setConfirmLoading(false);
       });
   };
 
   const handleFormChange = (changedValues, allValues) => {
     setFormData(allValues);
+  };
+
+  const getStatusText = (status) => {
+    switch (status) {
+      case "Waiting":
+        return "Đang chờ";
+      case "Paid":
+        return "Đã thanh toán";
+      case "Preparing":
+        return "Đang thực hiện";
+      case "Failed":
+        return "Thất bại";
+      case "Canceled":
+        return "Đã hủy";
+      case "Delivered":
+        return "Đã giao";
+      default:
+        return "Trạng thái không xác định";
+    }
   };
 
   return (
@@ -111,6 +129,7 @@ const ModalUpdateOrder = (props) => {
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
+        okText={confirmLoading ? "Đang cập nhật" : "Cập nhật"}
         confirmLoading={confirmLoading}
         onCancel={handleClose}
         maskClosable={false}
@@ -140,11 +159,11 @@ const ModalUpdateOrder = (props) => {
             <Form.Item label="Ngày đặt">
               <p>{new Date(order?.orderDate).toLocaleDateString()}</p>
             </Form.Item>
-            <Form.Item label="Ngày giao">
+            {/* <Form.Item label="Ngày giao">
               <p>
                 {new Date(order?.expectedDeliveryDate).toLocaleDateString()}
               </p>
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item label="Giá hàng">
               <p>
                 {new Intl.NumberFormat("en-US", {
@@ -179,10 +198,10 @@ const ModalUpdateOrder = (props) => {
                 },
               ]}
             >
-              <Select value={order?.orderStatus}>
+              <Select value={getStatusText(order?.orderStatus)}>
                 {listOrderStatus?.map((orderStatus, index) => (
                   <Select.Option value={orderStatus?.value} key={index}>
-                    {orderStatus?.display}
+                    {getStatusText(orderStatus?.display)}
                   </Select.Option>
                 ))}
               </Select>

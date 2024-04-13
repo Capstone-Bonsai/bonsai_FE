@@ -85,6 +85,25 @@ function OrderManage() {
     }
   };
 
+  const getStatusText = (status) => {
+    switch (status) {
+      case "Waiting":
+        return "Đang chờ";
+      case "Paid":
+        return "Đã thanh toán";
+      case "Preparing":
+        return "Đang thực hiện";
+      case "Failed":
+        return "Thất bại";
+      case "Canceled":
+        return "Đã hủy";
+      case "Delivered":
+        return "Đã giao";
+      default:
+        return "Trạng thái không xác định";
+    }
+  };
+
   const handleTableChange = (pagination) => {
     console.log(pagination);
     const index = Number(pagination.current) - 1;
@@ -143,12 +162,32 @@ function OrderManage() {
   };
   const columns = [
     {
-      title: "Khách hàng",
-      dataIndex: "customer",
-      key: "customer",
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
       render: (_, record) => (
         <>
           <p>{record.customer?.applicationUser?.email}</p>
+        </>
+      ),
+    },
+    {
+      title: "Tên khách hàng",
+      dataIndex: "fullname",
+      key: "fullname",
+      render: (_, record) => (
+        <>
+          <p>{record.customer?.applicationUser?.fullname}</p>
+        </>
+      ),
+    },
+    {
+      title: "Số điện thoại",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+      render: (_, record) => (
+        <>
+          <p>{record.customer?.applicationUser?.phoneNumber}</p>
         </>
       ),
     },
@@ -238,7 +277,7 @@ function OrderManage() {
       render: (_, record) => {
         return (
           <a onClick={() => expend(record.id)}>
-            {record.id === expended ? "Close Details" : "More Details"}
+            {record.id === expended ? "Đóng" : "Thêm chi tiết"}
           </a>
         );
       },
@@ -253,7 +292,7 @@ function OrderManage() {
             color={getColor(record.orderStatus).color}
             icon={getColor(record.orderStatus).icon}
           >
-            {record.orderStatus}
+            {getStatusText(record.orderStatus)}
           </Tag>
         </>
       ),
