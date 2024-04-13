@@ -66,7 +66,7 @@ export const addComplaint = async (formData) => {
     const res = await axios.post(`/Complaint`, formData);
     return res.data;
   } catch (err) {
-    const errMessage = err.response;
+    const errMessage = err.response.data;
     console.log(errMessage);
     throw (err, errMessage);
   }
