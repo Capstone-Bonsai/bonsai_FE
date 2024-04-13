@@ -3,7 +3,10 @@ import { Input, Modal, Form, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { putComplaint } from "../../../utils/complaintApi";
-import { contractDetailById } from "../../../redux/slice/contractSlice";
+import {
+  contractDetailById,
+  listAllContract,
+} from "../../../redux/slice/contractSlice";
 
 const ModalUpdateComplaint = (props) => {
   const [form] = Form.useForm();
@@ -77,6 +80,12 @@ const ModalUpdateComplaint = (props) => {
       .validateFields()
       .then(() => {
         setConfirmLoading(true);
+        dispatch(
+          listAllContract({
+            pageIndex: 0,
+            pageSize: 10,
+          })
+        );
         updateComplaint(formData);
       })
       .catch((errorInfo) => {

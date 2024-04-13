@@ -236,7 +236,7 @@ function ServiceGardenChecking() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Hợp đồng</div>
+          <div className="font-semibold mb-6">Đơn đợi duyệt</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="mb-12">
               <Table
