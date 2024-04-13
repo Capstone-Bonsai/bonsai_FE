@@ -9,4 +9,9 @@ const postContractImages = (contractId, postData) => {
   });
 };
 
-export { postContractImages };
+const putContractStatus = (contractId) => {
+  console.log(contractId);
+  return axios.put(`/Contract/${contractId}?contractStatus=7`);
+};
+
+export { postContractImages, putContractStatus };
