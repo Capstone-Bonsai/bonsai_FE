@@ -26,7 +26,7 @@ function AddCustomerGarden(propsAddGarden) {
           </div>
         </div>
         <div>
-          <div className="text-[#3a9943]">Diện tích</div>
+          <div className="text-[#3a9943]">Diện tích/m<sup>2</sup></div>
           <input
             value={propsAddGarden.newSquare}
             onChange={(e) => propsAddGarden.setNewSquare(e.target.value)}

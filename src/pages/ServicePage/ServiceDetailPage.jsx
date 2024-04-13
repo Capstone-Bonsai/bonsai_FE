@@ -112,6 +112,7 @@ function ServiceDetailPage() {
   const acceptService = async (serviceGardenId) => {
     try {
       await acceptServiceGarden(serviceGardenId);
+      navigate("/ManageService");
       toast.success("Đã chấp nhận dịch vụ");
     } catch (error) {
       toast.error("Lỗi", error);
@@ -292,7 +293,7 @@ function ServiceDetailPage() {
                           .getElementById("my_modal_selectedGarden")
                           .showModal()
                       }
-                      className="flex outline-none hover:text-[#3a9943] text-[18px]"
+                      className="flex outline-none text-[#3a9943] text-[18px]"
                     >
                       {!gardenSelected ? (
                         <PlusCircleOutlined />
@@ -327,7 +328,7 @@ function ServiceDetailPage() {
                         </div>
                       )}
                       <button
-                        className="flex hover:text-[#3a9943] text-[18px] outline-none"
+                        className="flex text-[#3a9943] text-[18px] outline-none"
                         onClick={() =>
                           document
                             .getElementById("my_modal_selectedBonsai")
