@@ -242,8 +242,8 @@ function ContractUserDetail(props) {
                   />
                 </div>
                 <div>
-                  Chú ý: Hạn khiếu nại là 3 ngày , còn hạn xử lý khiếu nại là 5
-                  ngày{" "}
+                  Chú ý: Hạn khiếu nại là 3 ngày , và thời gian xử lý khiếu nại
+                  là 5 ngày{" "}
                 </div>
                 {contractDetail?.complaints?.length > 0 ? (
                   <table className="w-full table">
