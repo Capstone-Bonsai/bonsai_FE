@@ -169,39 +169,39 @@ function ContractDetail(props) {
           <div className="flex justify-center w-[100%]">
             <div className="p-4 mb-6 w-[100%]">
               <div className="grid grid-cols-2 w-[100%]">
-                <div className="font-medium grid grid-cols-2">
-                  <div>Tên khách hàng:</div>{" "}
-                  <div>{contractDetail?.customerName}</div>
-                </div>
-                <div className="font-medium grid grid-cols-2">
-                  <div>Số điện thoại:</div>
-                  <div>{contractDetail?.customerPhoneNumber}</div>
-                </div>
-                <div className="font-medium grid grid-cols-2">
-                  <div>Địa chỉ:</div> <div>{contractDetail?.address}</div>
-                </div>
-                <div className="font-medium grid grid-cols-2">
-                  <div>Khoảng cách:</div>
-                  <div>
-                    {contractDetail?.distance?.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}{" "}
-                    m
-                  </div>
-                </div>
-                <div className="font-medium grid grid-cols-2">
-                  <div>Ngày bắt đầu:</div>
-                  <div>
-                    {new Date(contractDetail?.startDate).toLocaleDateString()}
-                  </div>
-                </div>
-                <div className="font-medium grid grid-cols-2">
-                  <div>Ngày hết hạn:</div>
-                  <div>
-                    {new Date(contractDetail?.endDate).toLocaleDateString()}
-                  </div>
-                </div>
                 <div>
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Tên khách hàng:</div>{" "}
+                    <div>{contractDetail?.customerName}</div>
+                  </div>
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Số điện thoại:</div>
+                    <div>{contractDetail?.customerPhoneNumber}</div>
+                  </div>
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Địa chỉ:</div> <div>{contractDetail?.address}</div>
+                  </div>
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Khoảng cách:</div>
+                    <div>
+                      {contractDetail?.distance?.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}{" "}
+                      m
+                    </div>
+                  </div>
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Ngày bắt đầu:</div>
+                    <div>
+                      {new Date(contractDetail?.startDate).toLocaleDateString()}
+                    </div>
+                  </div>
+                  <div className="font-medium grid grid-cols-2">
+                    <div>Ngày hết hạn:</div>
+                    <div>
+                      {new Date(contractDetail?.endDate).toLocaleDateString()}
+                    </div>
+                  </div>
                   <div className="font-medium grid grid-cols-2">
                     <div>Trạng thái:</div>{" "}
                     <div
@@ -216,6 +216,8 @@ function ContractDetail(props) {
                       {getStatusText(contractDetail?.contractStatus)}
                     </div>
                   </div>
+                </div>
+                <div>
                   <div className="font-medium grid grid-cols-2">
                     <div>Diện tích sân vườn:</div>
                     <div>
@@ -255,7 +257,7 @@ function ContractDetail(props) {
                   </div>
                   <div className="font-medium grid grid-cols-2">
                     <div>Loại dịch vụ:</div>
-                    {record.serviceType === 1 ? (
+                    {contractDetail?.serviceType === 1 ? (
                       <div>Dịch vụ chăm vườn</div>
                     ) : (
                       <div>Dịch vụ chăm cây</div>
