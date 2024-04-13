@@ -33,11 +33,12 @@ function ServiceGardenChecking() {
   const allServiceGardens = useSelector(
     (state) => state.contract?.allServiceGardenDTO?.contracts?.items
   );
+  console.log(allServiceGardens)
   const totalItemsCount = useSelector(
     (state) => state.contract?.allServiceGardenDTO?.contracts?.totalItemsCount
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.contract?.pagination);
   const showModalDelete = () => {
     setOpenDelete(true);
@@ -237,16 +238,6 @@ function ServiceGardenChecking() {
         <div className="w-[100%]">
           <div className="font-semibold mb-6">Hợp đồng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
-            <div className="flex justify-between p-6">
-              <div></div>
-              <div className="pr-0">
-                <Search
-                  placeholder="input search text"
-                  className="w-[300px]"
-                  allowClear
-                />
-              </div>
-            </div>
             <div className="mb-12">
               <Table
                 className="w-[100%]"

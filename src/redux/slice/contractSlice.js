@@ -115,6 +115,9 @@ const contractSlice = createSlice({
     setContract: (state, action) => {
       state.allContractDTO = action.payload;
     },
+    setServiceGarden: (state, action) => {
+      state.allServiceGardenDTO = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -191,5 +194,5 @@ const contractSlice = createSlice({
   },
 });
 const { reducer: contractReducer, actions } = contractSlice;
-export const { setContract } = actions;
+export const { setContract, setServiceGarden } = actions;
 export { contractReducer as default };

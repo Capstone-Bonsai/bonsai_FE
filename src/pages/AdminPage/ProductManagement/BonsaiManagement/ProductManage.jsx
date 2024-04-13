@@ -150,23 +150,23 @@ function ProductManage() {
     },
     {
       title: "Năm trồng",
-      dataIndex: "yearOfPlanting",
       key: "yearOfPlanting",
+      render: (record) => <div>{record?.yearOfPlanting} năm</div>,
     },
     {
       title: "Hoành cây",
-      dataIndex: "trunkDimenter",
       key: "trunkDimenter",
+      render: (record) => <div>{record?.trunkDimenter}</div>,
     },
     {
       title: "Chiều cao ",
-      dataIndex: "height",
       key: "height",
+      render: (record) => <div>{record?.height} m</div>,
     },
     {
       title: "Số thân",
-      dataIndex: "numberOfTrunk",
       key: "numberOfTrunk",
+      render: (record) => <div>{record?.numberOfTrunk}</div>,
     },
     {
       title: "Giá tiền",
