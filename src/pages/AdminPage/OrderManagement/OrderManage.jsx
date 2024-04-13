@@ -76,9 +76,15 @@ function OrderManage() {
     switch (orderStatus) {
       case "Paid":
         return { color: "success", icon: <CheckCircleOutlined /> };
+      case "Delivered":
+        return { color: "success", icon: <CheckCircleOutlined /> };
       case "Waiting":
         return { color: "warning", icon: <ClockCircleOutlined /> };
+      case "Preparing":
+        return { color: "warning", icon: <ClockCircleOutlined /> };
       case "Failed":
+        return { color: "error", icon: <CloseCircleOutlined /> };
+      case "Canceled":
         return { color: "error", icon: <CloseCircleOutlined /> };
       default:
         return "defaultColor";
@@ -156,7 +162,7 @@ function OrderManage() {
         columns={columns}
         rowKey="id"
         dataSource={record.orderDetails}
-        pagination
+        pagination={false}
       />
     );
   };
