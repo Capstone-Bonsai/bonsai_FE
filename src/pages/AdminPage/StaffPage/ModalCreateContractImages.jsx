@@ -135,12 +135,14 @@ const ModalCreateContractImages = (props) => {
   };
   const onSubmit = (i) => {
     formData.image = listImage?.map((image) => image?.originFileObj);
+    const postData = new FormData();
+    formData.image?.map((image) => postData.append("Image", image));
     console.log(formData);
     formRef.current
       .validateFields()
       .then(() => {
         setConfirmLoading(true);
-        updateListImage(formData);
+        updateListImage(postData);
       })
       .catch((errorInfo) => {
         console.log(errorInfo);
