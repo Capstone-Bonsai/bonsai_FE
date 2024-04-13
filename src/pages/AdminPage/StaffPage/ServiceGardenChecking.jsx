@@ -86,27 +86,17 @@ function ServiceGardenChecking() {
   const getStatusText = (status) => {
     switch (status) {
       case 1:
-        return "Đang chờ";
+        return "Chưa chấp nhận";
       case 2:
-        return "Đã thanh toán";
+        return "Hủy";
       case 3:
-        return "Đang thực hiện nhiệm vụ";
+        return "Đã chấp nhận";
       case 4:
-        return "Thất bại";
+        return "Đã được duyệt";
       case 5:
-        return "Đã hủy";
+        return "Từ chối";
       case 6:
-        return "Hoàn thành nhiệm vụ";
-      case 7:
-        return "Hoàn thành hợp đồng";
-      case 8:
-        return "Phản hồi";
-      case 9:
-        return "Đang xử lý khiếu nại";
-      case 10:
-        return "Đã xử lý khiếu nại";
-      case 11:
-        return "Hoàn thành xử lý khiếu nại";
+        return "Hoàn thành";
       default:
         return "Trạng thái không xác định";
     }

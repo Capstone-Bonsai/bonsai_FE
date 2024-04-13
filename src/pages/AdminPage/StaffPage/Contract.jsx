@@ -105,7 +105,7 @@ function Contract() {
       case 7:
         return "Hoàn thành hợp đồng";
       case 8:
-        return "Phản hồi";
+        return "Khiếu nại";
       case 9:
         return "Đang xử lý khiếu nại";
       case 10:

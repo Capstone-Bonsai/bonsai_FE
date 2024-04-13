@@ -84,7 +84,7 @@ function ContractDetail(props) {
       case 7:
         return "Hoàn thành hợp đồng";
       case 8:
-        return "Phản hồi";
+        return "Khiếu nại";
       case 9:
         return "Đang xử lý khiếu nại";
       case 10:
@@ -165,16 +165,22 @@ function ContractDetail(props) {
       dataIndex: "hanhdong",
       key: "hanhdong",
       render: (_, record) => (
-        <Space size="middle">
-          <button
-            onClick={() => {
-              setSelectedComplaint(record);
-              showUpdateModal();
-            }}
-          >
-            Chỉnh sửa
-          </button>
-        </Space>
+        <>
+          {record?.complaintStatus === 1 || record?.complaintStatus === 2 ? (
+            <Space size="middle">
+              <button
+                onClick={() => {
+                  setSelectedComplaint(record);
+                  showUpdateModal();
+                }}
+              >
+                Chỉnh sửa
+              </button>
+            </Space>
+          ) : (
+            <></>
+          )}
+        </>
       ),
     },
   ];
