@@ -141,7 +141,6 @@ function CustomerGarden() {
       dispatch(getBonsaiInGarden({ bonsaiInGardenId })).then(() => {
         setLoadingBonsai(false);
       });
-      setGardenLoading(!gardenLoading);
     } catch (error) {
       console.log("data error" + error);
     }
