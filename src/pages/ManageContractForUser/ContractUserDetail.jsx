@@ -80,6 +80,12 @@ function ContractUserDetail(props) {
                 <span className="font-bold">Địa chỉ:</span>{" "}
                 {contractDetail?.address}
               </div>
+              <div>
+                <span className="font-bold">Loại dịch vụ: </span>{" "}
+                {contractDetail?.serviceType == 1
+                  ? "Chăm sóc cây cảnh"
+                  : "Chăm sóc sân vườn"}
+              </div>
               <div>Khoảng cách: {contractDetail?.distance}m</div>
               <div>
                 Diện tích vườn: {contractDetail.gardenSquare}m<sup>2</sup>
