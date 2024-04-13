@@ -32,6 +32,7 @@ function CustomerGarden() {
   const [imageGarden, setImageGarden] = useState([]);
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(3);
+  const [gardenLoading, setGardenLoading] = useState(false);
   const boughtBonsai = useSelector((state) => state.bonsai.boughtBonsai?.items);
   const gardens = useSelector((state) => state.garden.gardenDTO?.items);
   useEffect(() => {
@@ -52,7 +53,7 @@ function CustomerGarden() {
         console.error("Error fetching order data:", error);
         setLoading(false);
       });
-  }, [pageIndex]);
+  }, [pageIndex, gardenLoading]);
   const [file, setFile] = useState([]);
   const handleImageChange = (e) => {
     const files = e.target.files;
@@ -82,7 +83,7 @@ function CustomerGarden() {
     // setLoading(true);
     try {
       await addCustomerGarden(formData);
-      fetchCustomerGarden();
+      setGardenLoading(!gardenLoading);
       setLoading(false);
       toast.success("Thêm vườn thành công thành Công");
     } catch (error) {
@@ -116,6 +117,8 @@ function CustomerGarden() {
     bonsaiInGarden,
     bonsaiData,
     loadingBonsai,
+    setGardenLoading,
+    gardenLoading
   };
   const propsAddGarden = {
     setNewAddress,
@@ -138,6 +141,7 @@ function CustomerGarden() {
       dispatch(getBonsaiInGarden({ bonsaiInGardenId })).then(() => {
         setLoadingBonsai(false);
       });
+      setGardenLoading(!gardenLoading);
     } catch (error) {
       console.log("data error" + error);
     }

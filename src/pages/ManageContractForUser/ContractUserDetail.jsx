@@ -12,6 +12,8 @@ import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import ModalComplain from "./ModalComplain";
+import { Image } from "antd";
+
 function ContractUserDetail(props) {
   const dispatch = useDispatch();
   const contractId = props.contractId;
@@ -64,6 +66,25 @@ function ContractUserDetail(props) {
                 <div>
                   {new Date(contractDetail.endDate).toLocaleDateString()}
                 </div>
+              </div>
+              <div className="">
+                {" "}
+                <span className="font-bold">Tên khách hàng:</span>{" "}
+                {contractDetail?.customerName}
+              </div>
+              <div>
+                <span className="font-bold">Số điện thoại:</span>{" "}
+                {contractDetail?.customerPhoneNumber}
+              </div>
+              <div>
+                <span className="font-bold">Địa chỉ:</span>{" "}
+                {contractDetail?.address}
+              </div>
+              <div>
+                <span className="font-bold">Loại dịch vụ: </span>{" "}
+                {contractDetail?.serviceType == 1
+                  ? "Chăm sóc cây cảnh"
+                  : "Chăm sóc sân vườn"}
               </div>
               <div>Khoảng cách: {contractDetail?.distance}m</div>
               <div>
@@ -157,34 +178,60 @@ function ContractUserDetail(props) {
                     setApiContractLoading={setApiContractLoading}
                   />
                 </div>
-                <table className="w-full table">
-                  <thead>
-                    <tr>
-                      <th>STT</th>
-                      <th>Chi tiết khiếu nại</th>
-                      <th>Trạng Thái</th>
-                      <th>Lý do bị từ chối</th>
-                      <th>Hình ảnh</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {contractDetail?.complaints?.length > 0 ? (
-                      contractDetail?.complaints.map((complaint, index) => (
-                        <tr key={complaint.id}>
-                          <td>{index + 1}</td>
-                          <td>{complaint.detail}</td>
-                          <td>{complaint.complaintStatus}</td>
-                          <td>{complaint.cancelReason}</td>
-                          <td>{complaint.complaintImages}</td>
-                        </tr>
-                      ))
-                    ) : (
+                {contractDetail?.complaints?.length > 0 ? (
+                  <table className="w-full table">
+                    <thead>
                       <tr>
-                        <td></td>
+                        <th>STT</th>
+                        <th>Chi tiết khiếu nại</th>
+                        <th>Trạng Thái</th>
+                        <th>Lý do bị từ chối</th>
+                        <th>Hình ảnh</th>
                       </tr>
-                    )}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {contractDetail?.complaints?.length > 0 ? (
+                        contractDetail?.complaints?.map((complaint, index) => (
+                          <tr key={complaint?.id}>
+                            <td>{index + 1}</td>
+                            <td>{complaint?.detail}</td>
+                            <td>{complaint?.complaintStatus}</td>
+                            <td>{complaint?.cancelReason}</td>
+                            <td>
+                              {/* {complaint?.complaintImages.map(
+                                (image, index) => (
+                                  <Image
+                                    width={200}
+                                    height={200}
+                                    className="object-cover"
+                                    key={index}
+                                    src={image?.image}
+                                    alt={`Image ${index}`}
+                                  />
+                                )
+                              )} */}
+                              <Image
+                                width={200}
+                                height={200}
+                                src={
+                                  complaint?.complaintImages > 0
+                                    ? complaint?.complaintImages[0].image
+                                    : ""
+                                }
+                              />
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td></td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                ) : (
+                  ""
+                )}
               </>
             )}
           </div>
