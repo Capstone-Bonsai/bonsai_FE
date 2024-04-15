@@ -103,7 +103,11 @@ function ShoppingCart() {
                 >
                   <td className="flex justify-center items-center h-[170px]">
                     <div>
-                      <img src={item?.image} alt="" className="w-[120px] h-[120px] object-cover" />
+                      <img
+                        src={item?.image}
+                        alt=""
+                        className="w-[120px] h-[120px] object-cover"
+                      />
                     </div>
                   </td>
                   <td className="">

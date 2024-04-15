@@ -38,6 +38,7 @@ import {
   ProductManagetNavigate,
 } from "../pages/NotFoundPage/NotFound";
 import DeliveryFeeTable from "../pages/DeliveryFee/DeliveryFeeTable";
+import CodeOTP from "../pages/Auth/CodeOTP";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -56,6 +57,10 @@ function Router() {
               {
                 path: "/Register",
                 element: <Register />,
+              },
+              {
+                path: "/CodeOTP",
+                element: <CodeOTP />,
               },
               {
                 path: "/api/Auth/ConfirmEmail",

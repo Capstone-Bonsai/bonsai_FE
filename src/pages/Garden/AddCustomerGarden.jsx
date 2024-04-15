@@ -22,15 +22,20 @@ function AddCustomerGarden(propsAddGarden) {
             id=""
           /> */}
           <div className="w-full">
-            <CompletedAddress className="" setAddress={propsAddGarden.setNewAddress} />
+            <CompletedAddress
+              className=""
+              setAddress={propsAddGarden.setNewAddress}
+            />
           </div>
         </div>
         <div>
-          <div className="text-[#3a9943]">Diện tích/m<sup>2</sup></div>
+          <div className="text-[#3a9943]">
+            Diện tích/m<sup>2</sup>
+          </div>
           <input
             value={propsAddGarden.newSquare}
             onChange={(e) => propsAddGarden.setNewSquare(e.target.value)}
-            className="border outline-none w-[90%] h-[40px] my-2 mb-5"
+            className="border outline-none w-full px-2 h-[40px] my-2 mb-5"
             type="number"
             name=""
             id=""

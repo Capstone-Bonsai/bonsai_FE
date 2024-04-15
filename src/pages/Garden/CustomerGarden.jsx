@@ -118,7 +118,7 @@ function CustomerGarden() {
     bonsaiData,
     loadingBonsai,
     setGardenLoading,
-    gardenLoading
+    gardenLoading,
   };
   const propsAddGarden = {
     setNewAddress,
@@ -198,7 +198,7 @@ function CustomerGarden() {
                       ) : (
                         <img
                           src={noImage}
-                          className=" bg-[red] w-[400px] h-[250px] object-cover border"
+                          className="w-[400px] h-[250px] object-cover border"
                           style={{ backgroundPosition: "bottom" }}
                           alt="No Image"
                         />
@@ -213,7 +213,7 @@ function CustomerGarden() {
                     <div className="flex items-center">
                       <img src={square} className="w-[50px]" alt="" />
                       <span className="font-[400] opacity-50">Diện tích:</span>
-                      {garden.square} m²
+                      {garden.square.toLocaleString("en")} m²
                     </div>
                     <div className="flex">
                       <div className="pr-2">Bonsai: </div>

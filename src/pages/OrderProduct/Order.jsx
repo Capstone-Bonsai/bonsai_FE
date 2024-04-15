@@ -200,7 +200,11 @@ function Order() {
                   <tr key={item.bonsaiId} className="ml-5 text-center h-[70px]">
                     <td className="flex justify-center items-center h-[70px]">
                       <div>
-                        <img src={item?.image} alt="" className="w-[50px] h-[50px] object-cover" />
+                        <img
+                          src={item?.image}
+                          alt=""
+                          className="w-[50px] h-[50px] object-cover"
+                        />
                       </div>
                     </td>
                     <td className="">
@@ -262,104 +266,6 @@ function Order() {
                 <div className="text-[24px] font-bold text-[#3e9943]">
                   Địa chỉ
                 </div>
-                {/* <div className="flex gap-5 items-center">
-                  <select
-                    onChange={(e) => {
-                      setProvinceId(e.target.value),
-                        setProvinceName(
-                          e.target.options[e.target.selectedIndex].getAttribute(
-                            "provincename"
-                          )
-                        );
-                    }}
-                    className="border outline-none rounded-[10px] h-[50px]"
-                    id=""
-                    name=""
-                  >
-                    {provinceData?.data.map((province) => (
-                      <option
-                        key={province.ProvinceID}
-                        value={province.ProvinceID}
-                        provincename={province.ProvinceName}
-                      >
-                        {province.ProvinceName}
-                      </option>
-                    ))}
-                  </select>
-
-                  {districtData != null ? (
-                    <select
-                      onChange={(e) => {
-                        setDistrictId(e.target.value),
-                          setDistrictName(
-                            e.target.options[
-                              e.target.selectedIndex
-                            ].getAttribute("districtname")
-                          );
-                      }}
-                      className="border outline-none rounded-[10px] h-[50px]"
-                      name=""
-                      id=""
-                    >
-                      {districtData?.data.map((district) => (
-                        <option
-                          key={district.DistrictID}
-                          value={district.DistrictID}
-                          districtname={district.DistrictName}
-                        >
-                          {district.DistrictName}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    ""
-                  )}
-                  {wardData != null && districtId != "3451" ? (
-                    <select
-                      defaultValue={wardData?.data[0]?.WardName}
-                      className="border outline-none rounded-[10px] h-[50px]"
-                      name=""
-                      id=""
-                      onChange={(e) =>
-                        setWardName(
-                          e.target.options[e.target.selectedIndex].getAttribute(
-                            "wardname"
-                          )
-                        )
-                      }
-                    >
-                      {wardData?.data.map((ward) => (
-                        <option
-                          key={ward.WardCode}
-                          value={ward.WardCode}
-                          wardname={ward.WardName}
-                        >
-                          {ward.WardName}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    ""
-                  )}
-                  {wardData != null ? (
-                    <div className="w-full flex">
-                      <input
-                        value={street}
-                        className="border w-full px-5 h-[50px] rounded-[10px] outline-none"
-                        onChange={(e) => setStreet(e.target.value)}
-                        placeholder="Nhập địa chỉ"
-                        required
-                        onBlur={() =>
-                          handleDeliveryFee(
-                            street + wardName + districtName + provinceName
-                          )
-                        }
-                      />
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div> */}
                 <CompletedAddress setAddress={setAddress} />
               </div>
               <div className="mt-5">
