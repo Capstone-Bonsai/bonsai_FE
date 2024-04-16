@@ -39,7 +39,6 @@ export const addToCart = async (
   toast.success("Đã thêm sản phẩm vào giỏ hàng!");
   const cartId = !idUser ? "cartItems" : `cartId ${idUser}`;
   await cookies.set(cartId, cartItems, { path: "/" });
-
   const itemCount = cartItems.length;
-  dispatch(setCartFromCookie({ cartItems, itemCount }));
+  dispatch(setCartFromCookie({ itemCount }));
 };

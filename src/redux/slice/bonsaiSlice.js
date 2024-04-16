@@ -73,14 +73,17 @@ export const allCategory = createAsyncThunk("product/subCategory", async () => {
   }
 });
 
-export const bonsaiBought = createAsyncThunk("bonsai/bonsaiBought", async () => {
-  try {
-    const response = await axios.get("/bonsai/BoughtBonsai");
-    return response.data;
-  } catch (error) {
-    throw error;
+export const bonsaiBought = createAsyncThunk(
+  "bonsai/bonsaiBought",
+  async () => {
+    try {
+      const response = await axios.get("/bonsai/BoughtBonsai");
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
-});
+);
 
 export const filterTag = createAsyncThunk("product/tags", async () => {
   try {
@@ -169,8 +172,7 @@ const bonsaiSlice = createSlice({
       state.allBonsaiDTO = action.payload;
     },
     setCartFromCookie: (state, action) => {
-      const { cartItems, itemCount } = action.payload;
-      state.cart = cartItems;
+      const { itemCount } = action.payload;
       state.itemCount = itemCount;
     },
     setBonsaiById: (state, action) => {
@@ -300,7 +302,7 @@ const bonsaiSlice = createSlice({
         state.msg = "Error loading data";
         state.loading = false;
       })
-    .addCase(bonsaiBought.pending, (state) => {
+      .addCase(bonsaiBought.pending, (state) => {
         state.msg = "Loading...";
         state.loading = true;
       })
@@ -312,7 +314,7 @@ const bonsaiSlice = createSlice({
       .addCase(bonsaiBought.rejected, (state) => {
         state.msg = "Error loading data";
         state.loading = false;
-      })
+      });
   },
 });
 

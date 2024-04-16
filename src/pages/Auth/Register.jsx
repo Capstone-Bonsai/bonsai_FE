@@ -21,7 +21,6 @@ function Register() {
     fullName: false,
     phoneNumber: false,
   });
-  console.log(errorMessage);
   const handleSubmitRegister = async (e) => {
     e.preventDefault();
     setErrorTrim({

@@ -28,6 +28,18 @@ export const cancelServiceGarden = async (serviceGardenId) => {
   }
 };
 
+export const serviceOption = createAsyncThunk(
+  "service/serviceOption",
+  async () => {
+    try {
+      const response = await axios.get(`/ServiceType`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const acceptServiceGarden = async (serviceGardenId) => {
   try {
     const response = await axios.put(
@@ -59,10 +71,10 @@ export const postServiceGarden = createAsyncThunk(
       console.log(response.data);
       return response.data;
     } catch (error) {
-       if (error.response) {
-        throw error.response.data; 
+      if (error.response) {
+        throw error.response.data;
       } else {
-        throw error; 
+        throw error;
       }
     }
   }
@@ -98,6 +110,7 @@ const initialState = {
   listService: {},
   serviceById: {},
   manageService: {},
+  serviceOptionOTP: {},
   allServiceTypeDTO: undefined,
   serviceTempPrice: {},
   pagination: {},
@@ -188,6 +201,20 @@ const serviceSlice = createSlice({
       })
       .addCase(manageServiceCustomer.rejected, (state) => {
         state.manageService = {};
+        state.msg = "Không tìm thấy";
+        state.loading = false;
+      })
+      .addCase(serviceOption.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(serviceOption.fulfilled, (state, action) => {
+        state.serviceOptionOTP = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(serviceOption.rejected, (state) => {
+        state.serviceOptionOTP = {};
         state.msg = "Không tìm thấy";
         state.loading = false;
       });

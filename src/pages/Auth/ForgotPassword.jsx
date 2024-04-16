@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { forgotPassword } from "../../redux/slice/authSlice";
 
 function ForgotPassword() {
@@ -14,14 +14,13 @@ function ForgotPassword() {
       toast.success("Đã gửi xác nhận qua mail");
     } catch (error) {
       console.log(error);
-      toast.error(error?.response.data);
+      toast.error(error?.response?.data);
     }
   };
 
   return (
     <>
       <div className=" top-0 left-0 right-0 bottom-0 w-full h-full flex justify-center items-center my-10">
-        <ToastContainer />
         <div className="bg-[#ffffff] w-[30%] drop-shadow-lg">
           <div className="w-[90%] m-auto h-full text-center">
             <h2 className="underline text-[20px] font-bold">Quên mật khẩu</h2>
@@ -37,7 +36,7 @@ function ForgotPassword() {
               />
               <button
                 onClick={handleForgotPassword}
-                className="hover:text-[#3a9943] ml-5"
+                className="hover:text-[#3a9943] ml-5 outline-none"
               >
                 Gửi
               </button>

@@ -44,7 +44,7 @@ function ShoppingCart() {
     );
     await updateCartItems(updatedCartItems);
     const itemCount = updatedCartItems.length;
-    dispatch(setCartFromCookie({ updatedCartItems, itemCount }));
+    dispatch(setCartFromCookie({ itemCount }));
   };
   const subTotal = () => {
     let totalPrice = 0;

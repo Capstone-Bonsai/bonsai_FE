@@ -39,6 +39,7 @@ import {
 } from "../pages/NotFoundPage/NotFound";
 import DeliveryFeeTable from "../pages/DeliveryFee/DeliveryFeeTable";
 import CodeOTP from "../pages/Auth/CodeOTP";
+import { ToastContainer } from "react-toastify";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -224,9 +225,11 @@ function Router() {
   console.log(element);
   if (!element) return null;
   return (
+    <>
     <AnimatePresence mode="wait" initial={false}>
       {element}
     </AnimatePresence>
+    </>
   );
 }
 
