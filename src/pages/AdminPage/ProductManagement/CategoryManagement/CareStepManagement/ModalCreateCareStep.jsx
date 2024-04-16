@@ -96,8 +96,8 @@ const ModalCreateCareStep = (props) => {
                       flexDirection: "column",
                     }}
                   >
-                    {fields.map((field) => (
-                      <Space>
+                    {fields.map((field, index) => (
+                      <Space key={index}>
                         <div>
                           <Form.Item name={[field.name]} noStyle>
                             <Input />

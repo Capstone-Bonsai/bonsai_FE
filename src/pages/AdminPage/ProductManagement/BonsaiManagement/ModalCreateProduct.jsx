@@ -250,7 +250,7 @@ const ModalCreateProduct = (props) => {
             <Form.Item
               label="Kiểu dáng"
               rules={[
-                { required: true, message: "Phân loại không được để trống!" },
+                { required: true, message: "Kiểu dáng không được để trống!" },
               ]}
             >
               <div>
@@ -260,7 +260,7 @@ const ModalCreateProduct = (props) => {
                   </Tag>
                 </div>
                 <div className="mt-3">
-                  <Form.Item name="StyleId">  
+                  <Form.Item name="StyleId">
                     <Select>
                       {listStyle?.map((style, index) => (
                         <Select.Option value={style.id} key={index}>
@@ -275,9 +275,7 @@ const ModalCreateProduct = (props) => {
             <Form.Item
               label="Tên sản phẩm"
               name="Name"
-              rules={[
-                { required: true, message: "Phân loại không được để trống!" },
-              ]}
+              rules={[{ required: true, message: "Tên không được để trống!" }]}
             >
               <Input />
             </Form.Item>
@@ -294,10 +292,6 @@ const ModalCreateProduct = (props) => {
               label="Số năm trồng"
               name="YearOfPlanting"
               rules={[
-                {
-                  required: true,
-                  message: "Số năm trồng không được để trống!",
-                },
                 {
                   type: "number",
                   message: "Số năm trồng phải là một số!",
@@ -323,7 +317,6 @@ const ModalCreateProduct = (props) => {
               label="Chiều cao"
               name="Height"
               rules={[
-                { required: true, message: "Chiều cao không được để trống!" },
                 {
                   type: "number",
                   message: "Chiều cao phải là một số!",

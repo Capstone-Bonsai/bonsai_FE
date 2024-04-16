@@ -17,6 +17,17 @@ export const register = async (registerData) => {
   }
 };
 
+export const OtpHandler = async (email, Otp ) => {
+  try {
+    const response = await axios.get(
+      `/Auth/OtpHandler?Email=${email}&Otp=${Otp}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const loginUser = async ({ email, password }) => {
   try {
     const response = await axios.post("/Auth/Login", { email, password });
@@ -58,7 +69,7 @@ export const profileUser = async () => {
     if (!token) {
       throw new Error("Token not found");
     }
-    const response = await axios.get("/User/Profile", );
+    const response = await axios.get("/User/Profile");
     return response.data;
   } catch (error) {
     throw error;

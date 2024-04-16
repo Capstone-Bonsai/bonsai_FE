@@ -46,7 +46,7 @@ function ModalComplain(props) {
       setApiContractLoading(true);
       toast.success("Đã khiếu nại thành công");
     } catch (error) {
-      toast.error("Khiếu nại lỗi", error);
+      toast.error(error);
     }
   };
 
@@ -83,7 +83,7 @@ function ModalComplain(props) {
             id="upload-input"
           />
           <div className="flex flex-wrap gap-5">
-            {imageComplain.length > 0 ? (
+            {imageComplain?.length > 0 ? (
               imageComplain.map((image, index) => (
                 <div
                   key={index}
@@ -110,7 +110,7 @@ function ModalComplain(props) {
               />
             )}
           </div>
-          {imageComplain.length < 4 ? (
+          {imageComplain?.length < 4 ? (
             <button
               onClick={() => handleUploadClick()}
               className="border p-1 rounded-lg my-5 outline-none"

@@ -87,7 +87,7 @@ function Home() {
           </div>
 
           <div className="w-[70%] m-auto flex justify-center">
-            <img src={Banner} alt="" className="w-[100%]" />
+            <img src={Banner} alt="" className="w-[100%] h-[500px] object-cover" />
           </div>
 
           <div className="w-[70%] m-auto mt-6 flex justify-between gap-5">

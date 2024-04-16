@@ -57,7 +57,8 @@ function ModalBonsaiCustomer(props) {
     });
     try {
       await addBonsaiIntoGarden(formData, props.selectedGardenId);
-      toast.success("Thêm vườn thành công thành Công");
+      props.setGardenLoading(!props.gardenLoading);
+      toast.success("Thêm bonsai thành công");
       setStyleId("");
       setCateId("");
       setImgBonsai([]);
@@ -69,7 +70,7 @@ function ModalBonsaiCustomer(props) {
       setHeight("");
       setNumberOfTrunk("");
     } catch (error) {
-      toast.error("Thêm vườn không thành công", error);
+      toast.error("Thêm bonsai không thành công", error);
     }
   };
   return (
@@ -147,7 +148,7 @@ function ModalBonsaiCustomer(props) {
             />
           </div>
           <div className="my-2">
-            <div className="font-bold">Năm tuổi</div>
+            <div className="font-bold">Năm trồng</div>
             <input
               value={yop}
               onChange={(e) => setYop(e.target.value)}

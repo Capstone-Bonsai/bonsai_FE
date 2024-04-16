@@ -38,6 +38,7 @@ import {
   ProductManagetNavigate,
 } from "../pages/NotFoundPage/NotFound";
 import DeliveryFeeTable from "../pages/DeliveryFee/DeliveryFeeTable";
+import CodeOTP from "../pages/Auth/CodeOTP";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -56,6 +57,10 @@ function Router() {
               {
                 path: "/Register",
                 element: <Register />,
+              },
+              {
+                path: "/CodeOTP",
+                element: <CodeOTP />,
               },
               {
                 path: "/api/Auth/ConfirmEmail",
@@ -172,12 +177,8 @@ function Router() {
                 element: <ProductLayout />,
               },
               {
-                path: "/admin/order",
-                element: <OrderManage />,
-              },
-              {
-                path: "/admin/customerGarden",
-                element: <CustomerGardenManage />,
+                path: "/admin/service",
+                element: <ServiceManage />,
               },
               {
                 path: "/admin/baseTask",
@@ -192,8 +193,12 @@ function Router() {
         ...(userInfo?.role == "Manager" || userInfo?.role == "Staff"
           ? [
               {
-                path: "/admin/service",
-                element: <ServiceManage />,
+                path: "/admin/customerGarden",
+                element: <CustomerGardenManage />,
+              },
+              {
+                path: "/admin/order",
+                element: <OrderManage />,
               },
               {
                 path: "/admin/contract",

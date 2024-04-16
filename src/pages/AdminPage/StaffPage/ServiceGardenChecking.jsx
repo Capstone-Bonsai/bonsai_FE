@@ -33,11 +33,12 @@ function ServiceGardenChecking() {
   const allServiceGardens = useSelector(
     (state) => state.contract?.allServiceGardenDTO?.contracts?.items
   );
+  console.log(allServiceGardens);
   const totalItemsCount = useSelector(
     (state) => state.contract?.allServiceGardenDTO?.contracts?.totalItemsCount
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.contract?.pagination);
   const showModalDelete = () => {
     setOpenDelete(true);
@@ -79,6 +80,25 @@ function ServiceGardenChecking() {
         return { color: "error", icon: <CloseCircleOutlined /> };
       default:
         return "defaultColor";
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch (status) {
+      case 1:
+        return "Chưa chấp nhận";
+      case 2:
+        return "Hủy";
+      case 3:
+        return "Đã chấp nhận";
+      case 4:
+        return "Đã được duyệt";
+      case 5:
+        return "Từ chối";
+      case 6:
+        return "Hoàn thành";
+      default:
+        return "Trạng thái không xác định";
     }
   };
 
@@ -186,7 +206,19 @@ function ServiceGardenChecking() {
       title: "Trạng thái",
       dataIndex: "contractStatus",
       key: "contractStatus",
-      render: (_, record) => <>{record.serviceGardenStatus}</>,
+      render: (_, record) => (
+        <div
+          className={`${
+            record?.serviceGardenStatus == 1 ||
+            record?.serviceGardenStatus == 4 ||
+            record?.serviceGardenStatus == 5
+              ? "text-[red]"
+              : "text-[#3a9943]"
+          }`}
+        >
+          {getStatusText(record?.serviceGardenStatus)}
+        </div>
+      ),
     },
 
     {
@@ -235,18 +267,8 @@ function ServiceGardenChecking() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Hợp đồng</div>
+          <div className="font-semibold mb-6">Đơn đợi duyệt</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
-            <div className="flex justify-between p-6">
-              <div></div>
-              <div className="pr-0">
-                <Search
-                  placeholder="input search text"
-                  className="w-[300px]"
-                  allowClear
-                />
-              </div>
-            </div>
             <div className="mb-12">
               <Table
                 className="w-[100%]"

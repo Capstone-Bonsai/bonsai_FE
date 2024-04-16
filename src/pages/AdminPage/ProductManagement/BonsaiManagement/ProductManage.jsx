@@ -150,23 +150,23 @@ function ProductManage() {
     },
     {
       title: "Năm trồng",
-      dataIndex: "yearOfPlanting",
       key: "yearOfPlanting",
+      render: (record) => <div>{record?.yearOfPlanting} năm</div>,
     },
     {
       title: "Hoành cây",
-      dataIndex: "trunkDimenter",
       key: "trunkDimenter",
+      render: (record) => <div>{record?.trunkDimenter}</div>,
     },
     {
       title: "Chiều cao ",
-      dataIndex: "height",
       key: "height",
+      render: (record) => <div>{record?.height} m</div>,
     },
     {
       title: "Số thân",
-      dataIndex: "numberOfTrunk",
       key: "numberOfTrunk",
+      render: (record) => <div>{record?.numberOfTrunk}</div>,
     },
     {
       title: "Giá tiền",
@@ -209,11 +209,10 @@ function ProductManage() {
       key: "image",
       render: (_, record) => (
         <>
-          <div>
+          <div className="h-[200px] w-[200px]">
             <img
               src={record.bonsaiImages[0]?.imageUrl}
-              width={200}
-              height={200}
+              style={{ width: "200px", height: "200px" }}
             />
           </div>
         </>
@@ -241,9 +240,6 @@ function ProductManage() {
           >
             Chỉnh sửa
           </button>
-          <Link to={`/admin/productDetail/${record.id}`} key={record.id}>
-            Xem thông tin
-          </Link>
         </Space>
       ),
     },

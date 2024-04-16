@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import {
-  Space,
-  Table,
-  Modal,
-} from "antd";
+import { Space, Table, Modal } from "antd";
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../../components/Loading";
-import { fetchAllService, allServiceType } from "../../../redux/slice/serviceSlice";
+import {
+  fetchAllService,
+  allServiceType,
+} from "../../../redux/slice/serviceSlice";
 import { deleteService } from "../../../utils/serviceApi";
 import ModalCreateService from "./ModalCreateService";
 import ModalUpdateService from "./ModalUpdateService";
@@ -24,11 +23,13 @@ function ServiceManage() {
   const [selectedService, setSelectedService] = useState();
   const [selectedUpdateService, setSelectedUpdateService] = useState();
 
-  const allService = useSelector((state) => state.service?.listService?.services?.items);
+  const allService = useSelector(
+    (state) => state.service?.listService?.services?.items
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const paging = useSelector((state) => state.service?.pagination);
-  
+
   useEffect(() => {
     dispatch(
       fetchAllService({
@@ -43,7 +44,7 @@ function ServiceManage() {
   }, []);
 
   const showCreateModal = () => {
-    console.log("1111")
+    console.log("1111");
     setOpenCreateModal(true);
   };
 
@@ -102,7 +103,7 @@ function ServiceManage() {
       })
     );
   };
-  
+
   const columns = [
     {
       title: "Tên dịch vụ",
@@ -145,8 +146,11 @@ function ServiceManage() {
       key: "image",
       render: (_, record) => (
         <>
-          <div>
-            <img src={record.image} width={200} height={200} />
+          <div className="h-[200px] w-[200px]">
+            <img
+              src={record.image}
+              style={{ width: "200px", height: "200px" }}
+            />
           </div>
         </>
       ),
@@ -185,7 +189,7 @@ function ServiceManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Sản phẩm</div>
+          <div className="font-semibold mb-6">Dịch vụ</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
               <div>

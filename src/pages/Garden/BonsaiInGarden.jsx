@@ -1,6 +1,6 @@
 import React from "react";
 import Loading from "../../components/Loading";
-
+import noImage from '../../assets/unImage.png'
 function BonsaiInGarden(props) {
   const bonsaiDetail = props.bonsaiData;
   console.log(bonsaiDetail);
@@ -16,11 +16,25 @@ function BonsaiInGarden(props) {
                 ✕
               </button>
             </form>
-            <div>
-              <div className="font-bold text-lg">{bonsaiDetail?.name}</div>
-              <div>Mô tả: {bonsaiDetail?.description}</div>
-              <div>Năm tuổi: {bonsaiDetail?.yearOfPlanting} năm</div>
-              <div>{bonsaiDetail?.trunkDimenter}</div>
+            <div className="flex gap-2">
+              <div>
+                <img
+                className="w-[100px] h-[100px] object-cover"
+                  src={
+                    bonsaiDetail?.bonsaiImages?.length > 0
+                      ? bonsaiDetail?.bonsaiImages[0].imageUrl
+                      : noImage
+                  }
+                  alt=""
+                />{" "}
+              </div>
+              <div>
+                <div className="font-bold text-lg">{bonsaiDetail?.name}</div>
+                <div>Code: {bonsaiDetail?.code}</div>
+                <div>Năm trồng: {bonsaiDetail?.yearOfPlanting}</div>
+                <div>{bonsaiDetail?.trunkDimenter}cm</div>
+                <div>{bonsaiDetail?.height}m</div>
+              </div>
             </div>
           </>
         )}

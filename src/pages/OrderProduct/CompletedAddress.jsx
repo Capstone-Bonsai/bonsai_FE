@@ -3,7 +3,7 @@ import "@goongmaps/goong-js/dist/goong-js.css";
 import "@goongmaps/goong-geocoder/dist/goong-geocoder.css";
 import GoongGeocoder from "@goongmaps/goong-geocoder/dist/goong-geocoder.min.js";
 import "es6-promise/dist/es6-promise.auto.min.js"; 
-
+import "./DesignInputAdress.css"
 class CompletedAddress extends Component {
   constructor(props) {
     super(props);

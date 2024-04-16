@@ -6,10 +6,16 @@ import { DatePicker, Space } from "antd";
 import { parse } from "date-fns";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
-import { createContract } from "../../../redux/slice/contractSlice";
+import {
+  allServiceGarden,
+  createContract,
+} from "../../../redux/slice/contractSlice";
+import { useDispatch } from "react-redux";
 const { RangePicker } = DatePicker;
 function ModalServiceGardenChecking(props) {
   const { show, setShow, contractDetail } = props;
+  const dispatch = useDispatch();
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const [contractDetailne, setContractDetailne] = useState();
   const tempPriceService = contractDetail?.temporaryPrice;
   const surchargePriceService = contractDetail?.temporarySurchargePrice;
@@ -82,26 +88,40 @@ function ModalServiceGardenChecking(props) {
     if (tempPriceService !== contractDetail?.temporaryPrice) {
       console.log("Temp price updated:", tempPriceService);
     }
-    try {
-      await createContract(payload);
-      toast.success("Tạo hợp đồng thành công");
-    } catch (error) {
-      toast.error("Lỗi tạo hợp đồng!!!", error);
-    }
+    setConfirmLoading(true);
+    await createContract(payload)
+      .then((data) => {
+        toast.success("Tạo hợp đồng thành công");
+        dispatch(
+          allServiceGarden({
+            pageIndex: 0,
+            pageSize: 10,
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Lỗi tạo hợp đồng!!!", err);
+      })
+      .finally(() => {
+        setConfirmLoading(false);
+      });
     setShow(false);
   };
 
   return (
     <>
       <Modal
+        width="60%"
         onCancel={() => {
           setShow(false), handleCancelEdit();
         }}
-        okText="Tạo hợp đồng"
         onOk={handleOk}
         okButtonProps={{ type: "default" }}
         open={show}
+        okText={confirmLoading ? "Đang tạo" : "Tạo hợp đồng"}
         cancelText="Hủy"
+        confirmLoading={confirmLoading}
         maskClosable={false}
       >
         <div className="flex items-center gap-2">
@@ -125,6 +145,59 @@ function ModalServiceGardenChecking(props) {
           <div className="flex items-center">
             {isEditing ? (
               <div className="my-2">
+                <div className="my-2">
+                  Tên khách hàng:{" "}
+                  {
+                    contractDetail?.customerGarden?.customer?.applicationUser
+                      ?.fullname
+                  }
+                </div>
+                <div className="my-2">
+                  Email:{" "}
+                  {
+                    contractDetail?.customerGarden?.customer?.applicationUser
+                      ?.email
+                  }
+                </div>
+                <div className="my-2">
+                  Số điện thoại:{" "}
+                  {
+                    contractDetail?.customerGarden?.customer?.applicationUser
+                      ?.phoneNumber
+                  }
+                </div>
+                <div className="my-2">
+                  Địa chỉ vườn: {contractDetail?.customerGarden?.address}
+                </div>
+                <div className="my-2">
+                  Diện tích vườn:
+                  {contractDetail?.customerGarden?.square.toLocaleString(
+                    undefined,
+                    {
+                      maximumFractionDigits: 2,
+                    }
+                  )}
+                  m<sup>2</sup>
+                </div>
+                <div className="my-2">
+                  Tên dịch vụ: {contractDetail?.service?.name}
+                </div>
+                <div className="my-2">
+                  Mô tả: {contractDetail?.service?.description}
+                </div>
+                <div className="my-2">
+                  Loại dịch vụ:{" "}
+                  {contractDetail?.service?.serviceType == 1
+                    ? "Chắm sóc Bonsai"
+                    : "Chăm sóc sân vườn"}
+                </div>
+                <div className="my-2 h-[200px] w-[200px]">
+                  Hình ảnh:
+                  <img
+                    src={contractDetail?.service?.image}
+                    style={{ width: "150px", height: "150px" }}
+                  />
+                </div>
                 <div className="flex items-center gap-2">
                   Thời gian làm việc:
                   <RangePicker

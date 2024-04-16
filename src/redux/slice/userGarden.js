@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import axios from "../../utils/axiosCustomize";
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 export const fetchCustomerGarden = createAsyncThunk(
@@ -198,7 +199,7 @@ const gardenSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchCustomerGardensManagers.rejected, (state) => {
-        toast.error("Bạn không có quyền truy cập vào tính năng này!");
+        toast.error("Không tìm thấy!");
         state.loading = false;
       });
   },

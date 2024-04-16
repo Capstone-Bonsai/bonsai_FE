@@ -18,6 +18,9 @@ import {
 import { formatPrice } from "../../../components/formatPrice/FormatPrice";
 import ModalContractDetail from "./ModalContractDetail";
 import ModalAddGardener from "./ModalAddGardener";
+import ContractDetail from "./ContractDetail";
+import ModalCreateContractImages from "./ModalCreateContractImages";
+import { getStatusText } from "../../../components/status/contractStatus";
 
 function Contract() {
   const dispatch = useDispatch();
@@ -29,13 +32,17 @@ function Contract() {
   const [openDelete, setOpenDelete] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
   const [openGardener, setOpenGardener] = useState(false);
+  const [openModalCreateContractImages, setOpenModalCreateContractImages] =
+    useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [selectedContractDetail, setSelectedContractDetail] = useState();
+  const [selectedDetail, setSelectedDetail] = useState(false);
+  const [selectedContractImages, setSelectedContractImages] = useState();
   const allContracts = useSelector(
     (state) => state.contract?.listContractDTO?.items
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.contract?.pagination);
   const showModalDelete = () => {
     setOpenDelete(true);
@@ -45,6 +52,9 @@ function Contract() {
   };
   const showModalInfo = () => {
     setOpenInfo(true);
+  };
+  const showModalCreateContractImages = () => {
+    setOpenModalCreateContractImages(true);
   };
   const totalItemsCount = useSelector(
     (state) => state.contract?.listContractDTO?.totalItemsCount
@@ -69,17 +79,8 @@ function Contract() {
     setOpenGardener(false);
   };
 
-  const getColor = (orderStatus) => {
-    switch (orderStatus) {
-      case "Paid":
-        return { color: "success", icon: <CheckCircleOutlined /> };
-      case "Waiting":
-        return { color: "warning", icon: <ClockCircleOutlined /> };
-      case "Failed":
-        return { color: "error", icon: <CloseCircleOutlined /> };
-      default:
-        return "defaultColor";
-    }
+  const handleCancelModalCreateContractImages = () => {
+    setOpenModalCreateContractImages(false);
   };
 
   const handleTableChange = (pagination) => {
@@ -87,6 +88,8 @@ function Contract() {
     const index = Number(pagination.current);
     setCurrentPage(index);
   };
+
+
 
   const columns = [
     {
@@ -115,7 +118,12 @@ function Contract() {
       key: "distance",
       render: (_, record) => (
         <>
-          <p>{record.distance}</p>
+          <p>
+            {record?.distance?.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}{" "}
+            m
+          </p>
         </>
       ),
     },
@@ -145,7 +153,12 @@ function Contract() {
       key: "gardenSquare",
       render: (_, record) => (
         <>
-          <p>{record?.gardenSquare} m2</p>
+          <p>
+            {record?.gardenSquare.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}{" "}
+            m<sup>2</sup>
+          </p>
         </>
       ),
     },
@@ -193,7 +206,19 @@ function Contract() {
       title: "Trạng thái",
       dataIndex: "contractStatus",
       key: "contractStatus",
-      render: (_, record) => <>{record.contractStatus}</>,
+      render: (_, record) => (
+        <div
+          className={`${
+            record?.contractStatus == 1 ||
+            record?.contractStatus == 4 ||
+            record?.contractStatus == 5
+              ? "text-[red]"
+              : "text-[#3a9943]"
+          }`}
+        >
+          {getStatusText(record?.contractStatus)}
+        </div>
+      ),
     },
     {
       title: "Tình trạng",
@@ -213,9 +238,9 @@ function Contract() {
       key: "serviceType",
       render: (_, record) => {
         if (record.serviceType === 1) {
-          return <>Dịch vụ chăm vườn</>;
-        } else if (record.serviceType === 2) {
           return <>Dịch vụ chăm cây</>;
+        } else if (record.serviceType === 2) {
+          return <>Dịch vụ chăm vườn</>;
         }
       },
     },
@@ -227,6 +252,26 @@ function Contract() {
         <>
           <p>{record?.numberOfGardener} người</p>
         </>
+      ),
+    },
+    {
+      title: "Hình ảnh",
+      dataIndex: "image",
+      key: "image",
+      render: (_, record) => (
+        <Space size="middle">
+          <button
+            className="outline-none"
+            onClick={() => {
+              console.log(record);
+              setSelectedContractImages(record?.contractImages);
+              setSelectedContractDetail(record);
+              showModalCreateContractImages();
+            }}
+          >
+            Thêm hình ảnh
+          </button>
+        </Space>
       ),
     },
     userInfo.role == "Staff" ? (
@@ -247,21 +292,24 @@ function Contract() {
             <button
               className="outline-none"
               onClick={() => {
-                setSelectedContractDetail(record);
-                showModalInfo();
+                setSelectedDetail(true), setSelectedContractDetail(record);
               }}
             >
               Xem thông tin
             </button>
-            <button
-              className="outline-none"
-              onClick={() => {
-                setSelectedContractDetail(record);
-                showModalGardener();
-              }}
-            >
-              Thêm người làm vườn
-            </button>
+            {record.numberOfGardener == record.contractGardeners.length ? (
+              <></>
+            ) : (
+              <button
+                className="outline-none"
+                onClick={() => {
+                  setSelectedContractDetail(record);
+                  showModalGardener();
+                }}
+              >
+                Thêm người làm vườn
+              </button>
+            )}
           </Space>
         ),
       }
@@ -270,49 +318,53 @@ function Contract() {
     ),
   ];
 
+  const props = {
+    selectedContractDetail,
+    setSelectedDetail,
+  };
+
   return (
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Hợp đồng</div>
-          <div className="bg-[#ffffff] drop-shadow-2xl">
-            <div className="flex justify-between p-6">
-              <div>
-                {/* <button
-                  className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
-                  onClick={showCreateModal}
-                >
-                  <PlusCircleOutlined /> Thêm sản phẩm
-                </button> */}
+          {selectedDetail ? (
+            <ContractDetail {...props} />
+          ) : (
+            <>
+              <div className="font-semibold mb-6">Hợp đồng</div>
+              <div className="bg-[#ffffff] drop-shadow-2xl">
+                <div className="flex justify-between p-6">
+                  <div></div>
+                  <div className="pr-0">
+                    {/* <Search
+                      placeholder="input search text"
+                      className="w-[300px]"
+                      allowClear
+                    /> */}
+                  </div>
+                </div>
+                <div className="mb-12">
+                  <Table
+                    className="w-[100%]"
+                    dataSource={allContracts}
+                    columns={columns}
+                    scroll={{ x: true }}
+                    pagination={{
+                      total: totalItemsCount,
+                      pageSize: pageSize,
+                      current: currentPage,
+                    }}
+                    onChange={handleTableChange}
+                    rowKey={(record) => record.id}
+                    loading={{
+                      indicator: <Loading loading={loading} />,
+                      spinning: loading,
+                    }}
+                  />
+                </div>
               </div>
-              <div className="pr-0">
-                <Search
-                  placeholder="input search text"
-                  className="w-[300px]"
-                  allowClear
-                />
-              </div>
-            </div>
-            <div className="mb-12">
-              <Table
-                className="w-[100%]"
-                dataSource={allContracts}
-                columns={columns}
-                scroll={{ x: true }}
-                pagination={{
-                  total: totalItemsCount,
-                  pageSize: pageSize,
-                  current: currentPage,
-                }}
-                onChange={handleTableChange}
-                rowKey={(record) => record.id}
-                loading={{
-                  indicator: <Loading loading={loading} />,
-                  spinning: loading,
-                }}
-              />
-            </div>
-          </div>
+            </>
+          )}
         </div>
         <Modal
           title="Xóa hợp đồng"
@@ -328,12 +380,17 @@ function Contract() {
           setShow={handleCancelGardener}
           contractDetail={selectedContractDetail}
         />
-
-        <ModalContractDetail
+        <ModalCreateContractImages
+          show={openModalCreateContractImages}
+          setShow={handleCancelModalCreateContractImages}
+          contractDetail={selectedContractDetail}
+          contractImages={selectedContractImages}
+        />
+        {/* <ModalContractDetail
           show={openInfo}
           setShow={handleCancelInfo}
           contractDetail={selectedContractDetail}
-        />
+        /> */}
         {/* <Modal
           title="Thông tin hợp đồng"
           open={openInfo}

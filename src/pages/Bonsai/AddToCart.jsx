@@ -10,7 +10,8 @@ export const addToCart = async (
   bonsaiSubCategory,
   dispatch
 ) => {
-  const cookies = new Cookies();
+  const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
+  const cookies = new Cookies(null, { expires: cookieExpires });
   const userInfo = cookies.get("user");
   const idUser = userInfo?.id;
   let cartItems;

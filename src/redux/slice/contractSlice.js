@@ -66,7 +66,7 @@ export const addComplaint = async (formData) => {
     const res = await axios.post(`/Complaint`, formData);
     return res.data;
   } catch (err) {
-    const errMessage = err.response;
+    const errMessage = err.response.data;
     console.log(errMessage);
     throw (err, errMessage);
   }
@@ -114,6 +114,9 @@ const contractSlice = createSlice({
   reducers: {
     setContract: (state, action) => {
       state.allContractDTO = action.payload;
+    },
+    setServiceGarden: (state, action) => {
+      state.allServiceGardenDTO = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -164,7 +167,7 @@ const contractSlice = createSlice({
       })
       .addCase(contractDetailById.pending, (state) => {
         state.msg = "Loading...";
-        state.loading = true;
+        state.contractDetail.loading = true;
       })
       .addCase(contractDetailById.fulfilled, (state, action) => {
         state.contractDetail = action.payload;
@@ -177,7 +180,7 @@ const contractSlice = createSlice({
       })
       .addCase(listTask.pending, (state) => {
         state.msg = "Loading...";
-        state.loading = true;
+        state.listTaskDTO.loading = true;
       })
       .addCase(listTask.fulfilled, (state, action) => {
         state.listTaskDTO = action.payload;
@@ -191,5 +194,5 @@ const contractSlice = createSlice({
   },
 });
 const { reducer: contractReducer, actions } = contractSlice;
-export const { setContract } = actions;
+export const { setContract, setServiceGarden } = actions;
 export { contractReducer as default };

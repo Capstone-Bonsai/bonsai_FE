@@ -5,14 +5,16 @@ import { forgotPassword } from "../../redux/slice/authSlice";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
+  console.log(email);
   const navigate = useNavigate();
   const handleForgotPassword = async () => {
     try {
       await forgotPassword({ email });
-      navigate("/Login");
+      navigate("/CodeOTP", { state: { email: email } });
       toast.success("Đã gửi xác nhận qua mail");
     } catch (error) {
-      toast.error("Chưa gửi đc xác nhận");
+      console.log(error);
+      toast.error(error?.response.data);
     }
   };
 
@@ -30,6 +32,7 @@ function ForgotPassword() {
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="bonsai@gmail.com"
                 className="w-full border border-[#999999] py-[10px] px-[20px] my-[15px] outline-none"
               />
               <button

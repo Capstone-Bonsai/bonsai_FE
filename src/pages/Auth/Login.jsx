@@ -17,7 +17,9 @@ function Login() {
     password: false,
   });
   console.log(errorTrims);
-  const cookies = new Cookies();
+  const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
+
+  const cookies = new Cookies(null, { expires: cookieExpires });
   const navigate = useNavigate();
 
   const userInfo = cookies?.get("user");

@@ -21,7 +21,7 @@ function Banner() {
   const navLinks = [
     { text: "Trang chủ", to: "/" },
     { text: "Bonsai", to: "/bonsai" },
-    { text: "Chăm sóc cây cảnh", to: "/service" },
+    { text: "Dịch vụ chăm sóc", to: "/service" },
     { text: "Bảng giá giao hàng", to: "/delivery" },
     { text: "Liên hệ", to: "/contact" },
   ];
@@ -75,7 +75,7 @@ function Banner() {
 
   useEffect(() => {
     fetchCartFromCookie();
-  }, []);
+  }, [userInfo]);
 
   return (
     <>
