@@ -21,7 +21,7 @@ function Banner() {
   const navLinks = [
     { text: "Trang chủ", to: "/" },
     { text: "Bonsai", to: "/bonsai" },
-    { text: "Dịch vụ chăm sóc", to: "/service" },
+    { text: "Dịch vụ chăm sóc", to: "/serviceOption" },
     { text: "Bảng giá giao hàng", to: "/delivery" },
     { text: "Liên hệ", to: "/contact" },
   ];
@@ -77,9 +77,8 @@ function Banner() {
   useEffect(() => {
     fetchCartFromCookie();
     // setCountCart()
-    console.log("sdfsdf");
   }, [userInfo]);
-  const countItemsInCart = useSelector((state) => state.bonsai.itemCount);
+  const countItemsInCart = useSelector((state) => state?.bonsai?.itemCount);
   return (
     <>
       <div className="bg-[#3a9943] py-5">

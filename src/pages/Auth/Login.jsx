@@ -16,7 +16,6 @@ function Login() {
     username: false,
     password: false,
   });
-  console.log(errorTrims);
   const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
 
   const cookies = new Cookies(null, { expires: cookieExpires });
@@ -25,17 +24,15 @@ function Login() {
   const userInfo = cookies?.get("user");
 
   const location = useLocation();
-  const registerService = location.state;
-  console.log(registerService);
 
   const searchParams = new URLSearchParams(location.search);
   const userId = searchParams.get("userId");
   const code = searchParams.get("code");
 
-  useEffect(() => {
-    console.log("User ID:", userId);
-    console.log("Code:", code);
-  }, [userId, code]);
+  // useEffect(() => {
+  //   console.log("User ID:", userId);
+  //   console.log("Code:", code);
+  // }, [userId, code]);
 
   useEffect(() => {
     if (userId != null && code != null) {
@@ -76,7 +73,6 @@ function Login() {
       }
       cookies.set("user", response);
 
-      console.log(response);
       if (response.role == "Customer") {
         navigate("/");
       } else if (response.role == "Manager") {

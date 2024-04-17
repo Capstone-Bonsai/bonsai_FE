@@ -109,8 +109,9 @@ export const manageServiceCustomer = createAsyncThunk(
 const initialState = {
   listService: {},
   serviceById: {},
+  serviceType: {},
   manageService: {},
-  serviceOptionOTP: {},
+  serviceOption: {},
   allServiceTypeDTO: undefined,
   serviceTempPrice: {},
   pagination: {},
@@ -209,12 +210,12 @@ const serviceSlice = createSlice({
         state.loading = true;
       })
       .addCase(serviceOption.fulfilled, (state, action) => {
-        state.serviceOptionOTP = action.payload;
+        state.serviceOption = action.payload;
         state.msg = "Data loaded successfully";
         state.loading = false;
       })
       .addCase(serviceOption.rejected, (state) => {
-        state.serviceOptionOTP = {};
+        state.serviceOption = {};
         state.msg = "Không tìm thấy";
         state.loading = false;
       });

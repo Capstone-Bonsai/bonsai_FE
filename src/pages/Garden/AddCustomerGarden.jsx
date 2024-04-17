@@ -12,15 +12,6 @@ function AddCustomerGarden(propsAddGarden) {
         <h3 className="font-bold text-lg">Thêm vườn của bạn</h3>
         <div>
           <div className="text-[#3a9943]">Địa chỉ</div>
-          {/* <input
-            className="border outline-none w-[90%] h-[40px] my-2 px-2"
-            value={propsAddGarden.newAddress}
-            placeholder="Địa chỉ"
-            onChange={(e) => propsAddGarden.setNewAddress(e.target.value)}
-            type="text"
-            name=""
-            id=""
-          /> */}
           <div className="w-full">
             <CompletedAddress
               className=""
