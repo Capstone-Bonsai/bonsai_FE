@@ -118,22 +118,9 @@ function CustomerGarden() {
     bonsaiData,
     loadingBonsai,
     setGardenLoading,
-    gardenLoading
+    gardenLoading,
   };
-  const propsAddGarden = {
-    setNewAddress,
-    newAddress,
-    newSquare,
-    setNewSquare,
-    handleImageChange,
-    imageGarden,
-    handleRemoveImage,
-    CloseCircleOutlined,
-    noImage,
-    UploadOutlined,
-    handleUploadClick,
-    handleAddNewGarden,
-  };
+
   const { totalItemsCount } = useSelector((state) => state.garden.gardenDTO);
   const handleBonsaiInGarden = (bonsaiInGardenId) => {
     try {
@@ -174,7 +161,7 @@ function CustomerGarden() {
               ) : (
                 ""
               )}
-              <AddCustomerGarden {...propsAddGarden} />
+              <AddCustomerGarden setLoading={setLoading} loading={loading} />
               {gardens?.map((garden) => (
                 <div key={garden.id} className="flex p-4 gap-10">
                   <div className=" h-[250px] w-[45%]">
@@ -198,7 +185,7 @@ function CustomerGarden() {
                       ) : (
                         <img
                           src={noImage}
-                          className=" bg-[red] w-[400px] h-[250px] object-cover border"
+                          className="w-[400px] h-[250px] object-cover border"
                           style={{ backgroundPosition: "bottom" }}
                           alt="No Image"
                         />
@@ -213,7 +200,7 @@ function CustomerGarden() {
                     <div className="flex items-center">
                       <img src={square} className="w-[50px]" alt="" />
                       <span className="font-[400] opacity-50">Diện tích:</span>
-                      {garden.square} m²
+                      {garden.square.toLocaleString("en")} m²
                     </div>
                     <div className="flex">
                       <div className="pr-2">Bonsai: </div>

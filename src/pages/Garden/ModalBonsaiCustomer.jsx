@@ -112,7 +112,7 @@ function ModalBonsaiCustomer(props) {
               <option disabled value="" className="opacity-30">
                 Chọn dáng cây
               </option>
-              {props.allStyleDTO.items.map((style) => (
+              {props.allStyleDTO.items?.map((style) => (
                 <option value={style.id} key={style.id}>
                   {style.name}
                 </option>

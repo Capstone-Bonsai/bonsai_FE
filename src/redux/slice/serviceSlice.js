@@ -28,6 +28,18 @@ export const cancelServiceGarden = async (serviceGardenId) => {
   }
 };
 
+export const serviceOption = createAsyncThunk(
+  "service/serviceOption",
+  async () => {
+    try {
+      const response = await axios.get(`/ServiceType`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const acceptServiceGarden = async (serviceGardenId) => {
   try {
     const response = await axios.put(
@@ -59,10 +71,10 @@ export const postServiceGarden = createAsyncThunk(
       console.log(response.data);
       return response.data;
     } catch (error) {
-       if (error.response) {
-        throw error.response.data; 
+      if (error.response) {
+        throw error.response.data;
       } else {
-        throw error; 
+        throw error;
       }
     }
   }
@@ -97,9 +109,12 @@ export const manageServiceCustomer = createAsyncThunk(
 const initialState = {
   listService: {},
   serviceById: {},
+  serviceType: {},
   manageService: {},
+  serviceOption: {},
   allServiceTypeDTO: undefined,
   serviceTempPrice: {},
+  serviceTypeId: "",
   pagination: {},
   loading: false,
   msg: "",
@@ -118,6 +133,9 @@ const serviceSlice = createSlice({
     },
     setServiceById: (state, action) => {
       state.serviceById = action.payload;
+    },
+    setServiceTypeId: (state, action) => {
+      state.serviceTypeId = action.payload;
     },
   },
 
@@ -190,9 +208,28 @@ const serviceSlice = createSlice({
         state.manageService = {};
         state.msg = "Không tìm thấy";
         state.loading = false;
+      })
+      .addCase(serviceOption.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+      .addCase(serviceOption.fulfilled, (state, action) => {
+        state.serviceOption = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(serviceOption.rejected, (state) => {
+        state.serviceOption = {};
+        state.msg = "Không tìm thấy";
+        state.loading = false;
       });
   },
 });
 const { reducer: serviceReducer, actions } = serviceSlice;
-export const { setAllService, setServiceById, setServiceType } = actions;
+export const {
+  setAllService,
+  setServiceById,
+  setServiceType,
+  setServiceTypeId,
+} = actions;
 export { serviceReducer as default };

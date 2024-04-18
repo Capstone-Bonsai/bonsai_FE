@@ -10,7 +10,6 @@ function CustomerRoute() {
   const navigate = useNavigate();
   return (
     <>
-      <ToastContainer />
       <Banner />
       <Outlet />
       <Footer />

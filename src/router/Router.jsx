@@ -38,6 +38,10 @@ import {
   ProductManagetNavigate,
 } from "../pages/NotFoundPage/NotFound";
 import DeliveryFeeTable from "../pages/DeliveryFee/DeliveryFeeTable";
+import CodeOTP from "../pages/Auth/CodeOTP";
+import { ToastContainer } from "react-toastify";
+import ServiceOption from "../pages/ServicePage/ServiceOption";
+import ServiceStepMain from "../pages/ServicePage/ServiceStepRegister/ServiceStepMain";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -56,6 +60,10 @@ function Router() {
               {
                 path: "/Register",
                 element: <Register />,
+              },
+              {
+                path: "/CodeOTP",
+                element: <CodeOTP />,
               },
               {
                 path: "/api/Auth/ConfirmEmail",
@@ -101,9 +109,13 @@ function Router() {
                 path: "/ServiceDetail/:serviceId",
                 element: <ServiceDetailPage />,
               },
+              // {
+              //   path: "/service",
+              //   element: <ServiceListPage />,
+              // },
               {
-                path: "/service",
-                element: <ServiceListPage />,
+                path: "/serviceOption",
+                element: <ServiceOption />,
               },
               {
                 path: "/ForgotPassword",
@@ -153,6 +165,10 @@ function Router() {
               {
                 path: "/ManageContractDetail",
                 element: <ContractUserDetail />,
+              },
+              {
+                path: "/ServiceRegister",
+                element: <ServiceStepMain />,
               },
             ]
           : []),
@@ -219,9 +235,11 @@ function Router() {
   console.log(element);
   if (!element) return null;
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      {element}
-    </AnimatePresence>
+    <>
+      <AnimatePresence mode="wait" initial={false}>
+        {element}
+      </AnimatePresence>
+    </>
   );
 }
 

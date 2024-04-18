@@ -7,20 +7,15 @@ import { setCartFromCookie } from "../../redux/slice/bonsaiSlice";
 import MinHeight from "../../components/MinHeight";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchAllBonsaiNoPagination } from "../../redux/slice/bonsaiSlice";
-
+import noImage from "../../assets/unImage.png";
 function ShoppingCart() {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const location = useLocation();
-  const [maxQuantityReached, setMaxQuantityReached] = useState(false);
-
-  console.log(maxQuantityReached);
 
   const dispatch = useDispatch();
   const userInfo = cookies.get("user");
-  const allBonsai = useSelector(
-    (state) => state.bonsai.allBonsaiNoPaginationDTO?.items
-  );
+
   const idUser = userInfo?.id;
   const [cartItems, setCartItems] = useState(
     userInfo != null
@@ -44,7 +39,7 @@ function ShoppingCart() {
     );
     await updateCartItems(updatedCartItems);
     const itemCount = updatedCartItems.length;
-    dispatch(setCartFromCookie({ updatedCartItems, itemCount }));
+    dispatch(setCartFromCookie({ itemCount }));
   };
   const subTotal = () => {
     let totalPrice = 0;
@@ -103,7 +98,11 @@ function ShoppingCart() {
                 >
                   <td className="flex justify-center items-center h-[170px]">
                     <div>
-                      <img src={item?.image} alt="" className="w-[120px] h-[120px] object-cover" />
+                      <img
+                        src={item?.image ? item?.image : noImage}
+                        alt=""
+                        className="w-[120px] h-[120px] object-cover"
+                      />
                     </div>
                   </td>
                   <td className="">

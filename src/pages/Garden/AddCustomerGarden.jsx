@@ -1,6 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 import CompletedAddress from "../OrderProduct/CompletedAddress";
-function AddCustomerGarden(propsAddGarden) {
+import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
+import noImage from "../../assets/unImage.png";
+import { addCustomerGarden } from "../../redux/slice/userGarden";
+import { toast } from "react-toastify";
+
+function AddCustomerGarden(props) {
+  const { loading, setLoading } = props;
+  const [imageGarden, setImageGarden] = useState([]);
+  const [newAddress, setNewAddress] = useState("");
+  const [newSquare, setNewSquare] = useState("");
+
+  const handleUploadClick = () => {
+    document.getElementById("upload-input").click();
+  };
+  const [file, setFile] = useState([]);
+  const handleImageChange = (e) => {
+    const files = e.target.files;
+    const updatedImageGarden = [...imageGarden];
+    const updatedFiles = [...file];
+    for (let i = 0; i < files.length; i++) {
+      const newFile = files[i];
+      const imageURL = URL.createObjectURL(newFile);
+      updatedImageGarden.push({ file: newFile, imageURL });
+      updatedFiles.push(newFile);
+    }
+
+    setImageGarden(updatedImageGarden);
+    setFile(updatedFiles);
+  };
+  const handleRemoveImage = (index) => {
+    const updatedImageGarden = [...imageGarden];
+    updatedImageGarden.splice(index, 1);
+    setImageGarden(updatedImageGarden);
+  };
+
+  const handleAddNewGarden = async () => {
+    if (!newAddress.trim() || !newSquare.trim()) {
+      toast.error("Vui lòng điền đầy đủ thông tin địa chỉ và diện tích");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("Address", newAddress);
+    formData.append("Square", newSquare);
+    imageGarden.map((image) => {
+      formData.append(`Image`, image.file);
+    });
+    setLoading(true);
+    try {
+      await addCustomerGarden(formData);
+      // setGardenLoading(!gardenLoading);
+      setLoading(false);
+      toast.success("Thêm vườn thành công");
+    } catch (error) {
+      toast.error("Thêm vườn không thành công", error);
+    }
+  };
   return (
     <dialog id="my_modal_1" className="modal">
       <div className="modal-box">
@@ -12,25 +67,18 @@ function AddCustomerGarden(propsAddGarden) {
         <h3 className="font-bold text-lg">Thêm vườn của bạn</h3>
         <div>
           <div className="text-[#3a9943]">Địa chỉ</div>
-          {/* <input
-            className="border outline-none w-[90%] h-[40px] my-2 px-2"
-            value={propsAddGarden.newAddress}
-            placeholder="Địa chỉ"
-            onChange={(e) => propsAddGarden.setNewAddress(e.target.value)}
-            type="text"
-            name=""
-            id=""
-          /> */}
           <div className="w-full">
-            <CompletedAddress className="" setAddress={propsAddGarden.setNewAddress} />
+            <CompletedAddress className="" setAddress={setNewAddress} />
           </div>
         </div>
         <div>
-          <div className="text-[#3a9943]">Diện tích/m<sup>2</sup></div>
+          <div className="text-[#3a9943]">
+            Diện tích/m<sup>2</sup>
+          </div>
           <input
-            value={propsAddGarden.newSquare}
-            onChange={(e) => propsAddGarden.setNewSquare(e.target.value)}
-            className="border outline-none w-[90%] h-[40px] my-2 mb-5"
+            value={newSquare}
+            onChange={(e) => setNewSquare(e.target.value)}
+            className="border outline-none w-full px-2 h-[40px] my-2 mb-5"
             type="number"
             name=""
             id=""
@@ -40,14 +88,14 @@ function AddCustomerGarden(propsAddGarden) {
           <input
             type="file"
             accept="image/*"
-            onChange={propsAddGarden.handleImageChange}
+            onChange={handleImageChange}
             style={{ display: "none" }}
             id="upload-input"
           />
         </div>
         <div className="flex flex-wrap gap-5">
-          {propsAddGarden.imageGarden.length > 0 ? (
-            propsAddGarden.imageGarden.map((image, index) => (
+          {imageGarden?.length > 0 ? (
+            imageGarden?.map((image, index) => (
               <div key={index} className="relative p-10 border rounded-[10px]">
                 <img
                   src={image.imageURL}
@@ -56,39 +104,38 @@ function AddCustomerGarden(propsAddGarden) {
                 />
                 <button
                   className="absolute top-0 right-2 text-[#f2f2f2] text-[30px]"
-                  onClick={() => propsAddGarden.handleRemoveImage(index)}
+                  onClick={() => handleRemoveImage(index)}
                 >
-                  <propsAddGarden.CloseCircleOutlined />
+                  <CloseCircleOutlined />
                 </button>
               </div>
             ))
           ) : (
             <img
-              src={propsAddGarden.noImage}
+              src={noImage}
               className="object-cover w-[100px] h-[100px]"
               alt="No Image"
             />
           )}
         </div>
-        {propsAddGarden.imageGarden.length < 4 ? (
-          <button
-            onClick={() => propsAddGarden.handleUploadClick()}
-            className="border p-1 rounded-lg my-5 outline-none"
-          >
-            <propsAddGarden.UploadOutlined />
-            Thêm hình ảnh
-          </button>
+        {imageGarden?.length < 4 ? (
+          <div className="text-center">
+            <button
+              onClick={() => handleUploadClick()}
+              className="border p-1 rounded-lg my-5 outline-none"
+            >
+              <UploadOutlined />
+              Thêm hình ảnh
+            </button>
+          </div>
         ) : (
           "Bạn chỉ có thể thêm tối đa 4 ảnh"
         )}
         <div className="modal-action">
           <form method="dialog">
-            <button
-              className="btn"
-              onClick={() => propsAddGarden.handleAddNewGarden()}
-            >
+            <button className="btn" onClick={() => handleAddNewGarden()}>
               Thêm vườn
-            </button>{" "}
+            </button>
           </form>
         </div>
       </div>

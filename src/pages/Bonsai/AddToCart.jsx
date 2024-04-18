@@ -10,7 +10,8 @@ export const addToCart = async (
   bonsaiSubCategory,
   dispatch
 ) => {
-  const cookies = new Cookies();
+  const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
+  const cookies = new Cookies(null, { expires: cookieExpires });
   const userInfo = cookies.get("user");
   const idUser = userInfo?.id;
   let cartItems;
@@ -27,7 +28,6 @@ export const addToCart = async (
     toast.info("Sản phẩm đã có trong giỏ hàng!");
     return;
   }
-
   cartItems.push({
     bonsaiId,
     name: bonsaiName,
@@ -38,7 +38,6 @@ export const addToCart = async (
   toast.success("Đã thêm sản phẩm vào giỏ hàng!");
   const cartId = !idUser ? "cartItems" : `cartId ${idUser}`;
   await cookies.set(cartId, cartItems, { path: "/" });
-
   const itemCount = cartItems.length;
-  dispatch(setCartFromCookie({ cartItems, itemCount }));
+  dispatch(setCartFromCookie({ itemCount }));
 };
