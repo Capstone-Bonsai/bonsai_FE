@@ -55,46 +55,46 @@ function CustomerGarden() {
       });
   }, [pageIndex, gardenLoading]);
   const [file, setFile] = useState([]);
-  const handleImageChange = (e) => {
-    const files = e.target.files;
-    const updatedImageGarden = [...imageGarden];
-    const updatedFiles = [...file];
-    for (let i = 0; i < files.length; i++) {
-      const newFile = files[i];
-      const imageURL = URL.createObjectURL(newFile);
-      updatedImageGarden.push({ file: newFile, imageURL });
-      updatedFiles.push(newFile);
-    }
+  // const handleImageChange = (e) => {
+  //   const files = e.target.files;
+  //   const updatedImageGarden = [...imageGarden];
+  //   const updatedFiles = [...file];
+  //   for (let i = 0; i < files.length; i++) {
+  //     const newFile = files[i];
+  //     const imageURL = URL.createObjectURL(newFile);
+  //     updatedImageGarden.push({ file: newFile, imageURL });
+  //     updatedFiles.push(newFile);
+  //   }
 
-    setImageGarden(updatedImageGarden);
-    setFile(updatedFiles);
-  };
-  const handleUploadClick = () => {
-    document.getElementById("upload-input").click();
-  };
+  //   setImageGarden(updatedImageGarden);
+  //   setFile(updatedFiles);
+  // };
+  // const handleUploadClick = () => {
+  //   document.getElementById("upload-input").click();
+  // };
 
-  const handleAddNewGarden = async () => {
-    const formData = new FormData();
-    formData.append("Address", newAddress);
-    formData.append("Square", newSquare);
-    imageGarden.map((image) => {
-      formData.append(`Image`, image.file);
-    });
-    // setLoading(true);
-    try {
-      await addCustomerGarden(formData);
-      setGardenLoading(!gardenLoading);
-      setLoading(false);
-      toast.success("Thêm vườn thành công thành Công");
-    } catch (error) {
-      toast.error("Thêm vườn không thành công", error);
-    }
-  };
-  const handleRemoveImage = (index) => {
-    const updatedImageGarden = [...imageGarden];
-    updatedImageGarden.splice(index, 1);
-    setImageGarden(updatedImageGarden);
-  };
+  // const handleAddNewGarden = async () => {
+  //   const formData = new FormData();
+  //   formData.append("Address", newAddress);
+  //   formData.append("Square", newSquare);
+  //   imageGarden.map((image) => {
+  //     formData.append(`Image`, image.file);
+  //   });
+  //   // setLoading(true);
+  //   try {
+  //     await addCustomerGarden(formData);
+  //     setGardenLoading(!gardenLoading);
+  //     setLoading(false);
+  //     toast.success("Thêm vườn thành công thành Công");
+  //   } catch (error) {
+  //     toast.error("Thêm vườn không thành công", error);
+  //   }
+  // };
+  // const handleRemoveImage = (index) => {
+  //   const updatedImageGarden = [...imageGarden];
+  //   updatedImageGarden.splice(index, 1);
+  //   setImageGarden(updatedImageGarden);
+  // };
   const handlePageChange = (page) => {
     setPageIndex(page);
   };

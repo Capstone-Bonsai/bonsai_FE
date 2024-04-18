@@ -8,10 +8,8 @@ import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 
 function Register() {
   const [isLoading, setIsLoading] = useState(false);
-
   const onFinish = async (values) => {
     setIsLoading(true);
-    setErrorMessage("");
     try {
       const res = await register(values);
       toast.success(res);
