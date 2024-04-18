@@ -3,7 +3,10 @@ import { CloseCircleOutlined, ShoppingOutlined } from "@ant-design/icons";
 import { InputNumber, Space } from "antd";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { setCartFromCookie } from "../../redux/slice/bonsaiSlice";
+import {
+  addBonsaiToCart,
+  setCartFromCookie,
+} from "../../redux/slice/bonsaiSlice";
 import MinHeight from "../../components/MinHeight";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchAllBonsaiNoPagination } from "../../redux/slice/bonsaiSlice";
@@ -22,11 +25,11 @@ function ShoppingCart() {
       ? cookies.get(`cartId ${idUser}`) || []
       : cookies.get("cartItems") || []
   );
-
   useEffect(() => {
     dispatch(fetchAllBonsaiNoPagination());
+    dispatch(addBonsaiToCart(cartItems));
   }, []);
-
+  const bonsais = useSelector((state) => state.bonsai?.bonsaiInCart);
   const updateCartItems = (newCartItems) => {
     const cartId = userInfo ? `cartId ${idUser}` : "cartItems";
     setCartItems(newCartItems);
@@ -43,7 +46,7 @@ function ShoppingCart() {
   };
   const subTotal = () => {
     let totalPrice = 0;
-    cartItems.forEach((item) => {
+    bonsais.forEach((item) => {
       totalPrice += item.price;
     });
     return totalPrice;
@@ -91,9 +94,9 @@ function ShoppingCart() {
               </tr>
             </thead>
             <tbody>
-              {cartItems.map((item) => (
+              {bonsais.map((item) => (
                 <tr
-                  key={item.bonsaiId}
+                  key={item.id}
                   className="border-b ml-5 text-center h-[170px]"
                 >
                   <td className="flex justify-center items-center h-[170px]">

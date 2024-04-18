@@ -8,6 +8,17 @@ function ModalBonsaiCustomer(props) {
   const [cateId, setCateId] = useState();
   const [imgBonsai, setImgBonsai] = useState([]);
   const [file, setFile] = useState([]);
+
+  //error
+  const [cateError, setCateError] = useState("");
+  const [styleError, setStyleError] = useState("");
+  const [bonsaiNameError, setBonsaiNameError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [yearOfPlantingError, setYearOfPlantingError] = useState("");
+  const [trunkDimenterError, setTrunkDimenterError] = useState("");
+  const [numberOfTrunkError, setNumberOfTrunkError] = useState("");
+  const [heightError, setHeightError] = useState("");
+
   const handleImageChange = (e) => {
     const files = e.target.files;
     const updatedImageBonsai = [...imgBonsai];
@@ -35,6 +46,7 @@ function ModalBonsaiCustomer(props) {
   };
   const handleCategoryChange = (event) => {
     setCateId(event.target.value);
+    setCateError("")
   };
   const [bonsaiName, setBonsaiName] = useState("");
   const [bonsaiDescription, setBonsaiDescription] = useState("");
@@ -42,7 +54,17 @@ function ModalBonsaiCustomer(props) {
   const [trunkDimeter, setTrunkDimenter] = useState("");
   const [height, setHeight] = useState("");
   const [numberOfTrunk, setNumberOfTrunk] = useState("");
+
   const handleAddBonsai = async () => {
+    if(!cateId) {
+      setCateError("Vui lòng chọn loại cây")
+    }
+    if (!bonsaiName.trim()) {
+      setBonsaiNameError("Vui lòng nhập tên cây");
+    }
+    if (!bonsaiDescription.trim()) {
+      setDescriptionError("Vui lòng nhập mô tả");
+    }
     const formData = new FormData();
     formData.append("CategoryId", cateId);
     formData.append("StyleId", styleId);
@@ -70,7 +92,8 @@ function ModalBonsaiCustomer(props) {
       setHeight("");
       setNumberOfTrunk("");
     } catch (error) {
-      toast.error("Thêm bonsai không thành công", error);
+      console.log(error);
+      toast.error(error.response.data);
     }
   };
   return (
@@ -87,7 +110,9 @@ function ModalBonsaiCustomer(props) {
             <span className="font-bold">Loại cây</span>{" "}
             <span className="text-red-500">*</span>
             <select
-              className="w-full border outline-none py-2 px-2 mb-2 rounded-[10px]"
+              className={`w-full border ${
+                cateError != "" ? "border-[red]" : ""
+              } outline-none py-2 px-2 mb-2 rounded-[10px]`}
               onChange={handleCategoryChange}
               defaultValue=""
             >
@@ -125,30 +150,56 @@ function ModalBonsaiCustomer(props) {
             </div>
             <input
               value={bonsaiName}
-              required
-              onChange={(e) => setBonsaiName(e.target.value)}
-              className="w-full border outline-none p-2 rounded-[10px]"
+              onChange={(e) => {
+                const { value } = e.target;
+                if (value.length > 50) {
+                  setBonsaiNameError("Tên cây không được dài hơn 50 ký tự");
+                } else {
+                  setBonsaiName(value);
+                  setBonsaiNameError("");
+                }
+              }}
+              className={`w-full border ${
+                bonsaiNameError != "" ? "border-[red]" : ""
+              } outline-none p-2 rounded-[10px]`}
               type="text"
               name=""
               id=""
             />
+            {bonsaiNameError != "" ? (
+              <div className="text-[#ff4d4f] text-[14px]">
+                {bonsaiNameError}
+              </div>
+            ) : (
+              ""
+            )}
           </div>
           <div className="my-2">
             <div className="font-bold">
               Mô tả chi tiết <span className="text-[red]">*</span>
             </div>
             <input
-              required
               value={bonsaiDescription}
-              onChange={(e) => setBonsaiDescription(e.target.value)}
+              onChange={(e) => {
+                setBonsaiDescription(e.target.value), setDescriptionError("");
+              }}
               className="w-full border outline-none p-2 rounded-[10px]"
               type="text"
               name=""
               id=""
             />
+            {descriptionError != "" ? (
+              <div className="text-[#ff4d4f] text-[14px]">
+                {descriptionError}
+              </div>
+            ) : (
+              ""
+            )}
           </div>
           <div className="my-2">
-            <div className="font-bold">Năm trồng</div>
+            <div className="font-bold">
+              Năm trồng <span className="text-red-500">*</span>
+            </div>
             <input
               value={yop}
               onChange={(e) => setYop(e.target.value)}
@@ -175,7 +226,9 @@ function ModalBonsaiCustomer(props) {
             />
           </div>
           <div className="my-2">
-            <div className="font-bold">Chiều cao</div>
+            <div className="font-bold">
+              Chiều cao <span className="text-red-500">*</span>
+            </div>
             <input
               value={height}
               onChange={(e) => setHeight(e.target.value)}
@@ -250,9 +303,11 @@ function ModalBonsaiCustomer(props) {
             "Bạn chỉ có thể thêm tối đa 4 ảnh"
           )}
           <div className="text-right">
-            <form onSubmit={handleAddBonsai} method="dialog">
-              <button className="btn">Thêm cây</button>
-            </form>
+            {/* <form onSubmit={handleAddBonsai} method="dialog"> */}
+            <button onClick={handleAddBonsai} className="btn">
+              Thêm cây
+            </button>
+            {/* </form> */}
           </div>
         </div>
       </dialog>

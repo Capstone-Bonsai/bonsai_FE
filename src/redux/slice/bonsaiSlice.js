@@ -21,6 +21,19 @@ export const fetchAllBonsaiPagination = createAsyncThunk(
   }
 );
 
+export const addBonsaiToCart = createAsyncThunk(
+  "bonsai/addBonsaiToCart",
+  async (listBonsai) => {
+    try {
+      const response = await axios.post(`/Bonsai/CurrentCart`, listBonsai);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const fetchBonsaiWithCateCayTrac = createAsyncThunk(
   "bonsai/fetchAllBonsaiPaginationCayTrac",
   async ({ pageIndex, pageSize }) => {
@@ -147,6 +160,7 @@ const initialState = {
   allBonsaiPaginationDTO: {},
   allBonsaiNoPagination: {},
   bonsaiCayTrac: [],
+  bonsaiInCart: [],
   bonsaiCayThong: [],
   allBonsaiDTO: {},
   allCategoryDTO: {},
@@ -314,7 +328,20 @@ const bonsaiSlice = createSlice({
       .addCase(bonsaiBought.rejected, (state) => {
         state.msg = "Error loading data";
         state.loading = false;
-      });
+      })
+      .addCase(addBonsaiToCart.pending, (state) => {
+        state.msg = "Loading...";
+        state.bonsaiInCart.loading = true;
+      })
+      .addCase(addBonsaiToCart.fulfilled, (state, action) => {
+        state.bonsaiInCart = action.payload;
+        state.msg = "Data loaded successfully";
+        state.bonsaiInCart.loading = false;
+      })
+      .addCase(addBonsaiToCart.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.bonsaiInCart.loading = false;
+      })
   },
 });
 
