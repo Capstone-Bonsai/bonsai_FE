@@ -12,15 +12,10 @@ function ShoppingCart() {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const location = useLocation();
-  const [maxQuantityReached, setMaxQuantityReached] = useState(false);
-
-  console.log(maxQuantityReached);
 
   const dispatch = useDispatch();
   const userInfo = cookies.get("user");
-  const allBonsai = useSelector(
-    (state) => state.bonsai.allBonsaiNoPaginationDTO?.items
-  );
+
   const idUser = userInfo?.id;
   const [cartItems, setCartItems] = useState(
     userInfo != null

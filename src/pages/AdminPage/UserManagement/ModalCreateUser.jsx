@@ -235,7 +235,6 @@ const ModalCreateUser = (props) => {
             >
               <Input />
             </Form.Item>
-
             <Form.Item
               label="Số điện thoại"
               name="phone"
@@ -258,7 +257,6 @@ const ModalCreateUser = (props) => {
             >
               <Input />
             </Form.Item>
-
             <Form.Item
               label="Họ tên"
               name="fullname"
@@ -269,7 +267,6 @@ const ModalCreateUser = (props) => {
             >
               <Input />
             </Form.Item>
-
             <Form.Item
               label="Vai trò"
               name="role"

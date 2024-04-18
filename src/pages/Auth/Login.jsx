@@ -7,7 +7,9 @@ import { toast } from "react-toastify";
 import Loading from "../../components/Loading";
 import MinHeight from "../../components/MinHeight";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
+import { Button, Form, Input } from "antd";
 function Login() {
+  const [form] = Form.useForm();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -49,30 +51,17 @@ function Login() {
     }
   }, [userId, code]);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    if (username.trim() == "") {
-      setErrorTrims((prevErrors) => ({ ...prevErrors, username: true }));
-    } else {
-      setErrorTrims((prevErrors) => ({ ...prevErrors, username: false }));
-    }
-    if (password.trim() == "") {
-      setErrorTrims((prevErrors) => ({ ...prevErrors, password: true }));
-    } else {
-      setErrorTrims((prevErrors) => ({ ...prevErrors, password: false }));
-    }
-    if (username.trim() === "" || password.trim() === "") {
-      toast.error("Bạn cần phải điền đầy đủ thông tin!");
-      return;
-    }
+  const handleLogin = async (values) => {
     try {
       setIsLoading(true);
-      const response = await loginUser({ email: username, password });
+      const response = await loginUser({
+        email: values.username,
+        password: values.password,
+      });
       if (userInfo != null) {
         cookies.remove("user");
       }
       cookies.set("user", response);
-
       if (response.role == "Customer") {
         navigate("/");
       } else if (response.role == "Manager") {
@@ -81,7 +70,8 @@ function Login() {
         navigate("/admin/serviceGardenChecking");
       }
     } catch (error) {
-      toast.error("Sai tài khoản hoặc mật khẩu");
+      // console.log(error);
+      toast.error(error.response.data);
     } finally {
       setIsLoading(false);
     }
@@ -95,72 +85,59 @@ function Login() {
         <MinHeight>
           <div className="top-0 left-0 right-0 bottom-0 w-full h-full flex justify-center items-center my-10">
             <div className="bg-[#ffffff] w-[30%] drop-shadow-lg">
-              <div className="w-[90%] m-auto h-full mb-5 ">
-                <h2 className="underline text-[20px] font-bold">Đăng nhập </h2>
-                <div>
-                  <label>
-                    Tài khoản <span className="text-[red]">*</span>
-                  </label>
-                  <div className="flex justify-center">
-                    <input
-                      type="text"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className={`w-full border py-[10px] px-[20px] my-[15px] ${
-                        errorTrims.username
-                          ? "border-[red]"
-                          : " border-[#999999]"
-                      }`}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label>
-                    Mật khẩu <span className="text-[red]">*</span>
-                  </label>
-                  <div className="flex justify-center relative">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className={`w-full border  py-[10px] px-[20px] my-[15px] ${
-                        errorTrims.password
-                          ? "border-[red]"
-                          : "border-[#999999]"
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      className=" absolute right-3 top-0 bottom-0 "
-                      onClick={() => setShowPassword(!showPassword)}
+              <Form
+                form={form}
+                onFinish={handleLogin}
+                layout="vertical"
+                className="w-[90%] m-auto h-full mb-5 "
+              >
+                <h2 className="underline text-[20px] font-bold">Đăng nhập</h2>
+                <Form.Item
+                  name="username"
+                  label="Tài khoản"
+                  rules={[
+                    { required: true, message: "Vui lòng nhập tài khoản!" },
+                  ]}
+                >
+                  <Input className="w-full border py-[10px] px-[20px] rounded-none" />
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  label="Mật khẩu"
+                  rules={[
+                    { required: true, message: "Vui lòng nhập mật khẩu!" },
+                  ]}
+                >
+                  <Input.Password
+                    iconRender={(visible) =>
+                      visible ? <EyeOutlined /> : <EyeInvisibleOutlined />
+                    }
+                    className="w-full border py-[10px] px-[20px] rounded-none"
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Link to="/forgotPassword">Quên mật khẩu?</Link>
+                </Form.Item>
+                <Form.Item>
+                  <div className="flex justify-between items-center">
+                    <Button
+                  
+                      htmlType="submit"
+                      className="uppercase w-[140px]"
+                      loading={isLoading}
+                      style={{ backgroundColor: '#3a9943', color: '#ffffff', outline: "none" }}
                     >
-                      {showPassword ? (
-                        <EyeInvisibleOutlined />
-                      ) : (
-                        <EyeOutlined />
-                      )}
-                    </button>
+                      Đăng nhập
+                    </Button>
+                    <Link
+                      to="/register"
+                      className="hover:text-[#3a9943] text-[15px]"
+                    >
+                      Chưa có tài khoản? Đăng ký ngay
+                    </Link>
                   </div>
-                </div>
-                <div className="flex justify-between">
-                  <div className="flex items-center"></div>
-                  <Link to="/ForgotPassword">Quên mật khẩu?</Link>
-                </div>
-                <div className="flex justify-between items-center">
-                  <button
-                    onClick={handleLogin}
-                    className="uppercase bg-black rounded-[3px] text-[#ffffff] w-[140px] h-[36px]"
-                  >
-                    Đăng nhập
-                  </button>
-                  <Link
-                    to="/register"
-                    className="hover:text-[#3a9943] text-[15px]"
-                  >
-                    Chưa có tài khoản? Đăng ký ngay
-                  </Link>
-                </div>
-              </div>
+                </Form.Item>
+              </Form>
             </div>
           </div>
         </MinHeight>

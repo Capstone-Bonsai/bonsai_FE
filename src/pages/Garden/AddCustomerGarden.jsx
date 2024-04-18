@@ -5,7 +5,8 @@ import noImage from "../../assets/unImage.png";
 import { addCustomerGarden } from "../../redux/slice/userGarden";
 import { toast } from "react-toastify";
 
-function AddCustomerGarden() {
+function AddCustomerGarden(props) {
+  const { loading, setLoading } = props;
   const [imageGarden, setImageGarden] = useState([]);
   const [newAddress, setNewAddress] = useState("");
   const [newSquare, setNewSquare] = useState("");
@@ -35,18 +36,22 @@ function AddCustomerGarden() {
   };
 
   const handleAddNewGarden = async () => {
+    if (!newAddress.trim() || !newSquare.trim()) {
+      toast.error("Vui lòng điền đầy đủ thông tin địa chỉ và diện tích");
+      return;
+    }
     const formData = new FormData();
     formData.append("Address", newAddress);
     formData.append("Square", newSquare);
     imageGarden.map((image) => {
       formData.append(`Image`, image.file);
     });
-    // setLoading(true);
+    setLoading(true);
     try {
       await addCustomerGarden(formData);
       // setGardenLoading(!gardenLoading);
-      // setLoading(false);
-      toast.success("Thêm vườn thành công thành Công");
+      setLoading(false);
+      toast.success("Thêm vườn thành công");
     } catch (error) {
       toast.error("Thêm vườn không thành công", error);
     }
@@ -130,7 +135,7 @@ function AddCustomerGarden() {
           <form method="dialog">
             <button className="btn" onClick={() => handleAddNewGarden()}>
               Thêm vườn
-            </button>{" "}
+            </button>
           </form>
         </div>
       </div>

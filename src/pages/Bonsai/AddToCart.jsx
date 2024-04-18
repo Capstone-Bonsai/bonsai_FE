@@ -28,7 +28,6 @@ export const addToCart = async (
     toast.info("Sản phẩm đã có trong giỏ hàng!");
     return;
   }
-
   cartItems.push({
     bonsaiId,
     name: bonsaiName,

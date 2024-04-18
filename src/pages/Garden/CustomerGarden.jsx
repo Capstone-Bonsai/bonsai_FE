@@ -161,7 +161,7 @@ function CustomerGarden() {
               ) : (
                 ""
               )}
-              <AddCustomerGarden />
+              <AddCustomerGarden setLoading={setLoading} loading={loading} />
               {gardens?.map((garden) => (
                 <div key={garden.id} className="flex p-4 gap-10">
                   <div className=" h-[250px] w-[45%]">

@@ -66,11 +66,13 @@ function Banner() {
       const itemCount = cartItems.length;
       // setCountCartItems(cartItems);
       setCountCart(itemCount);
+      dispatch(setCartFromCookie({ itemCount }));
     } else {
       const cartItems = cookies.get("cartItems") || [];
       const itemCount = cartItems.length;
       // setCountCartItems(cartItems);
       setCountCart(itemCount);
+      dispatch(setCartFromCookie({ itemCount }));
     }
   };
 
