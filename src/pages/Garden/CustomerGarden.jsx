@@ -120,20 +120,7 @@ function CustomerGarden() {
     setGardenLoading,
     gardenLoading,
   };
-  const propsAddGarden = {
-    setNewAddress,
-    newAddress,
-    newSquare,
-    setNewSquare,
-    handleImageChange,
-    imageGarden,
-    handleRemoveImage,
-    CloseCircleOutlined,
-    noImage,
-    UploadOutlined,
-    handleUploadClick,
-    handleAddNewGarden,
-  };
+
   const { totalItemsCount } = useSelector((state) => state.garden.gardenDTO);
   const handleBonsaiInGarden = (bonsaiInGardenId) => {
     try {
@@ -174,7 +161,7 @@ function CustomerGarden() {
               ) : (
                 ""
               )}
-              <AddCustomerGarden {...propsAddGarden} />
+              <AddCustomerGarden />
               {gardens?.map((garden) => (
                 <div key={garden.id} className="flex p-4 gap-10">
                   <div className=" h-[250px] w-[45%]">

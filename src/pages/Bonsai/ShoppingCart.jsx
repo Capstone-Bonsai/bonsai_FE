@@ -7,7 +7,7 @@ import { setCartFromCookie } from "../../redux/slice/bonsaiSlice";
 import MinHeight from "../../components/MinHeight";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchAllBonsaiNoPagination } from "../../redux/slice/bonsaiSlice";
-
+import noImage from "../../assets/unImage.png";
 function ShoppingCart() {
   const navigate = useNavigate();
   const cookies = new Cookies();
@@ -104,7 +104,7 @@ function ShoppingCart() {
                   <td className="flex justify-center items-center h-[170px]">
                     <div>
                       <img
-                        src={item?.image}
+                        src={item?.image ? item?.image : noImage}
                         alt=""
                         className="w-[120px] h-[120px] object-cover"
                       />

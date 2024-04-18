@@ -114,6 +114,7 @@ const initialState = {
   serviceOption: {},
   allServiceTypeDTO: undefined,
   serviceTempPrice: {},
+  serviceTypeId: "",
   pagination: {},
   loading: false,
   msg: "",
@@ -132,6 +133,9 @@ const serviceSlice = createSlice({
     },
     setServiceById: (state, action) => {
       state.serviceById = action.payload;
+    },
+    setServiceTypeId: (state, action) => {
+      state.serviceTypeId = action.payload;
     },
   },
 
@@ -222,5 +226,10 @@ const serviceSlice = createSlice({
   },
 });
 const { reducer: serviceReducer, actions } = serviceSlice;
-export const { setAllService, setServiceById, setServiceType } = actions;
+export const {
+  setAllService,
+  setServiceById,
+  setServiceType,
+  setServiceTypeId,
+} = actions;
 export { serviceReducer as default };

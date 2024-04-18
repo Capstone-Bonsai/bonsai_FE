@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
 import StepOne from "./StepOne";
 import { Steps } from "antd";
-
+import Cookies from "universal-cookie";
+import StepTwo from "./StepTwo";
 function ServiceStepMain() {
-  const [step, setStep] = useState(0);
-  const [selectedGardenId, setSelectedGardenId] = useState("");
+  const cookies = new Cookies();
+  const userInfo = cookies?.get("user");
+  const userId = userInfo?.id;
+  const [stepList, setStepList] = useState(1);
+  const step1 = cookies?.get(`step 1 + ${userId}`);
+  const [step, setStep] = useState(!step1 ? 0 : 1);
+  const [selectedGardenId, setSelectedGardenId] = useState(
+    !step1 ? "" : `${step1}`
+  );
   useEffect(() => {
     if (selectedGardenId != "") {
       setStep(1);
@@ -12,6 +20,12 @@ function ServiceStepMain() {
   }, [selectedGardenId]);
   console.log(selectedGardenId);
   const propsStepOne = {
+    setStepList,
+    selectedGardenId,
+    setSelectedGardenId,
+  };
+  const propsStepTwo = {
+    setStepList,
     selectedGardenId,
     setSelectedGardenId,
   };
@@ -32,7 +46,13 @@ function ServiceStepMain() {
           },
         ]}
       />
-      <StepOne {...propsStepOne} />
+      {stepList == 1 ? (
+        <StepOne {...propsStepOne} />
+      ) : stepList == 2 ? (
+        <StepTwo {...propsStepTwo} />
+      ) : (
+        ""
+      )}
     </div>
   );
 }
