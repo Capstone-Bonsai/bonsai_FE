@@ -56,29 +56,41 @@ function ModalBonsaiCustomer(props) {
   const [numberOfTrunk, setNumberOfTrunk] = useState("");
 
   const handleAddBonsai = async () => {
+    let isValid = true;
     if (!cateId) {
       setCateError("Vui lòng chọn loại cây");
+      isValid = false;
     }
     if (!styleError) {
       setCateError("Vui lòng chọn hình dáng cây");
+      isValid = false;
     }
     if (!bonsaiName.trim()) {
       setBonsaiNameError("Vui lòng nhập tên cây");
+      isValid = false;
     }
     if (!bonsaiDescription.trim()) {
       setDescriptionError("Vui lòng nhập mô tả");
+      isValid = false;
     }
     if (!yop.trim()) {
-      setDescriptionError("Vui lòng nằm trồng");
+      setYearOfPlantingError("Vui lòng nằm trồng");
+      isValid = false;
     }
     if (!trunkDimeter.trim()) {
-      setDescriptionError("Vui lòng nhập kích thước thân");
+      setTrunkDimenterError("Vui lòng nhập kích thước thân");
+      isValid = false;
     }
     if (!height.trim()) {
-      setDescriptionError("Vui lòng nhập chiều cao");
+      setHeightError("Vui lòng nhập chiều cao");
+      isValid = false;
     }
     if (!numberOfTrunk.trim()) {
-      setDescriptionError("Vui lòng nhập số thân");
+      setNumberOfTrunkError("Vui lòng nhập số thân");
+      isValid = false;
+    }
+    if (!isValid) {
+      return;
     }
     const formData = new FormData();
     formData.append("CategoryId", cateId);
