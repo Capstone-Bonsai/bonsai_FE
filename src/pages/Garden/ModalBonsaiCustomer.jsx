@@ -62,7 +62,7 @@ function ModalBonsaiCustomer(props) {
       isValid = false;
     }
     if (!styleError) {
-      setCateError("Vui lòng chọn hình dáng cây");
+      setStyleError("Vui lòng chọn hình dáng cây");
       isValid = false;
     }
     if (!bonsaiName.trim()) {
