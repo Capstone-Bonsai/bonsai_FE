@@ -3,35 +3,33 @@ import { CloseCircleOutlined, ShoppingOutlined } from "@ant-design/icons";
 import { InputNumber, Space } from "antd";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { setCartFromCookie } from "../../redux/slice/bonsaiSlice";
+import {
+  addBonsaiToCart,
+  setCartFromCookie,
+} from "../../redux/slice/bonsaiSlice";
 import MinHeight from "../../components/MinHeight";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchAllBonsaiNoPagination } from "../../redux/slice/bonsaiSlice";
-
+import noImage from "../../assets/unImage.png";
 function ShoppingCart() {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const location = useLocation();
-  const [maxQuantityReached, setMaxQuantityReached] = useState(false);
-
-  console.log(maxQuantityReached);
 
   const dispatch = useDispatch();
   const userInfo = cookies.get("user");
-  const allBonsai = useSelector(
-    (state) => state.bonsai.allBonsaiNoPaginationDTO?.items
-  );
+
   const idUser = userInfo?.id;
   const [cartItems, setCartItems] = useState(
     userInfo != null
       ? cookies.get(`cartId ${idUser}`) || []
       : cookies.get("cartItems") || []
   );
-
   useEffect(() => {
     dispatch(fetchAllBonsaiNoPagination());
+    dispatch(addBonsaiToCart(cartItems));
   }, []);
-
+  const bonsais = useSelector((state) => state.bonsai?.bonsaiInCart);
   const updateCartItems = (newCartItems) => {
     const cartId = userInfo ? `cartId ${idUser}` : "cartItems";
     setCartItems(newCartItems);
@@ -44,11 +42,11 @@ function ShoppingCart() {
     );
     await updateCartItems(updatedCartItems);
     const itemCount = updatedCartItems.length;
-    dispatch(setCartFromCookie({ updatedCartItems, itemCount }));
+    dispatch(setCartFromCookie({ itemCount }));
   };
   const subTotal = () => {
     let totalPrice = 0;
-    cartItems.forEach((item) => {
+    bonsais.forEach((item) => {
       totalPrice += item.price;
     });
     return totalPrice;
@@ -96,15 +94,15 @@ function ShoppingCart() {
               </tr>
             </thead>
             <tbody>
-              {cartItems.map((item) => (
+              {bonsais.map((item) => (
                 <tr
-                  key={item.bonsaiId}
+                  key={item.id}
                   className="border-b ml-5 text-center h-[170px]"
                 >
                   <td className="flex justify-center items-center h-[170px]">
                     <div>
                       <img
-                        src={item?.image}
+                        src={item?.image ? item?.image : noImage}
                         alt=""
                         className="w-[120px] h-[120px] object-cover"
                       />

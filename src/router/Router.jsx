@@ -40,6 +40,8 @@ import CodeOTP from "../pages/Auth/CodeOTP";
 import BonsaiLayout from "../pages/AdminPage/ProductManagement/Layout";
 import ServiceTypeManage from "../pages/AdminPage/ServiceTypeManagerment/ServiceTypeManage";
 import ServiceOrder from "../pages/AdminPage/StaffPage copy/ServiceOrder";
+import ServiceOption from "../pages/ServicePage/ServiceOption";
+import ServiceStepMain from "../pages/ServicePage/ServiceStepRegister/ServiceStepMain";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -107,9 +109,13 @@ function Router() {
                 path: "/ServiceDetail/:serviceId",
                 element: <ServiceDetailPage />,
               },
+              // {
+              //   path: "/service",
+              //   element: <ServiceListPage />,
+              // },
               {
-                path: "/service",
-                element: <ServiceListPage />,
+                path: "/serviceOption",
+                element: <ServiceOption />,
               },
               {
                 path: "/ForgotPassword",
@@ -159,6 +165,10 @@ function Router() {
               {
                 path: "/ManageContractDetail",
                 element: <ContractUserDetail />,
+              },
+              {
+                path: "/ServiceRegister",
+                element: <ServiceStepMain />,
               },
             ]
           : []),
@@ -229,9 +239,11 @@ function Router() {
   console.log(element);
   if (!element) return null;
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      {element}
-    </AnimatePresence>
+    <>
+      <AnimatePresence mode="wait" initial={false}>
+        {element}
+      </AnimatePresence>
+    </>
   );
 }
 

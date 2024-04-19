@@ -29,7 +29,7 @@ const DeliveryFeeTable = (props) => {
     <>
       <div class="flex justify-center mt-10">
         <h1 class="text-2xl font-bold">
-          Bảng giá về chi phí vận chuyển Bonsai (VND/km)
+          Bảng giá về chi phí vận chuyển Bonsai
         </h1>
       </div>
 

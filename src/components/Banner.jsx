@@ -21,12 +21,12 @@ function Banner() {
   const navLinks = [
     { text: "Trang chủ", to: "/" },
     { text: "Bonsai", to: "/bonsai" },
-    { text: "Dịch vụ chăm sóc", to: "/service" },
+    { text: "Dịch vụ chăm sóc", to: "/serviceOption" },
     { text: "Bảng giá giao hàng", to: "/delivery" },
     { text: "Liên hệ", to: "/contact" },
   ];
   const cookies = new Cookies();
-  const countCart = useSelector((state) => state.bonsai.itemCount);
+  const [countCart, setCountCart] = useState(0);
 
   const avatarUrl = useSelector((state) => state.avatar.avatarUrlRedux);
   const dispatch = useDispatch();
@@ -57,26 +57,30 @@ function Banner() {
         });
     }
   }, [userInfo]);
-
+  // let [countCartItems, setCountCartItems] = useState([]);
+  // console.log(countCartItems.length);
   const fetchCartFromCookie = () => {
     if (userInfo != null) {
       const cartIdUser = `cartId ${idUser}`;
       const cartItems = cookies.get(cartIdUser) || [];
       const itemCount = cartItems.length;
-      console.log(itemCount);
-      dispatch(setCartFromCookie({ cartItems, itemCount }));
+      // setCountCartItems(cartItems);
+      setCountCart(itemCount);
+      dispatch(setCartFromCookie({ itemCount }));
     } else {
       const cartItems = cookies.get("cartItems") || [];
       const itemCount = cartItems.length;
-      console.log(itemCount);
-      dispatch(setCartFromCookie({ cartItems, itemCount }));
+      // setCountCartItems(cartItems);
+      setCountCart(itemCount);
+      dispatch(setCartFromCookie({ itemCount }));
     }
   };
 
   useEffect(() => {
     fetchCartFromCookie();
+    // setCountCart()
   }, [userInfo]);
-
+  const countItemsInCart = useSelector((state) => state?.bonsai?.itemCount);
   return (
     <>
       <div className="bg-[#3a9943] py-5">
@@ -198,7 +202,7 @@ function Banner() {
             >
               <ShoppingCartOutlined />
               <div className="cartItemChildren w-[20px] h-[20px] bg-[#fff] text-black flex text-[15px] justify-center items-center rounded-full">
-                {countCart}
+                {countItemsInCart}
               </div>
             </Link>
           </div>

@@ -1,6 +1,6 @@
-import { toast } from "react-toastify";
 import axios from "../../utils/axiosCustomize";
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+
 export const fetchCustomerGarden = createAsyncThunk(
   "bonsai/fetchCustomerGarden",
   async ({ pageIndex, pageSize }) => {
@@ -130,17 +130,17 @@ const gardenSlice = createSlice({
     builder
       .addCase(fetchCustomerGarden.pending, (state) => {
         state.msg = "Loading...";
-        state.loading = true;
+        state.gardenDTO.loading = true;
       })
       .addCase(fetchCustomerGarden.fulfilled, (state, action) => {
         state.gardenDTO = action.payload;
         state.msg = "Data loaded successfully";
-        state.loading = false;
+        state.gardenDTO.loading = false;
       })
       .addCase(fetchCustomerGarden.rejected, (state) => {
         state.gardenDTO = [];
         state.msg = "Không tìm thấy";
-        state.loading = false;
+        state.gardenDTO.loading = false;
       })
       .addCase(getGardenNoPagination.pending, (state) => {
         state.msg = "Loading...";
@@ -199,7 +199,7 @@ const gardenSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchCustomerGardensManagers.rejected, (state) => {
-        toast.error("Không tìm thấy!");
+        toast.error("Bạn không có quyền truy cập vào tính năng này!");
         state.loading = false;
       });
   },

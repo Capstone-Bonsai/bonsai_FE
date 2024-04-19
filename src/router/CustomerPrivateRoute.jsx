@@ -9,7 +9,6 @@ function CustomerPrivateRoute() {
   const userInfo = cookies.get("user");
   return (
     <>
-      {/* <ToastContainer /> */}
       <Banner />
       <Outlet />
       <Footer />

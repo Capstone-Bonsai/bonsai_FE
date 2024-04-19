@@ -21,6 +21,19 @@ export const fetchAllBonsaiPagination = createAsyncThunk(
   }
 );
 
+export const addBonsaiToCart = createAsyncThunk(
+  "bonsai/addBonsaiToCart",
+  async (listBonsai) => {
+    try {
+      const response = await axios.post(`/Bonsai/CurrentCart`, listBonsai);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const fetchBonsaiWithCateCayTrac = createAsyncThunk(
   "bonsai/fetchAllBonsaiPaginationCayTrac",
   async ({ pageIndex, pageSize }) => {
@@ -73,14 +86,17 @@ export const allCategory = createAsyncThunk("product/subCategory", async () => {
   }
 });
 
-export const bonsaiBought = createAsyncThunk("bonsai/bonsaiBought", async () => {
-  try {
-    const response = await axios.get("/bonsai/BoughtBonsai");
-    return response.data;
-  } catch (error) {
-    throw error;
+export const bonsaiBought = createAsyncThunk(
+  "bonsai/bonsaiBought",
+  async () => {
+    try {
+      const response = await axios.get("/bonsai/BoughtBonsai");
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
-});
+);
 
 export const filterTag = createAsyncThunk("product/tags", async () => {
   try {
@@ -144,6 +160,7 @@ const initialState = {
   allBonsaiPaginationDTO: {},
   allBonsaiNoPagination: {},
   bonsaiCayTrac: [],
+  bonsaiInCart: [],
   bonsaiCayThong: [],
   allBonsaiDTO: {},
   allCategoryDTO: {},
@@ -169,8 +186,7 @@ const bonsaiSlice = createSlice({
       state.allBonsaiDTO = action.payload;
     },
     setCartFromCookie: (state, action) => {
-      const { cartItems, itemCount } = action.payload;
-      state.cart = cartItems;
+      const { itemCount } = action.payload;
       state.itemCount = itemCount;
     },
     setBonsaiById: (state, action) => {
@@ -300,7 +316,7 @@ const bonsaiSlice = createSlice({
         state.msg = "Error loading data";
         state.loading = false;
       })
-    .addCase(bonsaiBought.pending, (state) => {
+      .addCase(bonsaiBought.pending, (state) => {
         state.msg = "Loading...";
         state.loading = true;
       })
@@ -312,6 +328,19 @@ const bonsaiSlice = createSlice({
       .addCase(bonsaiBought.rejected, (state) => {
         state.msg = "Error loading data";
         state.loading = false;
+      })
+      .addCase(addBonsaiToCart.pending, (state) => {
+        state.msg = "Loading...";
+        state.bonsaiInCart.loading = true;
+      })
+      .addCase(addBonsaiToCart.fulfilled, (state, action) => {
+        state.bonsaiInCart = action.payload;
+        state.msg = "Data loaded successfully";
+        state.bonsaiInCart.loading = false;
+      })
+      .addCase(addBonsaiToCart.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.bonsaiInCart.loading = false;
       })
   },
 });

@@ -55,46 +55,46 @@ function CustomerGarden() {
       });
   }, [pageIndex, gardenLoading]);
   const [file, setFile] = useState([]);
-  const handleImageChange = (e) => {
-    const files = e.target.files;
-    const updatedImageGarden = [...imageGarden];
-    const updatedFiles = [...file];
-    for (let i = 0; i < files.length; i++) {
-      const newFile = files[i];
-      const imageURL = URL.createObjectURL(newFile);
-      updatedImageGarden.push({ file: newFile, imageURL });
-      updatedFiles.push(newFile);
-    }
+  // const handleImageChange = (e) => {
+  //   const files = e.target.files;
+  //   const updatedImageGarden = [...imageGarden];
+  //   const updatedFiles = [...file];
+  //   for (let i = 0; i < files.length; i++) {
+  //     const newFile = files[i];
+  //     const imageURL = URL.createObjectURL(newFile);
+  //     updatedImageGarden.push({ file: newFile, imageURL });
+  //     updatedFiles.push(newFile);
+  //   }
 
-    setImageGarden(updatedImageGarden);
-    setFile(updatedFiles);
-  };
-  const handleUploadClick = () => {
-    document.getElementById("upload-input").click();
-  };
+  //   setImageGarden(updatedImageGarden);
+  //   setFile(updatedFiles);
+  // };
+  // const handleUploadClick = () => {
+  //   document.getElementById("upload-input").click();
+  // };
 
-  const handleAddNewGarden = async () => {
-    const formData = new FormData();
-    formData.append("Address", newAddress);
-    formData.append("Square", newSquare);
-    imageGarden.map((image) => {
-      formData.append(`Image`, image.file);
-    });
-    // setLoading(true);
-    try {
-      await addCustomerGarden(formData);
-      setGardenLoading(!gardenLoading);
-      setLoading(false);
-      toast.success("Thêm vườn thành công thành Công");
-    } catch (error) {
-      toast.error("Thêm vườn không thành công", error);
-    }
-  };
-  const handleRemoveImage = (index) => {
-    const updatedImageGarden = [...imageGarden];
-    updatedImageGarden.splice(index, 1);
-    setImageGarden(updatedImageGarden);
-  };
+  // const handleAddNewGarden = async () => {
+  //   const formData = new FormData();
+  //   formData.append("Address", newAddress);
+  //   formData.append("Square", newSquare);
+  //   imageGarden.map((image) => {
+  //     formData.append(`Image`, image.file);
+  //   });
+  //   // setLoading(true);
+  //   try {
+  //     await addCustomerGarden(formData);
+  //     setGardenLoading(!gardenLoading);
+  //     setLoading(false);
+  //     toast.success("Thêm vườn thành công thành Công");
+  //   } catch (error) {
+  //     toast.error("Thêm vườn không thành công", error);
+  //   }
+  // };
+  // const handleRemoveImage = (index) => {
+  //   const updatedImageGarden = [...imageGarden];
+  //   updatedImageGarden.splice(index, 1);
+  //   setImageGarden(updatedImageGarden);
+  // };
   const handlePageChange = (page) => {
     setPageIndex(page);
   };
@@ -120,20 +120,7 @@ function CustomerGarden() {
     setGardenLoading,
     gardenLoading,
   };
-  const propsAddGarden = {
-    setNewAddress,
-    newAddress,
-    newSquare,
-    setNewSquare,
-    handleImageChange,
-    imageGarden,
-    handleRemoveImage,
-    CloseCircleOutlined,
-    noImage,
-    UploadOutlined,
-    handleUploadClick,
-    handleAddNewGarden,
-  };
+
   const { totalItemsCount } = useSelector((state) => state.garden.gardenDTO);
   const handleBonsaiInGarden = (bonsaiInGardenId) => {
     try {
@@ -174,7 +161,7 @@ function CustomerGarden() {
               ) : (
                 ""
               )}
-              <AddCustomerGarden {...propsAddGarden} />
+              <AddCustomerGarden setLoading={setLoading} loading={loading} />
               {gardens?.map((garden) => (
                 <div key={garden.id} className="flex p-4 gap-10">
                   <div className=" h-[250px] w-[45%]">

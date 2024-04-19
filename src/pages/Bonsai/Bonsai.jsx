@@ -18,10 +18,9 @@ import { allStyle } from "../../redux/slice/styleSlice";
 import { addToCart } from "./AddToCart";
 import { motion, useScroll } from "framer-motion";
 import noImage from "../../assets/unImage.png";
-function Bonsai() {
+function Bonsai({ countCartItems }) {
   const location = useLocation();
   const dispatch = useDispatch();
-
   const [priceRange, setPriceRange] = useState([]);
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(12);
@@ -38,7 +37,6 @@ function Bonsai() {
     (state) => state.category.allCategoryDTO?.items
   );
   const styles = useSelector((state) => state.style.allStyleDTO.items);
-
   const loading = useSelector((state) => state.bonsai.loading);
   const keyword = location.state?.keyword;
   useEffect(() => {
@@ -185,6 +183,7 @@ function Bonsai() {
                             bonsai.price,
                             bonsai.bonsaiImages[0].imageUrl,
                             bonsai.subCategory,
+                            countCartItems,
                             dispatch
                           );
                         } else {
@@ -193,6 +192,7 @@ function Bonsai() {
                             bonsai.name,
                             bonsai.price,
                             bonsai.subCategory,
+                            countCartItems,
                             dispatch
                           );
                         }

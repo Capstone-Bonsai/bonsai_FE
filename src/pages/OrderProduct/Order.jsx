@@ -30,17 +30,7 @@ function Order() {
       return cookies.get("cartItems") || [];
     }
   });
-
   const bonsaiIdOrder = cartItems.map((item) => item.bonsaiId);
-  const [provinceData, setProvinceData] = useState(null);
-  const [provinceName, setProvinceName] = useState("");
-  const [provinceId, setProvinceId] = useState(null);
-  const [districtData, setDistrictData] = useState(null);
-  const [districtName, setDistrictName] = useState("");
-  const [districtId, setDistrictId] = useState(null);
-  const [wardData, setWardData] = useState(null);
-  const [wardName, setWardName] = useState("");
-  const [street, setStreet] = useState("");
   const [address, setAddress] = useState("");
   const [emailNotLogin, setEmailNotLogin] = useState("");
   const [note, setNote] = useState("");
@@ -62,46 +52,6 @@ function Order() {
       }
     }
   }, [resultCode]);
-
-  // useEffect(() => {
-  //   if (provinceId && districtData) {
-  //     const defaultDistrict = districtData.data[0];
-  //     setDistrictId(defaultDistrict?.DistrictID);
-  //     setDistrictName(defaultDistrict?.DistrictName);
-  //   }
-  //   // if (districtId && wardData) {
-  //   //   const defaultWard = wardData.data[0];
-  //   //   setWardName(defaultWard.WardName);
-  //   // }
-  // }, [provinceId, districtData]);
-
-  // useEffect(() => {
-  //   const fetchProvinceAPI = async () => {
-  //     try {
-  //       const responseData = await getProvince();
-  //       setProvinceData(responseData);
-  //     } catch (error) {
-  //       // console.error("Error fetching province data:", error);
-  //     }
-  //   };
-  //   fetchProvinceAPI();
-  // }, []);
-
-  // useEffect(() => {
-  //   const fetchDistrictAPI = async () => {
-  //     try {
-  //       const responseData = await getDistrict({ provinceId });
-  //       const filteredData = responseData.data.filter(
-  //         (district) => district.DistrictID != "3451"
-  //         // && district.DistrictID != "3715"
-  //       );
-  //       setDistrictData({ ...responseData, data: filteredData });
-  //     } catch (error) {
-  //       // console.error("Error fetching province data:", error);
-  //     }
-  //   };
-  //   fetchDistrictAPI();
-  // }, [provinceId]);
 
   useEffect(() => {
     const fetchDeliveryFee = async () => {
@@ -167,9 +117,12 @@ function Order() {
   };
   const handleDeliveryFee = async (addressConfirm) => {
     setAddress(addressConfirm);
-    console.log(addressConfirm);
-    const res = await destination(addressConfirm);
-    const fee = res?.price;
+    const payload = {
+      destination: addressConfirm,
+      listBonsaiId: bonsaiIdOrder,
+    };
+    const res = await destination(payload);
+    const fee = res?.finalPrice;
     setDeliveryFee(fee);
   };
   const handleTotalOrder = () => {
