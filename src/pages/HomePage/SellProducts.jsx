@@ -15,7 +15,6 @@ import { motion, useScroll } from "framer-motion";
 import { Image } from "antd";
 
 function SellProducts({
-  topProductDTO,
   bonsaiCayThong,
   styleCount,
   handleFilterStyle,
