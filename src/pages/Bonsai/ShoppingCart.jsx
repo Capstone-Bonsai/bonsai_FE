@@ -28,7 +28,7 @@ function ShoppingCart() {
   useEffect(() => {
     dispatch(fetchAllBonsaiNoPagination());
     dispatch(addBonsaiToCart(cartItems));
-  }, []);
+  }, [cartItems]);
   const bonsais = useSelector((state) => state.bonsai?.bonsaiInCart);
   const updateCartItems = (newCartItems) => {
     const cartId = userInfo ? `cartId ${idUser}` : "cartItems";
@@ -36,9 +36,9 @@ function ShoppingCart() {
     cookies.set(cartId, JSON.stringify(newCartItems), { path: "/" });
   };
 
-  const handleRemoveItem = async (bonsai) => {
+  const handleRemoveItem = async (bonsaiIdToRemove) => {
     const updatedCartItems = cartItems.filter(
-      (item) => item.bonsaiId !== bonsai.bonsaiId
+      (bonsaiId) => bonsaiId !== bonsaiIdToRemove
     );
     await updateCartItems(updatedCartItems);
     const itemCount = updatedCartItems.length;
@@ -115,7 +115,7 @@ function ShoppingCart() {
 
                   <td className="font-medium">{formatPrice(item.price)}</td>
                   <td className="text-[20px] pr-5">
-                    <button onClick={() => handleRemoveItem(item)}>
+                    <button onClick={() => handleRemoveItem(item.id)}>
                       <CloseCircleOutlined />
                     </button>
                   </td>

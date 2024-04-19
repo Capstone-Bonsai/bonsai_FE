@@ -98,6 +98,7 @@ function CustomerGarden() {
   const handlePageChange = (page) => {
     setPageIndex(page);
   };
+  const [resetGarden, setResetGarden] = useState(false);
   const [selectedGardenId, setSelectedGardenId] = useState("");
   const { allStyleDTO } = useSelector((state) => state.style);
   const { allCategoryDTO } = useSelector((state) => state.category);
@@ -118,6 +119,7 @@ function CustomerGarden() {
     bonsaiData,
     loadingBonsai,
     setGardenLoading,
+    setResetGarden,
     gardenLoading,
   };
 
@@ -137,18 +139,18 @@ function CustomerGarden() {
     <MinHeight>
       <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
         <NavbarUser />
-        <div className=" border text-center w-[75%] pt-5">
+        <div className=" border w-[75%] pt-5">
           {loading ? (
             <Loading loading={loading} isRelative={true} />
           ) : (
             <>
               <button
-                className="bg-[#f2f2f2] text-black p-5 rounded-[5px] hover:bg-[#3A994A] hover:text-[#fff]"
+                className="bg-[#f2f2f2] mx-5 text-black p-5 rounded-[5px] hover:bg-[#3A994A] hover:text-[#fff]"
                 onClick={() =>
                   document.getElementById("my_modal_1").showModal()
                 }
               >
-                Thêm vườn của bạn
+                + Thêm vườn của bạn
               </button>
               {!gardens ? (
                 <div className="">
@@ -161,7 +163,12 @@ function CustomerGarden() {
               ) : (
                 ""
               )}
-              <AddCustomerGarden setLoading={setLoading} loading={loading} />
+              <AddCustomerGarden
+                setGardenLoading={setGardenLoading}
+                gardenLoading={gardenLoading}
+                setLoading={setLoading}
+                loading={loading}
+              />
               {gardens?.map((garden) => (
                 <div key={garden.id} className="flex p-4 gap-10">
                   <div className=" h-[250px] w-[45%]">

@@ -40,10 +40,11 @@ function Login() {
     if (userId != null && code != null) {
       const confirmEmailFromUrl = async () => {
         try {
-          await confirmEmail(userId, code);
-          toast.success("Xác thực thành công!");
+          const res = await confirmEmail(userId, code);
+          console.log(res);
+          toast.success(res.data);
         } catch (error) {
-          toast.error("Xác thực thất bại!");
+          toast.error(error.response.data);
         }
       };
 

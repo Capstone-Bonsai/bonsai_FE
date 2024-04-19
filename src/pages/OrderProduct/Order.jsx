@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { destination } from "../../redux/slice/orderSlice";
 import { orderBonsai } from "../../redux/slice/bonsaiSlice";
 import BarLoaderLoading from "../../components/BarLoaderLoading";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getDistrict, getProvince, getWard } from "../../redux/slice/address";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import CompletedAddress from "./CompletedAddress";
@@ -30,7 +30,7 @@ function Order() {
       return cookies.get("cartItems") || [];
     }
   });
-  const bonsaiIdOrder = cartItems.map((item) => item.bonsaiId);
+  // const bonsaiIdOrder = cartItems.map((item) => item.bonsaiId);
   const [address, setAddress] = useState("");
   const [emailNotLogin, setEmailNotLogin] = useState("");
   const [note, setNote] = useState("");
@@ -38,7 +38,7 @@ function Order() {
   const [fullNameNoneLogin, setFullNameNoneLogin] = useState("");
   const [phoneNumberNoneLogin, setPhoneNumberNoneLogin] = useState("");
   const [deliveryFee, setDeliveryFee] = useState(0);
-
+  const bonsais = useSelector((state) => state.bonsai?.bonsaiInCart);
   useEffect(() => {
     if (resultCode === "0") {
       cookies.remove(userInfo ? `cartId ${idUser}` : "cartItems");
@@ -75,7 +75,7 @@ function Order() {
       },
       address: address,
       note: note,
-      listBonsai: bonsaiIdOrder,
+      listBonsai: cartItems,
     };
     try {
       cookies.set("userTemp", {
@@ -110,7 +110,7 @@ function Order() {
 
   const subTotal = () => {
     let totalPrice = 0;
-    cartItems.forEach((item) => {
+    bonsais.forEach((item) => {
       totalPrice += item.price;
     });
     return totalPrice;
@@ -119,7 +119,7 @@ function Order() {
     setAddress(addressConfirm);
     const payload = {
       destination: addressConfirm,
-      listBonsaiId: bonsaiIdOrder,
+      listBonsaiId: cartItems,
     };
     const res = await destination(payload);
     const fee = res?.finalPrice;
@@ -149,7 +149,7 @@ function Order() {
                 </tr>
               </thead>
               <tbody>
-                {cartItems.map((item) => (
+                {bonsais.map((item) => (
                   <tr key={item.bonsaiId} className="ml-5 text-center h-[70px]">
                     <td className="flex justify-center items-center h-[70px]">
                       <div>
