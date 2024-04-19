@@ -10,7 +10,7 @@ function AddCustomerGarden(props) {
   const [imageGarden, setImageGarden] = useState([]);
   const [newAddress, setNewAddress] = useState("");
   const [newSquare, setNewSquare] = useState("");
-
+  const { setGardenLoading, gardenLoading } = props;
   const handleUploadClick = () => {
     document.getElementById("upload-input").click();
   };
@@ -46,10 +46,10 @@ function AddCustomerGarden(props) {
     imageGarden.map((image) => {
       formData.append(`Image`, image.file);
     });
-    setLoading(true);
     try {
+      setLoading(true);
       await addCustomerGarden(formData);
-      // setGardenLoading(!gardenLoading);
+      setGardenLoading(!gardenLoading);
       setLoading(false);
       toast.success("Thêm vườn thành công");
     } catch (error) {
