@@ -14,7 +14,10 @@ import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBonsai, setCartFromCookie } from "../redux/slice/bonsaiSlice";
 import { profileUser } from "../redux/slice/authSlice";
-import { setAvatarUrlRedux } from "../redux/slice/avatarSlice";
+import {
+  setAvatarUrlRedux,
+  setFullNameRedux,
+} from "../redux/slice/avatarSlice";
 import "./Banner.css";
 function Banner() {
   const { Search } = Input;
@@ -29,6 +32,7 @@ function Banner() {
   const [countCart, setCountCart] = useState(0);
 
   const avatarUrl = useSelector((state) => state.avatar.avatarUrlRedux);
+  const fullNameRedux = useSelector((state) => state.avatar.fullName);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo = cookies.get("user");
@@ -51,6 +55,7 @@ function Banner() {
           cookies.set("userData", data);
           const newAvt = data?.avatarUrl;
           dispatch(setAvatarUrlRedux(newAvt));
+          dispatch(setFullNameRedux(data?.fullname));
         })
         .catch((error) => {
           console.error("Error while fetching profile data:", error);
@@ -126,7 +131,7 @@ function Banner() {
                         Xin chào
                       </span>
                       <span className="uppercase font-bold">
-                        {userInfo?.fullName}
+                        {fullNameRedux}
                       </span>
                     </div>
                     <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">

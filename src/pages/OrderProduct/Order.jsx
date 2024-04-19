@@ -4,7 +4,7 @@ import Cookies from "universal-cookie";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { destination } from "../../redux/slice/orderSlice";
-import { orderBonsai } from "../../redux/slice/bonsaiSlice";
+import { addBonsaiToCart, orderBonsai } from "../../redux/slice/bonsaiSlice";
 import BarLoaderLoading from "../../components/BarLoaderLoading";
 import { useDispatch, useSelector } from "react-redux";
 import { getDistrict, getProvince, getWard } from "../../redux/slice/address";
@@ -52,7 +52,9 @@ function Order() {
       }
     }
   }, [resultCode]);
-
+  useEffect(() => {
+    dispatch(addBonsaiToCart(cartItems));
+  }, [cartItems]);
   useEffect(() => {
     const fetchDeliveryFee = async () => {
       try {
@@ -95,8 +97,6 @@ function Order() {
       if (address.trim() === "") {
         toast.error("Vui lòng nhập địa chỉ.");
         return;
-      } else if (expectedDeliveryDate.trim() === "") {
-        toast.error("Vui lòng nhập địa chỉ.");
       }
       console.log(error);
       console.log(Array.isArray(error.data));

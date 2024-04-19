@@ -29,7 +29,6 @@ function Home() {
     console.log("Code:", code);
   }, [userId, code]);
   const dispatch = useDispatch();
-  const { topProductDTO } = useSelector((state) => state.product);
   const { allBonsaiPaginationDTO } = useSelector((state) => state.bonsai);
   const { bonsaiCayTrac } = useSelector((state) => state.bonsai);
   const { bonsaiCayThong } = useSelector((state) => state.bonsai);
@@ -113,7 +112,6 @@ function Home() {
           </div>
 
           <SellProducts
-            topProductDTO={topProductDTO}
             allBonsaiPaginationDTO={allBonsaiPaginationDTO}
             styleCount={styleCount}
             handleFilterStyle={handleFilterStyle}

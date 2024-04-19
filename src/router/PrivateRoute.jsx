@@ -113,21 +113,21 @@ function PrivateRoute() {
     ]),
   ];
 
-  useEffect(() => {
-    if (userInfo) {
-      console.log(userInfo);
-      profileUser()
-        .then((data) => {
-          console.log(data);
-          cookies.set("userData", data);
-          const newAvt = data?.avatarUrl;
-          //dispatch(setAvatarUrlRedux(newAvt));
-        })
-        .catch((error) => {
-          console.error("Error while fetching profile data:", error);
-        });
-    }
-  }, [userInfo]);
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     console.log(userInfo);
+  //     profileUser()
+  //       .then((data) => {
+  //         console.log(data);
+  //         cookies.set("userData", data);
+  //         const newAvt = data?.avatarUrl;
+  //         //dispatch(setAvatarUrlRedux(newAvt));
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error while fetching profile data:", error);
+  //       });
+  //   }
+  // }, [userInfo]);
   return (
     <>
       <Layout className="min-h-screen">
