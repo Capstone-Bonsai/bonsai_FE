@@ -173,10 +173,10 @@ function CustomerGardenManage() {
       key: "image",
       render: (_, record) => (
         <>
-          <div className="h-[200px] w-[200px]">
+          <div className="h-[150px] w-[150px]">
             <img
               src={record.customerGardenImages[0]?.image}
-              style={{ width: "200px", height: "200px" }}
+              style={{ width: "150px", height: "150px" }}
             />
           </div>
         </>

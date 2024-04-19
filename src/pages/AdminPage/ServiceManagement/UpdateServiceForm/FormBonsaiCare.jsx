@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import {
-  Input,
-  Modal,
-  Form,
-  Upload,
-} from "antd";
+import { Input, Modal, Form, Upload } from "antd";
 const { TextArea } = Input;
 
 const normFile = (e) => {
@@ -39,7 +34,7 @@ const FormBonsaiCare = ({
   const [formData, setFormData] = useState({
     Name: service.name,
     Description: service.description,
-    ServiceType: 1,
+    ServiceType: "70f34b1c-1a2c-40ad-a9b6-ec374db61354",
   });
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -84,7 +79,7 @@ const FormBonsaiCare = ({
           marginTop: 8,
         }}
       >
-        Tạo sản phẩm
+        Thêm ảnh
       </div>
     </button>
   );
@@ -133,7 +128,7 @@ const FormBonsaiCare = ({
         initialValues={formData}
       >
         <Form.Item name="ServiceType" style={{ display: "none" }}>
-          <Input type="hidden" value="1" />
+          <Input type="hidden" value="70f34b1c-1a2c-40ad-a9b6-ec374db61354" />
         </Form.Item>
         <Form.Item
           label="Tên dịch vụ"

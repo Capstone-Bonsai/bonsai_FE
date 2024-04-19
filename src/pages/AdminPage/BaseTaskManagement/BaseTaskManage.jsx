@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Space, Table, Modal } from "antd";
+import {
+  PlusCircleOutlined,
+  EditOutlined,
+  EyeOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { Space, Table, Modal, Tooltip, Button } from "antd";
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -110,22 +115,26 @@ function BaseTaskManage() {
       key: "hanhdong",
       render: (_, record) => (
         <Space size="middle">
-          <button
-            onClick={() => {
-              setSelectedBaseTask(record.id);
-              showModalDelete();
-            }}
-          >
-            Xóa
-          </button>
-          <button
-            onClick={() => {
-              setSelectedUpdateBaseTask(record);
-              showUpdateModal();
-            }}
-          >
-            Chỉnh sửa
-          </button>
+          <Tooltip title="Xem thông tin">
+            <Button
+              type="text"
+              icon={<EyeOutlined style={{ color: "blue" }} />}
+              onClick={() => {
+                setSelectedUpdateBaseTask(record);
+                showUpdateModal();
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Button
+              type="text"
+              icon={<DeleteOutlined style={{ color: "red" }} />}
+              onClick={() => {
+                setSelectedBaseTask(record.id);
+                showModalDelete();
+              }}
+            />
+          </Tooltip>
         </Space>
       ),
     },

@@ -6,7 +6,7 @@ import ProductManage from "./BonsaiManagement/ProductManage";
 import "./TabsBar.css";
 import CategoryManage from "./CategoryManagement/CategoryManage";
 
-function ProductLayout() {
+function BonsaiLayout() {
   return (
     <>
       <div className="flex justify-center">
@@ -40,4 +40,4 @@ function ProductLayout() {
   );
 }
 
-export default ProductLayout;
+export default BonsaiLayout;

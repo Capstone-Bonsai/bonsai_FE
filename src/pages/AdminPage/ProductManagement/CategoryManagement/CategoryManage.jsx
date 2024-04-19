@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { PlusCircleOutlined } from "@ant-design/icons";
-import { Space, Table, Modal } from "antd";
+import {
+  PlusCircleOutlined,
+  EyeOutlined,
+  DeleteOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
+import { Space, Table, Modal, Tooltip, Button } from "antd";
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -93,30 +98,36 @@ function CategoryManage() {
       key: "hanhdong",
       render: (_, record) => (
         <Space size="middle">
-          <button
-            onClick={() => {
-              setSelectedCategory(record.id);
-              showModalDelete();
-            }}
-          >
-            Xóa
-          </button>
-          <button
-            onClick={() => {
-              setSelectedUpdateCategory(record);
-              showUpdateModal();
-            }}
-          >
-            Chỉnh sửa
-          </button>
-          <button
-            onClick={() => {
-              setSelectedCareStepCategory(record);
-              showCareStepModal();
-            }}
-          >
-            Xem các bước chăm sóc
-          </button>
+          <Tooltip title="Xem thông tin">
+            <Button
+              type="text"
+              icon={<EyeOutlined style={{ color: "blue" }} />}
+              onClick={() => {
+                setSelectedUpdateCategory(record);
+                showUpdateModal();
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Button
+              type="text"
+              icon={<DeleteOutlined style={{ color: "red" }} />}
+              onClick={() => {
+                setSelectedCategory(record.id);
+                showModalDelete();
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Xem các bước chăm sóc">
+            <Button
+              type="text"
+              icon={<UnorderedListOutlined />}
+              onClick={() => {
+                setSelectedCareStepCategory(record);
+                showCareStepModal();
+              }}
+            />
+          </Tooltip>
         </Space>
       ),
     },

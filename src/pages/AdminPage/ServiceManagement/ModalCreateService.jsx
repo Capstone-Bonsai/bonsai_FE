@@ -10,12 +10,12 @@ import FormBonsaiCare from "./CreateServiceForm/FormBonsaiCare";
 const ModalCreateService = (props) => {
   const { show, setShow } = props;
   const dispatch = useDispatch();
+  const [tabKey, setTabKey] = useState("381e77b3-2cfa-4362-afae-fe588701616e");
   const [formBonsaiInstance, setFormBonsaiInstance] = useState();
   const [formGardenInstance, setFormGardenInstance] = useState();
   const [formData, setFormData] = useState({
     Name: undefined,
     Description: undefined,
-    StandardPrice: undefined,
     ServiceType: undefined,
     Image: undefined,
     ServiceBaseTaskId: undefined,
@@ -66,16 +66,13 @@ const ModalCreateService = (props) => {
     const postData = new FormData();
     postData.append("Name", formData.Name);
     postData.append("Description", formData.Description);
-    formData.StandardPrice
-      ? postData.append("StandardPrice", formData.StandardPrice)
-      : null;
-    postData.append("ServiceType", formData.ServiceType);
+    postData.append("ServiceTypeId", formData.ServiceType);
     postData.append("Image", formData.Image);
     listSelectedBaseTask?.map((selectedBaseTask) =>
       postData.append("ServiceBaseTaskId", selectedBaseTask.id)
     );
     console.log(formData);
-    formData.ServiceType == 2
+    tabKey === "381e77b3-2cfa-4362-afae-fe588701616e"
       ? formGardenInstance?.current
           ?.validateFields()
           .then(() => {
@@ -96,6 +93,10 @@ const ModalCreateService = (props) => {
             console.log(errorInfo);
             toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
           });
+  };
+
+  const onChangeTabs = (input) => {
+    setTabKey(input);
   };
 
   const onFormDataChange = (input) => {
@@ -127,9 +128,10 @@ const ModalCreateService = (props) => {
             defaultActiveKey="1"
             type="card"
             destroyInactiveTabPane
+            onChange={onChangeTabs}
             items={[
               {
-                key: "1",
+                key: "381e77b3-2cfa-4362-afae-fe588701616e",
                 label: `Mẫu chăm sóc sân vườn`,
                 children: (
                   <FormGardenCare
@@ -143,7 +145,7 @@ const ModalCreateService = (props) => {
                 ),
               },
               {
-                key: "2",
+                key: "70f34b1c-1a2c-40ad-a9b6-ec374db61354",
                 label: `Mẫu chăm sóc Bonsai`,
                 children: (
                   <FormBonsaiCare

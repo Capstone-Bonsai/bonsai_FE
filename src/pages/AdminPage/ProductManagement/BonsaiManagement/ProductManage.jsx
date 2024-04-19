@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Space, Table, Input, Modal, Select } from "antd";
+import {
+  PlusCircleOutlined,
+  EyeOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { Space, Table, Input, Modal, Select, Tooltip, Button } from "antd";
 const { Search, TextArea } = Input;
 
 import { toast } from "react-toastify";
@@ -139,7 +143,7 @@ function ProductManage() {
   };
   const columns = [
     {
-      title: "Sản phẩm",
+      title: "Tên bonsai",
       dataIndex: "name",
       key: "name",
     },
@@ -224,22 +228,26 @@ function ProductManage() {
       key: "hanhdong",
       render: (_, record) => (
         <Space size="middle">
-          <button
-            onClick={() => {
-              setSelectedBonsai(record.id);
-              showModalDelete();
-            }}
-          >
-            Xóa
-          </button>
-          <button
-            onClick={() => {
-              setSelectedUpdateBonsai(record);
-              showUpdateModal();
-            }}
-          >
-            Chỉnh sửa
-          </button>
+          <Tooltip title="Xem thông tin">
+            <Button
+              type="text"
+              icon={<EyeOutlined style={{ color: "blue" }} />}
+              onClick={() => {
+                setSelectedUpdateBonsai(record);
+                showUpdateModal();
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Button
+              type="text"
+              icon={<DeleteOutlined style={{ color: "red" }} />}
+              onClick={() => {
+                setSelectedBonsai(record.id);
+                showModalDelete();
+              }}
+            />
+          </Tooltip>
         </Space>
       ),
     },
@@ -251,15 +259,15 @@ function ProductManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Sản phẩm</div>
+          <div className="font-semibold mb-6">Bonsai</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
-            <div className="flex justify-between p-6">
+            <div className="grid grid-cols-2 lg:grid-cols-2 p-6">
               <div>
                 <button
                   className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
                   onClick={showCreateModal}
                 >
-                  <PlusCircleOutlined /> Thêm sản phẩm
+                  <PlusCircleOutlined /> Thêm Bonsai
                 </button>
               </div>
               <div className="grid grid-cols-3 lg:grid-cols-3">
@@ -298,7 +306,6 @@ function ProductManage() {
                     onChange={(e) =>
                       setFilter({ ...filter, keyword: e.target.value })
                     }
-                    className="w-[300px]"
                     allowClear
                   />
                 </div>
@@ -335,14 +342,14 @@ function ProductManage() {
           listStyle={allStyles}
         />
         <Modal
-          title="Xóa sản phẩm"
+          title="Xóa bonsai"
           open={openDelete}
           onOk={handleDelete}
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
         >
-          <div>Bạn có muốn xóa sản phẩm này không?</div>
+          <div>Bạn có muốn xóa bonsai này không?</div>
         </Modal>
       </div>
     </>

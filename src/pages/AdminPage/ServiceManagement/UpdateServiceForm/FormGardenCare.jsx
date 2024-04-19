@@ -1,14 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import {
-  Tag,
-  Input,
-  Modal,
-  Form,
-  InputNumber,
-  Upload,
-  List,
-} from "antd";
+import { Tag, Input, Modal, Form, InputNumber, Upload, List } from "antd";
 const { TextArea } = Input;
 import ModalSelectBaseTask from "../ModalSelectBaseTask";
 
@@ -44,9 +36,9 @@ const FormGardenCare = ({
   const [formData, setFormData] = useState({
     Name: service.name,
     Description: service.description,
-    StandardPrice: service.standardPrice,
-    ServiceType: 2,
+    ServiceType: "381e77b3-2cfa-4362-afae-fe588701616e",
   });
+  console.log(formData);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -94,7 +86,7 @@ const FormGardenCare = ({
           marginTop: 8,
         }}
       >
-        Tạo sản phẩm
+        Thêm ảnh
       </div>
     </button>
   );
@@ -132,7 +124,7 @@ const FormGardenCare = ({
     return false;
   };
 
-  // modal select style
+  // modal select base task
   const showModalSelectBaseTask = () => {
     setOpenSelectBaseTask(true);
     console.log();
@@ -159,7 +151,7 @@ const FormGardenCare = ({
         initialValues={formData}
       >
         <Form.Item name="ServiceType" style={{ display: "none" }}>
-          <Input type="hidden" value="2" />
+          <Input type="hidden" value="381e77b3-2cfa-4362-afae-fe588701616e" />
         </Form.Item>
         <Form.Item
           label="Tên dịch vụ"
@@ -168,7 +160,7 @@ const FormGardenCare = ({
             { required: true, message: "Tên dịch vụ không được để trống!" },
           ]}
         >
-          <Input />
+          <Input value={formData?.Name} />
         </Form.Item>
         <Form.Item
           label="Mô tả"
@@ -176,33 +168,6 @@ const FormGardenCare = ({
           rules={[{ required: true, message: "Mô tả không được để trống!" }]}
         >
           <TextArea rows={10} />
-        </Form.Item>
-        <Form.Item
-          label="Giá tiêu chuẩn"
-          name="StandardPrice"
-          rules={[
-            {
-              required: true,
-              message: "Giá tiêu chuẩn không được để trống!",
-            },
-            {
-              type: "number",
-              min: 0,
-              max: 100000000,
-              message:
-                "Giá tiêu chuẩn phải có ít nhất 0 Vnd và nhiều nhất 100,000,000 Vnd!",
-            },
-          ]}
-        >
-          <InputNumber
-            min={0}
-            step={1000}
-            formatter={(value) =>
-              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            prefix="₫"
-            className="w-[100%]"
-          />
         </Form.Item>
         <Form.Item
           label="Upload ảnh"
@@ -222,10 +187,8 @@ const FormGardenCare = ({
           </Upload>
         </Form.Item>
         <Form.Item
-          label="Kiểu dáng"
-          rules={[
-            { required: true, message: "Phân loại không được để trống!" },
-          ]}
+          label="Nhiệm vụ"
+          rules={[{ required: true, message: "Nhiệm vụ không được để trống!" }]}
         >
           <div>
             <div className="mt-1">

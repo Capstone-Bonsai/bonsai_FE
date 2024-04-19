@@ -4,7 +4,6 @@ import React from "react";
 import Home from "../pages/HomePage/Home";
 import ShoppingCart from "../pages/Bonsai/ShoppingCart";
 import ServiceListPage from "../pages/ServicePage/ServiceListPage";
-import ProductManage from "../pages/AdminPage/ProductManagement/BonsaiManagement/ProductManage";
 import CustomerRoute from "./CustomerRoute";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
@@ -24,7 +23,6 @@ import Contact from "../pages/Contact/Contact";
 import CustomerPrivateRoute from "./CustomerPrivateRoute";
 import CustomerGardenManage from "../pages/AdminPage/CustomerGardenManagement/CustomerGardenManage";
 import BaseTaskManage from "../pages/AdminPage/BaseTaskManagement/BaseTaskManage";
-import ProductLayout from "../pages/AdminPage/ProductManagement/Layout";
 import ManageService from "../pages/ServicePage/ManageService";
 import Contract from "../pages/AdminPage/StaffPage/Contract";
 import ServiceGardenChecking from "../pages/AdminPage/StaffPage/ServiceGardenChecking";
@@ -39,6 +37,9 @@ import {
 } from "../pages/NotFoundPage/NotFound";
 import DeliveryFeeTable from "../pages/DeliveryFee/DeliveryFeeTable";
 import CodeOTP from "../pages/Auth/CodeOTP";
+import BonsaiLayout from "../pages/AdminPage/ProductManagement/Layout";
+import ServiceTypeManage from "../pages/AdminPage/ServiceTypeManagerment/ServiceTypeManage";
+import ServiceOrder from "../pages/AdminPage/StaffPage copy/ServiceOrder";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -173,8 +174,8 @@ function Router() {
                 element: <UserManage />,
               },
               {
-                path: "/admin/product",
-                element: <ProductLayout />,
+                path: "/admin/bonsai",
+                element: <BonsaiLayout />,
               },
               {
                 path: "/admin/service",
@@ -185,6 +186,10 @@ function Router() {
                 element: <BaseTaskManage />,
               },
               {
+                path: "/admin/serviceType",
+                element: <ServiceTypeManage />,
+              },
+              {
                 path: "*",
                 element: <ProductManagetNavigate />,
               },
@@ -193,16 +198,12 @@ function Router() {
         ...(userInfo?.role == "Manager" || userInfo?.role == "Staff"
           ? [
               {
-                path: "/admin/customerGarden",
-                element: <CustomerGardenManage />,
-              },
-              {
                 path: "/admin/order",
                 element: <OrderManage />,
               },
               {
-                path: "/admin/contract",
-                element: <Contract />,
+                path: "/admin/serviceOrder",
+                element: <ServiceOrder />,
               },
               {
                 path: "/admin/serviceGardenChecking",
@@ -212,6 +213,10 @@ function Router() {
           : []),
         ...(userInfo?.role == "Staff"
           ? [
+              {
+                path: "/admin/customerGarden",
+                element: <CustomerGardenManage />,
+              },
               {
                 path: "*",
                 element: <ContractNavigate />,

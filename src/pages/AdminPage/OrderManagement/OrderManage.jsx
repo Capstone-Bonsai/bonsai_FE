@@ -3,8 +3,10 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   CloseCircleOutlined,
+  DeleteOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
-import { Space, Tag, Table, Modal } from "antd";
+import { Space, Tag, Table, Modal, Tooltip, Button } from "antd";
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,8 +14,12 @@ import { fetchAllOrders } from "../../../redux/slice/orderSlice";
 import { deleteProduct } from "../../../utils/productApi";
 import Loading from "../../../components/Loading";
 import ModalUpdateOrder from "./ModalUpdateOrder";
+import Cookies from "universal-cookie";
+import { deleteOrder } from "../../../utils/orderApi";
 
 function OrderManage() {
+  const cookies = new Cookies();
+  const userInfo = cookies.get("user");
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.order?.loading);
   const [openDelete, setOpenDelete] = useState(false);
@@ -48,7 +54,7 @@ function OrderManage() {
 
   const handleDelete = () => {
     setConfirmLoadingDelete(true);
-    deleteProduct(selectedOrder)
+    deleteOrder(selectedOrder)
       .then((data) => {
         toast.success(data);
       })
@@ -82,9 +88,11 @@ function OrderManage() {
         return { color: "warning", icon: <ClockCircleOutlined /> };
       case "Preparing":
         return { color: "warning", icon: <ClockCircleOutlined /> };
+      case "Delivering":
+        return { color: "warning", icon: <ClockCircleOutlined /> };
       case "Failed":
         return { color: "error", icon: <CloseCircleOutlined /> };
-      case "Canceled":
+      case "DeliveryFailed":
         return { color: "error", icon: <CloseCircleOutlined /> };
       default:
         return "defaultColor";
@@ -99,10 +107,12 @@ function OrderManage() {
         return "Đã thanh toán";
       case "Preparing":
         return "Đang thực hiện";
+      case "Delivering":
+        return "Đang giao";
       case "Failed":
         return "Thất bại";
-      case "Canceled":
-        return "Đã hủy";
+      case "DeliveryFailed ":
+        return "Giao hàng thất bại";
       case "Delivered":
         return "Đã giao";
       default:
@@ -203,16 +213,6 @@ function OrderManage() {
       key: "address",
     },
     {
-      title: "Loại giao",
-      dataIndex: "orderType",
-      key: "orderType",
-      render: (_, record) => (
-        <>
-          <Tag>{record.deliveryType}</Tag>
-        </>
-      ),
-    },
-    {
       title: "Ngày đặt",
       dataIndex: "orderDate",
       key: "orderDate",
@@ -283,7 +283,7 @@ function OrderManage() {
       render: (_, record) => {
         return (
           <a onClick={() => expend(record.id)}>
-            {record.id === expended ? "Đóng" : "Thêm chi tiết"}
+            {record.id === expended ? "Đóng" : "Xem chi tiết"}
           </a>
         );
       },
@@ -303,31 +303,39 @@ function OrderManage() {
         </>
       ),
     },
-    {
-      title: "Hành động",
-      dataIndex: "hanhdong",
-      key: "hanhdong",
-      render: (_, record) => (
-        <Space size="middle">
-          <button
-            onClick={() => {
-              setSelectedOrder(record.id);
-              showModalDelete();
-            }}
-          >
-            Xóa
-          </button>
-          <button
-            onClick={() => {
-              setSelectedUpdateOrder(record);
-              showUpdateModal();
-            }}
-          >
-            Chỉnh sửa
-          </button>
-        </Space>
-      ),
-    },
+    ...(userInfo?.role == "Staff"
+      ? [
+          {
+            title: "Hành động",
+            dataIndex: "hanhdong",
+            key: "hanhdong",
+            render: (_, record) => (
+              <Space size="middle">
+                <Tooltip title="Xem thông tin">
+                  <Button
+                    type="text"
+                    icon={<EyeOutlined style={{ color: "blue" }} />}
+                    onClick={() => {
+                      setSelectedUpdateOrder(record);
+                      showUpdateModal();
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title="Xóa">
+                  <Button
+                    type="text"
+                    icon={<DeleteOutlined style={{ color: "red" }} />}
+                    onClick={() => {
+                      setSelectedOrder(record.id);
+                      showModalDelete();
+                    }}
+                  />
+                </Tooltip>
+              </Space>
+            ),
+          },
+        ]
+      : []),
   ];
 
   return (

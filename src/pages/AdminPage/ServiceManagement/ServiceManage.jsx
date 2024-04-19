@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Space, Table, Modal } from "antd";
+import {
+  PlusCircleOutlined,
+  EyeOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { Space, Table, Modal, Tooltip, Button } from "antd";
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../../components/Loading";
-import {
-  fetchAllService,
-  allServiceType,
-} from "../../../redux/slice/serviceSlice";
+import { fetchAllService } from "../../../redux/slice/serviceSlice";
 import { deleteService } from "../../../utils/serviceApi";
 import ModalCreateService from "./ModalCreateService";
 import ModalUpdateService from "./ModalUpdateService";
@@ -37,10 +38,6 @@ function ServiceManage() {
         pageSize: pageSize,
       })
     );
-  }, []);
-
-  useEffect(() => {
-    dispatch(allServiceType());
   }, []);
 
   const showCreateModal = () => {
@@ -104,6 +101,45 @@ function ServiceManage() {
     );
   };
 
+  const [expended, setExpended] = useState();
+
+  const expend = (i) => {
+    if (expended === i) setExpended(undefined);
+    else setExpended(i);
+  };
+
+  const expandedRowRender = (record) => {
+    const columns = [
+      {
+        title: "Tên nhiệm vụ",
+        key: "bonsai",
+        render: (record) => <div>{record.baseTask?.name}</div>,
+      },
+      {
+        title: "Chi tiết",
+        key: "detail",
+        render: (record) => <div>{record.baseTask?.detail}</div>,
+      },
+      {
+        title: "Ngày tạo",
+        key: "creationDate",
+        render: (_, record) => (
+          <>
+            <p>{new Date(record?.creationDate).toLocaleDateString()}</p>
+          </>
+        ),
+      },
+    ];
+    return (
+      <Table
+        columns={columns}
+        rowKey="id"
+        dataSource={record?.serviceBaseTasks}
+        pagination={false}
+      />
+    );
+  };
+
   const columns = [
     {
       title: "Tên dịch vụ",
@@ -114,21 +150,6 @@ function ServiceManage() {
       title: "Mô tả",
       dataIndex: "description",
       key: "description",
-    },
-    {
-      title: "Giá tiêu chuẩn",
-      dataIndex: "standardPrice",
-      key: "standardPrice",
-      render: (_, record) => (
-        <>
-          <p>
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "VND",
-            }).format(record.standardPrice)}
-          </p>
-        </>
-      ),
     },
     {
       title: "Loại dịch vụ",
@@ -146,14 +167,25 @@ function ServiceManage() {
       key: "image",
       render: (_, record) => (
         <>
-          <div className="h-[200px] w-[200px]">
+          <div className="h-[150px] w-[150px]">
             <img
               src={record.image}
-              style={{ width: "200px", height: "200px" }}
+              style={{ width: "150px", height: "150px" }}
             />
           </div>
         </>
       ),
+    },
+    {
+      title: "Xem nhiệm vụ",
+      key: "orderDetails",
+      render: (_, record) => {
+        return (
+          <a onClick={() => expend(record.id)}>
+            {record.id === expended ? "Đóng" : "Xem chi tiết"}
+          </a>
+        );
+      },
     },
     {
       title: "Hành động",
@@ -161,25 +193,26 @@ function ServiceManage() {
       key: "hanhdong",
       render: (_, record) => (
         <Space size="middle">
-          <button
-            onClick={() => {
-              setSelectedService(record.id);
-              showModalDelete();
-            }}
-          >
-            Xóa
-          </button>
-          <button
-            onClick={() => {
-              setSelectedUpdateService(record);
-              showUpdateModal();
-            }}
-          >
-            Chỉnh sửa
-          </button>
-          {/* <Link to={`/admin/productDetail/${record.id}`} key={record.id}>
-            Xem thông tin
-          </Link> */}
+          <Tooltip title="Xem thông tin">
+            <Button
+              type="text"
+              icon={<EyeOutlined style={{ color: "blue" }} />}
+              onClick={() => {
+                setSelectedUpdateService(record);
+                showUpdateModal();
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Button
+              type="text"
+              icon={<DeleteOutlined style={{ color: "red" }} />}
+              onClick={() => {
+                setSelectedService(record.id);
+                showModalDelete();
+              }}
+            />
+          </Tooltip>
         </Space>
       ),
     },
@@ -215,6 +248,11 @@ function ServiceManage() {
                   indicator: <Loading loading={loading} />,
                   spinning: loading,
                 }}
+                expandable={{
+                  expandedRowRender,
+                  expandedRowKeys: [expended],
+                  expandIcon: () => <></>,
+                }}
               />
             </div>
           </div>
@@ -229,14 +267,14 @@ function ServiceManage() {
           service={selectedUpdateService}
         />
         <Modal
-          title="Xóa sản phẩm"
+          title="Xóa dịch vụ"
           open={openDelete}
           onOk={handleDelete}
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
         >
-          <div>Bạn có muốn xóa sản phẩm này không?</div>
+          <div>Bạn có muốn xóa dịch vụ này không?</div>
         </Modal>
       </div>
     </>

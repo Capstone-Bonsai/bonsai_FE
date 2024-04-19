@@ -101,7 +101,7 @@ const ModalCreateProduct = (props) => {
           marginTop: 8,
         }}
       >
-        Tạo sản phẩm
+        Thêm ảnh
       </div>
     </button>
   );
@@ -110,7 +110,7 @@ const ModalCreateProduct = (props) => {
       console.log(product);
       postBonsai(product)
         .then((data) => {
-          toast.success("Thêm sản phẩm thành công!");
+          toast.success("Thêm bonsai thành công!");
           dispatch(
             fetchAllBonsaiPagination({
               pageIndex: 0,
@@ -200,7 +200,7 @@ const ModalCreateProduct = (props) => {
     <>
       <Modal
         width={800}
-        title="Thêm sản phẩm"
+        title="Thêm Bonsai"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
@@ -273,7 +273,7 @@ const ModalCreateProduct = (props) => {
               </div>
             </Form.Item>
             <Form.Item
-              label="Tên sản phẩm"
+              label="Tên bonsai"
               name="Name"
               rules={[{ required: true, message: "Tên không được để trống!" }]}
             >

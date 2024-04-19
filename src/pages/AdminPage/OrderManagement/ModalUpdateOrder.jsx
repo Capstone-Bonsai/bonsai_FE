@@ -1,54 +1,31 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Tag, Modal, Form, Select } from "antd";
+import { Tag, Modal, Form, Select, Button } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { getOrderStatus, putOrder } from "../../../utils/orderApi";
 import { fetchAllOrders } from "../../../redux/slice/orderSlice";
 
 const ModalUpdateOrder = (props) => {
-  const [form] = Form.useForm();
   const { show, setShow, order } = props;
+  const [openUpdateStatus, setOpenUpdateStatus] = useState(false);
+  const [confirmLoadingUpdateStatus, setConfirmLoadingUpdateStatus] =
+    useState(false);
   const handleClose = () => {
-    setFormData({
-      orderId: "",
-      orderStatus: 0,
-    });
-    form.resetFields();
     setShow(false);
   };
-  const [formData, setFormData] = useState({
-    orderId: "",
-    orderStatus: 0,
-  });
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [listOrderStatus, setListOrderStatus] = useState();
-  const formRef = useRef(null);
 
   useEffect(() => {
     fetchListOrderStatus();
   }, []);
 
-  useEffect(() => {
-    if (order != undefined) {
-      console.log(order);
-      setFormData({
-        orderId: order.id,
-        orderStatus: getStatusText(order.orderStatus),
-      });
-    }
-  }, [order]);
-
-  useEffect(() => {
-    if (show === true) {
-      form.setFieldsValue(formData);
-    }
-  }, [form, formData]);
-
   const updateOrder = (data) => {
     try {
       console.log(data);
-      putOrder(order.id, formData.orderStatus)
+      putOrder(order.id, getStatusNumber(order.orderStatus))
         .then((data) => {
           toast.success(data.data);
           dispatch(fetchAllOrders({ pageIndex: 0, pageSize: 10 }));
@@ -57,8 +34,8 @@ const ModalUpdateOrder = (props) => {
           toast.error(err.response.data);
         })
         .finally(() => {
-          setConfirmLoading(false);
-          handleClose();
+          setConfirmLoadingUpdateStatus(false);
+          handleCancelUpdateStatus();
         });
     } catch (err) {
       toast.error(err.response.data);
@@ -86,21 +63,29 @@ const ModalUpdateOrder = (props) => {
   };
 
   const onSubmit = (i) => {
-    console.log(formData);
-    formRef.current
-      .validateFields()
-      .then(() => {
-        setConfirmLoading(true);
-        updateOrder(formData);
-      })
-      .catch((errorInfo) => {
-        console.log(errorInfo);
-        toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
-      });
+    setConfirmLoadingUpdateStatus(true);
+    updateOrder();
   };
 
-  const handleFormChange = (changedValues, allValues) => {
-    setFormData(allValues);
+  const getStatusNumber = (status) => {
+    switch (status) {
+      case "Waiting":
+        return 1;
+      case "Paid":
+        return 2;
+      case "Preparing":
+        return 3;
+      case "Delivering":
+        return 4;
+      case "Delivered":
+        return 5;
+      case "Failed":
+        return 6;
+      case "DeliveryFailed":
+        return 7;
+      default:
+        return 0;
+    }
   };
 
   const getStatusText = (status) => {
@@ -111,10 +96,12 @@ const ModalUpdateOrder = (props) => {
         return "Đã thanh toán";
       case "Preparing":
         return "Đang thực hiện";
+      case "Delivering":
+        return "Đang giao";
       case "Failed":
         return "Thất bại";
-      case "Canceled":
-        return "Đã hủy";
+      case "DeliveryFailed ":
+        return "Giao hàng thất bại";
       case "Delivered":
         return "Đã giao";
       default:
@@ -122,39 +109,42 @@ const ModalUpdateOrder = (props) => {
     }
   };
 
+  const showModalUpdateStatus = () => {
+    setOpenUpdateStatus(true);
+  };
+
+  const handleCancelUpdateStatus = () => {
+    console.log("Clicked cancel button");
+    setOpenUpdateStatus(false);
+  };
+
   return (
     <>
       <Modal
         title="Thông tin đơn hàng"
         open={show}
-        onOk={onSubmit}
-        okButtonProps={{ type: "default" }}
-        okText={confirmLoading ? "Đang cập nhật" : "Cập nhật"}
-        confirmLoading={confirmLoading}
-        onCancel={handleClose}
         maskClosable={false}
+        onCancel={handleClose}
+        footer={[
+          <Button key="back" onClick={handleClose}>
+            Trở lại
+          </Button>,
+        ]}
       >
         <div className="">
           <Form
-            form={form}
-            ref={formRef}
             layout="horizontal"
-            labelCol={{ span: 7 }}
+            labelCol={{ span: 8 }}
             wrapperCol={{ span: 15 }}
-            onValuesChange={handleFormChange}
-            initialValues={formData}
           >
             <Form.Item label="Khách hàng">
               <p>{order?.customer?.applicationUser?.email}</p>
             </Form.Item>
-            <Form.Item label="Sản phẩm">
+            <Form.Item label="Tên bonsai">
               <p>{order?.orderDetails[0]?.bonsai?.name}</p>
             </Form.Item>
             <Form.Item label="Địa chỉ">
               <p>{order?.address}</p>
-            </Form.Item>
-            <Form.Item label="Khách hàng">
-              <p>{order?.deliveryType}</p>
             </Form.Item>
             <Form.Item label="Ngày đặt">
               <p>{new Date(order?.orderDate).toLocaleDateString()}</p>
@@ -188,26 +178,37 @@ const ModalUpdateOrder = (props) => {
                 }).format(order?.totalPrice)}
               </p>
             </Form.Item>
-            <Form.Item
-              label="Trạng thái đơn hàng"
-              name="orderStatus"
-              rules={[
-                {
-                  required: true,
-                  message: "Trạng thái đơn hàng không được để trống!",
-                },
-              ]}
-            >
-              <Select value={getStatusText(order?.orderStatus)}>
-                {listOrderStatus?.map((orderStatus, index) => (
-                  <Select.Option value={orderStatus?.value} key={index}>
-                    {getStatusText(orderStatus?.display)}
-                  </Select.Option>
-                ))}
-              </Select>
+            <Form.Item label="Trạng thái đơn hàng:" name="orderStatus">
+              {/* <div className="grid grid-cols-2">
+                <p></p>
+                <button
+                  className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px- w-[100px]"
+                  onClick={showModalUpdateStatus}
+                >
+                  Cập nhật
+                </button>
+              </div> */}
+              <div className="flex items-center gap-2">
+                <Tag>{getStatusText(order?.orderStatus)}</Tag>
+                <div className="flex items-center">
+                  <Button className="bg-none" onClick={showModalUpdateStatus}>
+                    <EditOutlined /> Cập nhật
+                  </Button>
+                </div>
+              </div>
             </Form.Item>
           </Form>
         </div>
+      </Modal>
+      <Modal
+        title="Cập nhật trạng thái"
+        open={openUpdateStatus}
+        onOk={onSubmit}
+        okButtonProps={{ type: "default" }}
+        confirmLoading={confirmLoadingUpdateStatus}
+        onCancel={handleCancelUpdateStatus}
+      >
+        <div>Bạn có muốn cập nhật trạng thái của đơn hàng này không?</div>
       </Modal>
     </>
   );

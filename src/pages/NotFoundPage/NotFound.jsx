@@ -10,10 +10,10 @@ function LoginNavigate() {
 }
 
 function ProductManagetNavigate() {
-  return <Navigate to={{ pathname: "/admin/product" }} />;
+  return <Navigate to={{ pathname: "/admin/bonsai" }} />;
 }
 function ContractNavigate() {
-  return <Navigate to={{ pathname: "/admin/contract" }} />;
+  return <Navigate to={{ pathname: "/admin/serviceOrder" }} />;
 }
 
 export {
