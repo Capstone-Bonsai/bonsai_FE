@@ -49,10 +49,8 @@ const ModalUpdateProduct = (props) => {
     });
     form.resetFields();
     setListImage([]);
-    // setSelectedTags([]);
     setShow(false);
   };
-  const [selectedTags, setSelectedTags] = useState([]);
   const [formData, setFormData] = useState({
     CategoryId: "",
     StyleId: "",
@@ -98,14 +96,7 @@ const ModalUpdateProduct = (props) => {
       form.setFieldsValue(formData);
     }
   }, [form, formData]);
-
-  const handleChangeTagList = (tag, checked) => {
-    const nextSelectedTags = checked
-      ? [...selectedTags, tag]
-      : selectedTags.filter((t) => t !== tag);
-    console.log("You are interested in: ", nextSelectedTags);
-    setSelectedTags(nextSelectedTags);
-  };
+  
   const handleCancelPreview = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -134,7 +125,7 @@ const ModalUpdateProduct = (props) => {
           marginTop: 8,
         }}
       >
-        Cập nhật
+        Thêm ảnh
       </div>
     </button>
   );
@@ -248,7 +239,7 @@ const ModalUpdateProduct = (props) => {
     <>
       <Modal
         width={800}
-        title="Sửa sản phẩm"
+        title="Thông tin Bonsai"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
@@ -322,7 +313,7 @@ const ModalUpdateProduct = (props) => {
               </div>
             </Form.Item>
             <Form.Item
-              label="Tên sản phẩm"
+              label="Tên bonsai"
               name="Name"
               rules={[{ required: true, message: "Tên không được để trống!" }]}
             >

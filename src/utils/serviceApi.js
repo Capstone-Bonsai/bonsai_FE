@@ -10,21 +10,21 @@ const putService = (serviceId, service) => {
 };
 
 const postService = (service) => {
-    console.log(service);
-    return axios.post(`/Service`, service, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-  };
+  console.log(service);
+  return axios.post(`/Service`, service, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
 
-  const deleteService = (serviceId) => {
-    try {
-      console.log(serviceId);
-      return axios.delete(`/Service/${serviceId}`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const deleteService = (serviceId) => {
+  try {
+    console.log(serviceId);
+    return axios.delete(`/Service/${serviceId}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export { putService, postService, deleteService };

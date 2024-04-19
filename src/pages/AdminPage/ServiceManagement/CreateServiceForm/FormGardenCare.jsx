@@ -74,7 +74,7 @@ const FormGardenCare = ({
           marginTop: 8,
         }}
       >
-        Tạo sản phẩm
+        Thêm ảnh
       </div>
     </button>
   );
@@ -123,10 +123,10 @@ const FormGardenCare = ({
         labelCol={{ span: 5 }}
         wrapperCol={{ span: 18 }}
         onValuesChange={handleFormChange}
-        initialValues={{ ServiceType: 2 }}
+        initialValues={{ ServiceType: "381e77b3-2cfa-4362-afae-fe588701616e" }}
       >
         <Form.Item name="ServiceType" style={{ display: "none" }}>
-          <Input type="hidden" value="2" />
+          <Input value="381e77b3-2cfa-4362-afae-fe588701616e" />
         </Form.Item>
         <Form.Item
           label="Tên dịch vụ"
@@ -143,33 +143,6 @@ const FormGardenCare = ({
           rules={[{ required: true, message: "Mô tả không được để trống!" }]}
         >
           <TextArea rows={10} />
-        </Form.Item>
-        <Form.Item
-          label="Giá tiêu chuẩn"
-          name="StandardPrice"
-          rules={[
-            {
-              required: true,
-              message: "Giá tiêu chuẩn không được để trống!",
-            },
-            {
-              type: "number",
-              min: 0,
-              max: 100000000,
-              message:
-                "Giá tiêu chuẩn phải có ít nhất 0 Vnd và nhiều nhất 100,000,000 Vnd!",
-            },
-          ]}
-        >
-          <InputNumber
-            min={0}
-            step={1000}
-            formatter={(value) =>
-              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            prefix="₫"
-            className="w-[100%]"
-          />
         </Form.Item>
         <Form.Item
           label="Upload ảnh"

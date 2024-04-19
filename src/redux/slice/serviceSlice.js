@@ -84,7 +84,7 @@ export const allServiceType = createAsyncThunk(
   "service/allServiceType",
   async () => {
     try {
-      const response = await axios.get("/Service/ServiveType");
+      const response = await axios.get("/ServiceType");
       return response.data;
     } catch (error) {
       throw error;
@@ -111,8 +111,8 @@ const initialState = {
   serviceById: {},
   serviceType: {},
   manageService: {},
+  allServiceTypeDTO: {},
   serviceOption: {},
-  allServiceTypeDTO: undefined,
   serviceTempPrice: {},
   serviceTypeId: "",
   pagination: {},
@@ -169,16 +169,16 @@ const serviceSlice = createSlice({
     });
     builder.addCase(allServiceType.pending, (state) => {
       state.msg = "Loading...";
-      state.loading = true;
+      state.allServiceTypeDTO.loading = true;
     });
     builder.addCase(allServiceType.fulfilled, (state, action) => {
       state.allServiceTypeDTO = action.payload;
       state.msg = "Data loaded successfully";
-      state.loading = false;
+      state.allServiceTypeDTO.loading = false;
     });
     builder.addCase(allServiceType.rejected, (state) => {
       state.msg = "Error loading data";
-      state.loading = false;
+      state.allServiceTypeDTO.loading = false;
     });
     builder
       .addCase(postServiceGarden.pending, (state) => {

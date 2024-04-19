@@ -10,12 +10,26 @@ import FormGardenCare from "./UpdateServiceForm/FormGardenCare";
 
 const ModalUpdateService = (props) => {
   const { show, setShow, service } = props;
+  console.log(service);
   const dispatch = useDispatch();
+  const [tabKey, setTabKey] = useState("381e77b3-2cfa-4362-afae-fe588701616e");
   const [formBonsaiInstance, setFormBonsaiInstance] = useState();
   const [formGardenInstance, setFormGardenInstance] = useState();
   const [formData, setFormData] = useState({});
+
+  console.log(formData);
   const [listImage, setListImage] = useState();
   const [listSelectedBaseTask, setListSelectedBaseTask] = useState([]);
+
+  useEffect(() => {
+    if (service != undefined) {
+      setFormData({
+        Name: service?.name,
+        Description: service?.description,
+        ServiceType: "381e77b3-2cfa-4362-afae-fe588701616e",  
+      });
+    }
+  }, [service]);
 
   useEffect(() => {
     setListImage(service?.image);
@@ -62,8 +76,7 @@ const ModalUpdateService = (props) => {
   };
 
   const onSubmit = () => {
-    console.log(listSelectedBaseTask);
-    console.log(listImage);
+    console.log(formData);
     formData.Image =
       listImage?.length !== 0
         ? listImage[0]?.originFileObj
@@ -76,16 +89,13 @@ const ModalUpdateService = (props) => {
     const postData = new FormData();
     postData.append("Name", formData.Name);
     postData.append("Description", formData.Description);
-    formData.StandardPrice
-      ? postData.append("StandardPrice", formData.StandardPrice)
-      : null;
-    postData.append("ServiceType", formData.ServiceType);
+    postData.append("ServiceTypeId", formData.ServiceType);
     postData.append("Image", formData.Image);
     listSelectedBaseTask?.map((selectedBaseTask) =>
       postData.append("ServiceBaseTaskId", selectedBaseTask.id)
     );
     console.log(formData);
-    formData.ServiceType == 2
+    tabKey == "381e77b3-2cfa-4362-afae-fe588701616e"
       ? formGardenInstance?.current
           ?.validateFields()
           .then(() => {
@@ -106,7 +116,12 @@ const ModalUpdateService = (props) => {
           });
   };
 
+  const onChangeTabs = (input) => {
+    setTabKey(input);
+  };
+
   const onFormDataChange = (input) => {
+    console.log(input);
     setFormData(input);
   };
   const onImageChange = (input) => {
@@ -123,7 +138,7 @@ const ModalUpdateService = (props) => {
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
-        okText={confirmLoading ? "Đang tạo" : "Tạo mới"}
+        okText={confirmLoading ? "Đang cập nhật" : "Cập nhật"}
         cancelText="Hủy"
         confirmLoading={confirmLoading}
         onCancel={handleClose}
@@ -135,6 +150,7 @@ const ModalUpdateService = (props) => {
             defaultActiveKey={service?.serviceType == "BonsaiCare" ? "2" : "1"}
             type="card"
             destroyInactiveTabPane
+            onChange={onChangeTabs}
             tabBarStyle={{ display: "flex", justifyContent: "space-between" }}
             items={[
               {

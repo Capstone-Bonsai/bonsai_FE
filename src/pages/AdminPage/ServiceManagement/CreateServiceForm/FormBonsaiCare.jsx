@@ -75,7 +75,7 @@ const FormBonsaiCare = ({
           marginTop: 8,
         }}
       >
-        Tạo sản phẩm
+        Thêm ảnh
       </div>
     </button>
   );
@@ -110,10 +110,10 @@ const FormBonsaiCare = ({
         labelCol={{ span: 5 }}
         wrapperCol={{ span: 18 }}
         onValuesChange={handleFormChange}
-        initialValues={{ ServiceType: 1 }}
+        initialValues={{ ServiceType: "70f34b1c-1a2c-40ad-a9b6-ec374db61354" }}
       >
         <Form.Item name="ServiceType" style={{ display: "none" }}>
-          <Input type="hidden" value="1" />
+          <Input type="hidden" value="70f34b1c-1a2c-40ad-a9b6-ec374db61354" />
         </Form.Item>
         <Form.Item
           label="Tên dịch vụ"
