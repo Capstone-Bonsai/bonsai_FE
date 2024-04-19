@@ -19,6 +19,7 @@ import { allServiceOrder } from "../../../redux/slice/serviceOrderSlice";
 import ModalCreateServiceOrderImages from "./ModalCreateServiceOrderImages";
 import ModalUpateServiceOrderPrice from "./ModalUpateServiceOrderPrice";
 import ModalAddGardener from "./ModalAddGardener";
+import ServiceOrderDetail from "./ServiceOrderDetail";
 
 function ServiceOrder() {
   const dispatch = useDispatch();
@@ -241,17 +242,21 @@ function ServiceOrder() {
       key: "image",
       render: (_, record) => (
         <Space size="middle">
-          <button
-            className="outline-none"
-            onClick={() => {
-              console.log(record);
-              setSelectedServiceOrderImages(record?.contractImages);
-              setSelectedServiceOrderDetail(record);
-              showModalCreateServiceOrderImages();
-            }}
-          >
-            Thêm hình ảnh
-          </button>
+          {record.serviceOrderStatus === 3 ? (
+            <></>
+          ) : (
+            <button
+              className="outline-none"
+              onClick={() => {
+                console.log(record);
+                setSelectedServiceOrderImages(record?.contractImages);
+                setSelectedServiceOrderDetail(record);
+                showModalCreateServiceOrderImages();
+              }}
+            >
+              Thêm hình ảnh
+            </button>
+          )}
         </Space>
       ),
     },
@@ -276,7 +281,6 @@ function ServiceOrder() {
             ) : (
               <></>
             )}
-
             {record.serviceOrderStatus === 3 ? (
               <></>
             ) : (
@@ -299,39 +303,39 @@ function ServiceOrder() {
     ),
   ];
 
-  // const props = {
-  //   selectedContractDetail,
-  //   setSelectedDetail,
-  // };
+  const props = {
+    selectedServiceOrderDetail,
+    setSelectedDetail,
+  };
 
   return (
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          {/* {selectedDetail ? (
-            <ContractDetail {...props} />
+          {selectedDetail ? (
+            <ServiceOrderDetail {...props} />
           ) : (
-            <> */}
-          <div className="font-semibold mb-6">Đơn hàng dịch vụ</div>
-          <div className="bg-[#ffffff] drop-shadow-2xl">
-            <div className="mb-12">
-              <Table
-                className="w-[100%]"
-                dataSource={allServiceOrders}
-                columns={columns}
-                scroll={{ x: true }}
-                pagination={paging}
-                onChange={handleTableChange}
-                rowKey={(record) => record.id}
-                loading={{
-                  indicator: <Loading loading={loading} />,
-                  spinning: loading,
-                }}
-              />
-            </div>
-          </div>
-          {/* </>
-          )} */}
+            <>
+              <div className="font-semibold mb-6">Đơn hàng dịch vụ</div>
+              <div className="bg-[#ffffff] drop-shadow-2xl">
+                <div className="mb-12">
+                  <Table
+                    className="w-[100%]"
+                    dataSource={allServiceOrders}
+                    columns={columns}
+                    scroll={{ x: true }}
+                    pagination={paging}
+                    onChange={handleTableChange}
+                    rowKey={(record) => record.id}
+                    loading={{
+                      indicator: <Loading loading={loading} />,
+                      spinning: loading,
+                    }}
+                  />
+                </div>
+              </div>
+            </>
+          )}
         </div>
         {/* <Modal
           title="Xóa hợp đồng"

@@ -27,8 +27,9 @@ function ServiceManage() {
   const allService = useSelector(
     (state) => state.service?.listService?.services?.items
   );
+  console.log(allService)
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.service?.pagination);
 
   useEffect(() => {
@@ -157,7 +158,7 @@ function ServiceManage() {
       key: "serviceType",
       render: (_, record) => (
         <>
-          <p>{record.serviceType}</p>
+          <p>{record.serviceType?.typeName}</p>
         </>
       ),
     },

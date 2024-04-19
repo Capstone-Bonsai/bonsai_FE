@@ -12,7 +12,7 @@ import { putContractStatus } from "../../../utils/contractApi";
 import { toast } from "react-toastify";
 import { getStatusText } from "../../../components/status/contractStatus";
 
-function ContractDetail(props) {
+function ServiceOrderDetail(props) {
   const dispatch = useDispatch();
   const [selectedComplaint, setSelectedComplaint] = useState();
   const [openUpdateModal, setOpenUpdateModal] = useState();
@@ -354,4 +354,4 @@ function ContractDetail(props) {
   );
 }
 
-export default ContractDetail;
+export default ServiceOrderDetail;
