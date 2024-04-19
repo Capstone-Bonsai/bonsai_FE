@@ -56,14 +56,41 @@ function ModalBonsaiCustomer(props) {
   const [numberOfTrunk, setNumberOfTrunk] = useState("");
 
   const handleAddBonsai = async () => {
+    let isValid = true;
     if (!cateId) {
       setCateError("Vui lòng chọn loại cây");
+      isValid = false;
+    }
+    if (!styleError) {
+      setCateError("Vui lòng chọn hình dáng cây");
+      isValid = false;
     }
     if (!bonsaiName.trim()) {
       setBonsaiNameError("Vui lòng nhập tên cây");
+      isValid = false;
     }
     if (!bonsaiDescription.trim()) {
       setDescriptionError("Vui lòng nhập mô tả");
+      isValid = false;
+    }
+    if (!yop.trim()) {
+      setYearOfPlantingError("Vui lòng nằm trồng");
+      isValid = false;
+    }
+    if (!trunkDimeter.trim()) {
+      setTrunkDimenterError("Vui lòng nhập kích thước thân");
+      isValid = false;
+    }
+    if (!height.trim()) {
+      setHeightError("Vui lòng nhập chiều cao");
+      isValid = false;
+    }
+    if (!numberOfTrunk.trim()) {
+      setNumberOfTrunkError("Vui lòng nhập số thân");
+      isValid = false;
+    }
+    if (!isValid) {
+      return;
     }
     const formData = new FormData();
     formData.append("CategoryId", cateId);
@@ -131,7 +158,9 @@ function ModalBonsaiCustomer(props) {
               <span className="font-bold">Dáng cây </span>
               <span className="text-red-500">*</span>
               <select
-                className="w-full border outline-none py-2 px-2 mb-2 rounded-[10px]"
+                className={`w-full border ${
+                  styleError != "" ? "border-[red]" : ""
+                } outline-none py-2 px-2 mb-2 rounded-[10px]`}
                 onChange={handleStyleChange}
                 defaultValue=""
               >
@@ -184,7 +213,9 @@ function ModalBonsaiCustomer(props) {
                 onChange={(e) => {
                   setBonsaiDescription(e.target.value), setDescriptionError("");
                 }}
-                className="w-full border outline-none p-2 rounded-[10px]"
+                className={`w-full border ${
+                  descriptionError != "" ? "border-[red]" : ""
+                } outline-none p-2 rounded-[10px]`}
                 type="text"
                 name=""
                 id=""
@@ -204,12 +235,21 @@ function ModalBonsaiCustomer(props) {
               <input
                 value={yop}
                 onChange={(e) => setYop(e.target.value)}
-                className="w-full border outline-none p-2 rounded-[10px]"
+                className={`w-full border ${
+                  yearOfPlantingError != "" ? "border-[red]" : ""
+                } outline-none p-2 rounded-[10px]`}
                 type="number"
                 min={0}
                 name=""
                 id=""
               />
+              {yearOfPlantingError != "" ? (
+                <div className="text-[#ff4d4f] text-[14px]">
+                  {yearOfPlantingError}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="my-2">
               <div className="font-bold">
@@ -219,12 +259,21 @@ function ModalBonsaiCustomer(props) {
                 required
                 value={trunkDimeter}
                 onChange={(e) => setTrunkDimenter(e.target.value)}
-                className="w-full border outline-none p-2 rounded-[10px]"
+                className={`w-full border ${
+                  trunkDimenterError != "" ? "border-[red]" : ""
+                } outline-none p-2 rounded-[10px]`}
                 type="number"
                 min={0}
                 name=""
                 id=""
               />
+              {trunkDimenterError != "" ? (
+                <div className="text-[#ff4d4f] text-[14px]">
+                  {trunkDimenterError}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="my-2">
               <div className="font-bold">
@@ -233,12 +282,19 @@ function ModalBonsaiCustomer(props) {
               <input
                 value={height}
                 onChange={(e) => setHeight(e.target.value)}
-                className="w-full border outline-none p-2 rounded-[10px]"
+                className={`w-full border ${
+                  heightError != "" ? "border-[red]" : ""
+                } outline-none p-2 rounded-[10px]`}
                 type="number"
                 min={0}
                 name=""
                 id=""
               />
+              {heightError != "" ? (
+                <div className="text-[#ff4d4f] text-[14px]">{heightError}</div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="my-2">
               <div className="font-bold">
@@ -248,12 +304,21 @@ function ModalBonsaiCustomer(props) {
                 required
                 value={numberOfTrunk}
                 onChange={(e) => setNumberOfTrunk(e.target.value)}
-                className="w-full border outline-none p-2 rounded-[10px]"
+                className={`w-full border ${
+                  numberOfTrunkError != "" ? "border-[red]" : ""
+                } outline-none p-2 rounded-[10px]`}
                 type="number"
                 min={0}
                 name=""
                 id=""
               />
+              {numberOfTrunkError != "" ? (
+                <div className="text-[#ff4d4f] text-[14px]">
+                  {numberOfTrunkError}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div>
               <input
