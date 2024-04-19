@@ -16,7 +16,7 @@ export const freeGardener = createAsyncThunk(
 
 export const addGardener = async (payload) => {
   try {
-    const response = await axios.post(`/ContractGardener`, payload);
+    const response = await axios.post(`/ServiceOrderGardener`, payload);
     return response.data;
   } catch (error) {
     throw error;
@@ -42,17 +42,17 @@ const gardenerSlice = createSlice({
     builder
       .addCase(freeGardener.pending, (state) => {
         state.msg = "Loading...";
-        state.loading = true;
+        state.freeGardenerDTO.loading = true;
       })
       .addCase(freeGardener.fulfilled, (state, action) => {
         state.freeGardenerDTO = action.payload;
         state.msg = "Data loaded successfully";
-        state.loading = false;
+        state.freeGardenerDTO.loading = false;
       })
       .addCase(freeGardener.rejected, (state) => {
         state.freeGardenerDTO = [];
         state.msg = "Không tìm thấy";
-        state.loading = false;
+        state.freeGardenerDTO.loading = false;
       });
   },
 });

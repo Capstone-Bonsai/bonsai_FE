@@ -10,6 +10,7 @@ import {
   FileDoneOutlined,
   SmileOutlined,
   SnippetsOutlined,
+  ProductOutlined,
 } from "@ant-design/icons";
 import logo from "../assets/logo_footer_final.png";
 import { Dropdown, Layout, Menu, Button, theme } from "antd";
@@ -73,11 +74,13 @@ function PrivateRoute() {
     },
   ];
   const SideBarItems = [
-    getItem("Sản phẩm", "sub1", <VideoCameraOutlined />, [
+    getItem("Sản phẩm", "sub1", <ProductOutlined />, [
       ...(userInfo?.role == "Manager"
-        ? [getItem(<Link to={`/admin/product`}>Bonsai</Link>, "2")]
+        ? [getItem(<Link to={`/admin/bonsai`}>Bonsai</Link>, "2")]
         : []),
-      getItem(<Link to={`/admin/customerGarden`}>Sân vườn</Link>, "3"),
+      ...(userInfo?.role == "Staff"
+        ? [getItem(<Link to={`/admin/customerGarden`}>Sân vườn</Link>, "3")]
+        : []),
     ]),
     ...(userInfo?.role == "Manager"
       ? [
@@ -89,6 +92,7 @@ function PrivateRoute() {
           getItem("Dịch vụ", "sub2", <UploadOutlined />, [
             getItem(<Link to={`/admin/service`}>Dịch vụ</Link>, "5"),
             getItem(<Link to={`/admin/baseTask`}>Nhiệm vụ cơ bản</Link>, "6"),
+            getItem(<Link to={`/admin/serviceType`}>Loại dịch vụ</Link>, "9"),
           ]),
         ]
       : []),
@@ -101,8 +105,8 @@ function PrivateRoute() {
         "7"
       ),
       getItem(
-        <Link to={`/admin/contract`}>
-          <FileDoneOutlined /> Hợp đồng
+        <Link to={`/admin/serviceOrder`}>
+          <FileDoneOutlined /> Đơn hàng dịch vụ
         </Link>,
         "8"
       ),

@@ -56,10 +56,10 @@ function UserManage() {
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [fileList, setFileList] = useState([]);
 
-  const loading = useSelector((state) => state.user?.loading)
+  const loading = useSelector((state) => state.user?.loading);
   const allUsers = useSelector((state) => state.user?.listUser);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.user?.pagination);
 
   useEffect(() => {
@@ -246,7 +246,6 @@ function UserManage() {
                 <Search
                   placeholder="Địa chỉ email"
                   onSearch={onSearch}
-                  className="w-[300px]"
                   allowClear
                 />
               </div>

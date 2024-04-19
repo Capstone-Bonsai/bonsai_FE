@@ -331,16 +331,16 @@ const bonsaiSlice = createSlice({
       })
       .addCase(addBonsaiToCart.pending, (state) => {
         state.msg = "Loading...";
-        state.bonsaiInCart.loading = true;
+        state.loading = true;
       })
       .addCase(addBonsaiToCart.fulfilled, (state, action) => {
         state.bonsaiInCart = action.payload;
         state.msg = "Data loaded successfully";
-        state.bonsaiInCart.loading = false;
+        state.loading = false;
       })
       .addCase(addBonsaiToCart.rejected, (state) => {
         state.msg = "Error loading data";
-        state.bonsaiInCart.loading = false;
+        state.loading = false;
       })
   },
 });

@@ -64,6 +64,7 @@ const ModalCreateUser = (props) => {
       email: "",
       phone: "",
     });
+    setConfirmLoading(false);
     setFileList([]);
     setShow(false);
   };
@@ -138,7 +139,6 @@ const ModalCreateUser = (props) => {
   };
   const createUser = () => {
     try {
-      setConfirmLoading(true);
       const postData = new FormData();
       postData.append("Role", formData.role);
       postData.append("Fullname", formData.fullname);
@@ -148,13 +148,15 @@ const ModalCreateUser = (props) => {
 
       postCreateNewUser(postData)
         .then((data) => {
-          setConfirmLoading(false);
           toast.success(data.data);
           dispatch(fetchAllUsers({ pageIndex: 0, pageSize: 10 }));
           handleClose();
         })
         .catch((err) => {
           toast.error(err.response.data);
+        })
+        .finally(() => {
+          setConfirmLoading(false);
         });
     } catch (error) {
       console.log(error);
@@ -166,7 +168,6 @@ const ModalCreateUser = (props) => {
       .then(() => {
         setConfirmLoading(true);
         createUser();
-        setConfirmLoading(false);
       })
       .catch((errorInfo) => {
         toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");

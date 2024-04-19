@@ -137,18 +137,18 @@ function CustomerGarden() {
     <MinHeight>
       <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
         <NavbarUser />
-        <div className=" border text-center w-[75%] pt-5">
+        <div className=" border w-[75%] pt-5">
           {loading ? (
             <Loading loading={loading} isRelative={true} />
           ) : (
             <>
               <button
-                className="bg-[#f2f2f2] text-black p-5 rounded-[5px] hover:bg-[#3A994A] hover:text-[#fff]"
+                className="bg-[#f2f2f2] mx-5 text-black p-5 rounded-[5px] hover:bg-[#3A994A] hover:text-[#fff]"
                 onClick={() =>
                   document.getElementById("my_modal_1").showModal()
                 }
               >
-                Thêm vườn của bạn
+                + Thêm vườn của bạn
               </button>
               {!gardens ? (
                 <div className="">

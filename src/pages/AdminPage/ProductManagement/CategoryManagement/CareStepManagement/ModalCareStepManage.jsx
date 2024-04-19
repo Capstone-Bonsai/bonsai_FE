@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Space, Table, Input, Modal } from "antd";
+import {
+  PlusCircleOutlined,
+  EyeOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { Space, Table, Input, Modal, Tooltip, Button } from "antd";
 const { Search, TextArea } = Input;
 
 import { toast } from "react-toastify";
@@ -25,8 +29,10 @@ const ModalCareStepManage = (props) => {
   );
 
   useEffect(() => {
-    dispatch(allCareStep(category?.id));
-    console.log(allCareSteps);
+    if (category != undefined) {
+      dispatch(allCareStep(category?.id));
+      console.log(allCareSteps);
+    }
   }, [category, dispatch]);
 
   const showCreateModal = () => {
@@ -89,21 +95,26 @@ const ModalCareStepManage = (props) => {
       key: "hanhdong",
       render: (_, record) => (
         <Space size="middle">
-          <button
-            onClick={() => {
-              setSelectedCareStep(record.id);
-              showModalDelete();
-            }}
-          >
-            Xóa
-          </button>
-          <button
-            onClick={() => {
-              showCreateModal();
-            }}
-          >
-            Chỉnh sửa
-          </button>
+          <Tooltip title="Xem thông tin">
+            <Button
+              type="text"
+              icon={<EyeOutlined style={{ color: "blue" }} />}
+              onClick={() => {
+                setSelectedUpdateCareStep(record);
+                showUpdateModal();
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Button
+              type="text"
+              icon={<DeleteOutlined style={{ color: "red" }} />}
+              onClick={() => {
+                setSelectedCareStep(record.id);
+                showModalDelete();
+              }}
+            />
+          </Tooltip>
         </Space>
       ),
     },
@@ -126,7 +137,6 @@ const ModalCareStepManage = (props) => {
         >
           <div className="mt-9">
             <div className="w-[100%]">
-              <div className="font-semibold mb-6">Bước chăm sóc</div>
               <div className="bg-[#ffffff] drop-shadow-2xl">
                 <div className="flex justify-between p-6">
                   <div>

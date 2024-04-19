@@ -40,10 +40,11 @@ function Login() {
     if (userId != null && code != null) {
       const confirmEmailFromUrl = async () => {
         try {
-          await confirmEmail(userId, code);
-          toast.success("Xác thực thành công!");
+          const res = await confirmEmail(userId, code);
+          console.log(res);
+          toast.success(res.data);
         } catch (error) {
-          toast.error("Xác thực thất bại!");
+          toast.error(error.response.data);
         }
       };
 
@@ -121,11 +122,14 @@ function Login() {
                 <Form.Item>
                   <div className="flex justify-between items-center">
                     <Button
-                  
                       htmlType="submit"
                       className="uppercase w-[140px]"
                       loading={isLoading}
-                      style={{ backgroundColor: '#3a9943', color: '#ffffff', outline: "none" }}
+                      style={{
+                        backgroundColor: "#3a9943",
+                        color: "#ffffff",
+                        outline: "none",
+                      }}
                     >
                       Đăng nhập
                     </Button>

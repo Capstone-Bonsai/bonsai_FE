@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { PlusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Space, Table, Modal } from "antd";
+import {
+  PlusCircleOutlined,
+  EyeOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { Space, Table, Modal, Tooltip, Button } from "antd";
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -80,22 +84,26 @@ function StyleManage() {
       key: "hanhdong",
       render: (_, record) => (
         <Space size="middle">
-          <button
-            onClick={() => {
-              setSelectedStyle(record.id);
-              showModalDelete();
-            }}
-          >
-            Xóa
-          </button>
-          <button
-            onClick={() => {
-              setSelectedUpdateStyle(record);
-              showUpdateModal();
-            }}
-          >
-            Chỉnh sửa
-          </button>
+          <Tooltip title="Xem thông tin">
+            <Button
+              type="text"
+              icon={<EyeOutlined style={{ color: "blue" }} />}
+              onClick={() => {
+                setSelectedUpdateStyle(record);
+                showUpdateModal();
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Button
+              type="text"
+              icon={<DeleteOutlined style={{ color: "red" }} />}
+              onClick={() => {
+                setSelectedStyle(record.id);
+                showModalDelete();
+              }}
+            />
+          </Tooltip>
         </Space>
       ),
     },
