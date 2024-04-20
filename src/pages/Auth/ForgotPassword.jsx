@@ -5,16 +5,35 @@ import { forgotPassword } from "../../redux/slice/authSlice";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  console.log(emailError);
   console.log(email);
   const navigate = useNavigate();
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
   const handleForgotPassword = async () => {
+    let isValid = true;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      setEmailError("Email ko được để trống!!");
+      isValid = false;
+    } else if (!isValidEmail(email.trim())) {
+      setEmailError("Email không hợp lệ!!");
+      isValid = false;
+    }
+    if (!isValid) {
+      return;
+    }
     try {
-      await forgotPassword({ email });
+      const res = await forgotPassword({ email });
+      console.log(res);
       navigate("/CodeOTP", { state: { email: email } });
-      toast.success("Đã gửi xác nhận qua mail");
+      toast.success(res);
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data);
+      toast.error(error?.response);
     }
   };
 
@@ -28,11 +47,15 @@ function ForgotPassword() {
             <label>Vui lòng nhập email</label>
             <div className="flex justify-center">
               <input
-                type="text"
+                type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value), setEmailError("");
+                }}
                 placeholder="bonsai@gmail.com"
-                className="w-full border border-[#999999] py-[10px] px-[20px] my-[15px] outline-none"
+                className={`w-full border ${
+                  emailError != "" ? "border-[#ff4d4f]" : "border-[#999999] "
+                } py-[10px] px-[20px] my-[15px] outline-none`}
               />
               <button
                 onClick={handleForgotPassword}
@@ -41,6 +64,11 @@ function ForgotPassword() {
                 Gửi
               </button>
             </div>
+            {emailError != "" ? (
+              <div className="text-[#ff4d4f]">{emailError}</div>
+            ) : (
+              ""
+            )}
           </div>
           <div className=" w-full flex justify-end p-2 hover:text-[#3a9943]">
             <Link to="/Login">Đăng nhập</Link>
