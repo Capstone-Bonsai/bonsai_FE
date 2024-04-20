@@ -30,7 +30,7 @@ function Banner() {
   ];
   const cookies = new Cookies();
   const [countCart, setCountCart] = useState(0);
-
+  const [isSticky, setIsSticky] = useState(false);
   const avatarUrl = useSelector((state) => state.avatar.avatarUrlRedux);
   const fullNameRedux = useSelector((state) => state.avatar.fullName);
   const dispatch = useDispatch();
@@ -42,7 +42,22 @@ function Banner() {
     cookies.remove("user");
     cookies.remove("userData");
   };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        // Thay 100 bằng khoảng cách cuộn trang bạn muốn
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
 
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   const [keyword, setKeyword] = useState("");
   const handleSearch = () => {
     navigate("/bonsai", { state: { keyword } });
@@ -87,12 +102,12 @@ function Banner() {
   }, [userInfo]);
   const countItemsInCart = useSelector((state) => state?.bonsai?.itemCount);
   return (
-    <>
-      <div className="bg-[#3a9943] py-5">
+    <div className={`banner ${isSticky ? "sticky" : ""}`}>
+      <div className="bg-[#3a9943] bannerContainer py-5">
         <div className="w-[70%] h-[100%] m-auto">
           <div className="flex justify-between items-center border-b border-gray-200 border-opacity-50 pb-3">
-            <div className=" w-[220px] flex flex-col md:flex-row md:justify-between md:items-center text-[#ffffff] text-sm md:text-base">
-              <div className="hidden md:block">Theo dõi chúng tôi</div>
+            <div className=" w-[220px] followUs flex flex-col md:flex-row md:justify-between md:items-center text-[#ffffff] text-sm md:text-base">
+              <div className="hidden md:block ">Theo dõi chúng tôi</div>
               <Link className="hover:text-[#ffdd20] flex items-center">
                 <FacebookOutlined className="hover:text-[#ffdd20]" />
               </Link>
@@ -104,7 +119,7 @@ function Banner() {
               </Link>
             </div>
             {userInfo != null ? (
-              <div className="flex items-center">
+              <div className={`flex items-center bannerContent ${isSticky ? "absolute top-[40%] right-[50%]" : ""}`}>
                 <div className="bg-[#f2f2f2] w-[40px] h-[40px] flex justify-center rounded-full drop-shadow-lg text-[30px]">
                   {avatarUrl != null ? (
                     <div>
@@ -125,7 +140,7 @@ function Banner() {
                     <div
                       tabIndex={0}
                       role="button"
-                      className="btn m-1 text-[10px] md:text-base"
+                      className="btn m-1 text-[10px] md:text-base welcome"
                     >
                       <span className="normal-case font-semibold">
                         Xin chào
@@ -181,7 +196,7 @@ function Banner() {
                 handleSearch();
               }}
             >
-              <div className="relative">
+              <div className="relative searchBonsai">
                 <input
                   onChange={(e) => setKeyword(e.target.value)}
                   placeholder="Nhập sản phẩm tại đây..."
@@ -192,8 +207,7 @@ function Banner() {
                 </button>
               </div>
             </form>
-
-            <div className="flex items-center">
+            <div className="flex items-center contactUs">
               <img src={SPCus} alt="" />
               <div className="ml-3">
                 <div className="text-[#ffffff]">Chăm sóc khách hàng</div>
@@ -227,7 +241,7 @@ function Banner() {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
