@@ -31,7 +31,7 @@ const ModalCreateBaseTask = (props) => {
       console.log(input);
       postBaseTask(input)
         .then((data) => {
-          toast.success("Thêm công việc thành công!");
+          toast.success("Thêm nhiệm vụ cơ bản thành công!");
           dispatch(
             allBaseTaskPagination({
               pageIndex: 0,
@@ -71,7 +71,7 @@ const ModalCreateBaseTask = (props) => {
     <>
       <Modal
         width={800}
-        title="Thêm công việc"
+        title="Thêm nhiệm vụ cơ bản"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
@@ -91,17 +91,17 @@ const ModalCreateBaseTask = (props) => {
             onValuesChange={handleFormChange}
           >
             <Form.Item
-              label="Tên công việc"
+              label="Tên nhiệm vụ cơ bản"
               name="name"
               rules={[{ required: true, message: "Tên không được để trống!" }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              label="Miêu tả"
+              label="Mô tả"
               name="detail"
               rules={[
-                { required: true, message: "Miêu tả không được để trống!" },
+                { required: true, message: "Mô tả không được để trống!" },
               ]}
             >
               <Input />

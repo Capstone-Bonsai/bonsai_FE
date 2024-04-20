@@ -8,7 +8,7 @@ export const fetchAllService = createAsyncThunk(
   async ({ pageIndex, pageSize }) => {
     try {
       const response = await axios.get(
-        `/Service?page=${pageIndex}&size=${pageSize}`
+        `/Service?pageIndex=${pageIndex}&pageSize=${pageSize}`
       );
       return response.data;
     } catch (error) {

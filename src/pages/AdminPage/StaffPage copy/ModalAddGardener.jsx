@@ -3,12 +3,11 @@ import { Modal, InputNumber, Button, Select, Space } from "antd";
 import { addGardener, freeGardener } from "../../../redux/slice/gardener";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { listAllContract } from "../../../redux/slice/contractSlice";
 import Loading from "../../../components/Loading";
 import { allServiceOrder } from "../../../redux/slice/serviceOrderSlice";
 function ModalAddGardener(props) {
   const { show, setShow, serviceOrderDetail } = props;
-  console.log(contractDetail);
+  console.log(serviceOrderDetail);
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
   useEffect(() => {

@@ -72,7 +72,7 @@ export const addComplaint = async (formData) => {
 //   }
 // );
 
-export const serviceOrderlById = createAsyncThunk(
+export const serviceOrderById = createAsyncThunk(
   "serviceOrder/serviceOrderById",
   async (serviceOrderId) => {
     try {
@@ -127,16 +127,16 @@ const serviceOrderSlice = createSlice({
         state.msg = "Error loading data";
         state.allServiceOrderDTO.loading = false;
       })
-      .addCase(serviceOrderlById.pending, (state) => {
+      .addCase(serviceOrderById.pending, (state) => {
         state.msg = "Loading...";
         state.serviceOrderDetail.loading = true;
       })
-      .addCase(serviceOrderlById.fulfilled, (state, action) => {
+      .addCase(serviceOrderById.fulfilled, (state, action) => {
         state.serviceOrderDetail = action.payload;
         state.msg = "Data loaded successfully";
         state.serviceOrderDetail.loading = false;
       })
-      .addCase(serviceOrderlById.rejected, (state) => {
+      .addCase(serviceOrderById.rejected, (state) => {
         state.msg = "Error loading data";
         state.serviceOrderDetail.loading = false;
       })

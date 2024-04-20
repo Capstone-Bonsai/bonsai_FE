@@ -11,7 +11,6 @@ function BonsaiLayout() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Sản phẩm</div>
           <Tabs
             defaultActiveKey="1"
             type="card"

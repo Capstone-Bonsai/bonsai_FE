@@ -3,6 +3,7 @@ import {
   PlusCircleOutlined,
   EyeOutlined,
   DeleteOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { Space, Table, Modal, Tooltip, Button } from "antd";
 
@@ -27,8 +28,9 @@ function ServiceManage() {
   const allService = useSelector(
     (state) => state.service?.listService?.services?.items
   );
+  console.log(allService);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const paging = useSelector((state) => state.service?.pagination);
 
   useEffect(() => {
@@ -157,7 +159,7 @@ function ServiceManage() {
       key: "serviceType",
       render: (_, record) => (
         <>
-          <p>{record.serviceType}</p>
+          <p>{record.serviceType?.typeName}</p>
         </>
       ),
     },
@@ -196,7 +198,7 @@ function ServiceManage() {
           <Tooltip title="Xem thông tin">
             <Button
               type="text"
-              icon={<EyeOutlined style={{ color: "blue" }} />}
+              icon={<EditOutlined style={{ color: "orange" }} />}
               onClick={() => {
                 setSelectedUpdateService(record);
                 showUpdateModal();
@@ -273,6 +275,8 @@ function ServiceManage() {
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
+          okText={confirmLoadingDelete ? "Đang xóa" : "Xóa dịch vụ"}
+          cancelText="Hủy"
         >
           <div>Bạn có muốn xóa dịch vụ này không?</div>
         </Modal>
