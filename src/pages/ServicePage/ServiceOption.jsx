@@ -12,9 +12,9 @@ function ServiceOption() {
   useEffect(() => {
     dispatch(serviceOption());
   }, []);
-  const handleServiceTypeId = (serviceTypeId) => {
-    dispatch(setServiceTypeId(serviceTypeId));
-  };
+  // const handleServiceTypeId = (serviceTypeId) => {
+  //   dispatch(setServiceTypeId(serviceTypeId));
+  // };
   const services = useSelector((state) => state.service?.serviceOption?.items);
   return (
     <div className="mb-12 pb-12 w-[90%] m-auto">
@@ -31,8 +31,8 @@ function ServiceOption() {
                 className="mt-5 border w-[50%] rounded-[10px] drop-shadow-2xl bg-[#fff] hover:border-[1px] hover:border-[#3a9943]"
               >
                 <Link
-                  onClick={() => handleServiceTypeId(service?.id)}
-                  to={`/ServiceRegister?typeEnum=${service.typeEnum}`}
+                  // onClick={() => handleServiceTypeId(service?.id)}
+                  to={`/ServiceRegister?typeEnum=${service.typeEnum}&serviceTypeId=${service.id}`}
                   className=""
                 >
                   <div className="w-full h-[400px]">
