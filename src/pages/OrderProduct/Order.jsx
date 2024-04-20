@@ -38,6 +38,7 @@ function Order() {
   const [fullNameNoneLogin, setFullNameNoneLogin] = useState("");
   const [phoneNumberNoneLogin, setPhoneNumberNoneLogin] = useState("");
   const [deliveryFee, setDeliveryFee] = useState(0);
+  const [finalPrice, setFinalPrice] = useState(0);
   const bonsais = useSelector((state) => state.bonsai?.bonsaiInCart);
   useEffect(() => {
     if (resultCode === "0") {
@@ -122,8 +123,9 @@ function Order() {
       listBonsaiId: cartItems,
     };
     const res = await destination(payload);
-    const fee = res?.finalPrice;
+    const fee = res?.deliveryFee;
     setDeliveryFee(fee);
+    setFinalPrice(res?.finalPrice);
   };
   const handleTotalOrder = () => {
     let totalPriceOrder = 0;
@@ -181,7 +183,7 @@ function Order() {
               {userInfo == null ? (
                 <div className="mb-5">
                   <div className="text-[20px] leading-6 font-bold underline text-[#3e9943]">
-                    Không cần đăng nhập
+                    Bạn chưa có tài khoản?
                   </div>
                   <div className="my-5">
                     <div>Email</div>
@@ -296,7 +298,7 @@ function Order() {
                   </div>
                   <div className="flex justify-between border-t border-t-1 border-black font-bold text-[18px] pt-[9px]">
                     <div className="">Tổng</div>
-                    <div>{formatPrice(handleTotalOrder())}</div>
+                    <div>{formatPrice(finalPrice)}</div>
                   </div>
                 </div>
               </div>
