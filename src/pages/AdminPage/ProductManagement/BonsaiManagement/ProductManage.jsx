@@ -3,6 +3,7 @@ import {
   PlusCircleOutlined,
   EyeOutlined,
   DeleteOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { Space, Table, Input, Modal, Select, Tooltip, Button } from "antd";
 const { Search, TextArea } = Input;
@@ -155,7 +156,7 @@ function ProductManage() {
     {
       title: "Năm trồng",
       key: "yearOfPlanting",
-      render: (record) => <div>{record?.yearOfPlanting} năm</div>,
+      render: (record) => <div>năm {record?.yearOfPlanting}</div>,
     },
     {
       title: "Hoành cây",
@@ -231,7 +232,7 @@ function ProductManage() {
           <Tooltip title="Xem thông tin">
             <Button
               type="text"
-              icon={<EyeOutlined style={{ color: "blue" }} />}
+              icon={<EditOutlined style={{ color: "orange" }} />}
               onClick={() => {
                 setSelectedUpdateBonsai(record);
                 showUpdateModal();
@@ -259,7 +260,7 @@ function ProductManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Bonsai</div>
+          <div className="font-semibold mb-6">Quản lý Bonsai</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="grid grid-cols-2 lg:grid-cols-2 p-6">
               <div>
@@ -348,6 +349,8 @@ function ProductManage() {
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
+          okText={confirmLoadingDelete ? "Đang xóa" : "Xóa bonsai"}
+          cancelText="Hủy"
         >
           <div>Bạn có muốn xóa bonsai này không?</div>
         </Modal>

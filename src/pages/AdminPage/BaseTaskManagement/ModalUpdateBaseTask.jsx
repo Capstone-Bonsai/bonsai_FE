@@ -87,7 +87,7 @@ const ModalUpdateBaseTask = (props) => {
     <>
       <Modal
         width={800}
-        title="Sửa công việc"
+        title="Sửa nhiệm vụ cơ bản"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
@@ -108,17 +108,17 @@ const ModalUpdateBaseTask = (props) => {
             initialValues={formData}
           >
             <Form.Item
-              label="Tên công việc"
+              label="Tên nhiệm vụ cơ bản"
               name="name"
               rules={[{ required: true, message: "Tên không được để trống!" }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              label="Miêu tả"
+              label="Mô tả"
               name="detail"
               rules={[
-                { required: true, message: "Miêu tả không được để trống!" },
+                { required: true, message: "Mô tả không được để trống!" },
               ]}
             >
               <Input />

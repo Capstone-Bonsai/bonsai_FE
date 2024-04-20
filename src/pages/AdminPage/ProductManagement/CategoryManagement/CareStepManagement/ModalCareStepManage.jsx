@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   PlusCircleOutlined,
   EyeOutlined,
+  EditOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
 import { Space, Table, Input, Modal, Tooltip, Button } from "antd";
@@ -98,7 +99,7 @@ const ModalCareStepManage = (props) => {
           <Tooltip title="Xem thông tin">
             <Button
               type="text"
-              icon={<EyeOutlined style={{ color: "blue" }} />}
+              icon={<EditOutlined style={{ color: "orange" }} />}
               onClick={() => {
                 setSelectedUpdateCareStep(record);
                 showUpdateModal();
@@ -178,6 +179,8 @@ const ModalCareStepManage = (props) => {
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
+          okText={confirmLoadingDelete ? "Đang xóa" : "Xóa bước chăm sóc"}
+          cancelText="Hủy"
         >
           <div>Bạn có muốn xóa bước chăm sóc này không?</div>
         </Modal>

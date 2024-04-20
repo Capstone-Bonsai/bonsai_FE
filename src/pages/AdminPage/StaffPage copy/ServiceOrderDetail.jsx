@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import {
-  contractDetailById,
-  listTask,
-} from "../../../redux/slice/contractSlice";
-import { LeftOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { LeftOutlined, FileDoneOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { Divider, Modal, Space, Table, Tag } from "antd";
 import Loading from "../../../components/Loading";
 import ModalUpdateComplaint from "./ModalUpdateComplaint";
-import { putContractStatus } from "../../../utils/contractApi";
 import { toast } from "react-toastify";
 import { getStatusText } from "../../../components/status/contractStatus";
+import {
+  listTask,
+  serviceOrderById,
+} from "../../../redux/slice/serviceOrderSlice";
+import { putServiceOrderStatus } from "../../../utils/serviceOrderApi";
+import dayjs from "dayjs";
 
 function ServiceOrderDetail(props) {
   const dispatch = useDispatch();
@@ -18,21 +19,45 @@ function ServiceOrderDetail(props) {
   const [openUpdateModal, setOpenUpdateModal] = useState();
   const [openStatus, setOpenStatus] = useState(false);
   const [confirmLoadingStatus, setConfirmLoadingStatus] = useState(false);
-  const contractId = props.selectedContractDetail.id;
+  const serviceOrderId = props.selectedServiceOrderDetail.id;
 
-  const { contractDetail, listTaskDTO } = useSelector(
-    (state) => state.contract
+  const { serviceOrderDetail, listTaskDTO } = useSelector(
+    (state) => state.serviceOrder
   );
 
-  console.log(listTaskDTO?.taskOfContracts, listTaskDTO?.loading);
-  console.log(contractDetail);
-  useEffect(() => {
-    dispatch(contractDetailById(contractId));
-  }, [contractId]);
+  console.log(dayjs(serviceOrderDetail.endDate).format("DD/MM/YY"));
+  console.log(listTaskDTO);
+
+  const [isTodayEndDatePlusFourDays, setIsTodayEndDatePlusFourDays] =
+    useState(false);
 
   useEffect(() => {
-    dispatch(listTask(contractId));
-  }, [contractId]);
+    if (
+      props.selectedServiceOrderDetail &&
+      props.selectedServiceOrderDetail.endDate
+    ) {
+      // Sử dụng dayjs để tính toán ngày cách endDate 4 ngày
+      const endDate = dayjs(serviceOrderDetail.endDate);
+
+      const endDatePlusFour = endDate.add(4, "day");
+
+      // Lấy ngày hôm nay
+      const today = dayjs().format("YYYY-MM-DD");
+
+      // So sánh với endDatePlusFourDays
+      setIsTodayEndDatePlusFourDays(
+        today === endDatePlusFour.format("YYYY-MM-DD")
+      );
+    }
+  }, [props.selectedServiceOrderDetail]);
+
+  useEffect(() => {
+    dispatch(serviceOrderById(serviceOrderId));
+  }, [serviceOrderId]);
+
+  useEffect(() => {
+    dispatch(listTask(serviceOrderId));
+  }, [serviceOrderId]);
 
   const showUpdateModal = () => {
     setOpenUpdateModal(true);
@@ -159,10 +184,10 @@ function ServiceOrderDetail(props) {
 
   const handleUpdateStatus = () => {
     setConfirmLoadingStatus(true);
-    putContractStatus(contractId)
+    putServiceOrderStatus(serviceOrderId)
       .then((data) => {
         toast.success("Cập nhật thành công!");
-        dispatch(contractDetailById(contractId));
+        dispatch(serviceOrderById(serviceOrderId));
       })
       .catch((err) => {
         console.log(err);
@@ -178,136 +203,150 @@ function ServiceOrderDetail(props) {
       <button onClick={() => props.setSelectedDetail(false)}>
         <LeftOutlined className="text-[15px]" /> Quay lại
       </button>
-      {contractDetail?.contractStatus === 6 ||
-      contractDetail?.contractStatus === 11 ? (
-        <div>
-          <button
-            className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
-            onClick={showModalStatus}
-          >
-            <PlusCircleOutlined /> Cập nhật trạng thái hợp thái
-          </button>
-        </div>
-      ) : (
-        <></>
-      )}
       <div className="font-semibold text-center">Hợp đồng</div>
-      <div className="font-semibold mb-6 text-center">{contractId}</div>
+      <div className="font-semibold mb-6 text-center">{serviceOrderId}</div>
       <div className="bg-[#ffffff] drop-shadow-2xl">
-        {contractDetail?.loading === true ? (
-          <Loading loading={contractDetail?.loading} />
+        {serviceOrderDetail?.loading === true ? (
+          <Loading loading={serviceOrderDetail?.loading} />
         ) : (
           <div className="p-6 ">
-            <div className="font-medium">1. Thông tin hợp đồng</div>
+            <div className="font-bold">1. Thông tin hợp đồng</div>
             <div className="flex justify-center w-[100%]">
               <div className="p-4 mb-6 w-[100%]">
-                <div className="grid grid-cols-2 w-[100%]">
+                <div className="font-medium">- Thông tin khách hàng:</div>
+                <div className="grid grid-cols-2 w-[100%] p-6">
                   <div>
                     <div className="font-medium grid grid-cols-2">
                       <div>Tên khách hàng:</div>{" "}
-                      <div>{contractDetail?.customerName}</div>
+                      <div>{serviceOrderDetail?.customerName}</div>
                     </div>
                     <div className="font-medium grid grid-cols-2">
                       <div>Số điện thoại:</div>
-                      <div>{contractDetail?.customerPhoneNumber}</div>
-                    </div>
-                    <div className="font-medium grid grid-cols-2">
-                      <div>Địa chỉ:</div> <div>{contractDetail?.address}</div>
-                    </div>
-                    <div className="font-medium grid grid-cols-2">
-                      <div>Khoảng cách:</div>
-                      <div>
-                        {contractDetail?.distance?.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                        })}{" "}
-                        m
-                      </div>
-                    </div>
-                    <div className="font-medium grid grid-cols-2">
-                      <div>Ngày bắt đầu:</div>
-                      <div>
-                        {new Date(
-                          contractDetail?.startDate
-                        ).toLocaleDateString()}
-                      </div>
-                    </div>
-                    <div className="font-medium grid grid-cols-2">
-                      <div>Ngày hết hạn:</div>
-                      <div>
-                        {new Date(contractDetail?.endDate).toLocaleDateString()}
-                      </div>
+                      <div>{serviceOrderDetail?.customerPhoneNumber}</div>
                     </div>
                     <div className="font-medium grid grid-cols-2">
                       <div>Trạng thái:</div>{" "}
                       <div
                         className={`${
-                          contractDetail?.contractStatus == 1 ||
-                          contractDetail?.contractStatus == 4 ||
-                          contractDetail?.contractStatus == 5
+                          serviceOrderDetail?.serviceOrderStatus == 1 ||
+                          serviceOrderDetail?.serviceOrderStatus == 4 ||
+                          serviceOrderDetail?.serviceOrderStatus == 5
                             ? "text-[red]"
                             : "text-[#3a9943]"
                         }`}
                       >
-                        {getStatusText(contractDetail?.contractStatus)}
+                        {getStatusText(serviceOrderDetail?.serviceOrderStatus)}
                       </div>
                     </div>
                   </div>
                   <div>
-                    <div className="font-medium grid grid-cols-2">
-                      <div>Diện tích sân vườn:</div>
-                      <div>
-                        {contractDetail?.gardenSquare} m<sup>2</sup>
-                      </div>
-                    </div>
-                    <div className="font-medium grid grid-cols-2">
-                      <div>Số lượng người làm vườn:</div>
-                      <div>{contractDetail?.numberOfGardener} người</div>
-                    </div>
-                    <div className="font-medium grid grid-cols-2">
-                      <div>Giá tiêu chuẩn:</div>
-                      <div>
-                        {new Intl.NumberFormat("en-US", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(contractDetail?.standardPrice)}
-                      </div>
-                    </div>
-                    <div className="font-medium grid grid-cols-2">
-                      <div>Phụ phí:</div>
-                      <div>
-                        {new Intl.NumberFormat("en-US", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(contractDetail?.surchargePrice)}
-                      </div>
-                    </div>
                     <div className="font-medium grid grid-cols-2">
                       <div>Tổng chi phí:</div>
                       <div>
                         {new Intl.NumberFormat("en-US", {
                           style: "currency",
                           currency: "VND",
-                        }).format(contractDetail?.totalPrice)}
+                        }).format(serviceOrderDetail?.totalPrice)}
                       </div>
                     </div>
                     <div className="font-medium grid grid-cols-2">
-                      <div>Loại dịch vụ:</div>
-                      {contractDetail?.serviceType === 1 ? (
-                        <div>Dịch vụ chăm vườn</div>
-                      ) : (
-                        <div>Dịch vụ chăm cây</div>
-                      )}
+                      <div>Ngày bắt đầu:</div>
+                      <div>
+                        {new Date(
+                          serviceOrderDetail?.startDate
+                        ).toLocaleDateString()}
+                      </div>
+                    </div>
+                    <div className="font-medium grid grid-cols-2">
+                      <div>Ngày hết hạn:</div>
+                      <div>
+                        {new Date(
+                          serviceOrderDetail?.endDate
+                        ).toLocaleDateString()}
+                      </div>
                     </div>
                   </div>
                 </div>
                 <Divider type="vertical" />
+                <div className="font-medium">- Thông tin dịch vụ:</div>
+                <div className=" w-[100%] py-6 px-12">
+                  <div className="font-medium grid grid-cols-3 m-4">
+                    <div>Loại dịch vụ:</div>
+                    <div className="col-span-2">
+                      <Tag
+                        color={
+                          serviceOrderDetail?.service?.serviceType?.typeEnum ===
+                          2
+                            ? "green"
+                            : "blue"
+                        }
+                      >
+                        {serviceOrderDetail?.service?.serviceType?.typeName}
+                      </Tag>
+                    </div>
+                  </div>
+                  <div className="font-medium grid grid-cols-3 m-4">
+                    <div>Mô tả:</div>
+                    <div className="col-span-2">
+                      {serviceOrderDetail?.service?.serviceType?.description}
+                    </div>
+                  </div>
+                </div>
+                <div className="font-medium">- Thông tin sân vườn/bonsai:</div>
+                <div className=" w-[100%] py-6 px-12">
+                  {serviceOrderDetail?.service?.serviceType?.typeEnum === 2 ? (
+                    <>
+                      <div className="font-medium grid grid-cols-3 m-4">
+                        <div>Địa chỉ sân vườn:</div>
+                        <div className="col-span-2">
+                          {serviceOrderDetail?.customerGarden?.address}
+                        </div>
+                      </div>
+                      <div className="font-medium grid grid-cols-3 m-4">
+                        <div>Khoảng cách</div>
+                        <div className="col-span-2">
+                          {(serviceOrderDetail?.distance / 1000).toLocaleString(
+                            undefined,
+                            {
+                              maximumFractionDigits: 2,
+                            }
+                          )}{" "}
+                          km
+                        </div>
+                      </div>
+                      <div className="font-medium grid grid-cols-3 m-4">
+                        <div>Diện tích sân vườn:</div>
+                        <div className="col-span-2">
+                          {serviceOrderDetail?.customerGarden?.square} m
+                          <sup>2</sup>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="font-medium grid grid-cols-3 m-4">
+                      <div>Bonsai của khách hàng:</div>
+                      <div>
+                        <Tag
+                          color={
+                            serviceOrderDetail?.service?.serviceType
+                              ?.typeEnum === 2
+                              ? "red"
+                              : "blue"
+                          }
+                        >
+                          {serviceOrderDetail?.service?.serviceType?.typeName}
+                        </Tag>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
             <div className="font-medium">2. Tiến độ công việc</div>
             <div className="p-4 mb-6">
               <Table
-                dataSource={listTaskDTO?.taskOfContracts}
+                dataSource={listTaskDTO?.taskOfServiceOrders}
                 columns={columnsListTaskDTO}
                 scroll={{ x: true }}
                 rowKey={(record) => record.id}
@@ -321,24 +360,40 @@ function ServiceOrderDetail(props) {
             <div className="font-medium">3. Khiếu nại</div>
             <div className="p-4 mb-6">
               <Table
-                dataSource={contractDetail?.complaints}
+                dataSource={serviceOrderDetail?.complaints}
                 columns={columnsComplaints}
                 scroll={{ x: true }}
                 rowKey={(record) => record.id}
                 loading={{
-                  indicator: <Loading loading={contractDetail?.loading} />,
-                  spinning: contractDetail?.loading,
+                  indicator: <Loading loading={serviceOrderDetail?.loading} />,
+                  spinning: serviceOrderDetail?.loading,
                 }}
                 pagination={false}
               />
             </div>
           </div>
         )}
+        {(serviceOrderDetail?.serviceOrderStatus === 7 ||
+          serviceOrderDetail?.serviceOrderStatus === 11) &&
+        isTodayEndDatePlusFourDays === false ? (
+          <div className="p-8 flex justify-end">
+            <button
+              className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
+              onClick={showModalStatus}
+            >
+              <FileDoneOutlined /> Hoàn thành hợp đồng
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
+
       <ModalUpdateComplaint
         show={openUpdateModal}
         setShow={handleCancelUpdate}
         complaint={selectedComplaint}
+        serviceOrderId={serviceOrderId}
       />
       <Modal
         title="Cập nhật trạng thái hợp đồng"

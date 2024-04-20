@@ -68,7 +68,7 @@ function Login() {
       } else if (response.role == "Manager") {
         navigate("/admin/bonsai");
       } else if (response.role == "Staff") {
-        navigate("/admin/serviceGardenChecking");
+        navigate("/admin/serviceOrder");
       } else if (response.role == "Gardener") {
         cookies.remove("user");
         toast.error("Không được quyền truy cập vào web!");

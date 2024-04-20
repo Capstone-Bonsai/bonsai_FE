@@ -5,6 +5,8 @@ import {
   CloseCircleOutlined,
   EyeOutlined,
   UsergroupAddOutlined,
+  PlusSquareOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { Space, Tag, Table, Input, Modal, Badge, Tooltip, Button } from "antd";
 const { Search } = Input;
@@ -20,6 +22,7 @@ import ModalCreateServiceOrderImages from "./ModalCreateServiceOrderImages";
 import ModalUpateServiceOrderPrice from "./ModalUpateServiceOrderPrice";
 import ModalAddGardener from "./ModalAddGardener";
 import ServiceOrderDetail from "./ServiceOrderDetail";
+import { distance } from "framer-motion";
 
 function ServiceOrder() {
   const dispatch = useDispatch();
@@ -52,6 +55,7 @@ function ServiceOrder() {
   const paging = useSelector(
     (state) => state.serviceOrder?.allServiceOrderDTO?.pagination
   );
+  console.log(allServiceOrders);
   // const showModalDelete = () => {
   //   setOpenDelete(true);
   // };
@@ -129,10 +133,10 @@ function ServiceOrder() {
       render: (_, record) => (
         <>
           <p>
-            {record?.distance?.toLocaleString(undefined, {
+            {(record?.distance / 1000).toLocaleString(undefined, {
               maximumFractionDigits: 2,
             })}{" "}
-            m
+            km
           </p>
         </>
       ),
@@ -236,30 +240,34 @@ function ServiceOrder() {
         </>
       ),
     },
-    {
-      title: "Hình ảnh",
-      dataIndex: "image",
-      key: "image",
-      render: (_, record) => (
-        <Space size="middle">
-          {record.serviceOrderStatus === 3 ? (
-            <></>
-          ) : (
-            <button
-              className="outline-none"
-              onClick={() => {
-                console.log(record);
-                setSelectedServiceOrderImages(record?.contractImages);
-                setSelectedServiceOrderDetail(record);
-                showModalCreateServiceOrderImages();
-              }}
-            >
-              Thêm hình ảnh
-            </button>
-          )}
-        </Space>
-      ),
-    },
+    userInfo.role == "Staff" ? (
+      {
+        title: "Hình ảnh",
+        dataIndex: "image",
+        key: "image",
+        render: (_, record) => (
+          <Space size="middle">
+            {record.serviceOrderStatus === 3 ? (
+              <Tooltip title="Thêm hình ảnh">
+                <Button
+                  type="text"
+                  icon={<PlusSquareOutlined style={{ color: "black" }} />}
+                  onClick={() => {
+                    setSelectedServiceOrderImages(record?.contractImages);
+                    setSelectedServiceOrderDetail(record);
+                    showModalCreateServiceOrderImages();
+                  }}
+                />
+              </Tooltip>
+            ) : (
+              <></>
+            )}
+          </Space>
+        ),
+      }
+    ) : (
+      <></>
+    ),
     userInfo.role == "Staff" ? (
       {
         title: "Hành động",
@@ -268,10 +276,10 @@ function ServiceOrder() {
         render: (_, record) => (
           <Space size="middle">
             {record.serviceOrderStatus === 1 ? (
-              <Tooltip title="Xem thông tin">
+              <Tooltip title="Xem thời gian thực hiện và giá cả">
                 <Button
                   type="text"
-                  icon={<EyeOutlined style={{ color: "blue" }} />}
+                  icon={<EditOutlined style={{ color: "orange" }} />}
                   onClick={() => {
                     setSelectedServiceOrderDetail(record);
                     showModalUpdateServiceOrderPrice();
@@ -282,8 +290,6 @@ function ServiceOrder() {
               <></>
             )}
             {record.serviceOrderStatus === 3 ? (
-              <></>
-            ) : (
               <Tooltip title="Thêm người làm vườn">
                 <Button
                   type="text"
@@ -294,6 +300,22 @@ function ServiceOrder() {
                   }}
                 />
               </Tooltip>
+            ) : (
+              <></>
+            )}
+            {record.serviceOrderStatus >= 4 ? (
+              <Tooltip title="Xem thông tin">
+                <Button
+                  type="text"
+                  icon={<EditOutlined style={{ color: "orange" }} />}
+                  onClick={() => {
+                    setSelectedDetail(true);
+                    setSelectedServiceOrderDetail(record);
+                  }}
+                />
+              </Tooltip>
+            ) : (
+              <></>
             )}
           </Space>
         ),

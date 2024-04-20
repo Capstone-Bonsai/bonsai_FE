@@ -47,7 +47,11 @@ function PrivateRoute() {
   const NavBarItems = [
     {
       key: "1",
-      label: <UserOutlined />,
+      label: (
+        <div className="font-medium">
+          {userInfo.fullName} <UserOutlined />
+        </div>
+      ),
       children: userInfo
         ? [
             getItem(
@@ -98,12 +102,12 @@ function PrivateRoute() {
       : []),
     getItem(<Link to={`/admin/order`}>Đơn hàng</Link>, "4", <UploadOutlined />),
     getItem("Hợp Đồng", "sub3", <FileDoneOutlined />, [
-      getItem(
-        <Link to={`/admin/serviceGardenChecking`}>
-          <SnippetsOutlined /> Đơn đợi duyệt
-        </Link>,
-        "7"
-      ),
+      // getItem(
+      //   <Link to={`/admin/serviceGardenChecking`}>
+      //     <SnippetsOutlined /> Đơn đợi duyệt
+      //   </Link>,
+      //   "7"
+      // ),
       getItem(
         <Link to={`/admin/serviceOrder`}>
           <FileDoneOutlined /> Đơn hàng dịch vụ
