@@ -50,6 +50,8 @@ function ProfileUser() {
     if (!phoneNumber.trim()) {
       setPhoneNumberError("Không được bỏ trống số điện thoại!");
       isValid = false;
+    } else if (phoneNumber.length != 10) {
+      setPhoneNumberError("Số điện thoại phải đủ 10 số");
     }
     if (!isValid) {
       return;
@@ -185,15 +187,15 @@ function ProfileUser() {
                     }  py-2 w-[300px] rounded-xl pl-5 ml-2 outline-none`}
                     value={phoneNumber}
                     type="number"
-                    min={0}
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (value < 0) {
+                      setPhoneNumber(value);
+                      const phoneRegex = /^(03|05|07|08|09)/;
+                      if (!value.match(phoneRegex)) {
                         setPhoneNumberError(
-                          "Số điện thoại bắt đầu bằng 0"
+                          "Số điện thoại phải bắt đầu từ 03, 05, 07, 08, 09"
                         );
                       } else {
-                        setPhoneNumber(value);
                         setPhoneNumberError("");
                       }
                     }}

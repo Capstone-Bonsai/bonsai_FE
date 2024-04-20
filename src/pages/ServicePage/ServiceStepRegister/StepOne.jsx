@@ -28,7 +28,7 @@ function StepOne(propsStepOne) {
   const userInfo = cookies?.get("user");
   const userId = userInfo?.id;
   const handleToStepTwo = () => {
-    setStepList("2");
+    setStepList(2);
     cookies.set(`step 1 + ${userId}`, selectedGardenId);
   };
   return (
