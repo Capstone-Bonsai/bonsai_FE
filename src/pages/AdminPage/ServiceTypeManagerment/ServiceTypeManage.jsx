@@ -4,6 +4,7 @@ import {
   ClockCircleOutlined,
   CloseCircleOutlined,
   EyeOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { Space, Tag, Table, Modal, Tooltip, Button } from "antd";
 
@@ -83,7 +84,7 @@ function ServiceTypeManage() {
           <Tooltip title="Xem thông tin">
             <Button
               type="text"
-              icon={<EyeOutlined style={{ color: "blue" }} />}
+              icon={<EditOutlined style={{ color: "orange" }} />}
               onClick={() => {
                 setSelectedUpdateServiceType(record);
                 showUpdateModal();

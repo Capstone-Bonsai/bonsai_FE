@@ -100,12 +100,12 @@ function BaseTaskManage() {
   };
   const columns = [
     {
-      title: "Tên công việc",
+      title: "Tên nhiệm vụ cơ bản",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Miêu tả",
+      title: "Mô tả",
       dataIndex: "detail",
       key: "detail",
     },
@@ -118,7 +118,7 @@ function BaseTaskManage() {
           <Tooltip title="Xem thông tin">
             <Button
               type="text"
-              icon={<EyeOutlined style={{ color: "blue" }} />}
+              icon={<EditOutlined style={{ color: "orange" }} />}
               onClick={() => {
                 setSelectedUpdateBaseTask(record);
                 showUpdateModal();
@@ -144,7 +144,7 @@ function BaseTaskManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Công việc</div>
+          <div className="font-semibold mb-6">nhiệm vụ cơ bản</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
               <div>
@@ -152,7 +152,7 @@ function BaseTaskManage() {
                   className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
                   onClick={showCreateModal}
                 >
-                  <PlusCircleOutlined /> Thêm công việc
+                  <PlusCircleOutlined /> Thêm nhiệm vụ cơ bản
                 </button>
               </div>
             </div>
@@ -183,14 +183,16 @@ function BaseTaskManage() {
           baseTask={selectedUpdateBaseTask}
         />
         <Modal
-          title="Xóa công việc"
+          title="Xóa nhiệm vụ cơ bản"
           open={openDelete}
           onOk={handleDelete}
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
+          okText={confirmLoadingDelete ? "Đang xóa" : "Xóa nhiệm vụ cơ bản"}
+          cancelText="Hủy"
         >
-          <div>Bạn có muốn xóa công việc này không?</div>
+          <div>Bạn có muốn xóa nhiệm vụ cơ bản này không?</div>
         </Modal>
       </div>
     </>

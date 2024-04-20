@@ -12,7 +12,7 @@ const ModalUpdateService = (props) => {
   const { show, setShow, service } = props;
   console.log(service);
   const dispatch = useDispatch();
-  const [tabKey, setTabKey] = useState("381e77b3-2cfa-4362-afae-fe588701616e");
+  const [tabKey, setTabKey] = useState();
   const [formBonsaiInstance, setFormBonsaiInstance] = useState();
   const [formGardenInstance, setFormGardenInstance] = useState();
   const [formData, setFormData] = useState({});
@@ -26,8 +26,9 @@ const ModalUpdateService = (props) => {
       setFormData({
         Name: service?.name,
         Description: service?.description,
-        ServiceType: "381e77b3-2cfa-4362-afae-fe588701616e",  
+        ServiceType: service?.serviceType?.id,
       });
+      setTabKey(service?.serviceType?.id)
     }
   }, [service]);
 
@@ -147,14 +148,14 @@ const ModalUpdateService = (props) => {
       >
         <div className="mt-12">
           <Tabs
-            defaultActiveKey={service?.serviceType == "BonsaiCare" ? "2" : "1"}
+            defaultActiveKey={service?.serviceType?.typeEnum == 1 ? "2" : "1"}
             type="card"
             destroyInactiveTabPane
             onChange={onChangeTabs}
             tabBarStyle={{ display: "flex", justifyContent: "space-between" }}
             items={[
               {
-                disabled: service?.serviceType == "BonsaiCare",
+                disabled: service?.serviceType?.typeEnum == 1,
                 key: "1",
                 label: `Mẫu chăm sóc sân vườn`,
                 children: (
@@ -170,7 +171,7 @@ const ModalUpdateService = (props) => {
                 ),
               },
               {
-                disabled: service?.serviceType == "GardenCare",
+                disabled: service?.serviceType?.typeEnum == 2,
                 key: "2",
                 label: `Mẫu chăm sóc Bonsai`,
                 children: (

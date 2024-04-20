@@ -5,6 +5,7 @@ import {
   CloseCircleOutlined,
   DeleteOutlined,
   EyeOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { Space, Tag, Table, Modal, Tooltip, Button } from "antd";
 
@@ -314,7 +315,7 @@ function OrderManage() {
                 <Tooltip title="Xem thông tin">
                   <Button
                     type="text"
-                    icon={<EyeOutlined style={{ color: "blue" }} />}
+                    icon={<EditOutlined style={{ color: "orange" }} />}
                     onClick={() => {
                       setSelectedUpdateOrder(record);
                       showUpdateModal();

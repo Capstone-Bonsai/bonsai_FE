@@ -3,6 +3,7 @@ import {
   PlusCircleOutlined,
   EyeOutlined,
   DeleteOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { Space, Table, Modal, Tooltip, Button } from "antd";
 
@@ -87,7 +88,7 @@ function StyleManage() {
           <Tooltip title="Xem thông tin">
             <Button
               type="text"
-              icon={<EyeOutlined style={{ color: "blue" }} />}
+              icon={<EditOutlined style={{ color: "orange" }} />}
               onClick={() => {
                 setSelectedUpdateStyle(record);
                 showUpdateModal();
@@ -153,6 +154,8 @@ function StyleManage() {
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
+          okText={confirmLoadingDelete ? "Đang xóa" : "Xóa kiểu mẫu"}
+          cancelText="Hủy"
         >
           <div>Bạn có muốn xóa kiểu mẫu này không?</div>
         </Modal>

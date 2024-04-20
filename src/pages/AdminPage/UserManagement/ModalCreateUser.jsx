@@ -59,7 +59,6 @@ const ModalCreateUser = (props) => {
     setError([]);
     setFormData({
       role: "",
-      phone: "",
       fullname: "",
       email: "",
       phone: "",
@@ -71,7 +70,6 @@ const ModalCreateUser = (props) => {
   const [listRole, setListRole] = useState([]);
   const [formData, setFormData] = useState({
     role: "",
-    phone: "",
     fullname: "",
     email: "",
     phone: "",

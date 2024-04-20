@@ -4,6 +4,7 @@ import {
   EyeOutlined,
   DeleteOutlined,
   UnorderedListOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { Space, Table, Modal, Tooltip, Button } from "antd";
 
@@ -101,7 +102,7 @@ function CategoryManage() {
           <Tooltip title="Xem thông tin">
             <Button
               type="text"
-              icon={<EyeOutlined style={{ color: "blue" }} />}
+              icon={<EditOutlined style={{ color: "orange" }} />}
               onClick={() => {
                 setSelectedUpdateCategory(record);
                 showUpdateModal();
@@ -185,6 +186,8 @@ function CategoryManage() {
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
+          okText={confirmLoadingDelete ? "Đang xóa" : "Xóa loại cây"}
+          cancelText="Hủy"
         >
           <div>Bạn có muốn xóa loại cây này không?</div>
         </Modal>
