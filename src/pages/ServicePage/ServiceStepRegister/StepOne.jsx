@@ -28,19 +28,27 @@ function StepOne(propsStepOne) {
   const userInfo = cookies?.get("user");
   const userId = userInfo?.id;
   const handleToStepTwo = () => {
-    setStepList("2");
-    cookies.set(`step 1 + ${userId}`, selectedGardenId);
+    setStepList(2);
+    cookies.set(`step 1_typeEnum${typeEnum}_${userId}`, selectedGardenId, {
+      path: "/",
+    });
   };
   return (
     <div className="">
       <div className="w-full flex justify-between my-3">
-        <button
-          className="bg-[#3a9943] rounded-[10px] p-2 text-[#fff]"
-          onClick={() => document.getElementById("my_modal_1").showModal()}
-        >
-          + Thêm vườn
-        </button>
-        <AddCustomerGarden />
+        {typeEnum == 2 ? (
+          <div>
+            <button
+              className="bg-[#3a9943] rounded-[10px] p-2 text-[#fff]"
+              onClick={() => document.getElementById("my_modal_1").showModal()}
+            >
+              + Thêm vườn
+            </button>
+            <AddCustomerGarden />
+          </div>
+        ) : (
+          <div></div>
+        )}
         <div
           className={`${selectedGardenId == "" ? "tooltip" : ""} `}
           data-tip="Vui lòng chọn vườn"
@@ -58,7 +66,7 @@ function StepOne(propsStepOne) {
           </button>
         </div>
       </div>
-      {typeEnum == 1 ? (
+      {typeEnum == 2 ? (
         <div>
           <div className="text-center">Vườn của bạn</div>
           {loadingGarden ? (

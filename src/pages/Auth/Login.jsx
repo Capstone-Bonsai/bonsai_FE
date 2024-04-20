@@ -37,6 +37,10 @@ function Login() {
   // }, [userId, code]);
 
   useEffect(() => {
+    if (userInfo) {
+      cookies.remove("user");
+      cookies.remove("userData");
+    }
     if (userId != null && code != null) {
       const confirmEmailFromUrl = async () => {
         try {
@@ -47,7 +51,6 @@ function Login() {
           toast.error(error.response.data);
         }
       };
-
       confirmEmailFromUrl();
     }
   }, [userId, code]);
