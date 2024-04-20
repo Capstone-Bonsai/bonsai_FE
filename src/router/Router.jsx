@@ -215,10 +215,10 @@ function Router() {
                 path: "/admin/serviceOrder",
                 element: <ServiceOrder />,
               },
-              {
-                path: "/admin/serviceGardenChecking",
-                element: <ServiceGardenChecking />,
-              },
+              // {
+              //   path: "/admin/serviceGardenChecking",
+              //   element: <ServiceGardenChecking />,
+              // },
             ]
           : []),
         ...(userInfo?.role == "Staff"

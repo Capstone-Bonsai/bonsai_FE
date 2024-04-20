@@ -55,7 +55,7 @@ function PrivateRoute() {
       children: userInfo
         ? [
             getItem(
-              <Link to="/login" className="text-black" onClick={handleLogout}>
+              <Link to="/HOME" className="text-black" onClick={handleLogout}>
                 Đăng xuất
               </Link>,
               "1",
