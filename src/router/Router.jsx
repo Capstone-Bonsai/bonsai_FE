@@ -42,6 +42,7 @@ import ServiceTypeManage from "../pages/AdminPage/ServiceTypeManagerment/Service
 import ServiceOrder from "../pages/AdminPage/StaffPage copy/ServiceOrder";
 import ServiceOption from "../pages/ServicePage/ServiceOption";
 import ServiceStepMain from "../pages/ServicePage/ServiceStepRegister/ServiceStepMain";
+import ResetPassword from "../pages/Auth/ResetPassword";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -64,6 +65,10 @@ function Router() {
               {
                 path: "/CodeOTP",
                 element: <CodeOTP />,
+              },
+              {
+                path: "/ResetPassword",
+                element: <ResetPassword />,
               },
               {
                 path: "/api/Auth/ConfirmEmail",

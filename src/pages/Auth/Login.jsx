@@ -46,7 +46,7 @@ function Login() {
         try {
           const res = await confirmEmail(userId, code);
           console.log(res);
-          toast.success(res.data);
+          toast.success(res);
         } catch (error) {
           toast.error(error.response.data);
         }
