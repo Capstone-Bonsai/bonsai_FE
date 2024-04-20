@@ -106,11 +106,26 @@ export const manageServiceCustomer = createAsyncThunk(
   }
 );
 
+export const serviceListPackage = createAsyncThunk(
+  "service/serviceListPackage",
+  async ({ pageIndex, pageSize, serviceTypeId }) => {
+    try {
+      const response = await axios.get(
+        `/Service/Package?pageIndex=${pageIndex}&pageSize=${pageSize}&serviceTypeId=${serviceTypeId}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 const initialState = {
   listService: {},
   serviceById: {},
   serviceType: {},
   manageService: {},
+  servicePackage: {},
   allServiceTypeDTO: {},
   serviceOption: {},
   serviceTempPrice: {},
@@ -222,6 +237,20 @@ const serviceSlice = createSlice({
         state.serviceOption = {};
         state.msg = "Không tìm thấy";
         state.loading = false;
+      })
+      .addCase(serviceListPackage.pending, (state) => {
+        state.msg = "Loading...";
+        state.servicePackage.loading = true;
+      })
+      .addCase(serviceListPackage.fulfilled, (state, action) => {
+        state.servicePackage = action.payload;
+        state.msg = "Data loaded successfully";
+        state.servicePackage.loading = false;
+      })
+      .addCase(serviceListPackage.rejected, (state) => {
+        state.servicePackage = {};
+        state.msg = "Không tìm thấy";
+        state.servicePackage.loading = false;
       });
   },
 });
