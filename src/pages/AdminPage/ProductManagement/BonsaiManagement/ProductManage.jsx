@@ -191,9 +191,25 @@ function ProductManage() {
       ),
     },
     {
+      title: "Kích cỡ",
+      dataIndex: "deliverySize",
+      key: "deliverySize",
+      render: (_, record) => (
+        <>
+          <div>
+            {record?.deliverySize == 1
+              ? "Nhỏ"
+              : record?.deliverySize == 2
+              ? "Vừa"
+              : "Lớn"}
+          </div>
+        </>
+      ),
+    },
+    {
       title: "Tình trạng",
-      dataIndex: "style",
-      key: "style",
+      dataIndex: "isSold",
+      key: "isSold",
       render: (_, record) => (
         <>
           <Tag color={record?.isSold === true ? "red" : "green"}>
@@ -201,10 +217,11 @@ function ProductManage() {
           </Tag>
         </>
       ),
-    }, {
+    },
+    {
       title: "Hiệu lực",
-      dataIndex: "style",
-      key: "style",
+      dataIndex: "isDisable",
+      key: "isDisable",
       render: (_, record) => (
         <>
           <Tag color={record?.isDisable === true ? "red" : "green"}>
