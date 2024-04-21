@@ -71,6 +71,7 @@ const ModalUpdateProduct = (props) => {
   const [listImage, setListImage] = useState([]);
   const [openCreateCategory, setOpenCreateCategory] = useState(false);
   const [openCreateStyle, setOpenCreateStyle] = useState(false);
+  const [formDisabled, setFormDisabled] = useState(false);
   const formRef = useRef(null);
 
   useEffect(() => {
@@ -96,7 +97,7 @@ const ModalUpdateProduct = (props) => {
       form.setFieldsValue(formData);
     }
   }, [form, formData]);
-  
+
   const handleCancelPreview = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -159,6 +160,7 @@ const ModalUpdateProduct = (props) => {
         })
         .finally(() => {
           setConfirmLoading(false);
+          setFormDisabled(false);
         });
     } catch (err) {
       console.log(err);
@@ -186,6 +188,7 @@ const ModalUpdateProduct = (props) => {
     formRef.current
       .validateFields()
       .then(() => {
+        setFormDisabled(true);
         setConfirmLoading(true);
         updateBonsai(postData);
       })
@@ -258,6 +261,7 @@ const ModalUpdateProduct = (props) => {
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
             initialValues={formData}
+            disabled={formDisabled}
           >
             <Form.Item
               label="Phân loại"

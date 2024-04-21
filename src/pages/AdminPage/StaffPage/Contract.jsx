@@ -372,6 +372,8 @@ function Contract() {
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
+          okText={confirmLoadingDelete ? "Đang xóa" : "Xóa"}
+          cancelText="Hủy"
         >
           <div>Bạn có muốn xóa hợp đồng này không?</div>
         </Modal>

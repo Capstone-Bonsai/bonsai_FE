@@ -70,6 +70,7 @@ const ModalCreateProduct = (props) => {
   const [previewTitle, setPreviewTitle] = useState("");
   const [openCreateCategory, setOpenCreateCategory] = useState(false);
   const [openCreateStyle, setOpenCreateStyle] = useState(false);
+  const [formDisabled, setFormDisabled] = useState(false);
 
   const [listImage, setListImage] = useState([]);
   const formRef = useRef(null);
@@ -125,6 +126,7 @@ const ModalCreateProduct = (props) => {
         })
         .finally(() => {
           setConfirmLoading(false);
+          setFormDisabled(false);
         });
     } catch (err) {
       toast.error(err.response.data);
@@ -147,6 +149,7 @@ const ModalCreateProduct = (props) => {
     formRef.current
       .validateFields()
       .then(() => {
+        setFormDisabled(true);
         setConfirmLoading(true);
         createBonsai(postData);
       })
@@ -218,6 +221,7 @@ const ModalCreateProduct = (props) => {
             labelCol={{ span: 5 }}
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
+            disabled={formDisabled}
           >
             <Form.Item
               label="Phân loại"

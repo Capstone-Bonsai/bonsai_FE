@@ -22,6 +22,7 @@ const ModalCreateCategory = (props) => {
   const dispatch = useDispatch();
   const [confirmLoadingCreateCategory, setConfirmLoadingCreateCategory] =
     useState(false);
+  const [formDisabled, setFormDisabled] = useState(false);
 
   const formRef = useRef(null);
 
@@ -30,6 +31,7 @@ const ModalCreateCategory = (props) => {
     formRef.current
       .validateFields()
       .then(() => {
+        setFormDisabled(true);
         setConfirmLoadingCreateCategory(true);
         handleCreateCategory();
       })
@@ -48,6 +50,7 @@ const ModalCreateCategory = (props) => {
       .then((data) => {
         toast.success("Thêm loại cây thành công!");
         dispatch(allCategory());
+        handleClose();
       })
       .catch((err) => {
         console.log(err.response.statusText);
@@ -55,7 +58,7 @@ const ModalCreateCategory = (props) => {
       })
       .finally(() => {
         setConfirmLoadingCreateCategory(false);
-        handleClose();
+        setFormDisabled(false);
       });
   };
 
@@ -78,6 +81,7 @@ const ModalCreateCategory = (props) => {
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 17 }}
             onValuesChange={handleFormChange}
+            disabled={formDisabled}
           >
             <Form.Item
               label="Tên loại cây"

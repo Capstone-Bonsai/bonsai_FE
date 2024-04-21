@@ -24,6 +24,7 @@ const ModalCreateCareStep = (props) => {
   });
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [formDisabled, setFormDisabled] = useState(false);
 
   const formRef = useRef(null);
 
@@ -41,6 +42,7 @@ const ModalCreateCareStep = (props) => {
         })
         .finally(() => {
           setConfirmLoading(false);
+          setFormDisabled(false);
         });
     } catch (err) {
       toast.error(err.response.data);
@@ -51,6 +53,7 @@ const ModalCreateCareStep = (props) => {
     formRef.current
       .validateFields()
       .then(() => {
+        setFormDisabled(true);
         setConfirmLoading(true);
         createCareStep(formData);
       })
@@ -85,6 +88,7 @@ const ModalCreateCareStep = (props) => {
             labelCol={{ span: 5 }}
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
+            disabled={formDisabled}
           >
             <Form.Item label="Tên bước chăm sóc">
               <Form.List name="careSteps">
