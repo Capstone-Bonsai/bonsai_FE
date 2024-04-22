@@ -5,11 +5,13 @@ import { serviceListPackage } from "../../../redux/slice/serviceSlice";
 import { useLocation } from "react-router-dom";
 import { Image } from "antd";
 import Cookies from "universal-cookie";
+import { servicePackageById } from "../../../redux/slice/serviceOrderSlice";
 function StepTwo(propsStepTwo) {
   const {
     setSelectedGardenId,
     selectedGardenId,
     setStepList,
+    servicePackageDetail,
     setServiceIdSelected,
     serviceIdSelected,
   } = propsStepTwo;
@@ -29,6 +31,7 @@ function StepTwo(propsStepTwo) {
   useEffect(() => {
     dispatch(serviceListPackage({ pageIndex, pageSize, serviceTypeId }));
   }, []);
+
   const handleBackStep = () => {
     setStepList(1);
   };
@@ -36,7 +39,7 @@ function StepTwo(propsStepTwo) {
     (state) => state?.service?.servicePackage
   );
   const handleToStepThree = () => {
-    cookies.set(`step 2_typeEnum${typeEnum}_${userId}`, selectedGardenId, {
+    cookies.set(`step 2_typeEnum${typeEnum}_${userId}`, serviceIdSelected, {
       path: "/",
     });
     setStepList(3);
@@ -51,7 +54,16 @@ function StepTwo(propsStepTwo) {
           >
             <ArrowLeftOutlined />
           </button>
-          <div className="font-bold text-[20px]">Bước 2:</div>
+          <div className="font-bold text-[25px]">
+            Bước 2:{" "}
+            <span className="text-[18px] font-normal opacity-70">
+              {" "}
+              <span className="px-2">Dịch vụ</span>
+              {servicePackageDetail?.name
+                ? servicePackageDetail?.name
+                : "Vui lòng chọn loại dịch vụ"}
+            </span>
+          </div>
         </div>
         <button
           onClick={() => handleToStepThree()}

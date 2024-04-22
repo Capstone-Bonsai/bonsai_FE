@@ -16,7 +16,7 @@ import Cookies from "universal-cookie";
 import AddCustomerGarden from "../../Garden/AddCustomerGarden";
 import Loading from "../../../components/Loading";
 function StepOne(propsStepOne) {
-  const { setSelectedGardenId, selectedGardenId, setStepList } = propsStepOne;
+  const { setSelectedGardenId, gardenDetail, selectedGardenId, setStepList } = propsStepOne;
   const location = useLocation();
   const typeEnum = new URLSearchParams(location.search).get("typeEnum");
   const dispatch = useDispatch();
@@ -25,10 +25,7 @@ function StepOne(propsStepOne) {
   useEffect(() => {
     dispatch(fetchCustomerGarden({ pageIndex, pageSize }));
   }, []);
-  useEffect(() => {
-    dispatch(customerGardenDetail(selectedGardenId));
-  }, [selectedGardenId]);
-  const gardenDetail = useSelector((state) => state.garden?.gardenById);
+
   const gardens = useSelector((state) => state.garden?.gardenDTO?.items);
   const loadingGarden = useSelector(
     (state) => state?.garden?.gardenDTO?.loading
@@ -63,10 +60,11 @@ function StepOne(propsStepOne) {
           ) : (
             <div></div>
           )}
-          <div className="font-bold text-[20px]">
-            Bước 1:
-            <span className="font-normal opacity-70">
-              Địa chỉ {gardenDetail?.address
+          <div className="font-bold text-[25px]">
+            Bước 1: 
+            <span className="text-[18px] font-normal opacity-70">
+              <span className="px-2">Địa chỉ</span>
+              {gardenDetail?.address
                 ? gardenDetail?.address
                 : "Vui lòng chọn vườn"}
             </span>
