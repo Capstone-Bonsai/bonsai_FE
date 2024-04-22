@@ -152,7 +152,12 @@ function Order() {
               </thead>
               <tbody>
                 {bonsais.map((item) => (
-                  <tr key={item.bonsaiId} className="ml-5 text-center h-[70px]">
+                  <tr
+                    key={item.bonsaiId}
+                    className={`${
+                      item?.isDisable ? "opacity-30" : ""
+                    } ml-5 text-center h-[70px] `}
+                  >
                     <td className="flex justify-center items-center h-[70px]">
                       <div>
                         <img
@@ -163,7 +168,9 @@ function Order() {
                       </div>
                     </td>
                     <td className="">
-                      <div className="text-[16px] font-medium">{item.name}</div>
+                      <div className={`text-[16px] font-medium `}>
+                        {item.name}
+                      </div>
                     </td>
                     <td className="">
                       <div className="text-[16px] font-medium">
@@ -221,7 +228,9 @@ function Order() {
                 <div className="text-[24px] font-bold text-[#3e9943]">
                   Địa chỉ
                 </div>
-                <CompletedAddress setAddress={setAddress} />
+                <div className="border border-black py-2 rounded-[10px]">
+                  <CompletedAddress setAddress={setAddress} />
+                </div>
               </div>
               <div className="mt-5">
                 <div className="text-[24px] font-bold  text-[#3e9943]">

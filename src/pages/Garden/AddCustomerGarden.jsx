@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import CompletedAddress from "../OrderProduct/CompletedAddress";
 import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
 import noImage from "../../assets/unImage.png";
@@ -10,6 +10,8 @@ function AddCustomerGarden(props) {
   const [imageGarden, setImageGarden] = useState([]);
   const [newAddress, setNewAddress] = useState("");
   const [newSquare, setNewSquare] = useState("");
+  const [errorAddress, setErrorAddress] = useState("");
+  const [errorSquare, setErrorSquare] = useState("");
   const { setGardenLoading, gardenLoading } = props;
   const handleUploadClick = () => {
     document.getElementById("upload-input").click();
@@ -35,9 +37,18 @@ function AddCustomerGarden(props) {
     setImageGarden(updatedImageGarden);
   };
 
-  const handleAddNewGarden = async () => {
-    if (!newAddress.trim() || !newSquare.trim()) {
-      toast.error("Vui lòng điền đầy đủ thông tin địa chỉ và diện tích");
+  const handleAddNewGarden = async (e) => {
+    e.preventDefault();
+    let isValid = true;
+    if (!newAddress.trim()) {
+      setErrorAddress("Vui lòng nhập địa chỉ");
+      isValid = false;
+    }
+    if (!newSquare.trim()) {
+      setErrorSquare("Vui lòng nhập diện tích");
+      isValid = false;
+    }
+    if (!isValid) {
       return;
     }
     const formData = new FormData();
@@ -56,6 +67,7 @@ function AddCustomerGarden(props) {
       toast.error("Thêm vườn không thành công", error);
     }
   };
+
   return (
     <dialog id="my_modal_1" className="modal">
       <div className="modal-box">
@@ -67,24 +79,49 @@ function AddCustomerGarden(props) {
         <h3 className="font-bold text-lg">Thêm vườn của bạn</h3>
         <div>
           <div className="text-[#3a9943]">Địa chỉ</div>
-          <div className="w-full">
+          <div
+            className={`w-full border ${
+              errorAddress != "" ? "border-[red]" : ""
+            } `}
+          >
+            <input
+              type="hidden"
+              onChange={() => setErrorAddress("")}
+              name=""
+              id=""
+            />
             <CompletedAddress className="" setAddress={setNewAddress} />
           </div>
+          {errorAddress != "" ? (
+            <div className="text-[#ff4d4f] text-[14px]">{errorAddress}</div>
+          ) : (
+            ""
+          )}
         </div>
-        <div>
+        <div className="">
           <div className="text-[#3a9943]">
             Diện tích/m<sup>2</sup>
           </div>
           <input
             value={newSquare}
-            onChange={(e) => setNewSquare(e.target.value)}
-            className="border outline-none w-full px-2 h-[40px] my-2 mb-5"
+            onChange={(e) => {
+              setNewSquare(e.target.value), setErrorSquare("");
+              setErrorAddress("");
+            }}
+            className={`border outline-none w-full px-2 h-[40px] ${
+              errorSquare != "" ? "border-[#ff4d4f]" : ""
+            }`}
             type="number"
             name=""
             id=""
           />
+          {errorSquare != "" ? (
+            <div className="text-[#ff4d4f] text-[14px]">{errorSquare}</div>
+          ) : (
+            ""
+          )}
         </div>
-        <div>
+        <div className="my-2  ">
           <input
             type="file"
             accept="image/*"
@@ -132,8 +169,8 @@ function AddCustomerGarden(props) {
           "Bạn chỉ có thể thêm tối đa 4 ảnh"
         )}
         <div className="modal-action">
-          <form method="dialog">
-            <button className="btn" onClick={() => handleAddNewGarden()}>
+          <form onSubmit={handleAddNewGarden} method="dialog">
+            <button type="submit" className="btn">
               Thêm vườn
             </button>
           </form>
