@@ -15,8 +15,10 @@ import {
 import Cookies from "universal-cookie";
 import AddCustomerGarden from "../../Garden/AddCustomerGarden";
 import Loading from "../../../components/Loading";
+import { customerBonsai } from "../../../redux/slice/bonsaiSlice";
 function StepOne(propsStepOne) {
-  const { setSelectedGardenId, gardenDetail, selectedGardenId, setStepList } = propsStepOne;
+  const { setSelectedGardenId, gardenDetail, selectedGardenId, setStepList } =
+    propsStepOne;
   const location = useLocation();
   const typeEnum = new URLSearchParams(location.search).get("typeEnum");
   const dispatch = useDispatch();
@@ -24,13 +26,16 @@ function StepOne(propsStepOne) {
   const [pageSize, setPageSize] = useState(5);
   useEffect(() => {
     dispatch(fetchCustomerGarden({ pageIndex, pageSize }));
+    dispatch(customerBonsai({ pageIndex, pageSize }));
   }, []);
-
   const gardens = useSelector((state) => state.garden?.gardenDTO?.items);
+  const bonsais = useSelector((state) => state.bonsai?.customerBonsai.items);
   const loadingGarden = useSelector(
     (state) => state?.garden?.gardenDTO?.loading
   );
-  console.log(loadingGarden);
+  const bonsaiLoading = useSelector(
+    (state) => state?.bonsai?.customerBonsai?.loading
+  );
   const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
   const cookies = new Cookies(null, { expires: cookieExpires });
   const userInfo = cookies?.get("user");
@@ -61,12 +66,18 @@ function StepOne(propsStepOne) {
             <div></div>
           )}
           <div className="font-bold text-[25px]">
-            Bước 1: 
+            Bước 1:
             <span className="text-[18px] font-normal opacity-70">
-              <span className="px-2">Địa chỉ</span>
-              {gardenDetail?.address
-                ? gardenDetail?.address
-                : "Vui lòng chọn vườn"}
+              {typeEnum == 2 ? (
+                <>
+                  <span className="px-2">Địa chỉ</span>
+                  {gardenDetail?.address
+                    ? gardenDetail?.address
+                    : "Vui lòng chọn vườn"}
+                </>
+              ) : (
+                <></>
+              )}
             </span>
           </div>
         </div>
@@ -80,8 +91,8 @@ function StepOne(propsStepOne) {
             className={`w-[30px] h-[30px] ${
               selectedGardenId == ""
                 ? "hover:cursor-not-allowed"
-                : "hover:bg-[#3a9943]"
-            } hover:text-[#fff] p-2 rounded-full flex items-center justify-center`}
+                : "hover:bg-[#3a9943] hover:text-[#fff]"
+            }  p-2 rounded-full flex items-center justify-center`}
           >
             <ArrowRightOutlined />
           </button>
@@ -174,7 +185,53 @@ function StepOne(propsStepOne) {
           )}
         </div>
       ) : (
-        <div></div>
+        <div>
+          {bonsaiLoading ? (
+            <Loading loading={loadingGarden} />
+          ) : (
+            <div>
+              {bonsais?.length > 0
+                ? bonsais?.map((bonsai) => (
+                    <div key={bonsai.id} className="flex gap-2 relative">
+                      <div className="w-[30%] h-[300px] border rounded-tr-[30px]">
+                        <img
+                          className="w-full h-full object-cover rounded-tr-[30px]"
+                          src={
+                            bonsai?.bonsaiImages?.length > 0
+                              ? bonsai?.bonsaiImages?.image
+                              : noImage
+                          }
+                          alt=""
+                        />
+                      </div>
+                      <div>
+                        <div className="">{bonsai?.bonsai?.name}</div>
+                        <div>Code :{bonsai?.bonsai?.code}</div>
+                        <div>Năm trông:{bonsai?.bonsai?.yearOfPlanting}</div>
+                        <div>
+                          Diện tích thân: {bonsai?.bonsai?.trunkDimenter}cm
+                          <sup>2</sup>
+                        </div>
+                        <div>Chiều cao: {bonsai?.bonsai?.height}m</div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setSelectedGardenId(bonsai.id), handleToStepTwo();
+                        }}
+                        className="absolute right-0 outline-none text-[20px]"
+                      >
+                        {selectedGardenId == bonsai.id ? (
+                          <CheckCircleOutlined className="text-[#3a9943]" />
+                        ) : (
+                          <PlusCircleOutlined />
+                        )}
+                      </button>
+                    </div>
+                  ))
+                : ""}
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

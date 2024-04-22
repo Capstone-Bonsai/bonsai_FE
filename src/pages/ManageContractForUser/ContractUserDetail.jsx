@@ -131,12 +131,12 @@ function ContractUserDetail(props) {
                       : "Chăm sóc sân vườn"}
                   </div>
                   <div>
-                    Khoảng cách: {contractDetail?.distance.toLocaleString("en")}
+                    Khoảng cách: {contractDetail?.distance?.toLocaleString("en")}
                     m
                   </div>
                   <div>
                     Diện tích vườn:{" "}
-                    {contractDetail.gardenSquare.toLocaleString("en")}m
+                    {contractDetail.gardenSquare?.toLocaleString("en")}m
                     <sup>2</sup>
                   </div>
                 </div>

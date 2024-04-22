@@ -102,7 +102,7 @@ export const servicePackageById = createAsyncThunk(
       const response = await axios.get(`/Service/${servicePackageId}`);
       return response.data;
     } catch (error) {
-      throw error;
+      return {};
     }
   }
 );

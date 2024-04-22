@@ -108,11 +108,13 @@ export const manageServiceCustomer = createAsyncThunk(
 
 export const serviceListPackage = createAsyncThunk(
   "service/serviceListPackage",
-  async ({ pageIndex, pageSize, serviceTypeId }) => {
+  async ({ pageIndex, pageSize, serviceTypeId, customerBonsaiId }) => {
     try {
-      const response = await axios.get(
-        `/Service/Package?pageIndex=${pageIndex}&pageSize=${pageSize}&serviceTypeId=${serviceTypeId}`
-      );
+      let url = `/Service/Package?pageIndex=${pageIndex}&pageSize=${pageSize}&serviceTypeId=${serviceTypeId}`;
+      if (customerBonsaiId) {
+        url += `&customerBonsaiId=${customerBonsaiId}`;
+      }
+      const response = await axios.get(url);
       return response.data;
     } catch (error) {
       throw error;

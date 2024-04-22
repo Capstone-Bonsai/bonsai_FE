@@ -16,19 +16,6 @@ function ContractUser() {
   const [currentPage, setCurrentPage] = useState(1);
   console.log(currentPage);
   const [pageSize, setPageSize] = useState(3);
-  const contracts = useSelector(
-    (state) => state.contract?.listContractDTO?.items
-  );
-  console.log(contracts);
-  const { totalItemsCount } = useSelector(
-    (state) => state.contract.listContractDTO
-  );
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-  const [selectedDetail, setSelectedDetail] = useState(false);
-  const [contractId, setContractId] = useState("");
-  console.log(contractId);
   useEffect(() => {
     const payload = {
       pageIndex: currentPage - 1,
@@ -44,6 +31,19 @@ function ContractUser() {
         setLoading(false);
       });
   }, [currentPage]);
+  const contracts = useSelector(
+    (state) => state.contract?.listContractDTO?.items
+  );
+  console.log(contracts);
+  const { totalItemsCount } = useSelector(
+    (state) => state.contract.listContractDTO
+  );
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  const [selectedDetail, setSelectedDetail] = useState(false);
+  const [contractId, setContractId] = useState("");
+  console.log(contractId);
 
   const props = {
     contractId,
@@ -137,14 +137,14 @@ function ContractUser() {
                                 {contract.numberOfGardener} người
                               </div>
                               <div>
-                                Giá chuẩn: {formatPrice(contract.standardPrice)}
-                              </div>
-                              <div>
-                                Phụ phí: {formatPrice(contract.surchargePrice)}
+                                Quãng đường{" "}
+                                {contract?.distance?.toLocaleString("vi-VN")}km
                               </div>
                             </div>
                             <div className="text-[#3a9943] w-[15%]">
-                              {formatPrice(contract.totalPrice)}
+                              {contract?.totalPrice == 0
+                                ? "Đang cập nhật"
+                                : formatPrice(contract?.totalPrice)}
                             </div>
                             <button
                               onClick={() => {

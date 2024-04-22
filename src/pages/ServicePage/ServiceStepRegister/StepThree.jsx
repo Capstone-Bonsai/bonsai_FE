@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { DatePicker, Modal, Space } from "antd";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./modalServiceRegister.css";
 import { serviceOrder } from "../../../redux/slice/serviceOrderSlice";
 import { toast } from "react-toastify";
@@ -17,6 +17,7 @@ function StepThree(propsStepThree) {
   const handleBackStep = () => {
     setStepList(2);
   };
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -43,7 +44,7 @@ function StepThree(propsStepThree) {
     return current && current < nextWeek.setHours(0, 0, 0, 0);
   };
   const dateVilidate = () => {
-    if (dateRange.length < 2) {
+    if (dateRange?.length < 2) {
       setErrorDateRange("Vui lòng chọn ngày phù hợp!!");
       isValid = false;
     }
@@ -74,7 +75,8 @@ function StepThree(propsStepThree) {
     try {
       const res = await serviceOrder(payload);
       setIsModalOpen(false);
-      toast.success("Gửi đơn thành công")
+      toast.success("Gửi đơn thành công");
+      navigate("/ManageContractUser");
       console.log(res);
     } catch (error) {
       console.error("Error:", error);
@@ -98,7 +100,7 @@ function StepThree(propsStepThree) {
             <img
               className="w-full h-full object-cover rounded-[8px]"
               src={
-                gardenDetail?.customerGardenImages.length > 0
+                gardenDetail?.customerGardenImages?.length > 0
                   ? gardenDetail?.customerGardenImages[0]?.image
                   : ""
               }

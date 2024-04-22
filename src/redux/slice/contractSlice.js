@@ -20,7 +20,7 @@ export const listAllContract = createAsyncThunk(
   async ({ pageIndex, pageSize }) => {
     try {
       const response = await axios.get(
-        `/Contract/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
+        `/ServiceOrder/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
       );
       return response.data;
     } catch (error) {
@@ -88,7 +88,7 @@ export const contractDetailById = createAsyncThunk(
   "contract/contractDetail",
   async (contractId) => {
     try {
-      const response = await axios.get(`/Contract/${contractId}`);
+      const response = await axios.get(`/ServiceOrder/${contractId}`);
       return response.data;
     } catch (error) {
       throw error;

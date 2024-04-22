@@ -30,6 +30,7 @@ function ServiceStepMain() {
   const [serviceIdSelected, setServiceIdSelected] = useState(
     !step2 ? "" : `${step2}`
   );
+  console.log(serviceIdSelected);
   useEffect(() => {
     if (typeEnum == null || serviceTypeId == null) {
       toast.warning("Vui lòng chọn loại dịch vụ");
@@ -50,7 +51,7 @@ function ServiceStepMain() {
   const gardenDetail = useSelector((state) => state.garden?.gardenById);
   useEffect(() => {
     dispatch(servicePackageById(serviceIdSelected));
-  }, [serviceIdSelected]);
+  }, [dispatch, serviceIdSelected]);
   const servicePackageDetail = useSelector(
     (state) => state.serviceOrder?.servicePackageDetail
   );
@@ -83,7 +84,7 @@ function ServiceStepMain() {
         current={step}
         items={[
           {
-            title: "Chọn vườn",
+            title: typeEnum == 1 ? "Chọn cây" : "Chọn vườn",
           },
           {
             title: "Chọn gói dịch vụ",

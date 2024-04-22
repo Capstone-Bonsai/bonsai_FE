@@ -6,7 +6,7 @@ function NavbarUser() {
     { name: "Hồ sơ người dùng", path: "/Profile" },
     { name: "Quản lý đặt hàng", path: "/ManageOrder" },
     { name: "Vườn của bạn", path: "/CustomerGarden" },
-    { name: "Đơn đăng ký dịch vụ", path: "/ManageService" },
+    // { name: "Đơn đăng ký dịch vụ", path: "/ManageService" },
     { name: "Quản lý hợp đồng", path: "/ManageContractUser" },
   ];
   const location = useLocation();
