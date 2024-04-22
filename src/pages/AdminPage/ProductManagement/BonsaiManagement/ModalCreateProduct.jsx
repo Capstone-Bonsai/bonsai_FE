@@ -9,6 +9,7 @@ import { fetchAllBonsaiPagination } from "../../../../redux/slice/bonsaiSlice";
 import { postBonsai } from "../../../../utils/bonsaiApi";
 import ModalCreateCategory from "../CategoryManagement/ModalCreateCategory";
 import ModalCreateStyle from "../StyleManagement/ModalCreateStyle";
+import { deliverySizeList } from "./deliverySize";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -45,6 +46,7 @@ const ModalCreateProduct = (props) => {
       Height: 0,
       NumberOfTrunk: 0,
       Price: 0,
+      DeleverySize: 0,
       Image: "",
     });
     form.resetFields();
@@ -61,6 +63,7 @@ const ModalCreateProduct = (props) => {
     Height: 0,
     NumberOfTrunk: 0,
     Price: 0,
+    DeleverySize: 0,
     Image: "",
   });
   const dispatch = useDispatch();
@@ -70,6 +73,7 @@ const ModalCreateProduct = (props) => {
   const [previewTitle, setPreviewTitle] = useState("");
   const [openCreateCategory, setOpenCreateCategory] = useState(false);
   const [openCreateStyle, setOpenCreateStyle] = useState(false);
+  const [formDisabled, setFormDisabled] = useState(false);
 
   const [listImage, setListImage] = useState([]);
   const formRef = useRef(null);
@@ -125,6 +129,7 @@ const ModalCreateProduct = (props) => {
         })
         .finally(() => {
           setConfirmLoading(false);
+          setFormDisabled(false);
         });
     } catch (err) {
       toast.error(err.response.data);
@@ -142,11 +147,13 @@ const ModalCreateProduct = (props) => {
     postData.append("Height", formData.Height);
     postData.append("NumberOfTrunk", formData.NumberOfTrunk);
     postData.append("Price", formData.Price);
+    postData.append("DeliverySize", formData.DeleverySize);
     formData.Image?.map((image) => postData.append("Image", image));
 
     formRef.current
       .validateFields()
       .then(() => {
+        setFormDisabled(true);
         setConfirmLoading(true);
         createBonsai(postData);
       })
@@ -218,13 +225,9 @@ const ModalCreateProduct = (props) => {
             labelCol={{ span: 5 }}
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
+            disabled={formDisabled}
           >
-            <Form.Item
-              label="Phân loại"
-              rules={[
-                { required: true, message: "Phân loại không được để trống!" },
-              ]}
-            >
+            <Form.Item label="Phân loại">
               <div>
                 <div className="mt-1">
                   <Tag
@@ -235,7 +238,15 @@ const ModalCreateProduct = (props) => {
                   </Tag>
                 </div>
                 <div className="mt-3">
-                  <Form.Item name="CategoryId">
+                  <Form.Item
+                    name="CategoryId"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Phân loại không được để trống!",
+                      },
+                    ]}
+                  >
                     <Select>
                       {listCategory?.map((category, index) => (
                         <Select.Option value={category.id} key={index}>
@@ -247,12 +258,7 @@ const ModalCreateProduct = (props) => {
                 </div>
               </div>
             </Form.Item>
-            <Form.Item
-              label="Kiểu dáng"
-              rules={[
-                { required: true, message: "Kiểu dáng không được để trống!" },
-              ]}
-            >
+            <Form.Item label="Kiểu dáng">
               <div>
                 <div className="mt-1">
                   <Tag icon={<PlusOutlined />} onClick={showModalCreateStyle}>
@@ -260,7 +266,15 @@ const ModalCreateProduct = (props) => {
                   </Tag>
                 </div>
                 <div className="mt-3">
-                  <Form.Item name="StyleId">
+                  <Form.Item
+                    name="StyleId"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Kiểu dáng không được để trống!",
+                      },
+                    ]}
+                  >
                     <Select>
                       {listStyle?.map((style, index) => (
                         <Select.Option value={style.id} key={index}>
@@ -369,6 +383,28 @@ const ModalCreateProduct = (props) => {
                 prefix="₫"
                 className="w-[100%]"
               />
+            </Form.Item>
+            <Form.Item label="Kích cỡ">
+              <div className="mt-3">
+                <Form.Item
+                  name="DeliverySize"
+                  rules={[
+                    {
+                      type: "number",
+                      required: true,
+                      message: "Kích cõ không được để trống!",
+                    },
+                  ]}
+                >
+                  <Select>
+                    {deliverySizeList?.map((deleverySize, index) => (
+                      <Select.Option value={deleverySize.value} key={index}>
+                        {deleverySize.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </div>
             </Form.Item>
             <Form.Item
               label="Upload ảnh"

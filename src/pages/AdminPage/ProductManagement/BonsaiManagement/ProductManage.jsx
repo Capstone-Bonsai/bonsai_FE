@@ -5,7 +5,7 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import { Space, Table, Input, Modal, Select, Tooltip, Button } from "antd";
+import { Space, Table, Input, Modal, Select, Tooltip, Button, Tag } from "antd";
 const { Search, TextArea } = Input;
 
 import { toast } from "react-toastify";
@@ -39,6 +39,8 @@ function ProductManage() {
   const allBonsai = useSelector(
     (state) => state.bonsai?.allBonsaiPaginationDTO?.items
   );
+
+  console.log(allBonsai);
   const allCategories = useSelector(
     (state) => state.category?.allCategoryDTO?.items
   );
@@ -54,15 +56,15 @@ function ProductManage() {
         pageSize: pageSize,
       })
     );
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(allCategory());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(allStyle());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     handleSearchInputChange();
@@ -154,26 +156,6 @@ function ProductManage() {
       key: "code",
     },
     {
-      title: "Năm trồng",
-      key: "yearOfPlanting",
-      render: (record) => <div>năm {record?.yearOfPlanting}</div>,
-    },
-    {
-      title: "Hoành cây",
-      key: "trunkDimenter",
-      render: (record) => <div>{record?.trunkDimenter}</div>,
-    },
-    {
-      title: "Chiều cao ",
-      key: "height",
-      render: (record) => <div>{record?.height} m</div>,
-    },
-    {
-      title: "Số thân",
-      key: "numberOfTrunk",
-      render: (record) => <div>{record?.numberOfTrunk}</div>,
-    },
-    {
       title: "Giá tiền",
       dataIndex: "price",
       key: "price",
@@ -205,6 +187,46 @@ function ProductManage() {
       render: (_, record) => (
         <>
           <p>{record?.style?.name}</p>
+        </>
+      ),
+    },
+    {
+      title: "Kích cỡ",
+      dataIndex: "deliverySize",
+      key: "deliverySize",
+      render: (_, record) => (
+        <>
+          <div>
+            {record?.deliverySize == 1
+              ? "Nhỏ"
+              : record?.deliverySize == 2
+              ? "Vừa"
+              : "Lớn"}
+          </div>
+        </>
+      ),
+    },
+    {
+      title: "Tình trạng",
+      dataIndex: "isSold",
+      key: "isSold",
+      render: (_, record) => (
+        <>
+          <Tag color={record?.isSold === true ? "red" : "green"}>
+            {record?.isSold === true ? "Đã bán" : "Có sẵn"}
+          </Tag>
+        </>
+      ),
+    },
+    {
+      title: "Hiệu lực",
+      dataIndex: "isDisable",
+      key: "isDisable",
+      render: (_, record) => (
+        <>
+          <Tag color={record?.isDisable === true ? "red" : "green"}>
+            {record?.isDisable === true ? "Vô hiệu hóa" : "Có hiệu lực"}
+          </Tag>
         </>
       ),
     },

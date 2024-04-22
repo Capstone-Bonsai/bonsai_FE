@@ -14,6 +14,17 @@ export const freeGardener = createAsyncThunk(
   }
 );
 
+export const allGardener = createAsyncThunk("garden/allGardener", async () => {
+  try {
+    const response = await axios.get(
+      `/User/Gardener`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+});
+
 export const addGardener = async (payload) => {
   try {
     const response = await axios.post(`/ServiceOrderGardener`, payload);
@@ -25,6 +36,7 @@ export const addGardener = async (payload) => {
 
 const initialState = {
   freeGardenerDTO: {},
+  allGardenerDTO: {},
   loading: false,
   msg: "",
   token: null,
@@ -36,6 +48,9 @@ const gardenerSlice = createSlice({
   reducers: {
     setGarden: (state, action) => {
       state.gardenDTO = action.payload;
+    },
+    setAllGardener: (state, action) => {
+      state.allGardenerDTO = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -54,9 +69,24 @@ const gardenerSlice = createSlice({
         state.msg = "Không tìm thấy";
         state.freeGardenerDTO.loading = false;
       });
+    builder
+      .addCase(allGardener.pending, (state) => {
+        state.msg = "Loading...";
+        state.allGardenerDTO.loading = true;
+      })
+      .addCase(allGardener.fulfilled, (state, action) => {
+        state.allGardenerDTO = action.payload;
+        state.msg = "Data loaded successfully";
+        state.allGardenerDTO.loading = false;
+      })
+      .addCase(allGardener.rejected, (state) => {
+        state.allGardenerDTO = [];
+        state.msg = "Không tìm thấy";
+        state.allGardenerDTO.loading = false;
+      });
   },
 });
 
 const { reducer: gardenerReducer, actions } = gardenerSlice;
-export const { setGarden } = actions;
+export const { setGarden, setAllGardener } = actions;
 export { gardenerReducer as default };

@@ -55,7 +55,7 @@ function PrivateRoute() {
       children: userInfo
         ? [
             getItem(
-              <Link to="/login" className="text-black" onClick={handleLogout}>
+              <Link to="/HOME" className="text-black" onClick={handleLogout}>
                 Đăng xuất
               </Link>,
               "1",
@@ -78,6 +78,15 @@ function PrivateRoute() {
     },
   ];
   const SideBarItems = [
+    ...(userInfo?.role == "Manager"
+      ? [
+          getItem(
+            <Link to={`/dashboard`}>Dashboard</Link>,
+            "dashboard",
+            <UserOutlined />
+          ),
+        ]
+      : []),
     getItem("Sản phẩm", "sub1", <ProductOutlined />, [
       ...(userInfo?.role == "Manager"
         ? [getItem(<Link to={`/admin/bonsai`}>Bonsai</Link>, "2")]
