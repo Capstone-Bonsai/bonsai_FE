@@ -9,6 +9,7 @@ import { putBonsai } from "../../../../utils/bonsaiApi";
 import { fetchAllBonsaiPagination } from "../../../../redux/slice/bonsaiSlice";
 import ModalCreateCategory from "../CategoryManagement/ModalCreateCategory";
 import ModalCreateStyle from "../StyleManagement/ModalCreateStyle";
+import { deliverySizeList } from "./deliverySize";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -45,6 +46,7 @@ const ModalUpdateProduct = (props) => {
       Height: 0,
       NumberOfTrunk: 0,
       Price: 0,
+      DeliverySize: 0,
       Image: "",
     });
     form.resetFields();
@@ -61,6 +63,7 @@ const ModalUpdateProduct = (props) => {
     Height: 0,
     NumberOfTrunk: 0,
     Price: 0,
+    DeliverySize: 0,
     Image: "",
   });
   const dispatch = useDispatch();
@@ -71,6 +74,7 @@ const ModalUpdateProduct = (props) => {
   const [listImage, setListImage] = useState([]);
   const [openCreateCategory, setOpenCreateCategory] = useState(false);
   const [openCreateStyle, setOpenCreateStyle] = useState(false);
+  const [formDisabled, setFormDisabled] = useState(false);
   const formRef = useRef(null);
 
   useEffect(() => {
@@ -86,6 +90,7 @@ const ModalUpdateProduct = (props) => {
         Height: bonsai.height,
         NumberOfTrunk: bonsai.numberOfTrunk,
         Price: bonsai.price,
+        DeliverySize: bonsai.deliverySize,
         Image: fetchListImage(),
       });
     }
@@ -96,7 +101,7 @@ const ModalUpdateProduct = (props) => {
       form.setFieldsValue(formData);
     }
   }, [form, formData]);
-  
+
   const handleCancelPreview = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -155,10 +160,11 @@ const ModalUpdateProduct = (props) => {
         })
         .catch((err) => {
           console.log(err);
-          toast.error(err.response.data);
+          toast.error("Đã xảy ra sự cố!");
         })
         .finally(() => {
           setConfirmLoading(false);
+          setFormDisabled(false);
         });
     } catch (err) {
       console.log(err);
@@ -177,6 +183,7 @@ const ModalUpdateProduct = (props) => {
     postData.append("Height", formData.Height);
     postData.append("NumberOfTrunk", formData.NumberOfTrunk);
     postData.append("Price", formData.Price);
+    postData.append("DeliverySize", formData.DeliverySize);
     formData.Image?.map((image) =>
       image.originFileObj
         ? postData.append("Image", image.originFileObj)
@@ -186,6 +193,7 @@ const ModalUpdateProduct = (props) => {
     formRef.current
       .validateFields()
       .then(() => {
+        setFormDisabled(true);
         setConfirmLoading(true);
         updateBonsai(postData);
       })
@@ -258,13 +266,9 @@ const ModalUpdateProduct = (props) => {
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
             initialValues={formData}
+            disabled={formDisabled}
           >
-            <Form.Item
-              label="Phân loại"
-              rules={[
-                { required: true, message: "Phân loại không được để trống!" },
-              ]}
-            >
+            <Form.Item label="Phân loại">
               <div>
                 <div className="mt-1">
                   <Tag
@@ -275,7 +279,15 @@ const ModalUpdateProduct = (props) => {
                   </Tag>
                 </div>
                 <div className="mt-3">
-                  <Form.Item name="CategoryId">
+                  <Form.Item
+                    name="CategoryId"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Phân loại không được để trống!",
+                      },
+                    ]}
+                  >
                     <Select>
                       {listCategory?.map((category, index) => (
                         <Select.Option value={category.id} key={index}>
@@ -287,12 +299,7 @@ const ModalUpdateProduct = (props) => {
                 </div>
               </div>
             </Form.Item>
-            <Form.Item
-              label="Kiểu dáng"
-              rules={[
-                { required: true, message: "Kiểu dáng không được để trống!" },
-              ]}
-            >
+            <Form.Item label="Kiểu dáng">
               <div>
                 <div className="mt-1">
                   <Tag icon={<PlusOutlined />} onClick={showModalCreateStyle}>
@@ -300,7 +307,15 @@ const ModalUpdateProduct = (props) => {
                   </Tag>
                 </div>
                 <div className="mt-3">
-                  <Form.Item name="StyleId">
+                  <Form.Item
+                    name="StyleId"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Kiểu dáng không được để trống!",
+                      },
+                    ]}
+                  >
                     <Select value={bonsai?.styleId}>
                       {listStyle?.map((style, index) => (
                         <Select.Option value={style.id} key={index}>
@@ -409,6 +424,28 @@ const ModalUpdateProduct = (props) => {
                 prefix="₫"
                 className="w-[100%]"
               />
+            </Form.Item>
+            <Form.Item label="Kích cỡ">
+              <div className="mt-3">
+                <Form.Item
+                  name="DeliverySize"
+                  rules={[
+                    {
+                      type: "number",
+                      required: true,
+                      message: "Phân loại không được để trống!",
+                    },
+                  ]}
+                >
+                  <Select>
+                    {deliverySizeList?.map((deleverySize, index) => (
+                      <Select.Option value={deleverySize.value} key={index}>
+                        {deleverySize.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </div>
             </Form.Item>
             <Form.Item
               label="Upload ảnh"

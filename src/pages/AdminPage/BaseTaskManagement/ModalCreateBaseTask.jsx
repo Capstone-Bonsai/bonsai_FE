@@ -23,6 +23,7 @@ const ModalCreateBaseTask = (props) => {
   });
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [formDisabled, setFormDisabled] = useState(false);
 
   const formRef = useRef(null);
 
@@ -45,6 +46,7 @@ const ModalCreateBaseTask = (props) => {
         })
         .finally(() => {
           setConfirmLoading(false);
+          setFormDisabled(false);
         });
     } catch (err) {
       toast.error(err.response.data);
@@ -55,6 +57,7 @@ const ModalCreateBaseTask = (props) => {
     formRef.current
       .validateFields()
       .then(() => {
+        setFormDisabled(true);
         setConfirmLoading(true);
         createBaseTask(formData);
       })
@@ -89,6 +92,7 @@ const ModalCreateBaseTask = (props) => {
             labelCol={{ span: 5 }}
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
+            disabled={formDisabled}
           >
             <Form.Item
               label="Tên nhiệm vụ cơ bản"

@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { OtpHandler } from "../../redux/slice/authSlice";
-import { useLocation } from "react-router-dom";
-import {  toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function CodeOTP() {
+  const navigate = useNavigate();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [codeOTP, setCodeOTP] = useState("");
   const inputRefs = useRef([]);
@@ -41,10 +42,10 @@ function CodeOTP() {
   const handleCodeOTP = async () => {
     try {
       const response = await OtpHandler(email, codeOTP);
-      console.log(response);
       toast.success(response);
+      navigate("/ResetPassword", { state: { email: email, codeOTP: codeOTP } });
     } catch (error) {
-      console.error(error);
+      toast.error(error.response.data);
     }
   };
   useEffect(() => {
@@ -87,6 +88,7 @@ function CodeOTP() {
             Xác nhận
           </button>
         </div>
+        <div></div>
       </div>
     </div>
   );

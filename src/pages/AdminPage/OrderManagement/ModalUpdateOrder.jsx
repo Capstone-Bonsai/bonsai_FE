@@ -3,8 +3,11 @@ import { Tag, Modal, Form, Select, Button } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { getOrderStatus, putOrder } from "../../../utils/orderApi";
+import { addGardenerToOrder, getOrderStatus } from "../../../utils/orderApi";
 import { fetchAllOrders } from "../../../redux/slice/orderSlice";
+import { allGardener } from "../../../redux/slice/gardener";
+import Loading from "../../../components/Loading";
+import { getOrderStatusText } from "../../../components/status/orderStatus";
 
 const ModalUpdateOrder = (props) => {
   const { show, setShow, order } = props;
@@ -17,75 +20,49 @@ const ModalUpdateOrder = (props) => {
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [listOrderStatus, setListOrderStatus] = useState();
+  const [selectedGardener, setSelectedGardener] = useState();
+  const [validateMessege, setValidateMessege] = useState();
 
+  const handleSelectChange = (value) => {
+    setSelectedGardener(value);
+  };
+
+  const { allGardenerDTO } = useSelector((state) => state.gardener);
+  
   useEffect(() => {
-    fetchListOrderStatus();
+    if (selectedGardener !== undefined) {
+      setValidateMessege(undefined);
+    }
+  }, [selectedGardener]);
+  useEffect(() => {
+    dispatch(allGardener());
   }, []);
 
   const updateOrder = (data) => {
     try {
       console.log(data);
-      putOrder(order.id, getStatusNumber(order.orderStatus))
+      addGardenerToOrder(order.id, selectedGardener)
         .then((data) => {
+          console.log(data);
           toast.success(data.data);
           dispatch(fetchAllOrders({ pageIndex: 0, pageSize: 10 }));
+          handleCancelUpdateStatus();
         })
         .catch((err) => {
-          toast.error(err.response.data);
+          console.log(err);
+          setValidateMessege("Vui lòng chọn người làm vườn!");
         })
         .finally(() => {
           setConfirmLoadingUpdateStatus(false);
-          handleCancelUpdateStatus();
         });
     } catch (err) {
       toast.error(err.response.data);
     }
   };
 
-  const fetchListOrderStatus = () => {
-    getOrderStatus()
-      .then((data) => {
-        setListOrderStatus(data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        if (
-          err &&
-          err.response &&
-          err.response.data &&
-          err.response.data.value
-        ) {
-          toast.error(err.response.data.value);
-        } else {
-          toast.error("Đã xảy ra lỗi!");
-        }
-      });
-  };
-
   const onSubmit = (i) => {
     setConfirmLoadingUpdateStatus(true);
     updateOrder();
-  };
-
-  const getStatusNumber = (status) => {
-    switch (status) {
-      case "Waiting":
-        return 1;
-      case "Paid":
-        return 2;
-      case "Preparing":
-        return 3;
-      case "Delivering":
-        return 4;
-      case "Delivered":
-        return 5;
-      case "Failed":
-        return 6;
-      case "DeliveryFailed":
-        return 7;
-      default:
-        return 0;
-    }
   };
 
   const getStatusText = (status) => {
@@ -115,6 +92,7 @@ const ModalUpdateOrder = (props) => {
 
   const handleCancelUpdateStatus = () => {
     console.log("Clicked cancel button");
+    setSelectedGardener(undefined);
     setOpenUpdateStatus(false);
   };
 
@@ -189,26 +167,65 @@ const ModalUpdateOrder = (props) => {
                 </button>
               </div> */}
               <div className="flex items-center gap-2">
-                <Tag>{getStatusText(order?.orderStatus)}</Tag>
-                <div className="flex items-center">
+                <Tag>{getOrderStatusText(order?.orderStatus)}</Tag>
+                {/* <div className="flex items-center">
                   <Button className="bg-none" onClick={showModalUpdateStatus}>
                     <EditOutlined /> Cập nhật
                   </Button>
-                </div>
+                </div> */}
+              </div>
+            </Form.Item>
+            <Form.Item label="Người làm vườn">
+              <div className="flex items-center gap-2">
+                {order?.gardenerId ? (
+                  <Tag>Đã đủ người</Tag>
+                ) : (
+                  <Tag>Chưa thêm người</Tag>
+                )}
+                {order?.orderStatus === "Paid" ? (
+                  <div className="flex items-center">
+                    <Button className="bg-none" onClick={showModalUpdateStatus}>
+                      <EditOutlined /> Thêm người
+                    </Button>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
             </Form.Item>
           </Form>
         </div>
       </Modal>
       <Modal
-        title="Cập nhật trạng thái"
+        title="Thêm người làm vườn"
         open={openUpdateStatus}
         onOk={onSubmit}
+        okText={confirmLoadingUpdateStatus ? "Đang tạo" : "Tạo mới"}
+        cancelText="Hủy"
         okButtonProps={{ type: "default" }}
         confirmLoading={confirmLoadingUpdateStatus}
         onCancel={handleCancelUpdateStatus}
       >
         <div>Bạn có muốn cập nhật trạng thái của đơn hàng này không?</div>
+        {allGardenerDTO?.loading === true ? (
+          <Loading loading={allGardenerDTO?.loading} />
+        ) : (
+          <>
+            <Select
+              value={selectedGardener}
+              onChange={handleSelectChange}
+              style={{ width: "100%" }}
+              placeholder="Chọn người làm vườn"
+            >
+              {allGardenerDTO?.items?.map((gardener) => (
+                <Select.Option key={gardener.id} value={gardener.id}>
+                  {gardener?.fullname}
+                </Select.Option>
+              ))}
+            </Select>
+            <div className="text-red-500 pl-2">{validateMessege}</div>
+          </>
+        )}
       </Modal>
     </>
   );

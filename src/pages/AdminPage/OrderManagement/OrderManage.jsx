@@ -17,6 +17,7 @@ import Loading from "../../../components/Loading";
 import ModalUpdateOrder from "./ModalUpdateOrder";
 import Cookies from "universal-cookie";
 import { deleteOrder } from "../../../utils/orderApi";
+import { getOrderStatusText } from "../../../components/status/orderStatus";
 
 function OrderManage() {
   const cookies = new Cookies();
@@ -36,6 +37,7 @@ function OrderManage() {
 
   const [expended, setExpended] = useState();
 
+  console.log(allOrder)
   useEffect(() => {
     dispatch(
       fetchAllOrders({
@@ -53,21 +55,21 @@ function OrderManage() {
     setOpenDelete(true);
   };
 
-  const handleDelete = () => {
-    setConfirmLoadingDelete(true);
-    deleteOrder(selectedOrder)
-      .then((data) => {
-        toast.success(data);
-      })
-      .catch((err) => {
-        console.log(err.response.statusText);
-        toast.error(err.response.statusText);
-      })
-      .finally(() => {
-        setOpenDelete(false);
-        setConfirmLoadingDelete(false);
-      });
-  };
+  // const handleDelete = () => {
+  //   setConfirmLoadingDelete(true);
+  //   deleteOrder(selectedOrder)
+  //     .then((data) => {
+  //       toast.success(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.response.statusText);
+  //       toast.error(err.response.statusText);
+  //     })
+  //     .finally(() => {
+  //       setOpenDelete(false);
+  //       setConfirmLoadingDelete(false);
+  //     });
+  // };
 
   const handleCancelDelete = () => {
     console.log("Clicked cancel button");
@@ -112,7 +114,7 @@ function OrderManage() {
         return "Đang giao";
       case "Failed":
         return "Thất bại";
-      case "DeliveryFailed ":
+      case "DeliveryFailed":
         return "Giao hàng thất bại";
       case "Delivered":
         return "Đã giao";
@@ -299,7 +301,7 @@ function OrderManage() {
             color={getColor(record.orderStatus).color}
             icon={getColor(record.orderStatus).icon}
           >
-            {getStatusText(record.orderStatus)}
+            {getOrderStatusText(record.orderStatus)}
           </Tag>
         </>
       ),
@@ -322,7 +324,7 @@ function OrderManage() {
                     }}
                   />
                 </Tooltip>
-                <Tooltip title="Xóa">
+                {/* <Tooltip title="Xóa">
                   <Button
                     type="text"
                     icon={<DeleteOutlined style={{ color: "red" }} />}
@@ -331,7 +333,7 @@ function OrderManage() {
                       showModalDelete();
                     }}
                   />
-                </Tooltip>
+                </Tooltip> */}
               </Space>
             ),
           },
@@ -343,7 +345,7 @@ function OrderManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Đơn hàng</div>
+          <div className="font-semibold mb-6">Quản lý Đơn hàng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="mb-12">
               <Table
@@ -372,7 +374,7 @@ function OrderManage() {
           setShow={handleCancelUpdate}
           order={selectedUpdateOrder}
         />
-        <Modal
+        {/* <Modal
           title="Xóa đơn hàng"
           open={openDelete}
           onOk={handleDelete}
@@ -381,7 +383,7 @@ function OrderManage() {
           onCancel={handleCancelDelete}
         >
           <div>Bạn có muốn xóa đơn hàng này không?</div>
-        </Modal>
+        </Modal> */}
       </div>
     </>
   );

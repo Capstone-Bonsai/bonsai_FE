@@ -42,6 +42,8 @@ import ServiceTypeManage from "../pages/AdminPage/ServiceTypeManagerment/Service
 import ServiceOrder from "../pages/AdminPage/StaffPage copy/ServiceOrder";
 import ServiceOption from "../pages/ServicePage/ServiceOption";
 import ServiceStepMain from "../pages/ServicePage/ServiceStepRegister/ServiceStepMain";
+import ResetPassword from "../pages/Auth/ResetPassword";
+import Dashboard from "../pages/AdminPage/Dashboard/Dashboard";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -64,6 +66,10 @@ function Router() {
               {
                 path: "/CodeOTP",
                 element: <CodeOTP />,
+              },
+              {
+                path: "/ResetPassword",
+                element: <ResetPassword />,
               },
               {
                 path: "/api/Auth/ConfirmEmail",
@@ -200,6 +206,10 @@ function Router() {
                 element: <ServiceTypeManage />,
               },
               {
+                path: "/dashboard",
+                element: <Dashboard />,
+              },
+              {
                 path: "*",
                 element: <ProductManagetNavigate />,
               },
@@ -215,10 +225,10 @@ function Router() {
                 path: "/admin/serviceOrder",
                 element: <ServiceOrder />,
               },
-              {
-                path: "/admin/serviceGardenChecking",
-                element: <ServiceGardenChecking />,
-              },
+              // {
+              //   path: "/admin/serviceGardenChecking",
+              //   element: <ServiceGardenChecking />,
+              // },
             ]
           : []),
         ...(userInfo?.role == "Staff"

@@ -14,6 +14,7 @@ import careStepReducer from "./slice/careStepSlice";
 import contractReducer from "./slice/contractSlice";
 import gardenerReducer from "./slice/gardener";
 import serviceOrderReducer from "./slice/serviceOrderSlice";
+import dashboardReducer from "./slice/dashboardSlice";
 
 const store = configureStore({
   reducer: {
@@ -31,6 +32,7 @@ const store = configureStore({
     contract: contractReducer,
     gardener: gardenerReducer,
     serviceOrder: serviceOrderReducer,
+    dashboard: dashboardReducer,
   },
 });
 

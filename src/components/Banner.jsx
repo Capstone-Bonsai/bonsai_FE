@@ -28,7 +28,8 @@ function Banner() {
     { text: "Bảng giá giao hàng", to: "/delivery" },
     { text: "Liên hệ", to: "/contact" },
   ];
-  const cookies = new Cookies();
+  const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
+  const cookies = new Cookies(null, { expires: cookieExpires });
   const [countCart, setCountCart] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
   const avatarUrl = useSelector((state) => state.avatar.avatarUrlRedux);
@@ -119,7 +120,11 @@ function Banner() {
               </Link>
             </div>
             {userInfo != null ? (
-              <div className={`flex items-center bannerContent ${isSticky ? "absolute top-[40%] right-[50%]" : ""}`}>
+              <div
+                className={`flex items-center bannerContent ${
+                  isSticky ? "absolute top-[40%] right-[50%]" : ""
+                }`}
+              >
                 <div className="bg-[#f2f2f2] w-[40px] h-[40px] flex justify-center rounded-full drop-shadow-lg text-[30px]">
                   {avatarUrl != null ? (
                     <div>

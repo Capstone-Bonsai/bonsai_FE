@@ -21,6 +21,7 @@ const ModalCreateStyle = (props) => {
   const dispatch = useDispatch();
   const [confirmLoadingCreateStyle, setConfirmLoadingCreateStyle] =
     useState(false);
+  const [formDisabled, setFormDisabled] = useState(false);
 
   const formRef = useRef(null);
 
@@ -29,6 +30,7 @@ const ModalCreateStyle = (props) => {
     formRef.current
       .validateFields()
       .then(() => {
+        setFormDisabled(true);
         setConfirmLoadingCreateStyle(true);
         handleCreateStyle();
       })
@@ -47,6 +49,7 @@ const ModalCreateStyle = (props) => {
       .then((data) => {
         toast.success("Thêm kiểu mẫu thành công!");
         dispatch(allStyle());
+        handleClose();
       })
       .catch((err) => {
         console.log(err.response.statusText);
@@ -54,7 +57,7 @@ const ModalCreateStyle = (props) => {
       })
       .finally(() => {
         setConfirmLoadingCreateStyle(false);
-        handleClose();
+        setFormDisabled(false);
       });
   };
 
@@ -77,6 +80,7 @@ const ModalCreateStyle = (props) => {
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 17 }}
             onValuesChange={handleFormChange}
+            disabled={formDisabled}
           >
             <Form.Item
               label="Tên kiểu mẫu"

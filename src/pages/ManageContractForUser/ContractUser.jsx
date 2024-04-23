@@ -9,6 +9,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import ContractUserDetail from "./ContractUserDetail";
 import Loading from "../../components/Loading";
 import { AuditOutlined } from "@ant-design/icons";
+import {getStatusText} from '../../components/status/contractStatus'
 function ContractUser() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -16,19 +17,6 @@ function ContractUser() {
   const [currentPage, setCurrentPage] = useState(1);
   console.log(currentPage);
   const [pageSize, setPageSize] = useState(3);
-  const contracts = useSelector(
-    (state) => state.contract?.listContractDTO?.items
-  );
-  console.log(contracts);
-  const { totalItemsCount } = useSelector(
-    (state) => state.contract.listContractDTO
-  );
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-  const [selectedDetail, setSelectedDetail] = useState(false);
-  const [contractId, setContractId] = useState("");
-  console.log(contractId);
   useEffect(() => {
     const payload = {
       pageIndex: currentPage - 1,
@@ -44,39 +32,25 @@ function ContractUser() {
         setLoading(false);
       });
   }, [currentPage]);
+  const contracts = useSelector(
+    (state) => state.contract?.listContractDTO?.items
+  );
+  console.log(contracts);
+  const { totalItemsCount } = useSelector(
+    (state) => state.contract.listContractDTO
+  );
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  const [selectedDetail, setSelectedDetail] = useState(false);
+  const [contractId, setContractId] = useState("");
+  console.log(contractId);
 
   const props = {
     contractId,
     setSelectedDetail,
   };
-  const getStatusText = (status) => {
-    switch (status) {
-      case 1:
-        return "Đang chờ";
-      case 2:
-        return "Đã thanh toán";
-      case 3:
-        return "Đang thực hiện nhiệm vụ";
-      case 4:
-        return "Thất bại";
-      case 5:
-        return "Đã hủy";
-      case 6:
-        return "Hoàn thành nhiệm vụ";
-      case 7:
-        return "Hoàn thành hợp đồng";
-      case 8:
-        return "Phản hồi";
-      case 9:
-        return "Đang xử lý khiếu nại";
-      case 10:
-        return "Đã xử lý khiếu nại";
-      case 11:
-        return "Hoàn thành xử lý khiếu nại";
-      default:
-        return "Trạng thái không xác định";
-    }
-  };
+
   return (
     <MinHeight>
       <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
@@ -137,14 +111,14 @@ function ContractUser() {
                                 {contract.numberOfGardener} người
                               </div>
                               <div>
-                                Giá chuẩn: {formatPrice(contract.standardPrice)}
-                              </div>
-                              <div>
-                                Phụ phí: {formatPrice(contract.surchargePrice)}
+                                Quãng đường{" "}
+                                {contract?.distance?.toLocaleString("vi-VN")}km
                               </div>
                             </div>
                             <div className="text-[#3a9943] w-[15%]">
-                              {formatPrice(contract.totalPrice)}
+                              {contract?.totalPrice == 0
+                                ? "Đang cập nhật"
+                                : formatPrice(contract?.totalPrice)}
                             </div>
                             <button
                               onClick={() => {

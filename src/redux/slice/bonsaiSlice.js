@@ -34,6 +34,34 @@ export const addBonsaiToCart = createAsyncThunk(
   }
 );
 
+export const customerBonsai = createAsyncThunk(
+  "bonsai/CustomerBonsai",
+  async ({ pageIndex, pageSize }) => {
+    try {
+      const response = await axios.get(
+        `/CustomerBonsai/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const customerBonsaiById = createAsyncThunk(
+  "bonsai/customerBonsaiById",
+  async (bonsaiId) => {
+    try {
+      const response = await axios.get(`/CustomerBonsai/${bonsaiId}`);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const fetchBonsaiWithCateCayTrac = createAsyncThunk(
   "bonsai/fetchAllBonsaiPaginationCayTrac",
   async ({ pageIndex, pageSize }) => {
@@ -161,6 +189,8 @@ const initialState = {
   allBonsaiNoPagination: {},
   bonsaiCayTrac: [],
   bonsaiInCart: [],
+  customerBonsai: {},
+  customerBonsaiDetail: {},
   bonsaiCayThong: [],
   allBonsaiDTO: {},
   allCategoryDTO: {},
@@ -342,6 +372,32 @@ const bonsaiSlice = createSlice({
         state.msg = "Error loading data";
         state.loading = false;
       })
+      .addCase(customerBonsai.pending, (state) => {
+        state.msg = "Loading...";
+        state.customerBonsai.loading = true;
+      })
+      .addCase(customerBonsai.fulfilled, (state, action) => {
+        state.customerBonsai = action.payload;
+        state.msg = "Data loaded successfully";
+        state.customerBonsai.loading = false;
+      })
+      .addCase(customerBonsai.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.customerBonsai.loading = false;
+      })
+      .addCase(customerBonsaiById.pending, (state) => {
+        state.msg = "Loading...";
+        state.customerBonsaiDetail.loading = true;
+      })
+      .addCase(customerBonsaiById.fulfilled, (state, action) => {
+        state.customerBonsaiDetail = action.payload;
+        state.msg = "Data loaded successfully";
+        state.customerBonsaiDetail.loading = false;
+      })
+      .addCase(customerBonsaiById.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.customerBonsaiDetail.loading = false;
+      });
   },
 });
 

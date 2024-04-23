@@ -105,11 +105,25 @@ export const addBonsaiIntoGarden = async (formData, gardenId) => {
   }
 };
 
+export const customerGardenDetail = createAsyncThunk(
+  "bonsai/customerGardenDetail",
+  async (gardenId) => {
+    try {
+      const response = await axios.get(`/CustomerGarden/${gardenId}`);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 const initialState = {
   gardenDTO: {},
   gardenNoPagination: {},
   bonsaiInGarden: {},
   listBonsaiInGarden: {},
+  gardenById: {},
   loading: false,
   msg: "",
   token: null,
@@ -183,6 +197,20 @@ const gardenSlice = createSlice({
         state.listBonsaiInGarden = {};
         state.msg = "Không tìm thấy";
         state.loading = false;
+      })
+      .addCase(customerGardenDetail.pending, (state) => {
+        state.msg = "Loading...";
+        state.gardenById.loading = true;
+      })
+      .addCase(customerGardenDetail.fulfilled, (state, action) => {
+        state.gardenById = action.payload;
+        state.msg = "Data loaded successfully";
+        state.gardenById.loading = false;
+      })
+      .addCase(customerGardenDetail.rejected, (state) => {
+        state.gardenById = {};
+        state.msg = "Không tìm thấy";
+        state.gardenById.loading = false;
       });
     builder
       .addCase(fetchCustomerGardensManagers.pending, (state) => {

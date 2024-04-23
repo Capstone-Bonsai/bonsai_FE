@@ -12,6 +12,7 @@ import {
 } from "../../../redux/slice/serviceOrderSlice";
 import { putServiceOrderStatus } from "../../../utils/serviceOrderApi";
 import dayjs from "dayjs";
+import { getComplaintStatusText } from "../../../components/status/complaintStatus";
 
 function ServiceOrderDetail(props) {
   const dispatch = useDispatch();
@@ -78,20 +79,20 @@ function ServiceOrderDetail(props) {
     setOpenStatus(false);
   };
 
-  const getConplaintStatusText = (status) => {
-    switch (status) {
-      case 1:
-        return "Yêu cầu";
-      case 2:
-        return "Đang thực hiện";
-      case 3:
-        return "Đã hủy";
-      case 4:
-        return "Hoàn thành";
-      default:
-        return "Trạng thái không xác định";
-    }
-  };
+  // const getConplaintStatusText = (status) => {
+  //   switch (status) {
+  //     case 1:
+  //       return "Yêu cầu";
+  //     case 2:
+  //       return "Đang thực hiện";
+  //     case 3:
+  //       return "Đã hủy";
+  //     case 4:
+  //       return "Hoàn thành";
+  //     default:
+  //       return "Trạng thái không xác định";
+  //   }
+  // };
 
   const columnsListTaskDTO = [
     {
@@ -142,7 +143,7 @@ function ServiceOrderDetail(props) {
               record?.complaintStatus == 3 ? "text-[red]" : "text-[#3a9943]"
             }`}
           >
-            {getConplaintStatusText(record?.complaintStatus)}
+            {getComplaintStatusText(record?.complaintStatus)}
           </div>
         </>
       ),
