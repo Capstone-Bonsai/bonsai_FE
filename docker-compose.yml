@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  app:
+    image: janemyn/fe
+    ports:
+      - "5000:80"
+    restart: always
+  webapp:
+    build: .
+    image: janemyn/be
+    ports:
+    - "8080:80"
+    - "8081:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=pa55w0rd!
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/CapstoneBonsai.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
