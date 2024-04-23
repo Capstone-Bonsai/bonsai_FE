@@ -7,6 +7,7 @@ import { Image } from "antd";
 import Cookies from "universal-cookie";
 import { servicePackageById } from "../../../redux/slice/serviceOrderSlice";
 import Loading from "../../../components/Loading";
+import { toast } from "react-toastify";
 function StepTwo(propsStepTwo) {
   const {
     setSelectedGardenId,
@@ -33,17 +34,21 @@ function StepTwo(propsStepTwo) {
   );
   const typeEnum = new URLSearchParams(location.search).get("typeEnum");
   useEffect(() => {
-    if (typeEnum == 1) {
-      dispatch(
-        serviceListPackage({
-          pageIndex,
-          pageSize,
-          serviceTypeId,
-          customerBonsaiId: selectedGardenId,
-        })
-      );
-    } else {
-      dispatch(serviceListPackage({ pageIndex, pageSize, serviceTypeId }));
+    try {
+      if (typeEnum == 1) {
+        dispatch(
+          serviceListPackage({
+            pageIndex,
+            pageSize,
+            serviceTypeId,
+            customerBonsaiId: selectedGardenId,
+          })
+        );
+      } else {
+        dispatch(serviceListPackage({ pageIndex, pageSize, serviceTypeId }));
+      }
+    } catch (error) {
+      toast.error(error.response.data);
     }
   }, [typeEnum, selectedGardenId, serviceTypeId]);
 
@@ -65,7 +70,7 @@ function StepTwo(propsStepTwo) {
         <Loading loading={servicePackageLoading} />
       ) : (
         <div>
-          <div className="flex justify-between">
+          <div className="my-2 flex justify-between">
             <div className="flex">
               <button
                 onClick={() => handleBackStep()}
@@ -90,7 +95,7 @@ function StepTwo(propsStepTwo) {
               className={`${
                 serviceIdSelected == ""
                   ? "hover:cursor-not-allowed"
-                  : "hover:bg-[#3a9943] hover:text-[#fff]"
+                  : "hover:bg-[#3a9943] w-[30px] h-[30px] hover:text-[#fff]"
               }  p-2 rounded-full flex items-center justify-center`}
             >
               <ArrowRightOutlined />

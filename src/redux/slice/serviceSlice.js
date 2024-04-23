@@ -228,17 +228,17 @@ const serviceSlice = createSlice({
       })
       .addCase(serviceOption.pending, (state) => {
         state.msg = "Loading...";
-        state.loading = true;
+        state.serviceOption.loading = true;
       })
       .addCase(serviceOption.fulfilled, (state, action) => {
         state.serviceOption = action.payload;
         state.msg = "Data loaded successfully";
-        state.loading = false;
+        state.serviceOption.loading = false;
       })
       .addCase(serviceOption.rejected, (state) => {
         state.serviceOption = {};
         state.msg = "Không tìm thấy";
-        state.loading = false;
+        state.serviceOption.loading = false;
       })
       .addCase(serviceListPackage.pending, (state) => {
         state.msg = "Loading...";

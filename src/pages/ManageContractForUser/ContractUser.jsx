@@ -9,6 +9,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import ContractUserDetail from "./ContractUserDetail";
 import Loading from "../../components/Loading";
 import { AuditOutlined } from "@ant-design/icons";
+import {getStatusText} from '../../components/status/contractStatus'
 function ContractUser() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,34 +50,7 @@ function ContractUser() {
     contractId,
     setSelectedDetail,
   };
-  const getStatusText = (status) => {
-    switch (status) {
-      case 1:
-        return "Đang chờ";
-      case 2:
-        return "Đã thanh toán";
-      case 3:
-        return "Đang thực hiện nhiệm vụ";
-      case 4:
-        return "Thất bại";
-      case 5:
-        return "Đã hủy";
-      case 6:
-        return "Hoàn thành nhiệm vụ";
-      case 7:
-        return "Hoàn thành hợp đồng";
-      case 8:
-        return "Phản hồi";
-      case 9:
-        return "Đang xử lý khiếu nại";
-      case 10:
-        return "Đã xử lý khiếu nại";
-      case 11:
-        return "Hoàn thành xử lý khiếu nại";
-      default:
-        return "Trạng thái không xác định";
-    }
-  };
+
   return (
     <MinHeight>
       <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">

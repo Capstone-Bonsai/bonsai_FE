@@ -47,6 +47,9 @@ function AddCustomerGarden(props) {
     if (!newSquare.trim()) {
       setErrorSquare("Vui lòng nhập diện tích");
       isValid = false;
+    } else if (parseFloat(newSquare) <= 0) {
+      setErrorSquare("Diện tích phải lớn hơn 0");
+      isValid = false;
     }
     if (!isValid) {
       return;

@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./modalServiceRegister.css";
 import { serviceOrder } from "../../../redux/slice/serviceOrderSlice";
 import { toast } from "react-toastify";
+import noImage from "../../../assets/unImage.png";
 const { RangePicker } = DatePicker;
 function StepThree(propsStepThree) {
   const {
@@ -13,6 +14,7 @@ function StepThree(propsStepThree) {
     setStepList,
     gardenDetail,
     servicePackageDetail,
+    bonsaiDetail,
   } = propsStepThree;
   const handleBackStep = () => {
     setStepList(2);
@@ -85,7 +87,7 @@ function StepThree(propsStepThree) {
 
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex justify-between my-3">
         <button
           onClick={() => handleBackStep()}
           className="hover:bg-[#3a9943] hover:text-[#fff] w-[30px] h-[30px] rounded-full"
@@ -95,31 +97,64 @@ function StepThree(propsStepThree) {
       </div>
       <div className="w-full">
         <div className="text-center font-bold text-[20px]">Đăng ký dịch vụ</div>
-        <div className="border flex p-5 gap-3">
-          <div className="w-[300px] h-[200px]">
-            <img
-              className="w-full h-full object-cover rounded-[8px]"
-              src={
-                gardenDetail?.customerGardenImages?.length > 0
-                  ? gardenDetail?.customerGardenImages[0]?.image
-                  : ""
-              }
-              alt=""
-            />
-          </div>
-          <div>
-            <div className="font-bold text-[25px]">
-              {gardenDetail?.customer?.applicationUser?.fullname}
+        {typeEnum == 2 ? (
+          <div className="border flex p-5 gap-3">
+            <div className="w-[300px] h-[200px]">
+              <img
+                className="w-full h-full object-cover rounded-[8px]"
+                src={
+                  gardenDetail?.customerGardenImages?.length > 0
+                    ? gardenDetail?.customerGardenImages[0]?.image
+                    : ""
+                }
+                alt=""
+              />
             </div>
             <div>
-              <span className="text-[20px]">Địa chỉ:</span>{" "}
-              {gardenDetail?.address}
-            </div>
-            <div>
-              Diện tích: {gardenDetail?.square}m<sup>2</sup>
+              <div className="font-bold text-[25px]">
+                {gardenDetail?.customer?.applicationUser?.fullname}
+              </div>
+              <div>
+                <span className="text-[20px]">Địa chỉ:</span>{" "}
+                {gardenDetail?.address}
+              </div>
+              <div>
+                Diện tích: {gardenDetail?.square}m<sup>2</sup>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="border flex p-5 gap-3">
+            <div className="w-[300px] h-[200px]">
+              <img
+                className="w-full h-full object-cover rounded-[8px]"
+                src={
+                  bonsaiDetail?.bonsai?.bonsaiImages?.length > 0
+                    ? gardenDetail?.bonsai?.bonsaiImages[0]?.image
+                    : noImage
+                }
+                alt=""
+              />
+            </div>
+            <div>
+              <div className="text-[20px] font-bold">
+                {bonsaiDetail?.bonsai?.name}
+              </div>
+              <div className="">Code: {bonsaiDetail?.bonsai?.code}</div>
+              <div className="">
+                Năm trồng: {bonsaiDetail?.bonsai?.yearOfPlanting}
+              </div>
+              <div className="">
+                Kích thước thân: {bonsaiDetail?.bonsai?.trunkDimenter}cm
+                <sup>2</sup>
+              </div>
+              <div className="">Chiều cao: {bonsaiDetail?.bonsai?.height}m</div>
+              <div className="">
+                Số thân: {bonsaiDetail?.bonsai?.numberOfTrunk}
+              </div>
+            </div>
+          </div>
+        )}
         <div className="flex gap-3 p-5 border">
           <div className="w-[300px] h-[200px]">
             <img
@@ -147,6 +182,7 @@ function StepThree(propsStepThree) {
         </div>
         <div className="flex items-center justify-between my-2">
           <div className="">
+            <div>Ngày dự tính thực hiện: </div>
             <RangePicker
               size="large"
               className={`border ${

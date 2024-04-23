@@ -18,9 +18,22 @@ export const fetchCustomerBonsaisByGardenId = createAsyncThunk(
   }
 );
 
+export const customerBonsaiDetail = createAsyncThunk(
+  "customerBonsai/customerBonsaiDetail",
+  async (bonsaiId) => {
+    try {
+      const response = await axios.get(`/CustomerBonsai/${bonsaiId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 const initialState = {
   listCustomerBonsais: {},
   pagination: {},
+  customerBonsaiDetail: {},
   loading: false,
   msg: {},
   token: null,
@@ -57,6 +70,21 @@ const customerBonsaiSlice = createSlice({
       toast.error("Bạn không có quyền truy cập vào tính năng này!");
       state.loading = false;
     });
+    builder
+      .addCase(customerBonsaiDetail.pending, (state) => {
+        state.msg = "Loading...";
+        state.customerBonsaiDetail.loading = true;
+      })
+      .addCase(customerBonsaiDetail.fulfilled, (state, action) => {
+        state.customerBonsaiDetail = action.payload;
+        state.msg = "Data loaded successfully";
+        state.customerBonsaiDetail.loading = false;
+      })
+      .addCase(customerBonsaiDetail.rejected, (state) => {
+        state.customerBonsaiDetail = {};
+        state.msg = "Không tìm thấy";
+        state.customerBonsaiDetail.loading = false;
+      });
   },
 });
 const { reducer: customerBonsaiReducer, actions } = customerBonsaiSlice;

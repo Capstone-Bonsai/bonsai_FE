@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { customerGardenDetail } from "../../../redux/slice/userGarden";
 import { servicePackageById } from "../../../redux/slice/serviceOrderSlice";
+import { customerBonsaiDetail } from "../../../redux/slice/customerBonsaiSlice";
 function ServiceStepMain() {
   const cookies = new Cookies();
   const location = useLocation();
@@ -48,10 +49,16 @@ function ServiceStepMain() {
   useEffect(() => {
     dispatch(customerGardenDetail(selectedGardenId));
   }, [selectedGardenId]);
+  useEffect(() => {
+    dispatch(customerBonsaiDetail(selectedGardenId));
+  }, [selectedGardenId]);
   const gardenDetail = useSelector((state) => state.garden?.gardenById);
+  const bonsaiDetail = useSelector(
+    (state) => state.customerBonsai?.customerBonsaiDetail
+  );
   useEffect(() => {
     dispatch(servicePackageById(serviceIdSelected));
-  }, [dispatch, serviceIdSelected]);
+  }, [serviceIdSelected]);
   const servicePackageDetail = useSelector(
     (state) => state.serviceOrder?.servicePackageDetail
   );
@@ -76,6 +83,7 @@ function ServiceStepMain() {
     serviceIdSelected,
     gardenDetail,
     servicePackageDetail,
+    bonsaiDetail,
   };
   return (
     <div className="my-12 pb-12 w-[70%] m-auto">

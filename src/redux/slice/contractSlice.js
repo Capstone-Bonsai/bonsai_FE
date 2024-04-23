@@ -91,7 +91,8 @@ export const contractDetailById = createAsyncThunk(
       const response = await axios.get(`/ServiceOrder/${contractId}`);
       return response.data;
     } catch (error) {
-      throw error;
+      const resError = error.response.data;
+      return { error: resError };
     }
   }
 );
@@ -173,10 +174,12 @@ const contractSlice = createSlice({
         state.contractDetail = action.payload;
         state.msg = "Data loaded successfully";
         state.contractDetail.loading = false;
+
       })
-      .addCase(contractDetailById.rejected, (state) => {
+      .addCase(contractDetailById.rejected, (state, action) => {
         state.msg = "Error loading data";
         state.contractDetail.loading = false;
+        state.contractDetail.error = action.payload.error;
       })
       .addCase(listTask.pending, (state) => {
         state.msg = "Loading...";
