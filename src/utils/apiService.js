@@ -9,6 +9,20 @@ const postCreateNewUser = (postData) => {
   });
 };
 
+const putUser = (userId, postData) => {
+  console.log(postData);
+  return axios.put(`/User/Id?id=${userId}`, postData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+const lockoutUser = (userId) => {
+  console.log(userId);
+  return axios.put(`/User/Lockout?userId=${userId}`);
+};
+
 const getListRole = () => {
   return axios.get(`/User/ListRole`);
 };
@@ -22,6 +36,12 @@ const getListDeliveryFee = () => {
 //     tokenId: tokenId,
 //   });
 // };
-export { postCreateNewUser, getListRole, getListDeliveryFee };
+export {
+  postCreateNewUser,
+  getListRole,
+  getListDeliveryFee,
+  lockoutUser,
+  putUser,
+};
 
 //$filter=TotalPrice eq 16800 and contains(Title,'')

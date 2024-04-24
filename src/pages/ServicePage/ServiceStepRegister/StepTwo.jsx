@@ -3,7 +3,7 @@ import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { serviceListPackage } from "../../../redux/slice/serviceSlice";
 import { useLocation } from "react-router-dom";
-import { Image } from "antd";
+import { Image, Pagination } from "antd";
 import Cookies from "universal-cookie";
 import { servicePackageById } from "../../../redux/slice/serviceOrderSlice";
 import Loading from "../../../components/Loading";
@@ -32,6 +32,10 @@ function StepTwo(propsStepTwo) {
   const servicePackageLoading = useSelector(
     (state) => state.service?.servicePackage?.loading
   );
+  const {totalItemsCount} = useSelector((state) => state.service?.servicePackage);
+  const handlePageChange = (page) => {
+    setPageIndex(page);
+  };
   const typeEnum = new URLSearchParams(location.search).get("typeEnum");
   useEffect(() => {
     try {
@@ -136,6 +140,13 @@ function StepTwo(propsStepTwo) {
               </button>
             </div>
           ))}
+          <Pagination
+            current={pageIndex}
+            pageSize={pageSize}
+            total={totalItemsCount}
+            onChange={handlePageChange}
+            className="text-center mt-5"
+          />
         </div>
       )}
     </div>

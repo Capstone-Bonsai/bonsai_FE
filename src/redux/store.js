@@ -15,6 +15,7 @@ import contractReducer from "./slice/contractSlice";
 import gardenerReducer from "./slice/gardener";
 import serviceOrderReducer from "./slice/serviceOrderSlice";
 import dashboardReducer from "./slice/dashboardSlice";
+import authReducer from "./slice/authSlice";
 
 const store = configureStore({
   reducer: {

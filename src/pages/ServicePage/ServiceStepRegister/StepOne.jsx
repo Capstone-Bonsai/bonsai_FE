@@ -6,7 +6,7 @@ import {
   fetchCustomerGarden,
 } from "../../../redux/slice/userGarden";
 import noImage from "../../../assets/unImage.png";
-import { Image } from "antd";
+import { Image, Pagination } from "antd";
 import {
   PlusCircleOutlined,
   CheckCircleOutlined,
@@ -36,6 +36,16 @@ function StepOne(propsStepOne) {
   const bonsaiLoading = useSelector(
     (state) => state?.bonsai?.customerBonsai?.loading
   );
+
+  const totalItemsCountGarden = useSelector(
+    (state) => state.garden?.gardenDTO?.totalItemsCount
+  );
+  const totalItemsCountBonsai = useSelector(
+    (state) => state.bonsai?.customerBonsai?.totalItemsCount
+  );
+  const handlePageChange = (page) => {
+    setPageIndex(page);
+  };
   const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
   const cookies = new Cookies(null, { expires: cookieExpires });
   const userInfo = cookies?.get("user");
@@ -181,6 +191,13 @@ function StepOne(propsStepOne) {
                   </div>
                 </div>
               ))}
+              <Pagination
+                current={pageIndex}
+                pageSize={pageSize}
+                total={totalItemsCountGarden}
+                onChange={handlePageChange}
+                className="text-center mt-5"
+              />
             </div>
           )}
         </div>
@@ -229,6 +246,13 @@ function StepOne(propsStepOne) {
                     </div>
                   ))
                 : ""}
+              <Pagination
+                current={pageIndex}
+                pageSize={pageSize}
+                total={totalItemsCountBonsai}
+                onChange={handlePageChange}
+                className="text-center mt-5"
+              />
             </div>
           )}
         </div>

@@ -33,17 +33,16 @@ function getItem(label, key, icon, children, type) {
 function PrivateRoute() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
+  const navigate = useNavigate();
   const avatarUrl = useSelector((state) => state.avatar?.avatarUrlRedux);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
+  const [logoutAdmin, setLogoutAdmin] = useState(false);
   const handleLogout = () => {
-    cookies.remove("user");
-    cookies.remove("userData");
+    cookies.remove("user", { path: "/admin" });
   };
-
   const NavBarItems = [
     {
       key: "1",
@@ -52,29 +51,6 @@ function PrivateRoute() {
           {userInfo.fullName} <UserOutlined />
         </div>
       ),
-      children: userInfo
-        ? [
-            getItem(
-              <Link to="/HOME" className="text-black" onClick={handleLogout}>
-                Đăng xuất
-              </Link>,
-              "1",
-              "",
-              [],
-              "group"
-            ),
-          ]
-        : [
-            getItem(
-              <Link to="/login" className="text-black">
-                Đăng nhập
-              </Link>,
-              "1",
-              "",
-              [],
-              "group"
-            ),
-          ],
     },
   ];
   const SideBarItems = [
@@ -127,6 +103,16 @@ function PrivateRoute() {
   ];
   return (
     <>
+      <Link
+        to="/login"
+        className="text-black"
+        onClick={() => {
+          handleLogout();
+        }}
+      >
+        Đăng xuất
+      </Link>
+      ,
       <Layout className="min-h-screen">
         <Sider
           trigger={null}

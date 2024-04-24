@@ -92,11 +92,13 @@ function ServiceOrder() {
   };
 
   const handleCancelUpdateServiceOrderPrice = () => {
+    setSelectedServiceOrderDetail(undefined);
     setOpenUpdateServiceOrderPrice(false);
   };
 
   const handleCancelModalCreateServiceOrderImages = () => {
     setOpenModalCreateServiceOrderImages(false);
+    setSelectedServiceOrderImages(undefined);
   };
 
   const handleTableChange = (pagination) => {

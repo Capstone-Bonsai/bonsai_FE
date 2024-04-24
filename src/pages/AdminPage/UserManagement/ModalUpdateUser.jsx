@@ -28,7 +28,7 @@ import {
 } from "antd";
 const { Search } = Input;
 import { useDispatch, useSelector } from "react-redux";
-import { getListRole } from "../../../utils/apiService";
+import { getListRole, putUser } from "../../../utils/apiService";
 import { toast } from "react-toastify";
 import { postCreateNewUser } from "../../../utils/apiService";
 import { fetchAllUsers } from "../../../redux/slice/userSlice";
@@ -53,28 +53,28 @@ const ALLOWED_FILE_TYPES = [
   "image/jpg",
   "image/gif",
 ];
-const ModalCreateUser = (props) => {
+const ModalUpdateUser = (props) => {
   const [form] = Form.useForm();
-  const { show, setShow } = props;
+  const { show, setShow, user } = props;
+  console.log(user);
   const handleClose = () => {
     setError([]);
     setFormData({
-      role: "",
       fullname: "",
-      email: "",
+      userName: "",
       phone: "",
+      avatar: "",
     });
     form.resetFields();
     setConfirmLoading(false);
-    setFileList([]);
     setShow(false);
   };
   const [listRole, setListRole] = useState([]);
   const [formData, setFormData] = useState({
-    role: "",
     fullname: "",
-    email: "",
+    userName: "",
     phone: "",
+    avatar: "",
   });
   const dispatch = useDispatch();
   const [error, setError] = useState([]);
@@ -85,9 +85,24 @@ const ModalCreateUser = (props) => {
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState([]);
   const formRef = useRef(null);
+
   useEffect(() => {
-    fetchListRole();
-  }, []);
+    if (user != undefined) {
+      console.log(user);
+      setFormData({
+        phone: user.phoneNumber,
+        fullname: user.fullname,
+        userName: user.userName,
+        avatar: fetchListImage(),
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (show === true) {
+      form.setFieldsValue(formData);
+    }
+  }, [form, formData]);
 
   const handleCancelPreview = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
@@ -100,7 +115,17 @@ const ModalCreateUser = (props) => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const handleChange = (i) => setFileList(i);
+  const fetchListImage = () => {
+    const image = [
+      {
+        url: user?.avatarUrl,
+        uid: "",
+      },
+    ];
+    setFileList(image);
+    return image;
+  };
   const uploadButton = (
     <button
       style={{
@@ -119,41 +144,24 @@ const ModalCreateUser = (props) => {
       </div>
     </button>
   );
-  const fetchListRole = () => {
-    getListRole()
-      .then((data) => {
-        setListRole(data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-        if (
-          err &&
-          err.response &&
-          err.response.data &&
-          err.response.data.value
-        ) {
-          toast.error(err.response.data.value);
-        } else {
-          toast.error("Đã xảy ra lỗi!");
-        }
-      });
-  };
-  const createUser = () => {
+  const updateUser = () => {
     try {
+      formData.avatar = fileList[0] ? fileList[0].originFileObj : null;
       const postData = new FormData();
-      postData.append("Role", formData.role);
+      // postData.append("Role", formData.role);
       postData.append("Fullname", formData.fullname);
-      postData.append("Email", formData.email);
+      postData.append("Username", formData.userName);
       postData.append("PhoneNumber", formData.phone);
       postData.append("Avatar", fileList[0] ? fileList[0].originFileObj : null);
-
-      postCreateNewUser(postData)
+      console.log(formData);
+      putUser(user?.id, postData)
         .then((data) => {
           toast.success(data.data);
           dispatch(fetchAllUsers({ pageIndex: 0, pageSize: 10 }));
           handleClose();
         })
         .catch((err) => {
+          console.log(err);
           toast.error(err.response.data);
         })
         .finally(() => {
@@ -170,7 +178,7 @@ const ModalCreateUser = (props) => {
       .then(() => {
         setFormDisabled(true);
         setConfirmLoading(true);
-        createUser();
+        updateUser();
       })
       .catch((errorInfo) => {
         toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
@@ -212,10 +220,12 @@ const ModalCreateUser = (props) => {
   return (
     <>
       <Modal
-        title="Thêm người dùng mới"
+        title="Cập nhật thông tin người dùng"
         open={show}
         onOk={handleOk}
         okButtonProps={{ type: "default" }}
+        okText={confirmLoading ? "Đang cập nhật" : "Cập nhật"}
+        cancelText="Hủy"
         confirmLoading={confirmLoading}
         onCancel={handleClose}
         maskClosable={false}
@@ -228,15 +238,15 @@ const ModalCreateUser = (props) => {
             labelCol={{ span: 5 }}
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
+            initialValues={formData}
             disabled={formDisabled}
           >
             <Form.Item
-              label="Email"
-              name="email"
+              label="Username"
+              name="userName"
               rules={[
-                { required: true, message: "Email không được để trống!" },
-                { type: "email", message: "Email không hợp lệ!" },
-                { max: 50, message: "Email không quá 50 ký tự!" },
+                { required: true, message: "Username không được để trống!" },
+                { max: 50, message: "Username không quá 50 ký tự!" },
               ]}
             >
               <Input />
@@ -273,7 +283,7 @@ const ModalCreateUser = (props) => {
             >
               <Input />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               label="Vai trò"
               name="role"
               rules={[
@@ -290,7 +300,7 @@ const ModalCreateUser = (props) => {
                   </Select.Option>
                 ))}
               </Select>
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item
               label="Ảnh đại diện"
               valuePropName="fileList"
@@ -300,10 +310,12 @@ const ModalCreateUser = (props) => {
                 listType="picture-circle"
                 fileList={fileList}
                 onPreview={handlePreview}
-                onChange={handleChange}
                 beforeUpload={beforeUpload}
+                onChange={(e) => {
+                  handleChange(e.fileList);
+                }}
               >
-                {fileList.length >= 1 ? null : uploadButton}
+                {fileList?.length >= 1 ? null : uploadButton}
               </Upload>
             </Form.Item>
           </Form>
@@ -326,4 +338,4 @@ const ModalCreateUser = (props) => {
     </>
   );
 };
-export default ModalCreateUser;
+export default ModalUpdateUser;

@@ -17,6 +17,7 @@ const ModalUpdateComplaint = (props) => {
   ];
 
   const [selectingStatus, setSelectingStatus] = useState();
+  const [formDisabled, setFormDisabled] = useState(false);
 
   const handleClose = () => {
     setFormData({
@@ -66,6 +67,7 @@ const ModalUpdateComplaint = (props) => {
         })
         .finally(() => {
           setConfirmLoading(false);
+          setFormDisabled(false);
         });
     } catch (err) {
       console.log(err);
@@ -76,6 +78,7 @@ const ModalUpdateComplaint = (props) => {
     formRef.current
       .validateFields()
       .then(() => {
+        setFormDisabled(true);
         setConfirmLoading(true);
         updateComplaint(formData);
       })
@@ -111,6 +114,7 @@ const ModalUpdateComplaint = (props) => {
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
             initialValues={formData}
+            disabled={formDisabled}
           >
             <Form.Item
               label="Trạng thái khiếu nại"

@@ -34,6 +34,9 @@ import { useDispatch, useSelector } from "react-redux";
 import ModalCreateUser from "./ModalCreateUser";
 import { fetchAllUsers } from "../../../redux/slice/userSlice";
 import Loading from "../../../components/Loading";
+import { lockoutUser } from "../../../utils/apiService";
+import { toast } from "react-toastify";
+import ModalUpdateUser from "./ModalUpdateUser";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -52,8 +55,13 @@ const getBase64 = (file) =>
 function UserManage() {
   const dispatch = useDispatch();
   const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openLock, setOpenLock] = useState(false);
+  const [openUnlock, setOpenUnlock] = useState(false);
+  const [confirmLoadingLock, setConfirmLoadingLock] = useState(false);
+  const [confirmLoadingUnlock, setConfirmLoadingUnlock] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(false);
+  const [selectedUpdateUser, setSelectedUpdateUser] = useState(false);
   const [fileList, setFileList] = useState([]);
 
   const loading = useSelector((state) => state.user?.loading);
@@ -70,34 +78,73 @@ function UserManage() {
   const showCreateModal = () => {
     setOpenCreateModal(true);
   };
-
-  const handleOk = () => {
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpenCreateModal(false);
-      setConfirmLoading(false);
-    }, 2000);
+  const showUpdateModal = () => {
+    setOpenUpdateModal(true);
   };
 
-  // const showModalDelete = () => {
-  //   setOpenDelete(true);
-  // };
-
-  // const handleDelete = () => {
-  //   setConfirmLoadingDelete(true);
+  // const handleOk = () => {
+  //   setConfirmLoading(true);
   //   setTimeout(() => {
-  //     setOpenDelete(false);
-  //     setConfirmLoadingDelete(false);
+  //     setOpenCreateModal(false);
+  //     setConfirmLoading(false);
   //   }, 2000);
   // };
+
+  const showModalLock = () => {
+    setOpenLock(true);
+  };
+  const showModalUnlock = () => {
+    setOpenUnlock(true);
+  };
+
+  const handleLock = () => {
+    setConfirmLoadingLock(true);
+    lockoutUser(selectedUser)
+      .then((data) => {
+        toast.success("Khóa tài khoản thành công!");
+        dispatch(fetchAllUsers({ pageIndex: 0, pageSize: 10 }));
+      })
+      .catch((err) => {
+        toast.error(err.response.data);
+      })
+      .finally(() => {
+        setOpenLock(false);
+        setConfirmLoadingLock(false);
+      });
+  };
+
+  const handleUnlock = () => {
+    setConfirmLoadingUnlock(true);
+    lockoutUser(selectedUser)
+      .then((data) => {
+        toast.success("Mở khóa tài khoản thành công!");
+        dispatch(fetchAllUsers({ pageIndex: 0, pageSize: 10 }));
+      })
+      .catch((err) => {
+        toast.error(err.response.data);
+      })
+      .finally(() => {
+        setOpenUnlock(false);
+        setConfirmLoadingUnlock(false);
+      });
+  };
 
   const handleCancelCreate = () => {
     setOpenCreateModal(false);
   };
-  // const handleCancelDelete = () => {
-  //   console.log("Clicked cancel button");
-  //   setOpenDelete(false);
-  // };
+  const handleCancelUpdate = () => {
+    setSelectedUpdateUser(undefined);
+    setOpenUpdateModal(false);
+  };
+  const handleCancelLock = () => {
+    console.log("Clicked cancel button");
+    setOpenLock(false);
+  };
+  const handleCancelUnlock = () => {
+    console.log("Clicked cancel button");
+    setOpenUnlock(false);
+  };
+
   const getColor = (role) => {
     switch (role) {
       case "Manager":
@@ -194,7 +241,10 @@ function UserManage() {
               <Button
                 type="text"
                 icon={<LockOutlined style={{ color: "red" }} />}
-                //onClick={showModalDelete}
+                onClick={() => {
+                  setSelectedUser(record.id);
+                  showModalLock();
+                }}
               />
             </Tooltip>
           ) : (
@@ -202,22 +252,29 @@ function UserManage() {
               <Button
                 type="text"
                 icon={<UnlockOutlined style={{ color: "green" }} />}
-                //onClick={showModalDelete}
+                onClick={() => {
+                  setSelectedUser(record.id);
+                  showModalUnlock();
+                }}
               />
             </Tooltip>
           )}
 
-          <Tooltip title="Mở khóa">
+          {/* <Tooltip title="Mở khóa">
             <Button
               type="text"
               icon={<EditOutlined style={{ color: "orange" }} />}
               //onClick={showModalDelete}
             />
-          </Tooltip>
+          </Tooltip> */}
           <Tooltip title="Xem thông tin">
             <Button
               type="text"
               icon={<EyeOutlined style={{ color: "blue" }} />}
+              onClick={() => {
+                setSelectedUpdateUser(record);
+                showUpdateModal();
+              }}
             />
           </Tooltip>
         </Space>
@@ -268,16 +325,31 @@ function UserManage() {
           </div>
         </div>
         <ModalCreateUser show={openCreateModal} setShow={handleCancelCreate} />
-        {/* <Modal
-          title="Xóa sản phẩm"
-          open={openDelete}
-          onOk={handleDelete}
+        <ModalUpdateUser
+          show={openUpdateModal}
+          setShow={handleCancelUpdate}
+          user={selectedUpdateUser}
+        />
+        <Modal
+          title="Khóa tài khoản"
+          open={openLock}
+          onOk={handleLock}
           okButtonProps={{ type: "default" }}
-          confirmLoading={confirmLoadingDelete}
-          onCancel={handleCancelDelete}
+          confirmLoading={confirmLoadingLock}
+          onCancel={handleCancelLock}
         >
-          <div>Bạn có muốn xóa sản phẩm này không?</div>
-        </Modal> */}
+          <div>Bạn có muốn khóa tài khoản này không?</div>
+        </Modal>
+        <Modal
+          title="Mở khóa tài khoản"
+          open={openUnlock}
+          onOk={handleUnlock}
+          okButtonProps={{ type: "default" }}
+          confirmLoading={confirmLoadingUnlock}
+          onCancel={handleCancelUnlock}
+        >
+          <div>Bạn có muốn mở khóa tài khoản này không?</div>
+        </Modal>
       </div>
     </>
   );
