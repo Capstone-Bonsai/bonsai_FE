@@ -102,7 +102,7 @@ function Home() {
             </Link>
             <Link
               className="min-h-[220px]  w-[50%]  hover:opacity-50 bg-cover bg-no-repeat relative"
-              to="/service"
+              to="/serviceOption"
             >
               <img src={BannerDichVu} alt="" className="w-full h-full " />
               <div className="text-2xl pl-6 font-semibold uppercase absolute top-[30%]">

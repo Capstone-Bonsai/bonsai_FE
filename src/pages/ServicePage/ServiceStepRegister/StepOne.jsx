@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { fetchCustomerGarden } from "../../../redux/slice/userGarden";
+import {
+  customerGardenDetail,
+  fetchCustomerGarden,
+} from "../../../redux/slice/userGarden";
 import noImage from "../../../assets/unImage.png";
-import { Image } from "antd";
-import { PlusCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import { Image, Pagination } from "antd";
+import {
+  PlusCircleOutlined,
+  CheckCircleOutlined,
+  ArrowRightOutlined,
+} from "@ant-design/icons";
 import Cookies from "universal-cookie";
 import AddCustomerGarden from "../../Garden/AddCustomerGarden";
 import Loading from "../../../components/Loading";
+import { customerBonsai } from "../../../redux/slice/bonsaiSlice";
 function StepOne(propsStepOne) {
-  const { setSelectedGardenId, selectedGardenId, setStepList } = propsStepOne;
+  const { setSelectedGardenId, gardenDetail, selectedGardenId, setStepList } =
+    propsStepOne;
   const location = useLocation();
   const typeEnum = new URLSearchParams(location.search).get("typeEnum");
   const dispatch = useDispatch();
@@ -17,12 +26,26 @@ function StepOne(propsStepOne) {
   const [pageSize, setPageSize] = useState(5);
   useEffect(() => {
     dispatch(fetchCustomerGarden({ pageIndex, pageSize }));
+    dispatch(customerBonsai({ pageIndex, pageSize }));
   }, []);
   const gardens = useSelector((state) => state.garden?.gardenDTO?.items);
+  const bonsais = useSelector((state) => state.bonsai?.customerBonsai.items);
   const loadingGarden = useSelector(
     (state) => state?.garden?.gardenDTO?.loading
   );
-  console.log(loadingGarden);
+  const bonsaiLoading = useSelector(
+    (state) => state?.bonsai?.customerBonsai?.loading
+  );
+
+  const totalItemsCountGarden = useSelector(
+    (state) => state.garden?.gardenDTO?.totalItemsCount
+  );
+  const totalItemsCountBonsai = useSelector(
+    (state) => state.bonsai?.customerBonsai?.totalItemsCount
+  );
+  const handlePageChange = (page) => {
+    setPageIndex(page);
+  };
   const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
   const cookies = new Cookies(null, { expires: cookieExpires });
   const userInfo = cookies?.get("user");
@@ -36,19 +59,38 @@ function StepOne(propsStepOne) {
   return (
     <div className="">
       <div className="w-full flex justify-between my-3">
-        {typeEnum == 2 ? (
-          <div>
-            <button
-              className="bg-[#3a9943] rounded-[10px] p-2 text-[#fff]"
-              onClick={() => document.getElementById("my_modal_1").showModal()}
-            >
-              + Thêm vườn
-            </button>
-            <AddCustomerGarden />
+        <div className="flex items-center gap-3">
+          {typeEnum == 2 ? (
+            <div className="">
+              <button
+                className="bg-[#3a9943] rounded-[10px] p-2 text-[#fff]"
+                onClick={() =>
+                  document.getElementById("my_modal_1").showModal()
+                }
+              >
+                + Thêm vườn
+              </button>
+              <AddCustomerGarden />
+            </div>
+          ) : (
+            <div></div>
+          )}
+          <div className="font-bold text-[25px]">
+            Bước 1:
+            <span className="text-[18px] font-normal opacity-70">
+              {typeEnum == 2 ? (
+                <>
+                  <span className="px-2">Địa chỉ</span>
+                  {gardenDetail?.address
+                    ? gardenDetail?.address
+                    : "Vui lòng chọn vườn"}
+                </>
+              ) : (
+                <></>
+              )}
+            </span>
           </div>
-        ) : (
-          <div></div>
-        )}
+        </div>
         <div
           className={`${selectedGardenId == "" ? "tooltip" : ""} `}
           data-tip="Vui lòng chọn vườn"
@@ -56,19 +98,18 @@ function StepOne(propsStepOne) {
           <button
             onClick={() => handleToStepTwo()}
             disabled={selectedGardenId == ""}
-            className={`${
+            className={`w-[30px] h-[30px] ${
               selectedGardenId == ""
                 ? "hover:cursor-not-allowed"
-                : "hover:bg-[#3a9943]"
-            } bg-gray-500 text-[#fff] p-2 rounded-[10px]`}
+                : "hover:bg-[#3a9943] hover:text-[#fff]"
+            }  p-2 rounded-full flex items-center justify-center`}
           >
-            Bước tiếp theo
+            <ArrowRightOutlined />
           </button>
         </div>
       </div>
       {typeEnum == 2 ? (
         <div>
-          <div className="text-center">Vườn của bạn</div>
           {loadingGarden ? (
             <Loading loading={loadingGarden} />
           ) : (
@@ -76,7 +117,9 @@ function StepOne(propsStepOne) {
               {gardens?.map((garden) => (
                 <div key={garden.id} className="flex gap-5 py-5 relative">
                   <button
-                    onClick={() => setSelectedGardenId(garden.id)}
+                    onClick={() => {
+                      setSelectedGardenId(garden.id), handleToStepTwo();
+                    }}
                     className="absolute right-0 outline-none text-[20px]"
                   >
                     {selectedGardenId == garden.id ? (
@@ -99,7 +142,7 @@ function StepOne(propsStepOne) {
                   <div className="w-[70%]">
                     <div className="text-[25px]">{garden.address}</div>
                     <div>
-                      Diện tích: {garden.square}m<sup>2</sup>
+                      Diện tích: {garden?.square}m<sup>2</sup>
                     </div>
                     <div className="">
                       <div className="w-full">Bonsai đang trồng:</div>
@@ -117,14 +160,14 @@ function StepOne(propsStepOne) {
                                 src={
                                   bonsai?.bonsai?.bonsaiImages?.length > 0
                                     ? bonsai?.bonsai?.bonsaiImages[0]?.imageUrl
-                                    : ""
+                                    : noImage
                                 }
                                 alt=""
                               />
                             </div>
                             <div>
                               <div className="font-bold text-[20px]">
-                                {bonsai.bonsai.name}
+                                {bonsai?.bonsai?.name}
                               </div>
                               <div className="text-[12px]">
                                 <div>
@@ -148,11 +191,71 @@ function StepOne(propsStepOne) {
                   </div>
                 </div>
               ))}
+              <Pagination
+                current={pageIndex}
+                pageSize={pageSize}
+                total={totalItemsCountGarden}
+                onChange={handlePageChange}
+                className="text-center mt-5"
+              />
             </div>
           )}
         </div>
       ) : (
-        <div></div>
+        <div>
+          {bonsaiLoading ? (
+            <Loading loading={loadingGarden} />
+          ) : (
+            <div>
+              {bonsais?.length > 0
+                ? bonsais?.map((bonsai) => (
+                    <div key={bonsai.id} className="flex gap-2 relative">
+                      <div className="w-[30%] h-[300px] border rounded-tr-[30px]">
+                        <img
+                          className="w-full h-full object-cover rounded-tr-[30px]"
+                          src={
+                            bonsai?.bonsaiImages?.length > 0
+                              ? bonsai?.bonsaiImages?.image
+                              : noImage
+                          }
+                          alt=""
+                        />
+                      </div>
+                      <div>
+                        <div className="">{bonsai?.bonsai?.name}</div>
+                        <div>Code :{bonsai?.bonsai?.code}</div>
+                        <div>Năm trông:{bonsai?.bonsai?.yearOfPlanting}</div>
+                        <div>
+                          Diện tích thân: {bonsai?.bonsai?.trunkDimenter}cm
+                          <sup>2</sup>
+                        </div>
+                        <div>Chiều cao: {bonsai?.bonsai?.height}m</div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setSelectedGardenId(bonsai.id), handleToStepTwo();
+                        }}
+                        className="absolute right-0 outline-none text-[20px]"
+                      >
+                        {selectedGardenId == bonsai.id ? (
+                          <CheckCircleOutlined className="text-[#3a9943]" />
+                        ) : (
+                          <PlusCircleOutlined />
+                        )}
+                      </button>
+                    </div>
+                  ))
+                : ""}
+              <Pagination
+                current={pageIndex}
+                pageSize={pageSize}
+                total={totalItemsCountBonsai}
+                onChange={handlePageChange}
+                className="text-center mt-5"
+              />
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

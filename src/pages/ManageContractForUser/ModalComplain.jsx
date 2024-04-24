@@ -8,6 +8,8 @@ function ModalComplain(props) {
   const { contractId, contractDetailById, setApiContractLoading } = props;
   const [imageComplain, setImageComplain] = useState([]);
   const [textComplaint, setTextComplaint] = useState("");
+  const [errorTextComplaint, setErrorTextComplaint] = useState("");
+  const [errorImageComplaint, setErrorImageComplaint] = useState("");
   console.log(textComplaint);
   const [file, setFile] = useState([]);
   const dispatch = useDispatch();
@@ -34,9 +36,28 @@ function ModalComplain(props) {
     updatedImageCompain.splice(index, 1);
     setImageComplain(updatedImageCompain);
   };
-  const handleReport = async () => {
+  const closeModal = () => {
+    const modal = document.getElementById("modal_complain");
+    if (modal) {
+      modal.close();
+    }
+  };
+  const handleReport = async (e) => {
+    e.preventDefault();
+    let isValid = true;
+    if (!textComplaint.trim()) {
+      setErrorTextComplaint("Vui lòng nhập chi tiết!!");
+      isValid = false;
+    }
+    if (imageComplain?.length == 0) {
+      setErrorImageComplaint("Vui lòng thêm hình ảnh!!");
+      isValid = false;
+    }
+    if (!isValid) {
+      return;
+    }
     const formData = new FormData();
-    formData.append("ContractId", contractId);
+    formData.append("ServiceOrderId", contractId);
     formData.append("Detail", textComplaint);
     imageComplain.map((image) => {
       formData.append(`ListImage`, image.file);
@@ -45,8 +66,10 @@ function ModalComplain(props) {
       await addComplaint(formData);
       setApiContractLoading(true);
       toast.success("Đã khiếu nại thành công");
+      closeModal();
     } catch (error) {
       toast.error(error);
+      closeModal();
     }
   };
 
@@ -66,12 +89,21 @@ function ModalComplain(props) {
           <div className="w-[80%]">
             <input
               value={textComplaint}
-              onChange={(e) => setTextComplaint(e.target.value)}
-              className="border p-2 rounded-[5px] w-full"
+              onChange={(e) => {
+                setTextComplaint(e.target.value), setErrorTextComplaint("");
+              }}
+              className={`border p-2 rounded-[5px] w-full outline-none ${
+                errorTextComplaint != "" ? "border-[red]" : ""
+              }`}
               type="text"
               name=""
               id=""
             />
+            {errorTextComplaint != "" ? (
+              <div className="text-[red] font-[14px]">{errorTextComplaint}</div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
         <div className="mt-5">
@@ -82,16 +114,20 @@ function ModalComplain(props) {
             style={{ display: "none" }}
             id="upload-input"
           />
-          <div className="flex flex-wrap gap-5">
+          <div className={`flex flex-wrap gap-5 `}>
             {imageComplain?.length > 0 ? (
               imageComplain.map((image, index) => (
                 <div
                   key={index}
-                  className="relative p-10 border rounded-[10px]"
+                  className={`relative p-10 border rounded-[10px] ${
+                    errorImageComplaint != "" ? "border-[red]" : ""
+                  }`}
                 >
                   <img
                     src={image.imageURL}
-                    className="object-cover w-[130px] h-[130px]"
+                    className={`object-cover w-[130px] h-[130px] ${
+                      errorImageComplaint != "" ? "border-[red]" : ""
+                    }`}
                     alt=""
                   />
                   <button
@@ -105,7 +141,9 @@ function ModalComplain(props) {
             ) : (
               <img
                 src={noImage}
-                className="object-cover w-[100px] h-[100px]"
+                className={`object-cover border w-[100px] h-[100px] ${
+                  errorImageComplaint != "" ? "border-[red]" : ""
+                }`}
                 alt="No Image"
               />
             )}
@@ -113,7 +151,9 @@ function ModalComplain(props) {
           {imageComplain?.length < 4 ? (
             <button
               onClick={() => handleUploadClick()}
-              className="border p-1 rounded-lg my-5 outline-none"
+              className={`border p-1 rounded-lg my-5 outline-none ${
+                errorImageComplaint != "" ? "border-[red] " : ""
+              }`}
             >
               <UploadOutlined />
               Thêm hình ảnh
@@ -121,10 +161,19 @@ function ModalComplain(props) {
           ) : (
             "Bạn chỉ có thể thêm tối đa 4 ảnh"
           )}
+          {errorImageComplaint != "" ? (
+            <div className="text-[14px] text-[red]">{errorImageComplaint}</div>
+          ) : (
+            ""
+          )}
         </div>
-        <form method="dialog">
+        <form onSubmit={handleReport} method="dialog">
           <div className="flex justify-end">
-            <button onClick={() => handleReport()} className="btn">
+            <button
+              type="submit"
+              // onClick={() => handleReport()}
+              className="btn"
+            >
               Đăng
             </button>
           </div>

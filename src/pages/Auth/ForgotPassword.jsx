@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { forgotPassword } from "../../redux/slice/authSlice";
 
@@ -9,6 +9,8 @@ function ForgotPassword() {
   console.log(emailError);
   console.log(email);
   const navigate = useNavigate();
+  const location = useLocation();
+
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);

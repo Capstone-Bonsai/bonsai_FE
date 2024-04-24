@@ -28,9 +28,25 @@ export const fetchUserById = createAsyncThunk(
   }
 );
 
+export const notificationUser = createAsyncThunk(
+  "bonsai/notification",
+  async ({pageIndex, pageSize}) => {
+    try {
+      const response = await axios.get(
+        `/Notification/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 const initialState = {
   listUser: {},
   userById: {},
+  notification: {},
   pagination: {},
   loading: false,
   msg: {},
@@ -54,7 +70,6 @@ const userSlice = createSlice({
       state.msg = "Loading...";
       state.loading = true;
     });
-
     builder.addCase(fetchAllUsers.fulfilled, (state, action) => {
       state.listUser = action.payload;
       state.pagination = {
@@ -76,9 +91,25 @@ const userSlice = createSlice({
       state.userById = action.payload;
       state.loading = false;
     });
-    builder.addCase(fetchUserById.rejected, (state) => {
-      state.loading = false;
-    });
+    builder
+      .addCase(fetchUserById.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(notificationUser.pending, (state) => {
+        state.msg = "Loading...";
+        state.loading = true;
+      })
+
+      .addCase(notificationUser.fulfilled, (state, action) => {
+        state.notification = action.payload;
+        state.msg = "Data loaded successfully";
+        state.loading = false;
+      })
+      .addCase(notificationUser.rejected, (state) => {
+        state.notification = {};
+        state.notification.msg = "Error loading data";
+        state.notification.loading = false;
+      });
   },
 });
 const { reducer: userReducer, actions } = userSlice;

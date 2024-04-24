@@ -108,11 +108,13 @@ export const manageServiceCustomer = createAsyncThunk(
 
 export const serviceListPackage = createAsyncThunk(
   "service/serviceListPackage",
-  async ({ pageIndex, pageSize, serviceTypeId }) => {
+  async ({ pageIndex, pageSize, serviceTypeId, customerBonsaiId }) => {
     try {
-      const response = await axios.get(
-        `/Service/Package?pageIndex=${pageIndex}&pageSize=${pageSize}&serviceTypeId=${serviceTypeId}`
-      );
+      let url = `/Service/Package?pageIndex=${pageIndex}&pageSize=${pageSize}&serviceTypeId=${serviceTypeId}`;
+      if (customerBonsaiId) {
+        url += `&customerBonsaiId=${customerBonsaiId}`;
+      }
+      const response = await axios.get(url);
       return response.data;
     } catch (error) {
       throw error;
@@ -226,17 +228,17 @@ const serviceSlice = createSlice({
       })
       .addCase(serviceOption.pending, (state) => {
         state.msg = "Loading...";
-        state.loading = true;
+        state.serviceOption.loading = true;
       })
       .addCase(serviceOption.fulfilled, (state, action) => {
         state.serviceOption = action.payload;
         state.msg = "Data loaded successfully";
-        state.loading = false;
+        state.serviceOption.loading = false;
       })
       .addCase(serviceOption.rejected, (state) => {
         state.serviceOption = {};
         state.msg = "Không tìm thấy";
-        state.loading = false;
+        state.serviceOption.loading = false;
       })
       .addCase(serviceListPackage.pending, (state) => {
         state.msg = "Loading...";

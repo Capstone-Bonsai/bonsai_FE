@@ -60,6 +60,17 @@ export const addComplaint = async (formData) => {
   }
 };
 
+export const serviceOrder = async (payload) => {
+  try {
+    const res = await axios.post(`/ServiceOrder`, payload);
+    return res.data;
+  } catch (err) {
+    const errMessage = err.response.data;
+    console.log(errMessage);
+    throw (err, errMessage);
+  }
+};
+
 // export const serviceGardenByServiceId = createAsyncThunk(
 //   "serviceOrder/serviceGardenByServiceId",
 //   async (serviceId) => {
@@ -84,9 +95,22 @@ export const serviceOrderById = createAsyncThunk(
   }
 );
 
+export const servicePackageById = createAsyncThunk(
+  "serviceOrder/servicePackageById",
+  async (servicePackageId) => {
+    try {
+      const response = await axios.get(`/Service/${servicePackageId}`);
+      return response.data;
+    } catch (error) {
+      return {};
+    }
+  }
+);
+
 const initialState = {
   allServiceOrderDTO: {},
   listTaskDTO: {},
+  servicePackageDetail: {},
   serviceOrderDetail: {},
   pagination: {},
   msg: "",
@@ -152,6 +176,19 @@ const serviceOrderSlice = createSlice({
       .addCase(listTask.rejected, (state) => {
         state.msg = "Error loading data";
         state.listTaskDTO.loading = false;
+      })
+      .addCase(servicePackageById.pending, (state) => {
+        state.msg = "Loading...";
+        state.servicePackageDetail.loading = true;
+      })
+      .addCase(servicePackageById.fulfilled, (state, action) => {
+        state.servicePackageDetail = action.payload;
+        state.msg = "Data loaded successfully";
+        state.servicePackageDetail.loading = false;
+      })
+      .addCase(servicePackageById.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.servicePackageDetail.loading = false;
       });
   },
 });

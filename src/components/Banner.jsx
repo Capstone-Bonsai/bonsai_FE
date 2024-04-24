@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from "react";
 import logo from "../assets/logoFinal.png";
 import SPCus from "../assets/img-sp.webp";
-import { Image, Input, Space } from "antd";
+import { Image, Input, Space, notification } from "antd";
 import { SearchOutlined, UserOutlined } from "@ant-design/icons";
 import {
   ShoppingCartOutlined,
   FacebookOutlined,
   InstagramOutlined,
   TwitterOutlined,
+  BellOutlined,
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBonsai, setCartFromCookie } from "../redux/slice/bonsaiSlice";
-import { profileUser } from "../redux/slice/authSlice";
+import {  profileUser } from "../redux/slice/authSlice";
 import {
   setAvatarUrlRedux,
   setFullNameRedux,
 } from "../redux/slice/avatarSlice";
 import "./Banner.css";
+import { notificationUser } from "../redux/slice/userSlice";
 function Banner() {
   const { Search } = Input;
   const navLinks = [
@@ -28,8 +30,11 @@ function Banner() {
     { text: "Bảng giá giao hàng", to: "/delivery" },
     { text: "Liên hệ", to: "/contact" },
   ];
-  const cookies = new Cookies();
+  const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
+  const cookies = new Cookies(null, { expires: cookieExpires });
   const [countCart, setCountCart] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
   const [isSticky, setIsSticky] = useState(false);
   const avatarUrl = useSelector((state) => state.avatar.avatarUrlRedux);
   const fullNameRedux = useSelector((state) => state.avatar.fullName);
@@ -97,6 +102,10 @@ function Banner() {
   };
 
   useEffect(() => {
+    dispatch(notificationUser({pageIndex, pageSize}));
+  }, []);
+
+  useEffect(() => {
     fetchCartFromCookie();
     // setCountCart()
   }, [userInfo]);
@@ -119,7 +128,30 @@ function Banner() {
               </Link>
             </div>
             {userInfo != null ? (
-              <div className={`flex items-center bannerContent ${isSticky ? "absolute top-[40%] right-[50%]" : ""}`}>
+              <div
+                className={`flex items-center bannerContent ${
+                  isSticky ? "absolute top-[40%] right-[50%]" : ""
+                }`}
+              >
+                <div className="dropdown">
+                  <button className="bg-[#f2f2f2] hover:bg-gray-300 hover:text-[#fff] mx-3 relative rounded-full w-[30px] h-[30px] flex justify-center items-center">
+                    <BellOutlined />
+                    <div className="absolute top-[-10px] right-[-5px] bg-[red] w-[20px] h-[20px] text-[14px] text-[#fff] rounded-full">
+                      0
+                    </div>
+                  </button>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                  >
+                    <li>
+                      <a>Item 1</a>
+                    </li>
+                    <li>
+                      <a>Item 2</a>
+                    </li>
+                  </ul>
+                </div>
                 <div className="bg-[#f2f2f2] w-[40px] h-[40px] flex justify-center rounded-full drop-shadow-lg text-[30px]">
                   {avatarUrl != null ? (
                     <div>

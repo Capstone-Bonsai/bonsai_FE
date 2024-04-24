@@ -17,7 +17,7 @@ export const register = async (registerData) => {
   }
 };
 
-export const OtpHandler = async (email, Otp ) => {
+export const OtpHandler = async (email, Otp) => {
   try {
     const response = await axios.get(
       `/Auth/OtpHandler?Email=${email}&Otp=${Otp}`
@@ -76,6 +76,8 @@ export const profileUser = async () => {
   }
 };
 
+
+
 export const updateProfileUser = async (formData) => {
   try {
     const user = cookies.get("user");
@@ -95,8 +97,16 @@ export const updateProfileUser = async (formData) => {
   }
 };
 
+const initialState = {
+  itemCount: 0,
+  loading: false,
+  msg: "",
+  token: null,
+};
+
 export const authSlice = createSlice({
   name: "auth",
+  initialState,
   reducers: {
     logoutUser: (state) => {
       state.token = null;
@@ -104,9 +114,10 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder;
+    builder
+      
   },
 });
-const { reducer: authReducer } = authSlice;
+const { reducer: authReducer, actions } = authSlice;
 
 export { authReducer as default };

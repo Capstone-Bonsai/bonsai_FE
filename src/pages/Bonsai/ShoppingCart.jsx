@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CloseCircleOutlined, ShoppingOutlined } from "@ant-design/icons";
-import { InputNumber, Space } from "antd";
+import { InputNumber, Modal, Space } from "antd";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -30,6 +30,8 @@ function ShoppingCart() {
     dispatch(addBonsaiToCart(cartItems));
   }, [cartItems]);
   const bonsais = useSelector((state) => state.bonsai?.bonsaiInCart);
+
+  const [isDisabledItem, setIsDisabledItem] = useState(false);
   const updateCartItems = (newCartItems) => {
     const cartId = userInfo ? `cartId ${idUser}` : "cartItems";
     setCartItems(newCartItems);
@@ -58,6 +60,20 @@ function ShoppingCart() {
     }).format(price);
   };
   const totalCountItems = cartItems.length;
+  useEffect(() => {
+    const disabledItemExists = bonsais.some((item) => item.isDisable);
+    setIsDisabledItem(disabledItemExists);
+  }, [bonsais]);
+  const handleCheckout = () => {
+    if (isDisabledItem) {
+      Modal.error({
+        title: "Có sản phẩm không khả dụng",
+        content: "Vui lòng kiểm tra lại giỏ hàng của bạn.",
+      });
+    } else {
+      navigate("/order");
+    }
+  };
   return (
     <MinHeight>
       {cartItems?.length === 0 ? (
@@ -97,28 +113,49 @@ function ShoppingCart() {
               {bonsais.map((item) => (
                 <tr
                   key={item.id}
-                  className="border-b ml-5 text-center h-[170px]"
+                  className={`border-b ml-5 text-center relative h-[170px]`}
                 >
                   <td className="flex justify-center items-center h-[170px]">
                     <div>
                       <img
                         src={item?.image ? item?.image : noImage}
                         alt=""
-                        className="w-[120px] h-[120px] object-cover"
+                        className={`w-[120px] h-[120px] object-cover  ${
+                          item?.isDisable ? "opacity-30" : ""
+                        }`}
                       />
                     </div>
                   </td>
-                  <td className="">
-                    <div className="text-[16px] font-medium">{item.name}</div>
+                  <td className={` ${item?.isDisable ? "opacity-30" : ""}`}>
+                    <div className={`text-[16px] font-medium`}>{item.name}</div>
                   </td>
-                  <td className="font-medium">{formatPrice(item.price)}</td>
+                  <td
+                    className={`font-medium  ${
+                      item?.isDisable ? "opacity-30" : ""
+                    }`}
+                  >
+                    {formatPrice(item.price)}
+                  </td>
 
-                  <td className="font-medium">{formatPrice(item.price)}</td>
+                  <td
+                    className={`font-medium  ${
+                      item?.isDisable ? "opacity-30" : ""
+                    }`}
+                  >
+                    {formatPrice(item.price)}
+                  </td>
                   <td className="text-[20px] pr-5">
                     <button onClick={() => handleRemoveItem(item.id)}>
                       <CloseCircleOutlined />
                     </button>
                   </td>
+                  <div className="absolute bottom-0 right-5">
+                    {item?.isDisable ? (
+                      <div className="text-[red]">Sản phẩm đã được mua </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                 </tr>
               ))}
             </tbody>
@@ -143,14 +180,13 @@ function ShoppingCart() {
               </div>
             </div>
           </div>
-
           <div className="flex justify-end">
-            <Link
-              to="/order"
+            <button
+              onClick={handleCheckout}
               className="uppercase bg-black p-2 rounded-[3px] text-[#fff] my-5 hover:bg-[#3a9943]"
             >
               Tiến hành thanh toán
-            </Link>
+            </button>
           </div>
         </div>
       ) : (
