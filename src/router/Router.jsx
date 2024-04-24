@@ -44,6 +44,7 @@ import ServiceOption from "../pages/ServicePage/ServiceOption";
 import ServiceStepMain from "../pages/ServicePage/ServiceStepRegister/ServiceStepMain";
 import ResetPassword from "../pages/Auth/ResetPassword";
 import Dashboard from "../pages/AdminPage/Dashboard/Dashboard";
+import CustomerBonsai from "../pages/Garden/BonsaiInGarden/CustomerBonsai";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -147,6 +148,10 @@ function Router() {
               {
                 path: "/Profile",
                 element: <ProfileUser />,
+              },
+              {
+                path: "/CustomerBonsai",
+                element: <CustomerBonsai />,
               },
               {
                 path: "/CustomerGarden",
