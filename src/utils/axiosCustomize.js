@@ -1,9 +1,8 @@
 import axios from "axios";
 import NProgress from "nprogress";
 import Cookies from "universal-cookie";
-
 const instance = axios.create({
-  baseURL: "https://capstoneb.azurewebsites.net/api/",
+  baseURL: import.meta.env.TEST_URL,
 });
 const cookies = new Cookies();
 

@@ -96,7 +96,7 @@ function ContractUser() {
                                       : "text-[#3a9943]"
                                   }`}
                                 >
-                                  {getStatusText(contract?.contractStatus)}
+                                  {getStatusText(contract?.serviceOrderStatus)}
                                 </span>
                               </div>
                             </div>
