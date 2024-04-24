@@ -127,16 +127,6 @@ function PrivateRoute() {
   ];
   return (
     <>
-      <Link
-        to="/login"
-        className="text-black"
-        onClick={() => {
-          handleLogout();
-        }}
-      >
-        Đăng xuất
-      </Link>
-      ,
       <Layout className="min-h-screen">
         <Sider
           trigger={null}

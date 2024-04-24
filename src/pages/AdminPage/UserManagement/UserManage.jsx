@@ -287,7 +287,7 @@ function UserManage() {
   return (
     <>
       <div className="flex justify-center mt-12">
-        <div className="w-[70%]">
+        <div className="w-[80%]">
           <div className="font-semibold mb-6">Quản lý người dùng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
