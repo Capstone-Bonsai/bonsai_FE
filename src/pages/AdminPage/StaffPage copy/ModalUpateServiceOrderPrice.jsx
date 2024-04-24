@@ -14,6 +14,7 @@ function ModalUpateServiceOrderPrice(props) {
   const { show, setShow, serviceOrderDetail } = props;
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [formDisabled, setFormDisabled] = useState(false);
 
   const handleClose = () => {
     setFormData({
@@ -67,6 +68,7 @@ function ModalUpateServiceOrderPrice(props) {
         })
         .finally(() => {
           setConfirmLoading(false);
+          setFormDisabled(false);
         });
     } catch (err) {
       console.log(err);
@@ -78,6 +80,7 @@ function ModalUpateServiceOrderPrice(props) {
     formRef.current
       .validateFields()
       .then(() => {
+        setFormDisabled(true);
         setConfirmLoading(true);
         handleOk();
       })
@@ -113,6 +116,7 @@ function ModalUpateServiceOrderPrice(props) {
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
             initialValues={formData}
+            disabled={formDisabled}
           >
             <Form.Item label="Tên khách hàng:">
               <div>{serviceOrderDetail?.customerName}</div>

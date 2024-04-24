@@ -48,7 +48,7 @@ const ModalUpdateServiceType = (props) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-
+  const [formDisabled, setFormDisabled] = useState(false);
   const [listImage, setListImage] = useState([]);
   const formRef = useRef(null);
 
@@ -118,13 +118,14 @@ const ModalUpdateServiceType = (props) => {
         .then((data) => {
           toast.success(data.data);
           dispatch(allServiceType());
+          handleClose();
         })
         .catch((err) => {
           toast.error(err.response.data);
         })
         .finally(() => {
           setConfirmLoading(false);
-          handleClose();
+          setFormDisabled(false);
         });
     } catch (err) {
       toast.error(err.response.data);
@@ -139,6 +140,7 @@ const ModalUpdateServiceType = (props) => {
     formRef.current
       .validateFields()
       .then(() => {
+        setFormDisabled(true);
         setConfirmLoading(true);
         updateServiceType(postData);
       })
@@ -190,6 +192,7 @@ const ModalUpdateServiceType = (props) => {
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
             initialValues={formData}
+            disabled={formDisabled}
           >
             <Form.Item label="Tên loại dịch vụ">
               <p>{serviceType?.typeName}</p>

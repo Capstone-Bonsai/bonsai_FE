@@ -63,7 +63,7 @@ const ModalCreateProduct = (props) => {
     Height: 0,
     NumberOfTrunk: 0,
     Price: 0,
-    DeleverySize: 0,
+    DeliverySize: 0,
     Image: "",
   });
   const dispatch = useDispatch();
@@ -147,9 +147,10 @@ const ModalCreateProduct = (props) => {
     postData.append("Height", formData.Height);
     postData.append("NumberOfTrunk", formData.NumberOfTrunk);
     postData.append("Price", formData.Price);
-    postData.append("DeliverySize", formData.DeleverySize);
+    postData.append("DeliverySize", formData.DeliverySize);
     formData.Image?.map((image) => postData.append("Image", image));
 
+    console.log(formData)
     formRef.current
       .validateFields()
       .then(() => {
