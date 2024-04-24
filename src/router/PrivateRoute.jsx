@@ -42,7 +42,7 @@ function PrivateRoute() {
   const [logoutAdmin, setLogoutAdmin] = useState(false);
   const handleLogout = () => {
     cookies.remove("user", { path: "/" });
-    cookies.remove("user", { path: "/" });
+    cookies.remove("user", { path: "/admin" });
   };
   const NavBarItems = [
     {
