@@ -33,16 +33,17 @@ function getItem(label, key, icon, children, type) {
 function PrivateRoute() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
+  const navigate = useNavigate();
   const avatarUrl = useSelector((state) => state.avatar?.avatarUrlRedux);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
+  const [logoutAdmin, setLogoutAdmin] = useState(false);
   const handleLogout = () => {
     cookies.remove("user", { path: "/" });
+    cookies.remove("user", { path: "/" });
   };
-
   const NavBarItems = [
     {
       key: "1",
@@ -126,6 +127,16 @@ function PrivateRoute() {
   ];
   return (
     <>
+      <Link
+        to="/login"
+        className="text-black"
+        onClick={() => {
+          handleLogout();
+        }}
+      >
+        Đăng xuất
+      </Link>
+      ,
       <Layout className="min-h-screen">
         <Sider
           trigger={null}
