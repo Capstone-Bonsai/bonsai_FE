@@ -12,7 +12,7 @@ import {
   SnippetsOutlined,
   ProductOutlined,
 } from "@ant-design/icons";
-import logo from "../assets/logo_footer_final.png";
+import logo from "../assets/logoFinal.png";
 import { Dropdown, Layout, Menu, Button, theme } from "antd";
 import { profileUser } from "../redux/slice/authSlice";
 import Cookies from "universal-cookie";
@@ -40,8 +40,7 @@ function PrivateRoute() {
   } = theme.useToken();
 
   const handleLogout = () => {
-    cookies.remove("user");
-    cookies.remove("userData");
+    cookies.remove("user", { path: "/" });
   };
 
   const NavBarItems = [
@@ -55,7 +54,7 @@ function PrivateRoute() {
       children: userInfo
         ? [
             getItem(
-              <Link to="/HOME" className="text-black" onClick={handleLogout}>
+              <Link to="/login" className="text-black" onClick={handleLogout}>
                 Đăng xuất
               </Link>,
               "1",
@@ -135,7 +134,7 @@ function PrivateRoute() {
           className="min-h-screen"
         >
           <div className="demo-logo-vertical my-6 flex justify-center">
-            <img src={logo} width={150} />
+            <img src={logo} width={70} />
           </div>
           <Menu
             className="text-base"
