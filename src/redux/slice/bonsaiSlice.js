@@ -66,7 +66,7 @@ export const fetchBonsaiWithCateCayTrac = createAsyncThunk(
   "bonsai/fetchAllBonsaiPaginationCayTrac",
   async ({ pageIndex, pageSize }) => {
     try {
-      const response = await axiosCus.get(
+      const response = await axios.get(
         `/Bonsai/Category?pageIndex=${pageIndex}&pageSize=${pageSize}&categoryId=96feef97-a25c-4849-832f-08dc3f32bfc0`
       );
       console.log(response.data);
@@ -81,7 +81,7 @@ export const fetchBonsaiWithCateCayThong = createAsyncThunk(
   "bonsai/fetchAllBonsaiPaginationCayThong",
   async ({ pageIndex, pageSize }) => {
     try {
-      const response = await axiosCus.get(
+      const response = await axios.get(
         `/Bonsai/Category?pageIndex=${pageIndex}&pageSize=${pageSize}&categoryId=603b484b-7faa-40e6-6b22-08dc40005bf3`
       );
       console.log(response.data);
@@ -96,7 +96,7 @@ export const fetchAllBonsaiNoPagination = createAsyncThunk(
   "bonsai/fetchBonsaisNoPagination",
   async () => {
     try {
-      const response = await axiosCus.get(`/Bonsai`);
+      const response = await axios.get(`/Bonsai`);
       console.log(response);
       return response.data;
     } catch (error) {
@@ -128,7 +128,7 @@ export const bonsaiBought = createAsyncThunk(
 
 export const filterTag = createAsyncThunk("product/tags", async () => {
   try {
-    const response = await axiosCus.get("/Tag");
+    const response = await axios.get("/Tag");
     return response.data;
   } catch (error) {
     throw error;
@@ -147,7 +147,7 @@ export const fetchAllBonsai = createAsyncThunk(
     keyword,
   }) => {
     try {
-      const response = await axiosCus.post(
+      const response = await axios.post(
         `/Bonsai/Filter?pageIndex=${pageIndex}&pageSize=${pageSize}`,
         { minPrice, maxPrice, category, style, keyword }
       );
@@ -165,7 +165,7 @@ export const fetchBonsaiById = createAsyncThunk(
   "bonsai/fetchBonsaiById",
   async (bonsaiId) => {
     try {
-      const response = await axiosCus.get(`/Bonsai/${bonsaiId}`);
+      const response = await axios.get(`/Bonsai/${bonsaiId}`);
       return response.data;
     } catch (error) {
       throw error;
@@ -175,7 +175,7 @@ export const fetchBonsaiById = createAsyncThunk(
 
 export const orderBonsai = async (dataOrder) => {
   try {
-    const res = await axiosCus.post("/Order", dataOrder);
+    const res = await axios.post("/Order", dataOrder);
     return res.data;
   } catch (err) {
     const errMessage = err.response;
