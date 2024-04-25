@@ -4,10 +4,6 @@ import { toast } from "react-toastify";
 
 export const addToCart = async (
   bonsaiId,
-  bonsaiName,
-  bonsaiPrice,
-  bonsaiImage,
-  bonsaiSubCategory,
   dispatch
 ) => {
   const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
