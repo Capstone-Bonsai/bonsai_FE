@@ -41,9 +41,11 @@
     "react-slick": "^0.29.0",
     "react-spinners": "^0.13.8",
     "react-toastify": "^10.0.4",
+    "react-use-websocket": "^3.0.0",
     "slick-carousel": "^1.8.1",
     "universal-cookie": "^7.0.2",
-    "use-debounce": "^10.0.0"
+    "use-debounce": "^10.0.0",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
