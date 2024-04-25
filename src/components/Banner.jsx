@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBonsai, setCartFromCookie } from "../redux/slice/bonsaiSlice";
-import {  profileUser } from "../redux/slice/authSlice";
+import { profileUser } from "../redux/slice/authSlice";
 import {
   setAvatarUrlRedux,
   setFullNameRedux,
@@ -44,8 +44,8 @@ function Banner() {
   const idUser = userInfo?.id;
   const userProfile = useState(cookies.get("userData"));
   const handleLogout = () => {
-    cookies.remove("user");
-    cookies.remove("userData");
+    cookies.remove("user", { path: "/" });
+    cookies.remove("userData", { path: "/" });
   };
   useEffect(() => {
     const handleScroll = () => {
@@ -102,7 +102,7 @@ function Banner() {
   };
 
   useEffect(() => {
-    dispatch(notificationUser({pageIndex, pageSize}));
+    dispatch(notificationUser({ pageIndex, pageSize }));
   }, []);
 
   useEffect(() => {
