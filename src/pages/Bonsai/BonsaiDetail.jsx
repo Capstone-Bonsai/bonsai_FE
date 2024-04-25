@@ -2,12 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Image } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { ShoppingCartOutlined, TagsOutlined } from "@ant-design/icons";
+import {
+  ShoppingCartOutlined,
+  FileSearchOutlined,
+  TagsOutlined,
+} from "@ant-design/icons";
 import Cookies from "universal-cookie";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../../components/Loading";
-import { fetchBonsaiById } from "../../redux/slice/bonsaiSlice";
+import noImage from "../../assets/unImage.png";
+import {
+  bonsaiSameCategory,
+  fetchBonsaiById,
+} from "../../redux/slice/bonsaiSlice";
 import MinHeight from "../../components/MinHeight";
 import logo from "../../assets/logoFinal.png";
 import carShip from "../../assets/ship.png";
@@ -23,7 +31,31 @@ function BonsaiDetail() {
     dispatch(fetchBonsaiById(bonsaiId));
   }, [bonsaiId]);
 
-  const bonsaiDetail = useSelector((state) => state.bonsai.bonsaiById);
+  const bonsaiDetail = useSelector((state) => state.bonsai?.bonsaiById);
+  const bonsaiCategory = useSelector(
+    (state) => state.bonsai?.bonsaiById?.categoryId
+  );
+
+  console.log(bonsaiCategory);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const payload = {
+          pageIndex: 0,
+          pageSize: 4,
+          category: bonsaiCategory,
+        };
+        await dispatch(bonsaiSameCategory(payload));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [bonsaiDetail]);
+  const bonsaiListSameCategory = useSelector(
+    (state) => state?.bonsai?.bonsaiSameCategory?.items
+  );
   const loading = useSelector((state) => state.bonsai.loading);
 
   const [currentImage, setCurrentImage] = useState("");
@@ -170,6 +202,92 @@ function BonsaiDetail() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <div className="w-full flex flex-col items-center my-5">
+            <div className="text-start w-[75%] font-bold text-[25px]">Các cây khác cùng loại: </div>
+            <div className="w-[70%] flex flex-wrap gap-5">
+              {
+                bonsaiListSameCategory?.length > 0
+                  ? bonsaiListSameCategory?.map((bonsai) => (
+                      <motion.div
+                        key={bonsai.id}
+                        className="w-[255px] h-[355px] border mt-2 mx-5"
+                        whileHover={{ scale: 1.1 }}
+                      >
+                        <Image
+                          className="bg-cover bg-no-repeat w-full h-[250px]"
+                          width="100%"
+                          height="250px"
+                          src={
+                            (bonsai?.bonsaiImages).length > 0
+                              ? bonsai.bonsaiImages[0]?.imageUrl
+                              : noImage
+                          }
+                        />
+                        <div className="flex justify-evenly">
+                          <div className="py-2 text-[18px] w-[70%]">
+                            <Link
+                              className="text-[20px]
+                      hover:text-[#3a9943] block overflow-hidden whitespace-nowrap overflow-ellipsis"
+                              to={`/bonsaiDetail/${bonsai.id}`}
+                            >
+                              {bonsai.name}
+                            </Link>
+                            <div className="text-[12px] opacity-70">
+                              Code:{" "}
+                              {bonsai.code != ""
+                                ? bonsai.code
+                                : "đang cập nhật"}
+                            </div>
+                            <div className="text-[#3a9943] text-[16px]">
+                              {formatPrice(bonsai.price)}
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => {
+                              if (
+                                bonsai?.bonsaiImages &&
+                                bonsai.bonsaiImages.length > 0
+                              ) {
+                                addToCart(
+                                  bonsai.id,
+                                  bonsai.name,
+                                  bonsai.price,
+                                  bonsai.bonsaiImages[0].imageUrl,
+                                  bonsai.subCategory,
+                                  countCartItems,
+                                  dispatch
+                                );
+                              } else {
+                                addToCart(
+                                  bonsai.id,
+                                  bonsai.name,
+                                  bonsai.price,
+                                  bonsai.subCategory,
+                                  countCartItems,
+                                  dispatch
+                                );
+                              }
+                            }}
+                            className="bg-[#f2f2f2] mt-5 w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]"
+                          >
+                            <ShoppingCartOutlined />
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))
+                  : ""
+                // (
+                //   <div className="w-full flex flex-col justify-center items-center">
+                //     <FileSearchOutlined className="text-[200px] opacity-30" />
+                //     <div className="opacity-30">
+                //       Hix. Không có sản phẩm nào. Bạn thử tắt điều kiện lọc và tìm
+                //       lại nhé?
+                //     </div>
+                //   </div>
+                // )
+              }
             </div>
           </div>
         </MinHeight>
