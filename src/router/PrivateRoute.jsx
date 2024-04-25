@@ -12,7 +12,7 @@ import {
   SnippetsOutlined,
   ProductOutlined,
 } from "@ant-design/icons";
-import logo from "../assets/logo_footer_final.png";
+import logo from "../assets/logoFinal.png";
 import { Dropdown, Layout, Menu, Button, theme } from "antd";
 import { profileUser } from "../redux/slice/authSlice";
 import Cookies from "universal-cookie";
@@ -41,6 +41,7 @@ function PrivateRoute() {
   } = theme.useToken();
   const [logoutAdmin, setLogoutAdmin] = useState(false);
   const handleLogout = () => {
+    cookies.remove("user", { path: "/" });
     cookies.remove("user", { path: "/admin" });
   };
   const NavBarItems = [
@@ -51,6 +52,29 @@ function PrivateRoute() {
           {userInfo.fullName} <UserOutlined />
         </div>
       ),
+      children: userInfo
+        ? [
+            getItem(
+              <Link to="/login" className="text-black" onClick={handleLogout}>
+                Đăng xuất
+              </Link>,
+              "1",
+              "",
+              [],
+              "group"
+            ),
+          ]
+        : [
+            getItem(
+              <Link to="/login" className="text-black">
+                Đăng nhập
+              </Link>,
+              "1",
+              "",
+              [],
+              "group"
+            ),
+          ],
     },
   ];
   const SideBarItems = [
@@ -103,16 +127,6 @@ function PrivateRoute() {
   ];
   return (
     <>
-      <Link
-        to="/login"
-        className="text-black"
-        onClick={() => {
-          handleLogout();
-        }}
-      >
-        Đăng xuất
-      </Link>
-      ,
       <Layout className="min-h-screen">
         <Sider
           trigger={null}
@@ -121,7 +135,7 @@ function PrivateRoute() {
           className="min-h-screen"
         >
           <div className="demo-logo-vertical my-6 flex justify-center">
-            <img src={logo} width={150} />
+            <img src={logo} width={70} />
           </div>
           <Menu
             className="text-base"
