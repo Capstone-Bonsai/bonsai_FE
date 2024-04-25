@@ -113,91 +113,101 @@ function StepOne(propsStepOne) {
           {loadingGarden ? (
             <Loading loading={loadingGarden} />
           ) : (
-            <div>
-              {gardens?.map((garden) => (
-                <div key={garden.id} className="flex gap-5 py-5 relative">
-                  <button
-                    onClick={() => {
-                      setSelectedGardenId(garden.id), handleToStepTwo();
-                    }}
-                    className="absolute right-0 outline-none text-[20px]"
-                  >
-                    {selectedGardenId == garden.id ? (
-                      <CheckCircleOutlined className="text-[#3a9943]" />
-                    ) : (
-                      <PlusCircleOutlined />
-                    )}
-                  </button>
-                  <div className="w-[30%] h-[300px] border rounded-tr-[30px]">
-                    <img
-                      className="w-full h-full object-cover rounded-tr-[30px]"
-                      src={
-                        garden?.customerGardenImages?.length > 0
-                          ? garden?.customerGardenImages[0]?.image
-                          : noImage
-                      }
-                      alt=""
-                    />
-                  </div>
-                  <div className="w-[70%]">
-                    <div className="text-[25px]">{garden.address}</div>
-                    <div>
-                      Diện tích: {garden?.square}m<sup>2</sup>
-                    </div>
-                    <div className="">
-                      <div className="w-full">Bonsai đang trồng:</div>
-                      {garden.customerBonsais.length > 0 ? (
-                        garden.customerBonsais.map((bonsai) => (
-                          <div
-                            key={bonsai?.bonsaiId}
-                            className="w-full flex gap-2 border-y py-2"
-                          >
-                            <div className=" w-[10%] h-[50px]">
-                              <Image
-                                width="100%"
-                                height="100%"
-                                className="object-cover"
-                                src={
-                                  bonsai?.bonsai?.bonsaiImages?.length > 0
-                                    ? bonsai?.bonsai?.bonsaiImages[0]?.imageUrl
-                                    : noImage
-                                }
-                                alt=""
-                              />
-                            </div>
-                            <div>
-                              <div className="font-bold text-[20px]">
-                                {bonsai?.bonsai?.name}
-                              </div>
-                              <div className="text-[12px]">
-                                <div>
-                                  Năm trồng: {bonsai.bonsai.yearOfPlanting}
-                                </div>
-                                <div>
-                                  Kích thước thân: {bonsai.bonsai.trunkDimenter}
-                                  cm
-                                </div>
-                                <div>Chiều cao: {bonsai.bonsai.height}m</div>
-                              </div>
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <div className="opacity-70">
-                          Không có bonsai đang trồng
+            <div className="">
+              {gardens?.length > 0
+                ? gardens?.map((garden) => (
+                    <div key={garden.id} className="flex gap-5 p-5 my-5 relative border rounded-[10px]">
+                      <button
+                        onClick={() => {
+                          setSelectedGardenId(garden.id), handleToStepTwo();
+                        }}
+                        className="absolute right-5 outline-none text-[20px]"
+                      >
+                        {selectedGardenId == garden.id ? (
+                          <CheckCircleOutlined className="text-[#3a9943]" />
+                        ) : (
+                          <PlusCircleOutlined />
+                        )}
+                      </button>
+                      <div className="w-[30%] h-[300px] border rounded-tr-[30px]">
+                        <img
+                          className="w-full h-full object-cover rounded-tr-[30px]"
+                          src={
+                            garden?.customerGardenImages?.length > 0
+                              ? garden?.customerGardenImages[0]?.image
+                              : noImage
+                          }
+                          alt=""
+                        />
+                      </div>
+                      <div className="w-[70%]">
+                        <div className="text-[25px] w-[90%]">{garden.address}</div>
+                        <div>
+                          Diện tích: {garden?.square}m<sup>2</sup>
                         </div>
-                      )}
+                        <div className="">
+                          <div className="w-full">Bonsai đang trồng:</div>
+                          {garden.customerBonsais.length > 0 ? (
+                            garden.customerBonsais.map((bonsai) => (
+                              <div
+                                key={bonsai?.bonsaiId}
+                                className="w-full flex gap-2 border-y py-2"
+                              >
+                                <div className=" w-[10%] h-[50px]">
+                                  <Image
+                                    width="100%"
+                                    height="100%"
+                                    className="object-cover"
+                                    src={
+                                      bonsai?.bonsai?.bonsaiImages?.length > 0
+                                        ? bonsai?.bonsai?.bonsaiImages[0]
+                                            ?.imageUrl
+                                        : noImage
+                                    }
+                                    alt=""
+                                  />
+                                </div>
+                                <div>
+                                  <div className="font-bold text-[20px]">
+                                    {bonsai?.bonsai?.name}
+                                  </div>
+                                  <div className="text-[12px]">
+                                    <div>
+                                      Năm trồng: {bonsai.bonsai.yearOfPlanting}
+                                    </div>
+                                    <div>
+                                      Kích thước thân:{" "}
+                                      {bonsai.bonsai.trunkDimenter}
+                                      cm
+                                    </div>
+                                    <div>
+                                      Chiều cao: {bonsai.bonsai.height}m
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="opacity-70">
+                              Không có bonsai đang trồng
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-              <Pagination
-                current={pageIndex}
-                pageSize={pageSize}
-                total={totalItemsCountGarden}
-                onChange={handlePageChange}
-                className="text-center mt-5"
-              />
+                  ))
+                : "Bạn chưa có vườn nào"}
+              {gardens?.length > 0 ? (
+                <Pagination
+                  current={pageIndex}
+                  pageSize={pageSize}
+                  total={totalItemsCountGarden}
+                  onChange={handlePageChange}
+                  className="text-center mt-5"
+                />
+              ) : (
+                ""
+              )}
             </div>
           )}
         </div>
@@ -245,14 +255,18 @@ function StepOne(propsStepOne) {
                       </button>
                     </div>
                   ))
-                : ""}
-              <Pagination
-                current={pageIndex}
-                pageSize={pageSize}
-                total={totalItemsCountBonsai}
-                onChange={handlePageChange}
-                className="text-center mt-5"
-              />
+                : "Bạn chưa có cây nào"}
+              {bonsais?.length > 0 ? (
+                <Pagination
+                  current={pageIndex}
+                  pageSize={pageSize}
+                  total={totalItemsCountBonsai}
+                  onChange={handlePageChange}
+                  className="text-center mt-5"
+                />
+              ) : (
+                ""
+              )}
             </div>
           )}
         </div>

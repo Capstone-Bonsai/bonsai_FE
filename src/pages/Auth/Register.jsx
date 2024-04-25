@@ -30,6 +30,34 @@ function Register() {
     }
   };
 
+  const validatePassword = (_, value) => {
+    const hasNumber = /\d/.test(value);
+    const hasLowerCase = /[a-z]/.test(value);
+    const hasUpperCase = /[A-Z]/.test(value);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+
+    if (value.length < 6) {
+      return Promise.reject("Mật khẩu phải có ít nhất 6 ký tự!");
+    }
+    if (value.length > 50) {
+      return Promise.reject("Mật khẩu không được quá 50 ký tự!");
+    }
+    if (!hasNumber) {
+      return Promise.reject("Mật khẩu phải chứa ít nhất 1 chữ số!");
+    }
+    if (!hasLowerCase) {
+      return Promise.reject("Mật khẩu phải chứa ít nhất 1 chữ cái thường!");
+    }
+    if (!hasUpperCase) {
+      return Promise.reject("Mật khẩu phải chứa ít nhất 1 chữ cái hoa!");
+    }
+    if (!hasSpecialChar) {
+      return Promise.reject("Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt!");
+    }
+
+    return Promise.resolve();
+  };
+
   const validatePhoneNumber = (_, value) => {
     if (/^\d+$/.test(value)) {
       if (value.length === 10) {
@@ -45,6 +73,14 @@ function Register() {
       }
     } else {
       return Promise.reject("Vui lòng chỉ nhập số trong trường này");
+    }
+  };
+
+  const validateUserName = (_, value) => {
+    if (/^[a-zA-Z0-9]+$/.test(value)) {
+      return Promise.resolve();
+    } else {
+      return Promise.reject("Tên đăng nhập chỉ được chứa chữ cái và số");
     }
   };
 
@@ -102,6 +138,7 @@ function Register() {
             name="userName"
             rules={[
               { required: true, message: "Vui lòng nhập tên đăng nhập!" },
+              { validator: validateUserName },
             ]}
           >
             <Input className="w-full border py-[10px] px-[20px] rounded-none" />
@@ -111,7 +148,7 @@ function Register() {
             name="password"
             rules={[
               { required: true, message: "Vui lòng nhập mật khẩu!" },
-              { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự!" },
+              { validator: validatePassword },
             ]}
           >
             <Input.Password
