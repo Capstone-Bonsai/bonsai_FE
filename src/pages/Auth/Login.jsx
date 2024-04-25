@@ -38,8 +38,8 @@ function Login() {
 
   useEffect(() => {
     if (userInfo) {
-      cookies.remove("user");
-      cookies.remove("userData");
+      cookies.remove("user", { path: "/" });
+      cookies.remove("userData", { path: "/" });
     }
     if (userId != null && code != null) {
       const confirmEmailFromUrl = async () => {
@@ -65,7 +65,7 @@ function Login() {
       if (userInfo != null) {
         cookies.remove("user");
       }
-      cookies.set("user", response);
+      cookies.set("user", response, { path: "/" });
       if (response.role == "Customer") {
         navigate("/");
       } else if (response.role == "Manager") {
