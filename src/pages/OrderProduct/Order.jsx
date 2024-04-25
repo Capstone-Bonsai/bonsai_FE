@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDistrict, getProvince, getWard } from "../../redux/slice/address";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import CompletedAddress from "./CompletedAddress";
+import { addDays } from "date-fns";
+import { getStatusDeliverySize } from "../../components/status/deliverySize";
 function Order() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -39,6 +41,8 @@ function Order() {
   const [phoneNumberNoneLogin, setPhoneNumberNoneLogin] = useState("");
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [finalPrice, setFinalPrice] = useState(0);
+  const [deliveryFeeInfo, setDeliveryFeeInfo] = useState({});
+  console.log(deliveryFeeInfo);
   const bonsais = useSelector((state) => state.bonsai?.bonsaiInCart);
   useEffect(() => {
     if (resultCode === "0") {
@@ -126,6 +130,7 @@ function Order() {
     const fee = res?.deliveryFee;
     setDeliveryFee(fee);
     setFinalPrice(res?.finalPrice);
+    setDeliveryFeeInfo(res);
   };
   const handleTotalOrder = () => {
     let totalPriceOrder = 0;
@@ -144,16 +149,15 @@ function Order() {
                 <tr className="border-b bg-[#f2f2f2] h-[50px]">
                   <th className="uppercase">Hình Ảnh</th>
                   <th className="uppercase">Sản phẩm</th>
-                  <th className="uppercase"></th>
+                  <th className="uppercase">Kích thước vận chuyển</th>
                   <th className="uppercase">Giá</th>
-                  <th className="uppercase">Tổng</th>
-                  <th></th>
+                  <th></th> <th></th>
                 </tr>
               </thead>
               <tbody>
                 {bonsais.map((item) => (
                   <tr
-                    key={item.bonsaiId}
+                    key={item.id}
                     className={`${
                       item?.isDisable ? "opacity-30" : ""
                     } ml-5 text-center h-[70px] `}
@@ -173,11 +177,10 @@ function Order() {
                       </div>
                     </td>
                     <td className="">
-                      <div className="text-[16px] font-medium">
-                        {item.subCategory}
+                      <div className={`text-[16px] font-medium `}>
+                        {getStatusDeliverySize(item?.deliverySize)}
                       </div>
                     </td>
-                    <td className="font-medium">{formatPrice(item.price)}</td>
                     <td className="font-medium">{formatPrice(item.price)}</td>
                     <td className="text-[20px] pr-5"></td>
                   </tr>
@@ -279,14 +282,37 @@ function Order() {
                 <div className="font-bold">Địa chỉ:</div>
                 <div className="pl-2 w-[85%]">{address}</div>
               </div>
-              {/* <div className=" w-[20%] text-[16px]">
-              <span className="font-bold">Ngày dự kiến:</span>
-              <span>{expectedDeliveryDate}</span>
-            </div> */}
             </div>
-            <div className="flex pl-5 w-full">
-              <div className="font-bold">Lời nhắn</div>
-              <div className="pl-5  w-[90%]">{confirmNote}</div>
+            <div className="flex justify-between">
+              <div className="flex pl-5 w-[60%]">
+                <div className="font-bold">Lời nhắn: </div>
+                <div className="pl-5  w-[90%]">{confirmNote}</div>
+              </div>
+              <div className=" w-[40%] text-[16px]">
+                {deliveryFeeInfo?.distance ? (
+                  <>
+                    <div className="">
+                      <span className="font-bold">Khoảng cách: </span>
+                      <span>{deliveryFeeInfo?.distance}km</span>
+                    </div>
+                    <div className="">
+                      <span className="font-bold">
+                        Thời gian giao hàng dự kiến:{" "}
+                      </span>
+                      <span>
+                        {new Date(
+                          addDays(
+                            new Date(deliveryFeeInfo?.expectedDeliveryDate),
+                            2
+                          )
+                        ).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
           </div>
 
