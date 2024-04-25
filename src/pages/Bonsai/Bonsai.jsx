@@ -173,28 +173,8 @@ function Bonsai({ countCartItems }) {
                     </div>
                     <button
                       onClick={() => {
-                        if (
-                          bonsai?.bonsaiImages &&
-                          bonsai.bonsaiImages.length > 0
-                        ) {
-                          addToCart(
-                            bonsai.id,
-                            bonsai.name,
-                            bonsai.price,
-                            bonsai.bonsaiImages[0].imageUrl,
-                            bonsai.subCategory,
-                            countCartItems,
-                            dispatch
-                          );
-                        } else {
-                          addToCart(
-                            bonsai.id,
-                            bonsai.name,
-                            bonsai.price,
-                            bonsai.subCategory,
-                            countCartItems,
-                            dispatch
-                          );
+                        {
+                          addToCart(bonsai.id, dispatch);
                         }
                       }}
                       className="bg-[#f2f2f2] mt-5 w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]"

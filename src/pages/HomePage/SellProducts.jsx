@@ -81,27 +81,7 @@ function SellProducts({
                     <div className="col-end-4 flex justify-end">
                       <button
                         onClick={() => {
-                          if (
-                            office?.bonsaiImages &&
-                            office.bonsaiImages.length > 0
-                          ) {
-                            addToCart(
-                              office.id,
-                              office.name,
-                              office.price,
-                              office.bonsaiImages[0].imageUrl,
-                              office.subCategory,
-                              dispatch
-                            );
-                          } else {
-                            addToCart(
-                              office.id,
-                              office.name,
-                              office.price,
-                              office.subCategory,
-                              dispatch
-                            );
-                          }
+                          addToCart(office.id, dispatch);
                         }}
                         className="text-[20px] w-[40px] h-[40px] bg-[#f2f2f2] flex items-center border pl-2 rounded-[100%] 
           border-[#ffffff]-500 border-opacity-50 border-opacity-50 hover:bg-[#3A994A] hover:text-[#ffffff]"
@@ -164,27 +144,7 @@ function SellProducts({
                     <div className="col-end-4 flex justify-end">
                       <button
                         onClick={() => {
-                          if (
-                            office?.bonsaiImages &&
-                            office.bonsaiImages.length > 0
-                          ) {
-                            addToCart(
-                              office.id,
-                              office.name,
-                              office.price,
-                              office.bonsaiImages[0].imageUrl,
-                              office.subCategory,
-                              dispatch
-                            );
-                          } else {
-                            addToCart(
-                              office.id,
-                              office.name,
-                              office.price,
-                              office.subCategory,
-                              dispatch
-                            );
-                          }
+                          addToCart(office.id, dispatch);
                         }}
                         className="text-[20px] w-[40px] h-[40px] bg-[#f2f2f2] flex items-center border pl-2 rounded-[100%] 
           border-[#ffffff]-500 border-opacity-50 border-opacity-50 hover:bg-[#3A994A] hover:text-[#ffffff]"
