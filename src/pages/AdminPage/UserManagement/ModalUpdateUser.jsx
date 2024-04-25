@@ -201,6 +201,14 @@ const ModalUpdateUser = (props) => {
       new Error("Số điện thoại phải bắt đầu bằng 03, 05, 07, 08 hoặc 09.")
     );
   };
+  const validateUserName = (_, value) => {
+    if (!value || /^[a-zA-Z0-9]{1,50}$/.test(value)) {
+      return Promise.resolve();
+    }
+    return Promise.reject(
+      new Error("Tên đăng nhập chỉ được chứa chữ hoặc số.")
+    );
+  };
   const beforeUpload = (file) => {
     const isFileSizeValid = file.size <= MAX_FILE_SIZE;
     const isFileTypeValid = ALLOWED_FILE_TYPES.includes(file.type);
@@ -214,7 +222,7 @@ const ModalUpdateUser = (props) => {
         "Định dạng file không hợp lệ, vui lòng chọn file ảnh (JPEG, PNG, GIF)"
       );
     }
-    return isFileSizeValid && isFileTypeValid;
+    return false;
   };
 
   return (
@@ -246,6 +254,7 @@ const ModalUpdateUser = (props) => {
               name="userName"
               rules={[
                 { required: true, message: "Username không được để trống!" },
+                { validator: validateUserName },
                 { max: 50, message: "Username không quá 50 ký tự!" },
               ]}
             >
