@@ -37,7 +37,7 @@ const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
   }
-  return [e.file];
+  return e && e.fileList;
 };
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -63,10 +63,13 @@ const ModalCreateUser = (props) => {
       fullname: "",
       email: "",
       phone: "",
+      userName: "",
+      avatar: [],
     });
     form.resetFields();
     setConfirmLoading(false);
     setFileList([]);
+    setFormDisabled(false);
     setShow(false);
   };
   const [listRole, setListRole] = useState([]);
@@ -75,6 +78,8 @@ const ModalCreateUser = (props) => {
     fullname: "",
     email: "",
     phone: "",
+    userName: "",
+    avatar: [],
   });
   const dispatch = useDispatch();
   const [error, setError] = useState([]);
@@ -100,7 +105,7 @@ const ModalCreateUser = (props) => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const handleChange = (i) => setFileList(i);
   const uploadButton = (
     <button
       style={{
@@ -143,10 +148,14 @@ const ModalCreateUser = (props) => {
       const postData = new FormData();
       postData.append("Role", formData.role);
       postData.append("Fullname", formData.fullname);
+      postData.append("UserName", formData.userName);
       postData.append("Email", formData.email);
       postData.append("PhoneNumber", formData.phone);
-      postData.append("Avatar", fileList[0] ? fileList[0].originFileObj : null);
-
+      postData.append(
+        "Avatar",
+        formData.avatar[0] ? formData.avatar[0].originFileObj : null
+      );
+      console.log(formData);
       postCreateNewUser(postData)
         .then((data) => {
           toast.success(data.data);
@@ -193,20 +202,59 @@ const ModalCreateUser = (props) => {
       new Error("Số điện thoại phải bắt đầu bằng 03, 05, 07, 08 hoặc 09.")
     );
   };
-  const beforeUpload = (file) => {
-    const isFileSizeValid = file.size <= MAX_FILE_SIZE;
-    const isFileTypeValid = ALLOWED_FILE_TYPES.includes(file.type);
+
+  const validateUserName = (_, value) => {
+    if (!value || /^[a-zA-Z0-9]{1,50}$/.test(value)) {
+      return Promise.resolve();
+    }
+    return Promise.reject(
+      new Error("Tên đăng nhập chỉ được chứa chữ hoặc số.")
+    );
+  };
+
+  const validateImage = (_, value) => {
+    const isFileSizeValid = value[0]?.size
+      ? value[0]?.size <= MAX_FILE_SIZE
+      : true;
+
+    const isFileTypeValid = value[0]?.type
+      ? ALLOWED_FILE_TYPES.includes(value[0]?.type)
+      : true;
 
     if (!isFileSizeValid) {
-      message.error("Kích thước file quá lớn, vui lòng chọn file nhỏ hơn 10MB");
+      // message.error("Kích thước file quá lớn, vui lòng chọn file nhỏ hơn 10MB");
+      return Promise.reject(
+        new Error("Kích thước file quá lớn, vui lòng chọn file nhỏ hơn 10MB")
+      );
     }
 
     if (!isFileTypeValid) {
-      message.error(
-        "Định dạng file không hợp lệ, vui lòng chọn file ảnh (JPEG, PNG, GIF)"
+      // message.error(
+      //   "Định dạng file không hợp lệ, vui lòng chọn file ảnh (JPEG, PNG, GIF)"
+      // );
+      return Promise.reject(
+        new Error(
+          "Định dạng file không hợp lệ, vui lòng chọn file ảnh (JPEG, PNG, GIF)"
+        )
       );
     }
-    return isFileSizeValid && isFileTypeValid;
+    return Promise.resolve();
+  };
+
+  const beforeUpload = () => {
+    // const isFileSizeValid = file.size <= MAX_FILE_SIZE;
+    // const isFileTypeValid = ALLOWED_FILE_TYPES.includes(file.type);
+
+    // if (!isFileSizeValid) {
+    //   message.error("Kích thước file quá lớn, vui lòng chọn file nhỏ hơn 10MB");
+    // }
+
+    // if (!isFileTypeValid) {
+    //   message.error(
+    //     "Định dạng file không hợp lệ, vui lòng chọn file ảnh (JPEG, PNG, GIF)"
+    //   );
+    // }
+    return false;
   };
 
   return (
@@ -216,6 +264,8 @@ const ModalCreateUser = (props) => {
         open={show}
         onOk={handleOk}
         okButtonProps={{ type: "default" }}
+        okText={confirmLoading ? "Đang tạo" : "Tạo mới"}
+        cancelText="Hủy"
         confirmLoading={confirmLoading}
         onCancel={handleClose}
         maskClosable={false}
@@ -237,6 +287,20 @@ const ModalCreateUser = (props) => {
                 { required: true, message: "Email không được để trống!" },
                 { type: "email", message: "Email không hợp lệ!" },
                 { max: 50, message: "Email không quá 50 ký tự!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Username"
+              name="userName"
+              rules={[
+                {
+                  required: true,
+                  message: "Tên đăng nhập không được để trống!",
+                },
+                { validator: validateUserName },
+                { max: 50, message: "Tên đăng nhập không quá 50 ký tự!" },
               ]}
             >
               <Input />
@@ -292,18 +356,22 @@ const ModalCreateUser = (props) => {
               </Select>
             </Form.Item>
             <Form.Item
+              name="avatar"
               label="Ảnh đại diện"
               valuePropName="fileList"
               getValueFromEvent={normFile}
+              rules={[
+                {
+                  validator: validateImage,
+                },
+              ]}
             >
               <Upload
                 listType="picture-circle"
-                fileList={fileList}
                 onPreview={handlePreview}
-                onChange={handleChange}
                 beforeUpload={beforeUpload}
               >
-                {fileList.length >= 1 ? null : uploadButton}
+                {formData.avatar.length >= 1 ? null : uploadButton}
               </Upload>
             </Form.Item>
           </Form>

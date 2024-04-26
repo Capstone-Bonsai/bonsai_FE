@@ -344,16 +344,16 @@ const ModalUpdateProduct = (props) => {
               <TextArea rows={10} />
             </Form.Item>
             <Form.Item
-              label="Số năm trồng"
+              label="Năm trồng"
               name="YearOfPlanting"
               rules={[
                 {
                   type: "number",
-                  message: "Số năm trồng phải là một số!",
+                  message: "Năm trồng phải là một số!",
                 },
               ]}
             >
-              <InputNumber min={0} className="w-[100%]" />
+              <InputNumber min={0} className="w-[100%]" prefix="(năm)" />
             </Form.Item>
             <Form.Item
               label="Đường kính"
@@ -366,7 +366,7 @@ const ModalUpdateProduct = (props) => {
                 },
               ]}
             >
-              <InputNumber min={0} className="w-[100%]" />
+              <InputNumber min={0} className="w-[100%]" prefix="(cm)" />
             </Form.Item>
             <Form.Item
               label="Chiều cao"
@@ -433,7 +433,7 @@ const ModalUpdateProduct = (props) => {
                     {
                       type: "number",
                       required: true,
-                      message: "Phân loại không được để trống!",
+                      message: "Kích cỡ không được để trống!",
                     },
                   ]}
                 >

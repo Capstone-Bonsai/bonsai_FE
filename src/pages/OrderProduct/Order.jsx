@@ -87,6 +87,9 @@ function Order() {
       note: note,
       listBonsai: cartItems,
     };
+    if (!userInfo) {
+      dataOrder.otpCode = otpOrder;
+    }
     try {
       cookies.set("userTemp", {
         email: emailNotLogin,

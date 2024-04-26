@@ -151,7 +151,7 @@ const ModalCreateProduct = (props) => {
     postData.append("DeliverySize", formData.DeliverySize);
     formData.Image?.map((image) => postData.append("Image", image));
 
-    console.log(formData)
+    console.log(formData);
     formRef.current
       .validateFields()
       .then(() => {
@@ -305,16 +305,16 @@ const ModalCreateProduct = (props) => {
               <TextArea rows={10} />
             </Form.Item>
             <Form.Item
-              label="Số năm trồng"
+              label="Năm trồng"
               name="YearOfPlanting"
               rules={[
                 {
                   type: "number",
-                  message: "Số năm trồng phải là một số!",
+                  message: "Năm trồng phải là một số!",
                 },
               ]}
             >
-              <InputNumber min={0} className="w-[100%]" />
+              <InputNumber min={0} className="w-[100%]" prefix="(năm)" />
             </Form.Item>
             <Form.Item
               label="Đường kính"
@@ -327,7 +327,7 @@ const ModalCreateProduct = (props) => {
                 },
               ]}
             >
-              <InputNumber min={0} className="w-[100%]" />
+              <InputNumber min={0} className="w-[100%]" prefix="(cm)" />
             </Form.Item>
             <Form.Item
               label="Chiều cao"

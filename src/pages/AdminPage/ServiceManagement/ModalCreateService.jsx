@@ -11,7 +11,6 @@ const ModalCreateService = (props) => {
   const { show, setShow } = props;
   const dispatch = useDispatch();
   const [tabKey, setTabKey] = useState("381e77b3-2cfa-4362-afae-fe588701616e");
-  const [formBonsaiInstance, setFormBonsaiInstance] = useState();
   const [formGardenInstance, setFormGardenInstance] = useState();
   const [formData, setFormData] = useState({
     Name: undefined,
@@ -72,27 +71,16 @@ const ModalCreateService = (props) => {
       postData.append("ServiceBaseTaskId", selectedBaseTask.id)
     );
     console.log(formData);
-    tabKey === "381e77b3-2cfa-4362-afae-fe588701616e"
-      ? formGardenInstance?.current
-          ?.validateFields()
-          .then(() => {
-            setConfirmLoading(true);
-            createService(postData);
-          })
-          .catch((errorInfo) => {
-            console.log(errorInfo);
-            toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
-          })
-      : formBonsaiInstance?.current
-          ?.validateFields()
-          .then(() => {
-            setConfirmLoading(true);
-            createService(postData);
-          })
-          .catch((errorInfo) => {
-            console.log(errorInfo);
-            toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
-          });
+    formGardenInstance?.current
+      ?.validateFields()
+      .then(() => {
+        setConfirmLoading(true);
+        createService(postData);
+      })
+      .catch((errorInfo) => {
+        console.log(errorInfo);
+        toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
+      });
   };
 
   const onChangeTabs = (input) => {
@@ -141,19 +129,6 @@ const ModalCreateService = (props) => {
                     onFormDataChange={onFormDataChange}
                     onImageChange={onImageChange}
                     onBaseTaskChange={onBaseTaskChange}
-                  />
-                ),
-              },
-              {
-                key: "70f34b1c-1a2c-40ad-a9b6-ec374db61354",
-                label: `Mẫu chăm sóc Bonsai`,
-                children: (
-                  <FormBonsaiCare
-                    onFormInstanceReady={(instance) => {
-                      setFormBonsaiInstance(instance);
-                    }}
-                    onFormDataChange={onFormDataChange}
-                    onImageChange={onImageChange}
                   />
                 ),
               },

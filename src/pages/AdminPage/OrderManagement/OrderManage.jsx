@@ -18,6 +18,7 @@ import ModalUpdateOrder from "./ModalUpdateOrder";
 import Cookies from "universal-cookie";
 import { deleteOrder } from "../../../utils/orderApi";
 import { getOrderStatusText } from "../../../components/status/orderStatus";
+import OrderManageDetail from "./OrderManageDetail";
 
 function OrderManage() {
   const cookies = new Cookies();
@@ -27,6 +28,7 @@ function OrderManage() {
   const [openDelete, setOpenDelete] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openDetailModal, setOpenDetailModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState();
   const [selectedUpdateOrder, setSelectedUpdateOrder] = useState();
 
@@ -37,7 +39,7 @@ function OrderManage() {
 
   const [expended, setExpended] = useState();
 
-  console.log(allOrder)
+  console.log(allOrder);
   useEffect(() => {
     dispatch(
       fetchAllOrders({
@@ -53,6 +55,9 @@ function OrderManage() {
 
   const showModalDelete = () => {
     setOpenDelete(true);
+  };
+  const showModalDetail = () => {
+    setOpenDetailModal(true);
   };
 
   // const handleDelete = () => {
@@ -74,6 +79,11 @@ function OrderManage() {
   const handleCancelDelete = () => {
     console.log("Clicked cancel button");
     setOpenDelete(false);
+  };
+  const handleCancelDetail = () => {
+    console.log("Clicked cancel button");
+    setSelectedOrder(undefined);
+    setOpenDetailModal(false);
   };
 
   const handleCancelUpdate = () => {
@@ -99,27 +109,6 @@ function OrderManage() {
         return { color: "error", icon: <CloseCircleOutlined /> };
       default:
         return "defaultColor";
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch (status) {
-      case "Waiting":
-        return "Đang chờ";
-      case "Paid":
-        return "Đã thanh toán";
-      case "Preparing":
-        return "Đang thực hiện";
-      case "Delivering":
-        return "Đang giao";
-      case "Failed":
-        return "Thất bại";
-      case "DeliveryFailed":
-        return "Giao hàng thất bại";
-      case "Delivered":
-        return "Đã giao";
-      default:
-        return "Trạng thái không xác định";
     }
   };
 
@@ -216,12 +205,12 @@ function OrderManage() {
       key: "address",
     },
     {
-      title: "Ngày đặt",
+      title: "Ngày tạo đơn hàng",
       dataIndex: "orderDate",
       key: "orderDate",
       render: (_, record) => (
         <>
-          <p>{new Date(record.orderDate).toLocaleDateString()}</p>
+          <p>{new Date(record?.creationDate).toLocaleDateString()}</p>
         </>
       ),
     },
@@ -280,14 +269,37 @@ function OrderManage() {
         </>
       ),
     },
+    // {
+    //   title: "Xem đơn hàng",
+    //   key: "orderDetails",
+    //   render: (_, record) => {
+    //     return (
+    //       <a onClick={() => expend(record.id)}>
+    //         {record.id === expended ? "Đóng" : "Xem chi tiết"}
+    //       </a>
+    //     );
+    //   },
+    // },
     {
       title: "Xem đơn hàng",
       key: "orderDetails",
       render: (_, record) => {
         return (
-          <a onClick={() => expend(record.id)}>
-            {record.id === expended ? "Đóng" : "Xem chi tiết"}
-          </a>
+          <>
+            {record?.orderDetails != null ||
+            record?.orderTransaction != null ? (
+              <a
+                onClick={() => {
+                  setSelectedOrder(record);
+                  showModalDetail();
+                }}
+              >
+                Xem chi tiết
+              </a>
+            ) : (
+              <></>
+            )}
+          </>
         );
       },
     },
@@ -360,11 +372,11 @@ function OrderManage() {
                   indicator: <Loading loading={loading} />,
                   spinning: loading,
                 }}
-                expandable={{
-                  expandedRowRender,
-                  expandedRowKeys: [expended],
-                  expandIcon: () => <></>,
-                }}
+                // expandable={{
+                //   expandedRowRender,
+                //   expandedRowKeys: [expended],
+                //   expandIcon: () => <></>,
+                // }}
               />
             </div>
           </div>
@@ -373,6 +385,11 @@ function OrderManage() {
           show={openUpdateModal}
           setShow={handleCancelUpdate}
           order={selectedUpdateOrder}
+        />
+        <OrderManageDetail
+          show={openDetailModal}
+          setShow={handleCancelDetail}
+          order={selectedOrder}
         />
         {/* <Modal
           title="Xóa đơn hàng"
