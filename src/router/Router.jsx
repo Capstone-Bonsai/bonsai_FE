@@ -24,8 +24,6 @@ import CustomerPrivateRoute from "./CustomerPrivateRoute";
 import CustomerGardenManage from "../pages/AdminPage/CustomerGardenManagement/CustomerGardenManage";
 import BaseTaskManage from "../pages/AdminPage/BaseTaskManagement/BaseTaskManage";
 import ManageService from "../pages/ServicePage/ManageService";
-import Contract from "../pages/AdminPage/StaffPage/Contract";
-import ServiceGardenChecking from "../pages/AdminPage/StaffPage/ServiceGardenChecking";
 import ContractUser from "../pages/ManageContractForUser/ContractUser";
 import ContractUserDetail from "../pages/ManageContractForUser/ContractUserDetail";
 import Cookies from "universal-cookie";
