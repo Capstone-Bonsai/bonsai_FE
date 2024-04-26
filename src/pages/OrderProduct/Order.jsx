@@ -47,6 +47,65 @@ function Order() {
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [finalPrice, setFinalPrice] = useState(0);
   const [deliveryFeeInfo, setDeliveryFeeInfo] = useState({});
+
+  //validate
+  const [otpError, setOtpError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [fullNameError, setFullNameError] = useState("");
+  const [phoneNumberError, setPhoneNumberError] = useState("");
+
+  const handleOtpChange = (e) => {
+    const otpValue = e.target.value;
+    setOtpOrder(otpValue);
+    if (otpValue.length !== 6) {
+      setOtpError("OTP phải có độ dài 6 ký tự");
+    } else {
+      setOtpError("");
+    }
+  };
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(String(email).toLowerCase());
+  };
+
+  const validateFullName = (fullName) => {
+    const regex = /^[^\d`~!@#$%^&*()_\-+=|\\[\]{};:'",.<>/?]*$/;
+    return regex.test(fullName);
+  };
+
+  const handleEmailChange = (e) => {
+    const emailValue = e.target.value;
+    setEmailNotLogin(emailValue);
+    if (!validateEmail(emailValue)) {
+      setEmailError("Email không hợp lệ");
+    } else {
+      setEmailError("");
+    }
+  };
+  const handleFullNameChange = (e) => {
+    const fullNameValue = e.target.value;
+    setFullNameNoneLogin(fullNameValue);
+    if (!validateFullName(fullNameValue)) {
+      setFullNameError("Họ và Tên không được chứa ký tự đặc biệt hoặc số");
+    } else {
+      setFullNameError("");
+    }
+  };
+  const handlePhoneNumberChange = (e) => {
+    const phoneNumberValue = e.target.value;
+    setPhoneNumberNoneLogin(phoneNumberValue);
+
+    if (phoneNumberValue.length !== 10) {
+      setPhoneNumberError("Số Điện Thoại phải có đúng 10 số");
+    } else if (!/^(03|05|07|08|09)/.test(phoneNumberValue)) {
+      setPhoneNumberError(
+        "Số Điện Thoại phải bắt đầu bằng 03, 05, 07, 08 hoặc 09"
+      );
+    } else {
+      setPhoneNumberError("");
+    }
+  };
+
   console.log(deliveryFeeInfo);
   const bonsais = useSelector((state) => state.bonsai?.bonsaiInCart);
   useEffect(() => {
@@ -138,26 +197,36 @@ function Order() {
     setFinalPrice(res?.finalPrice);
     setDeliveryFeeInfo(res);
   };
-  // const handleTotalOrder = () => {
-  //   let totalPriceOrder = 0;
-  //   totalPriceOrder = subTotal() + deliveryFee;
-  //   return totalPriceOrder;
-  // };
   const handleGetOTP = async () => {
-    const payload = {
-      Fullname: fullNameNoneLogin,
-      Email: emailNotLogin,
-      PhoneNumber: phoneNumberNoneLogin,
-    };
+    let isValid = true;
+    if (!fullNameNoneLogin.trim()) {
+      setFullNameError("Vui lòng nhập họ và tên!!");
+      isValid = false;
+    }
+    if (!phoneNumberNoneLogin.trim()) {
+      setPhoneNumberError("Vui lòng nhập số điện thoại!!");
+      isValid = false;
+    }
+    if (!emailNotLogin.trim()) {
+      setEmailError("Vui lòng nhập email!!");
+      isValid = false;
+    }
+    if (!isValid) {
+      return;
+    }
     const formData = new FormData();
     formData.append("Fullname", fullNameNoneLogin);
     formData.append("Email", emailNotLogin);
     formData.append("PhoneNumber", phoneNumberNoneLogin);
     try {
+      setBarLoader(true);
       const res = await OrderOTP(formData);
+      setBarLoader(false);
+      setHaveOTP(true);
       toast.success(res);
     } catch (error) {
-      console.log(error);
+      setBarLoader(false);
+      toast.error(error.response.data);
     }
   };
 
@@ -190,10 +259,10 @@ function Order() {
                     <th className="uppercase">Kích thước vận chuyển</th>
                     <th className="uppercase">Giá</th>
                     <th>
-                      <div hidden>sdfsdf</div>
+                      <div hidden>a</div>
                     </th>
                     <th>
-                      <div hidden>sdf</div>
+                      <div hidden>a</div>
                     </th>
                   </tr>
                 </thead>
@@ -235,82 +304,138 @@ function Order() {
               <div className=" w-full p-5 border border-t-[2px] border-t-[#3e9943] rounded-b-[10px]">
                 {userInfo == null && !userConfirm ? (
                   <div className="mb-5">
-                    <div className="text-[20px] leading-6 font-bold underline text-[#3e9943]">
-                      Bạn chưa có tài khoản?
+                    <div className="text-[20px] leading-6 font-bold  text-[#3e9943]">
+                      <span className="underline">Bạn chưa có tài khoản? </span>
+                      <span className="text-[14px]">
+                        {" "}
+                        (Vui lòng xác thực trước khi đặt hàng)
+                      </span>
                     </div>
                     <div className="my-5">
                       <div>Email</div>
-                      <input
-                        value={emailNotLogin}
-                        className="h-[36px] w-full outline-none p-5 border border-black rounded-[10px]"
-                        onChange={(e) => setEmailNotLogin(e.target.value)}
-                      />
+                      <div>
+                        <input
+                          value={emailNotLogin}
+                          className={`h-[36px] w-full outline-none p-5 border ${
+                            emailError != "" ? "border-[red]" : "border-black"
+                          }  rounded-[10px]`}
+                          onChange={handleEmailChange}
+                        />
+                        {emailError && (
+                          <div className="text-[red] text-[14px]">
+                            {emailError}
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className="flex w-[100%] justify-between gap-x-5">
                       <div className="w-[50%]">
                         <div>Họ và tên</div>
-                        <input
-                          value={fullNameNoneLogin}
-                          className="h-[36px] w-full outline-none p-5 border border-black rounded-[10px]"
-                          onChange={(e) => setFullNameNoneLogin(e.target.value)}
-                        />
+                        <div>
+                          <input
+                            value={fullNameNoneLogin}
+                            className={`h-[36px] w-full outline-none p-5 border ${
+                              fullNameError != ""
+                                ? "border-[red]"
+                                : "border-black"
+                            }  rounded-[10px]`}
+                            onChange={handleFullNameChange}
+                          />
+                          {fullNameError && (
+                            <div className="text-[red] text-[14px]">
+                              {fullNameError}
+                            </div>
+                          )}
+                        </div>
                       </div>
                       <div className="w-[50%]">
                         <div>Số điện thoại</div>
-                        <input
-                          value={phoneNumberNoneLogin}
-                          className=" h-[36px] w-full outline-none p-5 border border-black rounded-[10px]"
-                          onChange={(e) =>
-                            setPhoneNumberNoneLogin(e.target.value)
-                          }
-                        />
+                        <div>
+                          <input
+                            type="number"
+                            value={phoneNumberNoneLogin}
+                            className={`h-[36px] w-full outline-none p-5 border ${
+                              phoneNumberError != ""
+                                ? "border-[red]"
+                                : "border-black"
+                            }  rounded-[10px]`}
+                            onChange={handlePhoneNumberChange}
+                          />
+                          {phoneNumberError && (
+                            <div className="text-[red] text-[14px]">
+                              {phoneNumberError}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-
-                    <button
-                      onClick={handleGetOTP}
-                      className="bg-[#3a9943] rounded-[8px] p-3 text-[#fff] my-3"
-                    >
-                      Xác thực thông tin
-                    </button>
-                    <input
-                      type="number"
-                      className="border outline-none"
-                      onChange={(e) => setOtpOrder(e.target.value)}
-                      name=""
-                      id=""
-                    />
-                    <button
-                      onClick={handleConfirmOTP}
-                      className="bg-[#3a9943] rounded-[8px] p-3 text-[#fff] my-3"
-                    >
-                      Xác thực mã otp
-                    </button>
+                    <div className="flex">
+                      <button
+                        onClick={handleGetOTP}
+                        className={`bg-[#3a9943] ${
+                          haveOTP ? "opacity-70" : ""
+                        } border hover:border-[green] rounded-[8px] p-3 text-[#fff] my-3`}
+                      >
+                        Xác thực thông tin
+                      </button>
+                    </div>
+                    {haveOTP && (
+                      <div className="flex items-center gap-5">
+                        <div>
+                          <input
+                            type="number"
+                            className="border border-black rounded-[8px] outline-none p-3"
+                            onChange={handleOtpChange}
+                            name=""
+                            id=""
+                          />
+                          {otpError != "" ? (
+                            <div className="text-red-500 text-[14px]">
+                              {otpError}
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                        <button
+                          onClick={handleConfirmOTP}
+                          className="bg-[#3a9943] rounded-[8px] border hover:border-[green] p-3 text-[#fff] my-3"
+                        >
+                          Xác thực mã otp
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <></>
                 )}
-                <div>
-                  <div className="text-[24px] font-bold text-[#3e9943]">
-                    Địa chỉ
-                  </div>
-                  <div className="border border-black py-2 rounded-[10px]">
-                    <CompletedAddress setAddress={setAddress} />
-                  </div>
-                </div>
-                <div className="mt-5">
-                  <div className="text-[24px] font-bold  text-[#3e9943]">
-                    Lời nhắn
-                  </div>
-                  <input
-                    className="border w-full px-5 h-[50px] rounded-[10px] border-black outline-none"
-                    placeholder="Lời nhắn chú ý"
-                    onChange={(e) => setNote(e.target.value)}
-                    onBlur={() => {
-                      setConfirmNote(note);
-                    }}
-                  />
-                </div>
+                {userInfo == null && userConfirm ? (
+                  <>
+                    <div>
+                      <div className="text-[24px] font-bold text-[#3e9943]">
+                        Địa chỉ
+                      </div>
+                      <div className="border border-black py-2 rounded-[10px]">
+                        <CompletedAddress setAddress={setAddress} />
+                      </div>
+                    </div>
+                    <div className="mt-5">
+                      <div className="text-[24px] font-bold  text-[#3e9943]">
+                        Lời nhắn
+                      </div>
+                      <input
+                        className="border w-full px-5 h-[50px] rounded-[10px] border-black outline-none"
+                        placeholder="Lời nhắn chú ý"
+                        onChange={(e) => setNote(e.target.value)}
+                        onBlur={() => {
+                          setConfirmNote(note);
+                        }}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             {userInfo == null && userConfirm ? (
