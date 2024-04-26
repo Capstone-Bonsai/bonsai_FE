@@ -86,22 +86,25 @@ function ServiceStepMain() {
     bonsaiDetail,
   };
   return (
-    <div className="my-12 pb-12 w-[70%] m-auto">
-      <Steps
-        size="larget"
-        current={step}
-        items={[
-          {
-            title: typeEnum == 1 ? "Chọn cây" : "Chọn vườn",
-          },
-          {
-            title: "Chọn gói dịch vụ",
-          },
-          {
-            title: "Đăng ký mẫu",
-          },
-        ]}
-      />
+    <div className="my-12 pb-12 w-[70%] m-auto border rounded-[8px] p-5">
+      <div className="text-center font-bold text-[20px]">Mẫu đăng ký dịch vụ</div>
+      <div className="w-[70%] m-auto my-2">
+        <Steps
+          size="small"
+          current={step}
+          items={[
+            {
+              title: typeEnum == 1 ? "Chọn cây" : "Chọn vườn",
+            },
+            {
+              title: "Chọn gói dịch vụ",
+            },
+            {
+              title: "Đăng ký mẫu",
+            },
+          ]}
+        />
+      </div>
       {stepList == 1 ? (
         <StepOne {...propsStepOne} />
       ) : stepList == 2 ? (

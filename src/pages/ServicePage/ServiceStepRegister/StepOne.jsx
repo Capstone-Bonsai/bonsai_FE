@@ -16,6 +16,7 @@ import Cookies from "universal-cookie";
 import AddCustomerGarden from "../../Garden/AddCustomerGarden";
 import Loading from "../../../components/Loading";
 import { customerBonsai } from "../../../redux/slice/bonsaiSlice";
+import ModalCreateCustomerBonsai from "./ModalCreateCustomerBonsai";
 function StepOne(propsStepOne) {
   const { setSelectedGardenId, gardenDetail, selectedGardenId, setStepList } =
     propsStepOne;
@@ -60,21 +61,6 @@ function StepOne(propsStepOne) {
     <div className="">
       <div className="w-full flex justify-between my-3">
         <div className="flex items-center gap-3">
-          {typeEnum == 2 ? (
-            <div className="">
-              <button
-                className="bg-[#3a9943] rounded-[10px] p-2 text-[#fff]"
-                onClick={() =>
-                  document.getElementById("my_modal_1").showModal()
-                }
-              >
-                + Thêm vườn
-              </button>
-              <AddCustomerGarden />
-            </div>
-          ) : (
-            <div></div>
-          )}
           <div className="font-bold text-[25px]">
             Bước 1:
             <span className="text-[18px] font-normal opacity-70">
@@ -109,6 +95,29 @@ function StepOne(propsStepOne) {
         </div>
       </div>
       {typeEnum == 2 ? (
+        <div className="">
+          <button
+            className="bg-[#3a9943] rounded-[10px] p-2 text-[#fff]"
+            onClick={() => document.getElementById("my_modal_1").showModal()}
+          >
+            + Thêm vườn
+          </button>
+          <AddCustomerGarden />
+        </div>
+      ) : (
+        <div className="">
+          <button
+            onClick={() =>
+              document.getElementById("modal_create_bonsai_garden").showModal()
+            }
+            className="bg-[#3a9943] border outline-none text-[#fff] p-3 rounded-[8px] my-3 hover:border-[green]"
+          >
+            + Thêm cây
+          </button>
+          <ModalCreateCustomerBonsai />
+        </div>
+      )}
+      {typeEnum == 2 ? (
         <div>
           {loadingGarden ? (
             <Loading loading={loadingGarden} />
@@ -116,7 +125,10 @@ function StepOne(propsStepOne) {
             <div className="">
               {gardens?.length > 0
                 ? gardens?.map((garden) => (
-                    <div key={garden.id} className="flex gap-5 p-5 my-5 relative border rounded-[10px]">
+                    <div
+                      key={garden.id}
+                      className="flex gap-5 p-5 my-5 relative border rounded-[10px]"
+                    >
                       <button
                         onClick={() => {
                           setSelectedGardenId(garden.id), handleToStepTwo();
@@ -141,7 +153,9 @@ function StepOne(propsStepOne) {
                         />
                       </div>
                       <div className="w-[70%]">
-                        <div className="text-[25px] w-[90%]">{garden.address}</div>
+                        <div className="text-[25px] w-[90%]">
+                          {garden.address}
+                        </div>
                         <div>
                           Diện tích: {garden?.square}m<sup>2</sup>
                         </div>
