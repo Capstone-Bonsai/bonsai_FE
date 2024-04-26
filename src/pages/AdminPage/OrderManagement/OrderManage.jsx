@@ -82,6 +82,7 @@ function OrderManage() {
   };
   const handleCancelDetail = () => {
     console.log("Clicked cancel button");
+    setSelectedOrder(undefined);
     setOpenDetailModal(false);
   };
 
@@ -204,12 +205,12 @@ function OrderManage() {
       key: "address",
     },
     {
-      title: "Ngày đặt",
+      title: "Ngày tạo đơn hàng",
       dataIndex: "orderDate",
       key: "orderDate",
       render: (_, record) => (
         <>
-          <p>{new Date(record.orderDate).toLocaleDateString()}</p>
+          <p>{new Date(record?.creationDate).toLocaleDateString()}</p>
         </>
       ),
     },
@@ -371,11 +372,11 @@ function OrderManage() {
                   indicator: <Loading loading={loading} />,
                   spinning: loading,
                 }}
-                expandable={{
-                  expandedRowRender,
-                  expandedRowKeys: [expended],
-                  expandIcon: () => <></>,
-                }}
+                // expandable={{
+                //   expandedRowRender,
+                //   expandedRowKeys: [expended],
+                //   expandIcon: () => <></>,
+                // }}
               />
             </div>
           </div>
