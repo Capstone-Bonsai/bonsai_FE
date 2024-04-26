@@ -52,7 +52,7 @@ function StyleManage() {
       })
       .catch((err) => {
         console.log(err.response);
-        toast.error(err.response.statusText);
+        toast.error(err.response.data);
       })
       .finally(() => {
         setOpenDelete(false);

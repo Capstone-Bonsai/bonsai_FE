@@ -69,7 +69,7 @@ const ModalUpdateStyle = (props) => {
       })
       .catch((err) => {
         console.log(err.response);
-        toast.error(err.response.statusText);
+        toast.error(err.response.data);
       })
       .finally(() => {
         setConfirmLoadingUpdateStyle(false);

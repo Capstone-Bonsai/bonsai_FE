@@ -63,7 +63,7 @@ function CategoryManage() {
       })
       .catch((err) => {
         console.log(err.response);
-        toast.error(err.response.statusText);
+        toast.error(err.response.data);
         setOpenDelete(false);
         setConfirmLoadingDelete(false);
       });
@@ -124,6 +124,7 @@ function CategoryManage() {
               type="text"
               icon={<UnorderedListOutlined />}
               onClick={() => {
+                console.log(record);
                 setSelectedCareStepCategory(record);
                 showCareStepModal();
               }}

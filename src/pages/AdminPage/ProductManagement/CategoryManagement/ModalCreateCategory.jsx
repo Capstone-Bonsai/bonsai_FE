@@ -53,8 +53,8 @@ const ModalCreateCategory = (props) => {
         handleClose();
       })
       .catch((err) => {
-        console.log(err.response.statusText);
-        toast.error(err.response.statusText);
+        console.log(err.response.data);
+        toast.error(err.response.data);
       })
       .finally(() => {
         setConfirmLoadingCreateCategory(false);

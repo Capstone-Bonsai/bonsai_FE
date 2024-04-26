@@ -5,9 +5,9 @@ export const getOrderStatusText = (status) => {
     case "Paid":
       return "Đã thanh toán";
     case "Preparing":
-      return "Đang thực hiện";
+      return "Đang chuẩn bị";
     case "Delivering":
-      return "Đang giao";
+      return "Đang giao hàng";
     case "Failed":
       return "Thất bại";
     case "DeliveryFailed":

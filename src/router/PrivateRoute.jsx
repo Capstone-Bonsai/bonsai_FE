@@ -129,7 +129,7 @@ function PrivateRoute() {
     <>
       <Layout className="min-h-screen">
         <Sider
-          trigger={null}
+          trigger={null}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
           collapsible
           collapsed={collapsed}
           className="min-h-screen"

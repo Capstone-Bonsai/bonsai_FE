@@ -58,7 +58,7 @@ function ServiceManage() {
 
   const handleDelete = () => {
     setConfirmLoadingDelete(true);
-    deleteService(selectedBonsai)
+    deleteService(selectedService)
       .then((data) => {
         toast.success("Xóa thành công!");
         dispatch(
@@ -183,9 +183,15 @@ function ServiceManage() {
       key: "orderDetails",
       render: (_, record) => {
         return (
-          <a onClick={() => expend(record.id)}>
-            {record.id === expended ? "Đóng" : "Xem chi tiết"}
-          </a>
+          <>
+            {record?.serviceType?.typeEnum == 2 ? (
+              <a onClick={() => expend(record.id)}>
+                {record.id === expended ? "Đóng" : "Xem chi tiết"}
+              </a>
+            ) : (
+              <></>
+            )}
+          </>
         );
       },
     },
@@ -205,16 +211,20 @@ function ServiceManage() {
               }}
             />
           </Tooltip>
-          <Tooltip title="Xóa">
-            <Button
-              type="text"
-              icon={<DeleteOutlined style={{ color: "red" }} />}
-              onClick={() => {
-                setSelectedService(record.id);
-                showModalDelete();
-              }}
-            />
-          </Tooltip>
+          {record?.serviceType?.typeEnum == 2 ? (
+            <Tooltip title="Xóa">
+              <Button
+                type="text"
+                icon={<DeleteOutlined style={{ color: "red" }} />}
+                onClick={() => {
+                  setSelectedService(record.id);
+                  showModalDelete();
+                }}  
+              />
+            </Tooltip>
+          ) : (
+            <></>
+          )}
         </Space>
       ),
     },

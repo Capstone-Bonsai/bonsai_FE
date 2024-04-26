@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Tag, Modal, Form, Select, Button } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+  DeleteOutlined,
+  EyeOutlined,
+} from "@ant-design/icons";
+import { Tag, Modal, Form, Select, Button, Tooltip } from "antd";
+import { EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addGardenerToOrder, getOrderStatus } from "../../../utils/orderApi";
@@ -23,12 +30,13 @@ const ModalUpdateOrder = (props) => {
   const [selectedGardener, setSelectedGardener] = useState();
   const [validateMessege, setValidateMessege] = useState();
 
+  console.log(order);
   const handleSelectChange = (value) => {
     setSelectedGardener(value);
   };
 
   const { allGardenerDTO } = useSelector((state) => state.gardener);
-  
+
   useEffect(() => {
     if (selectedGardener !== undefined) {
       setValidateMessege(undefined);
@@ -47,6 +55,7 @@ const ModalUpdateOrder = (props) => {
           toast.success(data.data);
           dispatch(fetchAllOrders({ pageIndex: 0, pageSize: 10 }));
           handleCancelUpdateStatus();
+          handleClose();
         })
         .catch((err) => {
           console.log(err);
@@ -65,24 +74,24 @@ const ModalUpdateOrder = (props) => {
     updateOrder();
   };
 
-  const getStatusText = (status) => {
-    switch (status) {
-      case "Waiting":
-        return "Đang chờ";
+  const getColor = (orderStatus) => {
+    switch (orderStatus) {
       case "Paid":
-        return "Đã thanh toán";
-      case "Preparing":
-        return "Đang thực hiện";
-      case "Delivering":
-        return "Đang giao";
-      case "Failed":
-        return "Thất bại";
-      case "DeliveryFailed ":
-        return "Giao hàng thất bại";
+        return { color: "success", icon: <CheckCircleOutlined /> };
       case "Delivered":
-        return "Đã giao";
+        return { color: "success", icon: <CheckCircleOutlined /> };
+      case "Waiting":
+        return { color: "warning", icon: <ClockCircleOutlined /> };
+      case "Preparing":
+        return { color: "warning", icon: <ClockCircleOutlined /> };
+      case "Delivering":
+        return { color: "warning", icon: <ClockCircleOutlined /> };
+      case "Failed":
+        return { color: "error", icon: <CloseCircleOutlined /> };
+      case "DeliveryFailed":
+        return { color: "error", icon: <CloseCircleOutlined /> };
       default:
-        return "Trạng thái không xác định";
+        return "defaultColor";
     }
   };
 
@@ -99,6 +108,7 @@ const ModalUpdateOrder = (props) => {
   return (
     <>
       <Modal
+        width={600}
         title="Thông tin đơn hàng"
         open={show}
         maskClosable={false}
@@ -115,84 +125,152 @@ const ModalUpdateOrder = (props) => {
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 15 }}
           >
-            <Form.Item label="Khách hàng">
-              <p>{order?.customer?.applicationUser?.email}</p>
-            </Form.Item>
-            <Form.Item label="Tên bonsai">
-              <p>{order?.orderDetails[0]?.bonsai?.name}</p>
-            </Form.Item>
-            <Form.Item label="Địa chỉ">
-              <p>{order?.address}</p>
-            </Form.Item>
-            <Form.Item label="Ngày đặt">
-              <p>{new Date(order?.orderDate).toLocaleDateString()}</p>
-            </Form.Item>
-            {/* <Form.Item label="Ngày giao">
-              <p>
-                {new Date(order?.expectedDeliveryDate).toLocaleDateString()}
-              </p>
-            </Form.Item> */}
-            <Form.Item label="Giá hàng">
-              <p>
-                {new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(order?.price)}
-              </p>
-            </Form.Item>
-            <Form.Item label="Phí giao hàng">
-              <p>
-                {new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(order?.deliveryPrice)}
-              </p>
-            </Form.Item>
-            <Form.Item label="Tổng cộng">
-              <p>
-                {new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(order?.totalPrice)}
-              </p>
-            </Form.Item>
-            <Form.Item label="Trạng thái đơn hàng:" name="orderStatus">
-              {/* <div className="grid grid-cols-2">
-                <p></p>
-                <button
-                  className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px- w-[100px]"
-                  onClick={showModalUpdateStatus}
-                >
-                  Cập nhật
-                </button>
-              </div> */}
-              <div className="flex items-center gap-2">
-                <Tag>{getOrderStatusText(order?.orderStatus)}</Tag>
-                {/* <div className="flex items-center">
-                  <Button className="bg-none" onClick={showModalUpdateStatus}>
-                    <EditOutlined /> Cập nhật
-                  </Button>
-                </div> */}
+            <div className="font-medium pl-8 mt-3">1.Thông tin đơn hàng</div>
+            <div className="pl-8">
+              <div className="grid grid-cols-3 gap-4 m-4">
+                <div className="flex justify-start">Khách hàng: </div>
+                <div className="flex justify-start col-span-2">
+                  {order?.customer?.applicationUser?.email}
+                </div>
               </div>
-            </Form.Item>
-            <Form.Item label="Người làm vườn">
-              <div className="flex items-center gap-2">
-                {order?.gardenerId ? (
-                  <Tag>Đã đủ người</Tag>
-                ) : (
-                  <Tag>Chưa thêm người</Tag>
-                )}
-                {order?.orderStatus === "Paid" ? (
-                  <div className="flex items-center">
-                    <Button className="bg-none" onClick={showModalUpdateStatus}>
-                      <EditOutlined /> Thêm người
-                    </Button>
+              <div className="grid grid-cols-3 gap-4 m-4">
+                <div className="flex justify-start">Tên bonsai: </div>
+                <div className="flex justify-start col-span-2">
+                  {order?.orderDetails[0]?.bonsai?.name}
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4 m-4">
+                <div className="flex justify-start">Địa chỉ: </div>
+                <div className="flex justify-start col-span-2">
+                  {order?.address}
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4 m-4">
+                <div className="flex justify-start">Ngày tạo đơn: </div>
+                <div className="flex justify-start col-span-2">
+                  {new Date(order?.creationDate).toLocaleDateString()}
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4 m-4">
+                <div className="flex justify-start">Giá hàng: </div>
+                <div className="flex justify-start col-span-2">
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(order?.price)}
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4 m-4">
+                <div className="flex justify-start">Phí giao hàng: </div>
+                <div className="flex justify-start col-span-2">
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(order?.deliveryPrice)}
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4 m-4">
+                <div className="flex justify-start">Tổng cộng: </div>
+                <div className="flex justify-start col-span-2">
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(order?.totalPrice)}
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4 m-4">
+                <div className="flex justify-start">Trạng thái đơn hàng: </div>
+                <div className="flex justify-start col-span-2">
+                  <div>
+                    <Tag
+                      color={getColor(order?.orderStatus).color}
+                      icon={getColor(order?.orderStatus).icon}
+                    >
+                      {getOrderStatusText(order?.orderStatus)}
+                    </Tag>
                   </div>
-                ) : (
-                  <></>
-                )}
+                </div>
               </div>
-            </Form.Item>
+            </div>
+            <div>
+              <div className="font-medium pl-8 my-3">
+                2.Thông tin người làm vườn
+              </div>
+              {order?.gardenerId ? (
+                <div>
+                  <div className="pl-8">
+                    <div className="grid grid-cols-3 gap-4 m-4">
+                      <div className="flex justify-start">
+                        Email người làm vườn:
+                      </div>
+                      <div className="flex justify-start col-span-2">
+                        {order?.gardener?.applicationUser?.email}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 m-4">
+                      <div className="flex justify-start">Họ và tên:</div>
+                      <div className="flex justify-start col-span-2">
+                        {order?.gardener?.applicationUser?.fullname}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 m-4">
+                      <div className="flex justify-start">Số điện thoại:</div>
+                      <div className="flex justify-start col-span-2">
+                        {order?.gardener?.applicationUser?.phoneNumber}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="pl-12">
+                    <div>
+                      Hiện chưa có người làm vườn
+                      <span>
+                        {order?.orderStatus === "Paid" ? (
+                          <Tooltip title="Thêm người">
+                            <Button
+                              type="text"
+                              icon={
+                                <PlusCircleOutlined
+                                  style={{ color: "black" }}
+                                />
+                              }
+                              onClick={showModalUpdateStatus}
+                            />
+                          </Tooltip>
+                        ) : (
+                          <></>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+            {order?.orderStatus === "Delivered" ? (
+              <>
+                <div>
+                  <div className="font-medium pl-8 my-3">
+                    3.Hình ảnh giao hàng thành công
+                  </div>
+                </div>
+                <div className="pl-8">
+                  <div className="grid grid-cols-4 gap-4 m-4">
+                    {order?.deliveryImages?.map((image, index) => (
+                      <div key={index} className="h-[100px] w-[100px]">
+                        <img
+                          src={image.image}
+                          style={{ width: "100px  ", height: "100px" }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
           </Form>
         </div>
       </Modal>
@@ -200,13 +278,15 @@ const ModalUpdateOrder = (props) => {
         title="Thêm người làm vườn"
         open={openUpdateStatus}
         onOk={onSubmit}
-        okText={confirmLoadingUpdateStatus ? "Đang tạo" : "Tạo mới"}
+        okText={confirmLoadingUpdateStatus ? "Đang thêm" : "Thêm người"}
         cancelText="Hủy"
         okButtonProps={{ type: "default" }}
         confirmLoading={confirmLoadingUpdateStatus}
         onCancel={handleCancelUpdateStatus}
       >
-        <div>Bạn có muốn cập nhật trạng thái của đơn hàng này không?</div>
+        <div className="mb-6">
+          Bạn có muốn thêm người vào đơn hàng này không?
+        </div>
         {allGardenerDTO?.loading === true ? (
           <Loading loading={allGardenerDTO?.loading} />
         ) : (
