@@ -27,6 +27,25 @@ export const OtpHandler = async (email, Otp) => {
     throw error;
   }
 };
+export const OrderOTP = async (formData) => {
+  try {
+    const response = await axios.post(`/Order/OTPGeneration`, formData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const OrderConfirmOTP = async ({ email, otp }) => {
+  try {
+    const response = await axios.get(
+      `/Order/OtpHandler?Email=${email}&Otp=${otp}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const loginUser = async ({ email, password }) => {
   try {
@@ -76,8 +95,6 @@ export const profileUser = async () => {
   }
 };
 
-
-
 export const updateProfileUser = async (formData) => {
   try {
     const user = cookies.get("user");
@@ -114,8 +131,7 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
-      
+    builder;
   },
 });
 const { reducer: authReducer, actions } = authSlice;
