@@ -14,6 +14,7 @@ import { addDays } from "date-fns";
 import { getStatusDeliverySize } from "../../components/status/deliverySize";
 import Loading from "../../components/Loading";
 import { OrderConfirmOTP, OrderOTP } from "../../redux/slice/authSlice";
+import noImage from "../../assets/unImage.png";
 function Order() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -277,7 +278,11 @@ function Order() {
                       <td className="flex justify-center items-center h-[70px]">
                         <div>
                           <img
-                            src={item?.image}
+                            src={
+                              item?.bonsaiImages?.length > 0
+                                ? item?.bonsaiImages[0]?.imageUrl
+                                : noImage
+                            }
                             alt=""
                             className="w-[50px] h-[50px] object-cover"
                           />
@@ -409,7 +414,7 @@ function Order() {
                 ) : (
                   <></>
                 )}
-                {userInfo == null && userConfirm ? (
+                {(userInfo == null && userConfirm) || userInfo ? (
                   <>
                     <div>
                       <div className="text-[24px] font-bold text-[#3e9943]">
@@ -438,7 +443,7 @@ function Order() {
                 )}
               </div>
             </div>
-            {userInfo == null && userConfirm ? (
+            {(userInfo == null && userConfirm) || userInfo ? (
               <>
                 <div className=" drop-shadow-lg bg-[#ffffff] my-5 border border-t-[2px] border-t-[#3e9943] pb-5">
                   <div className="pl-5 pt-5 font-bold text-[25px] text-[#3e9943] underline">

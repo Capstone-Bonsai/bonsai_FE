@@ -6,6 +6,8 @@ import { allCategory } from "../../../redux/slice/categorySlice";
 import { allStyle } from "../../../redux/slice/styleSlice";
 import { UploadOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import noImage from "../../../assets/unImage.png";
+import { createBonsaiInService } from "../../../redux/slice/serviceOrderSlice";
+import { toast } from "react-toastify";
 function ModalCreateCustomerBonsai() {
   const dispatch = useDispatch();
   const [newGarden, setNewGarden] = useState(false);
@@ -59,6 +61,7 @@ function ModalCreateCustomerBonsai() {
     document.getElementById("upload-bonsai-in-service").click();
   };
   const [newAddress, setNewAddress] = useState("");
+  console.log(newAddress);
   const [newSquare, setNewSquare] = useState("");
   const [bonsaiName, setBonsaiName] = useState("");
   const [description, setDescription] = useState("");
@@ -77,6 +80,8 @@ function ModalCreateCustomerBonsai() {
   const [trunkDemError, setTrunkDemError] = useState("");
   const [heightError, setHeightError] = useState("");
   const [numTrunkError, setNumTrunkError] = useState("");
+
+  //onChange
   const handleGardenChange = (e) => {
     setGardenId(e.target.value);
     setAddressError("");
@@ -89,7 +94,44 @@ function ModalCreateCustomerBonsai() {
     setStyleId(e.target.value);
     setStyleError("");
   };
-  const handleCreateBonsai = () => {
+  const handleSquareChange = (e) => {
+    const squareValue = e.target.value;
+    setNewSquare(squareValue);
+    setSquareError("");
+  };
+  const handleNameChange = (e) => {
+    const bonsaiName = e.target.value;
+    setBonsaiName(bonsaiName);
+    setBonsaiNameError("");
+  };
+  const handleDesChange = (e) => {
+    const bonsaiDes = e.target.value;
+    setDescription(bonsaiDes);
+    setDesError("");
+  };
+  const handleYopChange = (e) => {
+    const yop = e.target.value;
+    setYop(yop);
+    setYopError("");
+  };
+  const handleTrunkDemChange = (e) => {
+    const trunkDem = e.target.value;
+    setTrunkDemeter(trunkDem);
+    setTrunkDemError("");
+  };
+  const handleHeightChange = (e) => {
+    const height = e.target.value;
+    setBonsaiHeight(height);
+    setHeightError("");
+  };
+  const handleNumTrunkChange = (e) => {
+    const numTrunk = e.target.value;
+    setNumTrunk(numTrunk);
+    setNumTrunkError("");
+  };
+
+  //post
+  const handleCreateBonsai = async () => {
     let isValid = true;
     if (categoryId == "") {
       setCategoryError("Vui lòng chọn loại cây!!");
@@ -97,13 +139,18 @@ function ModalCreateCustomerBonsai() {
     }
     if (styleId == "") {
       setStyleError("Vui lòng chọn hình dáng cây!!");
+      isValid = false;
     }
-    if (!newAddress.trim()) {
+    if (!newAddress.trim() && newGarden) {
       setAddressError("Vui lòng nhập địa chỉ!!");
       isValid = false;
     }
+    if (!newGarden && !gardenId) {
+      setAddressError("Vui lòng nhập địa chỉ!!");
+    }
     if (!newSquare.trim()) {
       setSquareError("Vui lòng nhập kích thước vườn!!");
+      isValid = false;
     }
     if (!bonsaiName.trim()) {
       setBonsaiNameError("Vui lòng nhập tên cây bonsai!!");
@@ -146,6 +193,12 @@ function ModalCreateCustomerBonsai() {
     imgBonsai.map((image) => {
       formData.append(`Image`, image.file);
     });
+    try {
+      const res = await createBonsaiInService(formData);
+      toast.success("Đăng vườn thành công");
+    } catch (error) {
+      toast.error("dssdf");
+    }
   };
 
   return (
@@ -189,7 +242,7 @@ function ModalCreateCustomerBonsai() {
                     addressError != "" ? "border-[red]" : ""
                   }`}
                 >
-                  <CompletedAddress setNewAddress={setNewAddress} />
+                  <CompletedAddress setAddress={setNewAddress} />
                 </div>
                 {addressError != "" ? (
                   <div className="text-[red] text-[14px]">{addressError}</div>
@@ -204,12 +257,18 @@ function ModalCreateCustomerBonsai() {
                 </div>
                 <div>
                   <input
+                    onChange={handleSquareChange}
                     className={`border w-full p-3 rounded-[8px] outline-none ${
                       squareError != "" ? "border-[red]" : ""
                     }`}
-                    type="text"
+                    type="number"
                   />
                 </div>
+                {squareError != "" ? (
+                  <div className="text-[red] text-[14px]">{squareError}</div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           ) : (
@@ -219,7 +278,7 @@ function ModalCreateCustomerBonsai() {
               <select
                 onChange={handleGardenChange}
                 className={`border w-full p-3 rounded-[8px] outline-none ${
-                  gardenId == "" ? "border-[red]" : ""
+                  addressError != "" ? "border-[red]" : ""
                 }`}
                 name=""
                 id=""
@@ -265,6 +324,9 @@ function ModalCreateCustomerBonsai() {
                     </option>
                   ))}
                 </select>
+                {categoryError && (
+                  <div className="text-[red] text-[14px]">{categoryError}</div>
+                )}
               </div>
             </div>
             <div className="my-3">
@@ -290,6 +352,9 @@ function ModalCreateCustomerBonsai() {
                     </option>
                   ))}
                 </select>
+                {styleError && (
+                  <div className="text-[red] text-[14px]">{styleError}</div>
+                )}
               </div>
             </div>
             <div className="my-3">
@@ -298,7 +363,7 @@ function ModalCreateCustomerBonsai() {
               </div>
               <div>
                 <input
-                  onChange={() => setBonsaiNameError("")}
+                  onChange={handleNameChange}
                   className={`border ${
                     bonsaiNameError != "" ? "border-[red]" : ""
                   } w-full p-3 rounded-[8px] outline-none`}
@@ -317,7 +382,7 @@ function ModalCreateCustomerBonsai() {
               </div>
               <div>
                 <input
-                  onChange={() => setDesError("")}
+                  onChange={handleDesChange}
                   className={`border ${
                     desError != "" ? "border-[red]" : ""
                   } w-full p-3 rounded-[8px] outline-none`}
@@ -336,11 +401,11 @@ function ModalCreateCustomerBonsai() {
               </div>
               <div>
                 <input
-                  onChange={() => setYopError("")}
+                  onChange={handleYopChange}
                   className={`border ${
                     yopError != "" ? "border-[red]" : ""
                   } w-full p-3 rounded-[8px] outline-none`}
-                  type="text"
+                  type="number"
                 />
               </div>
               {yopError != "" ? (
@@ -355,11 +420,11 @@ function ModalCreateCustomerBonsai() {
               </div>
               <div>
                 <input
-                  onChange={() => setTrunkDemError("")}
+                  onChange={handleTrunkDemChange}
                   className={`border ${
                     trunkDemError != "" ? "border-[red]" : ""
                   } w-full p-3 rounded-[8px] outline-none`}
-                  type="text"
+                  type="number"
                 />
               </div>
               {trunkDemError != "" ? (
@@ -374,11 +439,11 @@ function ModalCreateCustomerBonsai() {
               </div>
               <div>
                 <input
-                  onChange={() => setHeightError("")}
+                  onChange={handleHeightChange}
                   className={`border ${
                     heightError != "" ? "border-[red]" : ""
                   } w-full p-3 rounded-[8px] outline-none`}
-                  type="text"
+                  type="number"
                 />
               </div>
               {heightError != "" ? (
@@ -393,11 +458,11 @@ function ModalCreateCustomerBonsai() {
               </div>
               <div>
                 <input
-                  onChange={() => setNumTrunkError("")}
+                  onChange={handleNumTrunkChange}
                   className={`border ${
                     numTrunkError != "" ? "border-[red]" : ""
                   } w-full p-3 rounded-[8px] outline-none`}
-                  type="text"
+                  type="number"
                 />
               </div>
               {numTrunkError != "" ? (
@@ -459,14 +524,12 @@ function ModalCreateCustomerBonsai() {
             )}
           </div>
         </div>
-        <div className="modal-action">
-          <button
-            onClick={() => handleCreateBonsai()}
-            className="btn ountline-none"
-          >
-            Tạo cây
-          </button>
-        </div>
+        <button
+          onClick={() => handleCreateBonsai()}
+          className="btn ountline-none"
+        >
+          Tạo cây
+        </button>
       </div>
     </dialog>
   );
