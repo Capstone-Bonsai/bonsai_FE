@@ -49,7 +49,7 @@ function Banner() {
   const authHeader = { Authorization: `Bearer ${userInfo?.token}` };
 
   const { sendMessage, readyState } = useWebSocket(socketUrl, {
-    headers: authHeader,
+    Authorization: authHeader,
   });
   useEffect(() => {
     if (readyState === ReadyState.OPEN) {
