@@ -14,13 +14,15 @@ import { Link, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBonsai, setCartFromCookie } from "../redux/slice/bonsaiSlice";
-import {  profileUser } from "../redux/slice/authSlice";
+import { profileUser } from "../redux/slice/authSlice";
 import {
   setAvatarUrlRedux,
   setFullNameRedux,
 } from "../redux/slice/avatarSlice";
 import "./Banner.css";
 import { notificationUser } from "../redux/slice/userSlice";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+
 function Banner() {
   const { Search } = Input;
   const navLinks = [
@@ -41,16 +43,29 @@ function Banner() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo = cookies.get("user");
+  const [socketUrl, setSocketUrl] = useState(
+    "wss://capstoneb.azurewebsites.net/notification-hub"
+  );
+  const authHeader = { Authorization: `Bearer ${userInfo?.token}` };
+
+  const { sendMessage, readyState } = useWebSocket(socketUrl, {
+    Authorization: authHeader,
+  });
+  useEffect(() => {
+    if (readyState === ReadyState.OPEN) {
+    }
+  }, [readyState]);
+
   const idUser = userInfo?.id;
   const userProfile = useState(cookies.get("userData"));
   const handleLogout = () => {
-    cookies.remove("user");
-    cookies.remove("userData");
+    cookies.remove("user", { path: "/" });
+    cookies.remove("userData", { path: "/" });
   };
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 100) {
-        // Thay 100 bằng khoảng cách cuộn trang bạn muốn
         setIsSticky(true);
       } else {
         setIsSticky(false);
@@ -102,7 +117,7 @@ function Banner() {
   };
 
   useEffect(() => {
-    dispatch(notificationUser({pageIndex, pageSize}));
+    dispatch(notificationUser({ pageIndex, pageSize }));
   }, []);
 
   useEffect(() => {

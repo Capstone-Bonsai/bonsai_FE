@@ -176,16 +176,7 @@ function BonsaiDetail() {
                 <button
                   className="bg-[#f2f2f2] text-black px-6 py-3 rounded-md text-lg hover:bg-[#3a9943] hover:text-[#fff] transition duration-300"
                   onClick={() => {
-                    const imageUrl =
-                      bonsaiDetail.bonsaiImages?.[0]?.imageUrl || "";
-                    addToCart(
-                      bonsaiDetail.id,
-                      bonsaiDetail.name,
-                      bonsaiDetail.price,
-                      imageUrl,
-                      bonsaiDetail.subCategory,
-                      dispatch
-                    );
+                    addToCart(bonsaiDetail.id, dispatch);
                   }}
                 >
                   + Thêm vào Giỏ Hàng
@@ -205,7 +196,9 @@ function BonsaiDetail() {
             </div>
           </div>
           <div className="w-full flex flex-col items-center my-5">
-            <div className="text-start w-[75%] font-bold text-[25px]">Các cây khác cùng loại: </div>
+            <div className="text-start w-[75%] font-bold text-[25px]">
+              Các cây khác cùng loại:{" "}
+            </div>
             <div className="w-[70%] flex flex-wrap gap-5">
               {
                 bonsaiListSameCategory?.length > 0
@@ -246,28 +239,8 @@ function BonsaiDetail() {
                           </div>
                           <button
                             onClick={() => {
-                              if (
-                                bonsai?.bonsaiImages &&
-                                bonsai.bonsaiImages.length > 0
-                              ) {
-                                addToCart(
-                                  bonsai.id,
-                                  bonsai.name,
-                                  bonsai.price,
-                                  bonsai.bonsaiImages[0].imageUrl,
-                                  bonsai.subCategory,
-                                  countCartItems,
-                                  dispatch
-                                );
-                              } else {
-                                addToCart(
-                                  bonsai.id,
-                                  bonsai.name,
-                                  bonsai.price,
-                                  bonsai.subCategory,
-                                  countCartItems,
-                                  dispatch
-                                );
+                              {
+                                addToCart(bonsai.id, dispatch);
                               }
                             }}
                             className="bg-[#f2f2f2] mt-5 w-[50px] h-[50px] flex justify-center items-center rounded-full hover:text-[#ffffff] hover:bg-[#3a9943]"

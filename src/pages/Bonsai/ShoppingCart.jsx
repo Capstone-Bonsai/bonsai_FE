@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CloseCircleOutlined, ShoppingOutlined } from "@ant-design/icons";
-import { InputNumber, Modal, Space } from "antd";
+import { Button, InputNumber, Modal, Space } from "antd";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,6 +11,7 @@ import MinHeight from "../../components/MinHeight";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchAllBonsaiNoPagination } from "../../redux/slice/bonsaiSlice";
 import noImage from "../../assets/unImage.png";
+import { getStatusDeliverySize } from "../../components/status/deliverySize";
 function ShoppingCart() {
   const navigate = useNavigate();
   const cookies = new Cookies();
@@ -83,10 +84,9 @@ function ShoppingCart() {
               <tr className="border-b bg-[#f2f2f2] h-[50px]">
                 <th className="uppercase">Hình Ảnh</th>
                 <th className="uppercase">Sản phẩm</th>
+                <th className="uppercase">Kích thước vận chuyển</th>
                 <th className="uppercase">Giá</th>
-                <th className="uppercase">Số lượng</th>
-                <th className="uppercase">Tổng</th>
-                <th></th>
+                <th></th> <th></th>
               </tr>
             </thead>
           </table>
@@ -104,8 +104,9 @@ function ShoppingCart() {
               <tr className="border-b bg-[#f2f2f2] h-[50px]">
                 <th className="uppercase">Hình Ảnh</th>
                 <th className="uppercase">Sản phẩm</th>
+                <th className="uppercase">Kích thước vận chuyển</th>
                 <th className="uppercase">Giá</th>
-                <th className="uppercase">Tổng</th>
+                <th></th>
                 <th></th>
               </tr>
             </thead>
@@ -134,28 +135,29 @@ function ShoppingCart() {
                       item?.isDisable ? "opacity-30" : ""
                     }`}
                   >
-                    {formatPrice(item.price)}
+                    {getStatusDeliverySize(item?.deliverySize)}
                   </td>
-
                   <td
                     className={`font-medium  ${
                       item?.isDisable ? "opacity-30" : ""
                     }`}
                   >
                     {formatPrice(item.price)}
-                  </td>
+                  </td>{" "}
                   <td className="text-[20px] pr-5">
                     <button onClick={() => handleRemoveItem(item.id)}>
                       <CloseCircleOutlined />
                     </button>
                   </td>
-                  <div className="absolute bottom-0 right-5">
-                    {item?.isDisable ? (
-                      <div className="text-[red]">Sản phẩm đã được mua </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
+                  <td>
+                    <div className="absolute bottom-0 right-5">
+                      {item?.isDisable ? (
+                        <div className="text-[red]">Sản phẩm đã được mua </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -181,12 +183,17 @@ function ShoppingCart() {
             </div>
           </div>
           <div className="flex justify-end">
-            <button
+            <Button
               onClick={handleCheckout}
-              className="uppercase bg-black p-2 rounded-[3px] text-[#fff] my-5 hover:bg-[#3a9943]"
+              style={{
+                backgroundColor: "#3a9943",
+                color: "#ffffff",
+                outline: "none",
+              }}
+              className="my-5 py-[10px] text-[18px] flex justify-center items-center"
             >
               Tiến hành thanh toán
-            </button>
+            </Button>
           </div>
         </div>
       ) : (
