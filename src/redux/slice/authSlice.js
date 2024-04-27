@@ -27,6 +27,24 @@ export const OtpHandler = async (email, Otp) => {
     throw error;
   }
 };
+export const resetPassword = async (payload) => {
+  try {
+    const response = await axios.post(`/Auth/ResetPassword`, payload);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const changePassword = async (payload) => {
+  try {
+    const response = await axios.post(`/User/Profile`, payload);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 export const OrderOTP = async (formData) => {
   try {
     const response = await axios.post(`/Order/OTPGeneration`, formData);
