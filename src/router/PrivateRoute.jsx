@@ -94,7 +94,7 @@ function PrivateRoute() {
     ...(userInfo?.role == "Manager"
       ? [
           getItem(
-            <Link to={`/dashboard`}>Bảng điều khiển</Link>,
+            <Link to={`/admin/dashboard`}>Bảng điều khiển</Link>,
             "dashboard",
             <AreaChartOutlined />
           ),

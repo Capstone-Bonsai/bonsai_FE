@@ -1,6 +1,7 @@
+import dayjs from "dayjs";
 import ReactEcharts from "echarts-for-react";
 
-export default function LineChart({ height, color = [] }) {
+export default function LineChart({ height, color = [], data }) {
   const option = {
     grid: { top: "10%", bottom: "10%", left: "5%", right: "5%" },
     legend: {
@@ -15,9 +16,10 @@ export default function LineChart({ height, color = [] }) {
     },
     xAxis: {
       type: "category",
-      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-      axisLine: { show: false },
-      axisTick: { show: false },
+      name: "Tháng",
+      data: data?.map((month) => `Tháng ${dayjs(month?.time).format("MM")}`),
+      axisLine: { show: true },
+      axisTick: { show: true },
       axisLabel: {
         fontSize: 14,
         fontFamily: "roboto",
@@ -25,31 +27,54 @@ export default function LineChart({ height, color = [] }) {
     },
     yAxis: {
       type: "value",
-      axisLine: { show: false },
-      axisTick: { show: false },
+      name: "Doanh thu",
+      axisLine: { show: true },
+      axisTick: { show: true },
       splitLine: {
         lineStyle: { opacity: 0.15 },
       },
-      axisLabel: { fontSize: 13, fontFamily: "roboto" },
+      axisLabel: {
+        formatter: "{value} vnd",
+        fontSize: 10,
+        fontFamily: "roboto",
+      },
     },
     series: [
       {
-        data: [30, 40, 20, 50, 40, 80, 90],
+        data: data?.map((orderTotal) => orderTotal?.orderTotal),
         type: "line",
-        stack: "This month",
-        name: "This month",
+        stack: "Doanh thu đơn hàng",
+        name: "Doanh thu đơn hàng",
         smooth: true,
         symbolSize: 4,
         lineStyle: { width: 4 },
+        label: {
+          formatter: "{c} {vnd}",
+          show: true,
+          position: "top",
+          textStyle: {
+            fontSize: 10,
+          },
+        },
       },
       {
-        data: [20, 50, 15, 50, 30, 70, 95],
+        data: data?.map(
+          (serviceOrderTotal) => serviceOrderTotal?.serviceOrderTotal
+        ),
         type: "line",
-        stack: "Last month",
-        name: "Last month",
+        stack: "Doanh thu đơn hàng dịch vụ",
+        name: "Doanh thu đơn hàng dịch vụ",
         smooth: true,
         symbolSize: 4,
         lineStyle: { width: 4 },
+        label: {
+          formatter: "{c} {vnd}",
+          show: true,
+          position: "top",
+          textStyle: {
+            fontSize: 10,
+          },
+        },
       },
     ],
   };

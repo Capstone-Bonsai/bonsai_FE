@@ -210,7 +210,7 @@ function Router() {
                 element: <ServiceTypeManage />,
               },
               {
-                path: "/dashboard",
+                path: "/admin/dashboard",
                 element: <Dashboard />,
               },
               {
