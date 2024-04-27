@@ -94,7 +94,7 @@ function PrivateRoute() {
     ...(userInfo?.role == "Manager"
       ? [
           getItem(
-            <Link to={`/dashboard`}>Dashboard</Link>,
+            <Link to={`/dashboard`}>Bảng điều khiển</Link>,
             "dashboard",
             <AreaChartOutlined />
           ),
@@ -119,6 +119,11 @@ function PrivateRoute() {
               "serviceType"
             ),
           ]),
+          getItem(
+            <Link to={`/admin/deliveryFee`}>Bảng giá vận chuyển</Link>,
+            "deliveryFee",
+            <AreaChartOutlined />
+          ),
         ]
       : []),
     getItem(

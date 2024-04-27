@@ -43,6 +43,7 @@ import ServiceStepMain from "../pages/ServicePage/ServiceStepRegister/ServiceSte
 import ResetPassword from "../pages/Auth/ResetPassword";
 import Dashboard from "../pages/AdminPage/Dashboard/Dashboard";
 import CustomerBonsai from "../pages/Garden/BonsaiInGarden/CustomerBonsai";
+import DeliveryFeeManage from "../pages/AdminPage/DeliveryFeeManagement/DeliveryFeeManage";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -211,6 +212,10 @@ function Router() {
               {
                 path: "/dashboard",
                 element: <Dashboard />,
+              },
+              {
+                path: "/admin/deliveryFee",
+                element: <DeliveryFeeManage />,
               },
               {
                 path: "*",

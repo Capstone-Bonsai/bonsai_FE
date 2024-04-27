@@ -21,7 +21,7 @@ import { allServiceOrder } from "../../../redux/slice/serviceOrderSlice";
 import ModalCreateServiceOrderImages from "./ModalCreateServiceOrderImages";
 import ModalUpateServiceOrderPrice from "./ModalUpateServiceOrderPrice";
 import ModalAddGardener from "./ModalAddGardener";
-import ServiceOrderDetail from "./ServiceOrderDetail";
+import ServiceOrderDetail from "./ServiceOrderDetail/ServiceOrderDetail";
 import { distance } from "framer-motion";
 
 function ServiceOrder() {
@@ -340,7 +340,7 @@ function ServiceOrder() {
             <ServiceOrderDetail {...props} />
           ) : (
             <>
-              <div className="font-semibold mb-6">Đơn hàng dịch vụ</div>
+              <div className="font-semibold text-lg mb-6">Đơn hàng dịch vụ</div>
               <div className="bg-[#ffffff] drop-shadow-2xl">
                 <div className="mb-12">
                   <Table

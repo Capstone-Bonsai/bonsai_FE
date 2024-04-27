@@ -199,7 +199,9 @@ function CustomerGardenManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Sân vườn của khách hàng</div>
+          <div className="font-semibold text-lg mb-6">
+            Sân vườn của khách hàng
+          </div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="mb-12">
               <Table

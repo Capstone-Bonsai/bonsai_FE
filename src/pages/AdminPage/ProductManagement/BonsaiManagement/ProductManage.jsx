@@ -171,7 +171,7 @@ function ProductManage() {
       ),
     },
     {
-      title: "Loại cây",
+      title: "Phân loại",
       dataIndex: "category",
       key: "category",
       render: (_, record) => (
@@ -181,7 +181,7 @@ function ProductManage() {
       ),
     },
     {
-      title: "Kiểu mẫu",
+      title: "Kiểu dáng",
       dataIndex: "style",
       key: "style",
       render: (_, record) => (
@@ -282,7 +282,7 @@ function ProductManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Quản lý Bonsai</div>
+          <div className="font-semibold text-lg mb-6">Quản lý Bonsai</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="grid grid-cols-2 lg:grid-cols-2 p-6">
               <div>

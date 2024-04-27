@@ -48,7 +48,7 @@ const ModalCreateCategory = (props) => {
   const handleCreateCategory = () => {
     postCategory(formData)
       .then((data) => {
-        toast.success("Thêm loại cây thành công!");
+        toast.success("Thêm phân loại thành công!");
         dispatch(allCategory());
         handleClose();
       })
@@ -65,7 +65,7 @@ const ModalCreateCategory = (props) => {
   return (
     <>
       <Modal
-        title="Thêm loại cây"
+        title="Thêm phân loại"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
@@ -84,9 +84,12 @@ const ModalCreateCategory = (props) => {
             disabled={formDisabled}
           >
             <Form.Item
-              label="Tên loại cây"
+              label="Tên phân loại"
               name="name"
-              rules={[{ required: true, message: "Tên không được để trống!" }]}
+              rules={[
+                { required: true, message: "Tên không được để trống!" },
+                { max: 100, message: "Tên không quá 100 ký tự!" },
+              ]}
             >
               <Input />
             </Form.Item>
