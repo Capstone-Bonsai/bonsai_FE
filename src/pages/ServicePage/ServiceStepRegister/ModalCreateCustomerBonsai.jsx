@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGardenNoPagination } from "../../../redux/slice/userGarden";
+import {
+  addBonsaiIntoGarden,
+  getGardenNoPagination,
+} from "../../../redux/slice/userGarden";
 import CompletedAddress from "../../OrderProduct/CompletedAddress";
 import { allCategory } from "../../../redux/slice/categorySlice";
 import { allStyle } from "../../../redux/slice/styleSlice";
@@ -8,7 +11,9 @@ import { UploadOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import noImage from "../../../assets/unImage.png";
 import { createBonsaiInService } from "../../../redux/slice/serviceOrderSlice";
 import { toast } from "react-toastify";
-function ModalCreateCustomerBonsai() {
+function ModalCreateCustomerBonsai(bonsaiProps) {
+  const { customerBonsai, pageIndex, pageSize, setFetchApi, fetchApi } =
+    bonsaiProps;
   const dispatch = useDispatch();
   const [newGarden, setNewGarden] = useState(false);
   useEffect(() => {
@@ -28,9 +33,7 @@ function ModalCreateCustomerBonsai() {
   const [styleId, setStyleId] = useState("");
 
   const [imgBonsai, setImgBonsai] = useState([]);
-  console.log(imgBonsai);
   const [file, setFile] = useState([]);
-  console.log(file);
   const handleImageChange = (e) => {
     const files = e.target.files;
     const updatedImageBonsai = [...imgBonsai];
@@ -61,7 +64,6 @@ function ModalCreateCustomerBonsai() {
     document.getElementById("upload-bonsai-in-service").click();
   };
   const [newAddress, setNewAddress] = useState("");
-  console.log(newAddress);
   const [newSquare, setNewSquare] = useState("");
   const [bonsaiName, setBonsaiName] = useState("");
   const [description, setDescription] = useState("");
@@ -129,7 +131,34 @@ function ModalCreateCustomerBonsai() {
     setNumTrunk(numTrunk);
     setNumTrunkError("");
   };
+  const resetFormFields = () => {
+    setNewGarden(false);
+    setNewAddress("");
+    setNewSquare("");
+    setGardenId("");
+    setCategoryId("");
+    setStyleId("");
+    setBonsaiName("");
+    setDescription("");
+    setYop("");
+    setTrunkDemeter("");
+    setBonsaiHeight("");
+    setNumTrunk("");
+    setCategoryError("");
+    setStyleError("");
+    setAddressError("");
+    setSquareError("");
+    setBonsaiNameError("");
+    setDesError("");
+    setYopError("");
+    setTrunkDemError("");
+    setHeightError("");
+    setNumTrunkError("");
+    setImgBonsai([]);
+    setFile([]);
+  };
 
+  // const fetch
   //post
   const handleCreateBonsai = async () => {
     let isValid = true;
@@ -145,10 +174,10 @@ function ModalCreateCustomerBonsai() {
       setAddressError("Vui lòng nhập địa chỉ!!");
       isValid = false;
     }
-    if (!newGarden && !gardenId) {
+    if (newGarden && !gardenId) {
       setAddressError("Vui lòng nhập địa chỉ!!");
     }
-    if (!newSquare.trim()) {
+    if (!newSquare.trim() && newGarden) {
       setSquareError("Vui lòng nhập kích thước vườn!!");
       isValid = false;
     }
@@ -180,24 +209,47 @@ function ModalCreateCustomerBonsai() {
       return;
     }
     const formData = new FormData();
-    formData.append("Address", newAddress);
-    formData.append("Square", newSquare);
-    formData.append("CategoryId", categoryId);
-    formData.append("StyleId", styleId);
-    formData.append("Name", bonsaiName);
-    formData.append("Description", description);
-    formData.append("YearOfPlanting", yop);
-    formData.append("TrunkDimenter", trunkDemeter);
-    formData.append("Height", bonsaiHeight);
-    formData.append("NumberOfTrunk", numTrunk);
-    imgBonsai.map((image) => {
-      formData.append(`Image`, image.file);
-    });
+    if (!newGarden) {
+      formData.append("CategoryId", categoryId);
+      formData.append("StyleId", styleId);
+      formData.append("Name", bonsaiName);
+      formData.append("Description", description);
+      formData.append("YearOfPlanting", yop);
+      formData.append("TrunkDimenter", trunkDemeter);
+      formData.append("Height", bonsaiHeight);
+      formData.append("NumberOfTrunk", numTrunk);
+      imgBonsai.map((image) => {
+        formData.append(`Image`, image.file);
+      });
+    } else {
+      formData.append("Address", newAddress);
+      formData.append("Square", newSquare);
+      formData.append("CategoryId", categoryId);
+      formData.append("StyleId", styleId);
+      formData.append("Name", bonsaiName);
+      formData.append("Description", description);
+      formData.append("YearOfPlanting", yop);
+      formData.append("TrunkDimenter", trunkDemeter);
+      formData.append("Height", bonsaiHeight);
+      formData.append("NumberOfTrunk", numTrunk);
+      imgBonsai.map((image) => {
+        formData.append(`Image`, image.file);
+      });
+    }
     try {
-      const res = await createBonsaiInService(formData);
-      toast.success("Đăng vườn thành công");
+      document.getElementById("modal_create_bonsai_garden").close();
+      if (!newGarden) {
+        await addBonsaiIntoGarden(formData, gardenId);
+      } else {
+        const res = await createBonsaiInService(formData);
+      }
+      toast.success("Tạo cây thành công");
+      // resetFormFields();
+      setFetchApi(!fetchApi);
+      dispatch(customerBonsai({ pageIndex, pageSize }));
     } catch (error) {
-      toast.error("dssdf");
+      document.getElementById("modal_create_bonsai_garden").close();
+      toast.error(error);
     }
   };
 
@@ -525,7 +577,7 @@ function ModalCreateCustomerBonsai() {
           </div>
         </div>
         <button
-          onClick={() => handleCreateBonsai()}
+          onClick={handleCreateBonsai}
           className="btn ountline-none"
         >
           Tạo cây

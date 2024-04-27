@@ -25,17 +25,27 @@ function StepOne(propsStepOne) {
   const dispatch = useDispatch();
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(5);
+  const [fetchApi, setFetchApi] = useState(false);
+
   useEffect(() => {
-    dispatch(fetchCustomerGarden({ pageIndex, pageSize }));
-    dispatch(customerBonsai({ pageIndex, pageSize }));
-  }, []);
+    dispatch(fetchCustomerGarden({ pageIndex: pageIndex - 1, pageSize }));
+    dispatch(customerBonsai({ pageIndex: pageIndex - 1, pageSize }));
+  }, [fetchApi, pageIndex, pageSize]);
+  const bonsaiLoading = useSelector(
+    (state) => state?.bonsai?.customerBonsai?.loading
+  );
+  const bonsaiProps = {
+    dispatch,
+    customerBonsai,
+    pageIndex,
+    pageSize,
+    fetchApi,
+    setFetchApi,
+  };
   const gardens = useSelector((state) => state.garden?.gardenDTO?.items);
   const bonsais = useSelector((state) => state.bonsai?.customerBonsai.items);
   const loadingGarden = useSelector(
     (state) => state?.garden?.gardenDTO?.loading
-  );
-  const bonsaiLoading = useSelector(
-    (state) => state?.bonsai?.customerBonsai?.loading
   );
 
   const totalItemsCountGarden = useSelector(
@@ -114,7 +124,7 @@ function StepOne(propsStepOne) {
           >
             + Thêm cây
           </button>
-          <ModalCreateCustomerBonsai />
+          <ModalCreateCustomerBonsai {...bonsaiProps} />
         </div>
       )}
       {typeEnum == 2 ? (
