@@ -119,7 +119,11 @@ function ShoppingCart() {
                   <td className="flex justify-center items-center h-[170px]">
                     <div>
                       <img
-                        src={item?.image ? item?.image : noImage}
+                        src={
+                          item?.bonsaiImages?.length > 0
+                            ? item?.bonsaiImages[0]?.imageUrl
+                            : noImage
+                        }
                         alt=""
                         className={`w-[120px] h-[120px] object-cover  ${
                           item?.isDisable ? "opacity-30" : ""

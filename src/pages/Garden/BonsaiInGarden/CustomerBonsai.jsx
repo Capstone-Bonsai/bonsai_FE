@@ -17,7 +17,13 @@ function CustomerBonsai() {
     <MinHeight>
       <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
         <NavbarUser />
-        <div className=" border w-[75%] pt-5">sdfgdfgdfg</div>
+        <div className=" border w-[75%] pt-5">
+          {bonsais?.map((bonsai) => (
+            <div key={bonsai?.id} className="border">
+              <div>{bonsai?.bonsai?.name}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </MinHeight>
   );

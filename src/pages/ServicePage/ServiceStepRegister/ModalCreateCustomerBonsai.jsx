@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGardenNoPagination } from "../../../redux/slice/userGarden";
+import {
+  addBonsaiIntoGarden,
+  getGardenNoPagination,
+} from "../../../redux/slice/userGarden";
 import CompletedAddress from "../../OrderProduct/CompletedAddress";
 import { allCategory } from "../../../redux/slice/categorySlice";
 import { allStyle } from "../../../redux/slice/styleSlice";
 import { UploadOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import noImage from "../../../assets/unImage.png";
-function ModalCreateCustomerBonsai() {
+import { createBonsaiInService } from "../../../redux/slice/serviceOrderSlice";
+import { toast } from "react-toastify";
+function ModalCreateCustomerBonsai(bonsaiProps) {
+  const { customerBonsai, pageIndex, pageSize, setFetchApi, fetchApi } =
+    bonsaiProps;
   const dispatch = useDispatch();
   const [newGarden, setNewGarden] = useState(false);
   useEffect(() => {
@@ -26,9 +33,7 @@ function ModalCreateCustomerBonsai() {
   const [styleId, setStyleId] = useState("");
 
   const [imgBonsai, setImgBonsai] = useState([]);
-  console.log(imgBonsai);
   const [file, setFile] = useState([]);
-  console.log(file);
   const handleImageChange = (e) => {
     const files = e.target.files;
     const updatedImageBonsai = [...imgBonsai];
@@ -77,6 +82,8 @@ function ModalCreateCustomerBonsai() {
   const [trunkDemError, setTrunkDemError] = useState("");
   const [heightError, setHeightError] = useState("");
   const [numTrunkError, setNumTrunkError] = useState("");
+
+  //onChange
   const handleGardenChange = (e) => {
     setGardenId(e.target.value);
     setAddressError("");
@@ -89,7 +96,71 @@ function ModalCreateCustomerBonsai() {
     setStyleId(e.target.value);
     setStyleError("");
   };
-  const handleCreateBonsai = () => {
+  const handleSquareChange = (e) => {
+    const squareValue = e.target.value;
+    setNewSquare(squareValue);
+    setSquareError("");
+  };
+  const handleNameChange = (e) => {
+    const bonsaiName = e.target.value;
+    setBonsaiName(bonsaiName);
+    setBonsaiNameError("");
+  };
+  const handleDesChange = (e) => {
+    const bonsaiDes = e.target.value;
+    setDescription(bonsaiDes);
+    setDesError("");
+  };
+  const handleYopChange = (e) => {
+    const yop = e.target.value;
+    setYop(yop);
+    setYopError("");
+  };
+  const handleTrunkDemChange = (e) => {
+    const trunkDem = e.target.value;
+    setTrunkDemeter(trunkDem);
+    setTrunkDemError("");
+  };
+  const handleHeightChange = (e) => {
+    const height = e.target.value;
+    setBonsaiHeight(height);
+    setHeightError("");
+  };
+  const handleNumTrunkChange = (e) => {
+    const numTrunk = e.target.value;
+    setNumTrunk(numTrunk);
+    setNumTrunkError("");
+  };
+  const resetFormFields = () => {
+    setNewGarden(false);
+    setNewAddress("");
+    setNewSquare("");
+    setGardenId("");
+    setCategoryId("");
+    setStyleId("");
+    setBonsaiName("");
+    setDescription("");
+    setYop("");
+    setTrunkDemeter("");
+    setBonsaiHeight("");
+    setNumTrunk("");
+    setCategoryError("");
+    setStyleError("");
+    setAddressError("");
+    setSquareError("");
+    setBonsaiNameError("");
+    setDesError("");
+    setYopError("");
+    setTrunkDemError("");
+    setHeightError("");
+    setNumTrunkError("");
+    setImgBonsai([]);
+    setFile([]);
+  };
+
+  // const fetch
+  //post
+  const handleCreateBonsai = async () => {
     let isValid = true;
     if (categoryId == "") {
       setCategoryError("Vui lòng chọn loại cây!!");
@@ -97,13 +168,18 @@ function ModalCreateCustomerBonsai() {
     }
     if (styleId == "") {
       setStyleError("Vui lòng chọn hình dáng cây!!");
+      isValid = false;
     }
-    if (!newAddress.trim()) {
+    if (!newAddress.trim() && newGarden) {
       setAddressError("Vui lòng nhập địa chỉ!!");
       isValid = false;
     }
-    if (!newSquare.trim()) {
+    if (newGarden && !gardenId) {
+      setAddressError("Vui lòng nhập địa chỉ!!");
+    }
+    if (!newSquare.trim() && newGarden) {
       setSquareError("Vui lòng nhập kích thước vườn!!");
+      isValid = false;
     }
     if (!bonsaiName.trim()) {
       setBonsaiNameError("Vui lòng nhập tên cây bonsai!!");
@@ -133,19 +209,48 @@ function ModalCreateCustomerBonsai() {
       return;
     }
     const formData = new FormData();
-    formData.append("Address", newAddress);
-    formData.append("Square", newSquare);
-    formData.append("CategoryId", categoryId);
-    formData.append("StyleId", styleId);
-    formData.append("Name", bonsaiName);
-    formData.append("Description", description);
-    formData.append("YearOfPlanting", yop);
-    formData.append("TrunkDimenter", trunkDemeter);
-    formData.append("Height", bonsaiHeight);
-    formData.append("NumberOfTrunk", numTrunk);
-    imgBonsai.map((image) => {
-      formData.append(`Image`, image.file);
-    });
+    if (!newGarden) {
+      formData.append("CategoryId", categoryId);
+      formData.append("StyleId", styleId);
+      formData.append("Name", bonsaiName);
+      formData.append("Description", description);
+      formData.append("YearOfPlanting", yop);
+      formData.append("TrunkDimenter", trunkDemeter);
+      formData.append("Height", bonsaiHeight);
+      formData.append("NumberOfTrunk", numTrunk);
+      imgBonsai.map((image) => {
+        formData.append(`Image`, image.file);
+      });
+    } else {
+      formData.append("Address", newAddress);
+      formData.append("Square", newSquare);
+      formData.append("CategoryId", categoryId);
+      formData.append("StyleId", styleId);
+      formData.append("Name", bonsaiName);
+      formData.append("Description", description);
+      formData.append("YearOfPlanting", yop);
+      formData.append("TrunkDimenter", trunkDemeter);
+      formData.append("Height", bonsaiHeight);
+      formData.append("NumberOfTrunk", numTrunk);
+      imgBonsai.map((image) => {
+        formData.append(`Image`, image.file);
+      });
+    }
+    try {
+      document.getElementById("modal_create_bonsai_garden").close();
+      if (!newGarden) {
+        await addBonsaiIntoGarden(formData, gardenId);
+      } else {
+        const res = await createBonsaiInService(formData);
+      }
+      toast.success("Tạo cây thành công");
+      // resetFormFields();
+      setFetchApi(!fetchApi);
+      dispatch(customerBonsai({ pageIndex, pageSize }));
+    } catch (error) {
+      document.getElementById("modal_create_bonsai_garden").close();
+      toast.error(error);
+    }
   };
 
   return (
@@ -189,7 +294,7 @@ function ModalCreateCustomerBonsai() {
                     addressError != "" ? "border-[red]" : ""
                   }`}
                 >
-                  <CompletedAddress setNewAddress={setNewAddress} />
+                  <CompletedAddress setAddress={setNewAddress} />
                 </div>
                 {addressError != "" ? (
                   <div className="text-[red] text-[14px]">{addressError}</div>
@@ -204,12 +309,18 @@ function ModalCreateCustomerBonsai() {
                 </div>
                 <div>
                   <input
+                    onChange={handleSquareChange}
                     className={`border w-full p-3 rounded-[8px] outline-none ${
                       squareError != "" ? "border-[red]" : ""
                     }`}
-                    type="text"
+                    type="number"
                   />
                 </div>
+                {squareError != "" ? (
+                  <div className="text-[red] text-[14px]">{squareError}</div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           ) : (
@@ -219,7 +330,7 @@ function ModalCreateCustomerBonsai() {
               <select
                 onChange={handleGardenChange}
                 className={`border w-full p-3 rounded-[8px] outline-none ${
-                  gardenId == "" ? "border-[red]" : ""
+                  addressError != "" ? "border-[red]" : ""
                 }`}
                 name=""
                 id=""
@@ -265,6 +376,9 @@ function ModalCreateCustomerBonsai() {
                     </option>
                   ))}
                 </select>
+                {categoryError && (
+                  <div className="text-[red] text-[14px]">{categoryError}</div>
+                )}
               </div>
             </div>
             <div className="my-3">
@@ -290,6 +404,9 @@ function ModalCreateCustomerBonsai() {
                     </option>
                   ))}
                 </select>
+                {styleError && (
+                  <div className="text-[red] text-[14px]">{styleError}</div>
+                )}
               </div>
             </div>
             <div className="my-3">
@@ -298,7 +415,7 @@ function ModalCreateCustomerBonsai() {
               </div>
               <div>
                 <input
-                  onChange={() => setBonsaiNameError("")}
+                  onChange={handleNameChange}
                   className={`border ${
                     bonsaiNameError != "" ? "border-[red]" : ""
                   } w-full p-3 rounded-[8px] outline-none`}
@@ -317,7 +434,7 @@ function ModalCreateCustomerBonsai() {
               </div>
               <div>
                 <input
-                  onChange={() => setDesError("")}
+                  onChange={handleDesChange}
                   className={`border ${
                     desError != "" ? "border-[red]" : ""
                   } w-full p-3 rounded-[8px] outline-none`}
@@ -336,11 +453,11 @@ function ModalCreateCustomerBonsai() {
               </div>
               <div>
                 <input
-                  onChange={() => setYopError("")}
+                  onChange={handleYopChange}
                   className={`border ${
                     yopError != "" ? "border-[red]" : ""
                   } w-full p-3 rounded-[8px] outline-none`}
-                  type="text"
+                  type="number"
                 />
               </div>
               {yopError != "" ? (
@@ -355,11 +472,11 @@ function ModalCreateCustomerBonsai() {
               </div>
               <div>
                 <input
-                  onChange={() => setTrunkDemError("")}
+                  onChange={handleTrunkDemChange}
                   className={`border ${
                     trunkDemError != "" ? "border-[red]" : ""
                   } w-full p-3 rounded-[8px] outline-none`}
-                  type="text"
+                  type="number"
                 />
               </div>
               {trunkDemError != "" ? (
@@ -374,11 +491,11 @@ function ModalCreateCustomerBonsai() {
               </div>
               <div>
                 <input
-                  onChange={() => setHeightError("")}
+                  onChange={handleHeightChange}
                   className={`border ${
                     heightError != "" ? "border-[red]" : ""
                   } w-full p-3 rounded-[8px] outline-none`}
-                  type="text"
+                  type="number"
                 />
               </div>
               {heightError != "" ? (
@@ -393,11 +510,11 @@ function ModalCreateCustomerBonsai() {
               </div>
               <div>
                 <input
-                  onChange={() => setNumTrunkError("")}
+                  onChange={handleNumTrunkChange}
                   className={`border ${
                     numTrunkError != "" ? "border-[red]" : ""
                   } w-full p-3 rounded-[8px] outline-none`}
-                  type="text"
+                  type="number"
                 />
               </div>
               {numTrunkError != "" ? (
@@ -459,14 +576,12 @@ function ModalCreateCustomerBonsai() {
             )}
           </div>
         </div>
-        <div className="modal-action">
-          <button
-            onClick={() => handleCreateBonsai()}
-            className="btn ountline-none"
-          >
-            Tạo cây
-          </button>
-        </div>
+        <button
+          onClick={handleCreateBonsai}
+          className="btn ountline-none"
+        >
+          Tạo cây
+        </button>
       </div>
     </dialog>
   );

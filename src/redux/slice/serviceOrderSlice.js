@@ -71,6 +71,17 @@ export const serviceOrder = async (payload) => {
   }
 };
 
+export const createBonsaiInService = async (formData) => {
+  try {
+    const res = await axios.post(`/CustomerBonsai`, formData);
+    return res.data;
+  } catch (err) {
+    const errMessage = err.response.data;
+    console.log(errMessage);
+    throw (err, errMessage);
+  }
+};
+
 // export const serviceGardenByServiceId = createAsyncThunk(
 //   "serviceOrder/serviceGardenByServiceId",
 //   async (serviceId) => {
