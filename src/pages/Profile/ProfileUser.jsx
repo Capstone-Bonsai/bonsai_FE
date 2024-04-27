@@ -12,8 +12,10 @@ import { useDispatch } from "react-redux";
 import Loading from "../../components/Loading";
 import NavbarUser from "../Auth/NavbarUser";
 import MinHeight from "../../components/MinHeight";
+import ChangePassword from "./ChangePassword";
 function ProfileUser() {
   const cookies = new Cookies();
+  const [pageChangePassword, setPageChangePassword] = useState(false);
   const userInfo = cookies?.get("userData");
   const dispatch = useDispatch();
   const [userName, setUserName] = useState(userInfo?.userName);
@@ -91,7 +93,9 @@ function ProfileUser() {
       setIsLoading(false);
     }
   };
-
+  const props = {
+    setPageChangePassword,
+  };
   return (
     <>
       {isLoading ? (
@@ -101,120 +105,131 @@ function ProfileUser() {
           <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
             <NavbarUser />
             <div className="text-center border w-[75%] flex flex-col items-center p-4">
-              <div className=" items-center">
-                <div className=" flex flex-col items-center justify-center">
-                  {imageAvt != null || file != imageAvt ? (
-                    <div className="w-[100px] h-[100px] rounded-full flex justify-center items-center">
-                      <Image
-                        src={previewImage || file || imageAvt}
-                        className="rounded-full bg-cover"
-                        alt=""
-                        width={100}
-                        height={100}
-                      />
+              {!pageChangePassword ? (
+                <>
+                  <div className=" items-center">
+                    <div className=" flex flex-col items-center justify-center">
+                      {imageAvt != null || file != imageAvt ? (
+                        <div className="w-[100px] h-[100px] rounded-full flex justify-center items-center">
+                          <Image
+                            src={previewImage || file || imageAvt}
+                            className="rounded-full bg-cover"
+                            alt=""
+                            width={100}
+                            height={100}
+                          />
+                        </div>
+                      ) : (
+                        <div className="bg-[#f2f2f2] w-[100px] h-[100px] rounded-full flex justify-center items-center">
+                          <UserOutlined />
+                        </div>
+                      )}
+                      <div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageChange}
+                          style={{ display: "none" }}
+                          id="upload-input"
+                        />
+                        <button
+                          onClick={handleUploadClick}
+                          className="border p-1 rounded-lg my-5"
+                        >
+                          <UploadOutlined />
+                          Tải hình ảnh
+                        </button>
+                      </div>
                     </div>
-                  ) : (
-                    <div className="bg-[#f2f2f2] w-[100px] h-[100px] rounded-full flex justify-center items-center">
-                      <UserOutlined />
-                    </div>
-                  )}
-                  <div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      style={{ display: "none" }}
-                      id="upload-input"
-                    />
-                    <button
-                      onClick={handleUploadClick}
-                      className="border p-1 rounded-lg my-5"
-                    >
-                      <UploadOutlined />
-                      Tải hình ảnh
-                    </button>
                   </div>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <div className="w-[200px] text-end">Tài khoản</div>
-                <div>
-                  <input
-                    className={`border ${
-                      userNameError != "" ? "border-[#ff4d4f]" : ""
-                    }  py-2 w-[300px] rounded-xl pl-5 ml-2 outline-none`}
-                    value={userName}
-                    onChange={(e) => {
-                      setUserName(e.target.value), setUserNameError("");
-                    }}
-                  />
-                  {userNameError != "" ? (
-                    <div className="text-[#ff4d4f] text-[14px] text-start">
-                      {userNameError}
+                  <div className="flex items-center">
+                    <div className="w-[200px] text-end">Tài khoản</div>
+                    <div>
+                      <input
+                        className={`border ${
+                          userNameError != "" ? "border-[#ff4d4f]" : ""
+                        }  py-2 w-[300px] rounded-xl pl-5 ml-2 outline-none`}
+                        value={userName}
+                        onChange={(e) => {
+                          setUserName(e.target.value), setUserNameError("");
+                        }}
+                      />
+                      {userNameError != "" ? (
+                        <div className="text-[#ff4d4f] text-[14px] text-start">
+                          {userNameError}
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center my-5">
-                <div className=" w-[200px] text-end">Họ và Tên</div>
-                <div>
-                  <input
-                    className={`border ${
-                      fullNameError != "" ? "border-[#ff4d4f]" : ""
-                    }  py-2 w-[300px] rounded-xl pl-5 ml-2 outline-none`}
-                    value={fullName}
-                    onChange={(e) => {
-                      setFullName(e.target.value), setFullNameError("");
-                    }}
-                  />
-                  {fullNameError != "" ? (
-                    <div className="text-[#ff4d4f] text-[14px] text-start">
-                      {fullNameError}
+                  </div>
+                  <div className="flex items-center my-5">
+                    <div className=" w-[200px] text-end">Họ và Tên</div>
+                    <div>
+                      <input
+                        className={`border ${
+                          fullNameError != "" ? "border-[#ff4d4f]" : ""
+                        }  py-2 w-[300px] rounded-xl pl-5 ml-2 outline-none`}
+                        value={fullName}
+                        onChange={(e) => {
+                          setFullName(e.target.value), setFullNameError("");
+                        }}
+                      />
+                      {fullNameError != "" ? (
+                        <div className="text-[#ff4d4f] text-[14px] text-start">
+                          {fullNameError}
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center">
-                <div className=" w-[200px] text-end">Số điện thoại</div>
-                <div>
-                  <input
-                    className={`border ${
-                      phoneNumberError != "" ? "border-[#ff4d4f]" : ""
-                    }  py-2 w-[300px] rounded-xl pl-5 ml-2 outline-none`}
-                    value={phoneNumber}
-                    type="number"
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setPhoneNumber(value);
-                      const phoneRegex = /^(03|05|07|08|09)/;
-                      if (!value.match(phoneRegex)) {
-                        setPhoneNumberError(
-                          "Số điện thoại phải bắt đầu từ 03, 05, 07, 08, 09"
-                        );
-                      } else {
-                        setPhoneNumberError("");
-                      }
-                    }}
-                  />
-                  {phoneNumberError != "" ? (
-                    <div className="text-[#ff4d4f] text-[14px] text-start">
-                      {phoneNumberError}
+                  </div>
+                  <div className="flex items-center">
+                    <div className=" w-[200px] text-end">Số điện thoại</div>
+                    <div>
+                      <input
+                        className={`border ${
+                          phoneNumberError != "" ? "border-[#ff4d4f]" : ""
+                        }  py-2 w-[300px] rounded-xl pl-5 ml-2 outline-none`}
+                        value={phoneNumber}
+                        type="number"
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setPhoneNumber(value);
+                          const phoneRegex = /^(03|05|07|08|09)/;
+                          if (!value.match(phoneRegex)) {
+                            setPhoneNumberError(
+                              "Số điện thoại phải bắt đầu từ 03, 05, 07, 08, 09"
+                            );
+                          } else {
+                            setPhoneNumberError("");
+                          }
+                        }}
+                      />
+                      {phoneNumberError != "" ? (
+                        <div className="text-[#ff4d4f] text-[14px] text-start">
+                          {phoneNumberError}
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
-                  ) : (
-                    ""
-                  )}
+                  </div>
+                  <button
+                    onClick={() => handleUpdate()}
+                    className="bg-[green] py-2 px-2 my-5 rounded-lg text-[#ffffff] border hover:"
+                  >
+                    Thay đổi
+                  </button>
+                  <button onClick={() => setPageChangePassword(true)}>
+                    Đổi mật khẩu
+                  </button>
+                </>
+              ) : (
+                <div className="w-full">
+                  <ChangePassword {...props} />
                 </div>
-              </div>
-              <button
-                onClick={() => handleUpdate()}
-                className="bg-[green] py-2 px-2 my-5 rounded-lg text-[#ffffff]"
-              >
-                Thay đổi
-              </button>
+              )}
             </div>
           </div>
         </MinHeight>
