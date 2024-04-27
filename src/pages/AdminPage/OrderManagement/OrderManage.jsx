@@ -288,14 +288,18 @@ function OrderManage() {
           <>
             {record?.orderDetails != null ||
             record?.orderTransaction != null ? (
-              <a
-                onClick={() => {
-                  setSelectedOrder(record);
-                  showModalDetail();
-                }}
-              >
-                Xem chi tiết
-              </a>
+              <Space size="middle">
+                <Tooltip title="Xem chi tiết">
+                  <Button
+                    type="text"
+                    icon={<EyeOutlined style={{ color: "blue" }} />}
+                    onClick={() => {
+                      setSelectedOrder(record);
+                      showModalDetail();
+                    }}
+                  />
+                </Tooltip>
+              </Space>
             ) : (
               <></>
             )}
