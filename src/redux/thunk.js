@@ -37,7 +37,7 @@ export const disconnectWebSocket = () => {
     dispatch(getWebSocket());
     const webSocket = selectWebSocket(getState());
     if (webSocket) {
-      webSocket.close();
+      webSocket.onclose(1000);
     }
   };
 };

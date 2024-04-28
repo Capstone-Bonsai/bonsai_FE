@@ -75,6 +75,7 @@ function Login() {
       } else if (response.role == "Manager") {
         navigate("/admin/dashboard");
       } else if (response.role == "Staff") {
+        dispatch(connectWebSocket());
         navigate("/admin/serviceOrder");
       } else if (response.role == "Gardener") {
         cookies.remove("user");
