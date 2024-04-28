@@ -52,7 +52,7 @@ export const createContract = async (payload) => {
 
 export const paymentContract = async (contractId) => {
   try {
-    const res = await axios.get(`/Contract/Payment?ContractId=${contractId}`);
+    const res = await axios.get(`/ServiceOrder/Payment?ContractId=${contractId}`);
     return res.data;
   } catch (err) {
     const errMessage = err.response;

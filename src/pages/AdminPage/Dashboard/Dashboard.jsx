@@ -163,43 +163,53 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-12">
-                  <div className="bg-[#ffffff] drop-shadow-2xl rounded-md p-6">
-                    <div className="font-bold text-xl pb-4">
-                      Đơn hàng chăm cây
-                    </div>
-                    <div>
-                      <OrderCircleGraphs
-                        height="350px"
-                        color={["#115293", "#1976d2", "#4791db", "#ddebf8"]}
-                        data={dashboardDatas?.orderCircleGraphs}
-                      />
-                    </div>
-                  </div>
-                  <div className="bg-[#ffffff] drop-shadow-2xl rounded-md p-6">
-                    <div className="font-bold text-xl pb-4">
-                      Đơn hàng dịch vụ
-                    </div>
-                    <div>
-                      <ServiceOrderCircleGraphs
-                        height="350px"
-                        color={["#115293", "#1976d2", "#4791db", "#ddebf8"]}
-                        data={dashboardDatas?.serviceOrderCircleGraphs}
-                      />
+                <div className="grid grid-cols-4 gap-8">
+                  <div className="col-span-3 m-2 ">
+                    <div className="bg-[#ffffff] drop-shadow-2xl rounded-md p-6 ">
+                      <div className="font-bold text-xl">
+                        Tông doanh thu dịch vụ
+                      </div>
+                      <div>
+                        <LineChart
+                          height="600px"
+                          color={["#115293", "#1976d2"]}
+                          data={lineDashboardDatas?.data}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div>
-                  <div className="bg-[#ffffff] drop-shadow-2xl rounded-md p-6 mt-12">
-                    <div className="font-bold text-xl pb-4">
-                      Tông doanh thu dịch vụ
+                  <div className="m-2">
+                    <div className="bg-[#ffffff] drop-shadow-2xl rounded-md p-6 mb-4">
+                      <div className="font-bold text-xl">Đơn hàng chăm cây</div>
+                      <div>
+                        <OrderCircleGraphs
+                          height="300px"
+                          color={[
+                            "#115293",
+                            "#1976d2",
+                            "#4791db",
+                            "#bfdaf2",
+                            "#ddebf8",
+                          ]}
+                          data={dashboardDatas?.orderCircleGraphs}
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <LineChart
-                        height="350px"
-                        color={["#115293", "#1976d2"]}
-                        data={lineDashboardDatas?.data}
-                      />
+                    <div className="bg-[#ffffff] drop-shadow-2xl rounded-md p-6 mt-4">
+                      <div className="font-bold text-xl">Đơn hàng dịch vụ</div>
+                      <div>
+                        <ServiceOrderCircleGraphs
+                          height="300px"
+                          color={[
+                            "#ddebf8",
+                            "#bfdaf2",
+                            "#4791db",
+                            "#1976d2",
+                            "#115293",
+                          ]}
+                          data={dashboardDatas?.serviceOrderCircleGraphs}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

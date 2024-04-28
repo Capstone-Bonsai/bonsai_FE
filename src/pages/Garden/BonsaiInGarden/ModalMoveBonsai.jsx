@@ -10,12 +10,14 @@ import noImage from "../../../assets/unImage.png";
 import { toast } from "react-toastify";
 import { customerBonsai } from "../../../redux/slice/bonsaiSlice";
 function ModalMoveBonsai(propsModalMove) {
-  const { prevAddress, bonsaiId, fetchDataAfterMove, setFetchData, fetchData } = propsModalMove;
+  const { prevAddress, bonsaiId, gardenOfBonsaiId, setFetchData, fetchData } =
+    propsModalMove;
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(3);
   const dispatch = useDispatch();
   const [prevGarden, setPrevGarden] = useState("");
   const [loading, setLoading] = useState(false);
+  const [moveError, setMoveError] = useState("")
   useEffect(() => {
     setLoading(true);
     dispatch(fetchCustomerGarden({ pageIndex: pageIndex - 1, pageSize }))
@@ -28,11 +30,16 @@ function ModalMoveBonsai(propsModalMove) {
       });
   }, [pageIndex, pageSize]);
   const gardens = useSelector((state) => state.garden?.gardenDTO);
+
   const { totalItemsCount } = useSelector((state) => state.garden?.gardenDTO);
   const handlePageChange = (page) => {
     setPageIndex(page);
   };
   const handleMoveBonsai = async () => {
+    if (prevGarden && prevGarden.id == gardenOfBonsaiId) {
+      setMoveError("Cây bonsai đã thuộc vườn này!");
+      return;
+    }
     const payload = {
       customerBonsaiId: bonsaiId,
       customerGardenId: prevGarden?.id,
@@ -42,7 +49,7 @@ function ModalMoveBonsai(propsModalMove) {
       const res = await moveBonsai(payload);
       toast.success("Chuyển cây thành công");
       // fetchDataAfterMove();
-      setFetchData(!fetchData)
+      setFetchData(!fetchData);
     } catch (error) {
       console.log(error);
       toast.error("Chuyển cây thất bại");
@@ -57,8 +64,9 @@ function ModalMoveBonsai(propsModalMove) {
           </button>
         </form>
         <h3 className="font-bold text-lg">Bạn muốn đổi vườn</h3>
-        <div>Cây đang ở vườn: {prevAddress}</div>
-        <div>bạn muốn đổi qua vườn: {prevGarden?.address}</div>
+        <div><span className="font-bold text-[20px]">Cây đang ở vườn:</span> {prevAddress}</div>
+        <div><span className="font-bold text-[20px]">bạn muốn đổi qua vườn:</span> {prevGarden?.address}</div>
+        {moveError && <div className="text-[red] text-[14px]">{moveError}</div>}
         {loading ? (
           <Loading loading={loading} isRelative={true} />
         ) : (
@@ -66,12 +74,12 @@ function ModalMoveBonsai(propsModalMove) {
             {gardens?.items?.map((garden) => (
               <div className="border rounded-[8px] my-2" key={garden?.id}>
                 <button
-                  onClick={() => setPrevGarden(garden)}
+                  onClick={() => {setPrevGarden(garden); setMoveError("")}}
                   className="flex p-2 w-full gap-3 border hover:border-[green]"
                 >
                   {/* {garden?.customerGardenImages?.length > 0 ? (
                     garden?.customerGardenImages?.map((image) => ( */}
-                  <div className="w-[200px] h-[100px] bg-[red]">
+                  <div className="w-[200px] h-[100px]">
                     <img
                       className="w-full h-full "
                       src={
@@ -101,9 +109,14 @@ function ModalMoveBonsai(propsModalMove) {
             ))}
           </div>
         )}
-        <button onClick={() => handleMoveBonsai()} className="">
-          Xác nhận đổi vườn
-        </button>
+        <div className="text-end">
+          <button
+            onClick={() => handleMoveBonsai()}
+            className="bg-[#3a9943] text-[#fff] border hover:border-[green] p-3 rounded-[8px]"
+          >
+            Xác nhận đổi vườn
+          </button>
+        </div>
         <Pagination
           current={pageIndex}
           pageSize={pageSize}

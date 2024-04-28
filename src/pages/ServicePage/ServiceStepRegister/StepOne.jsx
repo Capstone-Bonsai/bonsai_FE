@@ -23,7 +23,7 @@ function StepOne(propsStepOne) {
   const location = useLocation();
   const typeEnum = new URLSearchParams(location.search).get("typeEnum");
   const dispatch = useDispatch();
-  const [pageIndex, setPageIndex] = useState(0);
+  const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [fetchApi, setFetchApi] = useState(false);
 

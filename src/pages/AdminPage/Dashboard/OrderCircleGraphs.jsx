@@ -6,11 +6,11 @@ export default function OrderCircleGraphs({ height, color = [], data }) {
   const option = {
     legend: {
       show: true,
-      itemGap: 20,
+      itemGap: 10,
       icon: "circle",
       bottom: 0,
       textStyle: {
-        fontSize: 13,
+        fontSize: 10,
         color: "blue",
       },
     },

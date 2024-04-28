@@ -141,9 +141,9 @@ function ContractUserDetail(props) {
                           Trạng thái:{" "}
                           <span
                             className={`${
-                              contractDetail?.contractStatus == 1 ||
-                              contractDetail?.contractStatus == 4 ||
-                              contractDetail?.contractStatus == 5
+                              contractDetail?.serviceOrderStatus == 1 ||
+                              contractDetail?.serviceOrderStatus == 4 ||
+                              contractDetail?.serviceOrderStatus == 5
                                 ? "text-[red]"
                                 : "text-[#3a9943]"
                             }`}
@@ -172,8 +172,7 @@ function ContractUserDetail(props) {
                       </div>
                     </div>
                     <div className="flex justify-end mt-2">
-                      {contractDetail.contractStatus == 1 ||
-                      contractDetail.contractStatus == 4 ? (
+                      {contractDetail.serviceOrderStatus == 2 ? (
                         <button
                           onClick={() =>
                             handlePaymentContract(contractDetail.id)
@@ -186,9 +185,9 @@ function ContractUserDetail(props) {
                         ""
                       )}
                     </div>
-                    {contractDetail.contractStatus == 1 ||
-                    contractDetail.contractStatus == 4 ||
-                    contractDetail.contractStatus == 5 ? (
+                    {contractDetail.serviceOrderStatus == 1 ||
+                    contractDetail.serviceOrderStatus == 4 ||
+                    contractDetail.serviceOrderStatus == 5 ? (
                       ""
                     ) : (
                       <>
@@ -218,7 +217,7 @@ function ContractUserDetail(props) {
                                         ? new Date(
                                             task?.completedTime
                                           ).toLocaleDateString()
-                                        : contractDetail.contractStatus == 9
+                                        : contractDetail.serviceOrderStatus == 9
                                         ? "Đang xử lý khiếu nại"
                                         : "Chưa hoàn thành"}
                                     </td>

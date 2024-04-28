@@ -144,16 +144,16 @@ function Banner() {
   // }, []);
 
   //done  ////websocket
-  const webSocket = useSelector((state) => state.webSocket);
+  // const webSocket = useSelector((state) => state.webSocket);
 
-  useEffect(() => {
-    dispatch(connectWebSocket());
-    return () => {
-      if (webSocket) {
-        webSocket.close();
-      }
-    };
-  }, [dispatch, webSocket]);
+  // useEffect(() => {
+  //   dispatch(connectWebSocket());
+  //   return () => {
+  //     if (webSocket) {
+  //       webSocket.close();
+  //     }
+  //   };
+  // }, [dispatch, webSocket]);
   const countItemsInCart = useSelector((state) => state?.bonsai?.itemCount);
   return (
     <div className={`banner ${isSticky ? "sticky" : ""}`}>

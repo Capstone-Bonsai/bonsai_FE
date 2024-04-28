@@ -16,10 +16,7 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
   const [loading, setFetchBonsaiDetail] = useState(false);
   const dispatch = useDispatch();
   const [fetchData, setFetchData] = useState(false);
-  const fetchDataAfterMove = () => {
-    console.log("Fetching data after moving bonsai...");
-    dispatch(getBonsaiInGarden(bonsaiId));
-  };
+
   useEffect(() => {
     setFetchBonsaiDetail(true);
     dispatch(getBonsaiInGarden(bonsaiId))
@@ -36,15 +33,14 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
     (state) => state?.garden?.bonsaiInGarden
   );
   const prevAddress = bonsaiDetailById?.customerGarden?.address;
-  const gardenOfBonsaiId = bonsaiDetailById?.customerGarden;
+  const gardenOfBonsaiId = bonsaiDetailById?.customerGardenId;
   const propsModalMove = {
     bonsaiId,
     prevAddress,
     gardenOfBonsaiId,
     setFetchBonsaiDetail,
-    fetchDataAfterMove,
     setFetchData,
-    fetchData
+    fetchData,
   };
 
   return (
