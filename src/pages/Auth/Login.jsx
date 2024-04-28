@@ -69,8 +69,8 @@ function Login() {
       }
       cookies.set("user", response, { path: "/" });
       dispatch(resetWebsocket());
-      dispatch(connectWebSocket());
       if (response.role == "Customer") {
+        dispatch(connectWebSocket());
         navigate("/");
       } else if (response.role == "Manager") {
         navigate("/admin/bonsai");

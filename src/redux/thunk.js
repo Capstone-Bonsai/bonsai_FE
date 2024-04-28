@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import {
   getWebSocket,
   selectWebSocket,
@@ -17,16 +18,15 @@ export const connectWebSocket = () => {
     dispatch(setWebSocket(socket));
 
     socket.onopen = () => {
-      console.log("WebSocket connection opened");
       socket.send(handshakeRequest);
     };
 
-    socket.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
+    socket.onerror = (error) => {};
 
     socket.onmessage = (event) => {
-      console.log("Received message:", event.data);
+      var cleanedJsonString = event.data.replace(/[^\x20-\x7E]/g, "");
+      var jsonObject = JSON.parse(cleanedJsonString);
+      if (jsonObject?.type == 1) toast.info(jsonObject.arguments[0]);
     };
 
     socket.onclose = () => {};
