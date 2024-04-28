@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import logo from "../assets/logoFinal.png";
 import SPCus from "../assets/img-sp.webp";
 import { Image, Input, Space, notification } from "antd";
@@ -22,6 +22,7 @@ import {
 import "./Banner.css";
 import { notificationUser } from "../redux/slice/userSlice";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import { connectWebSocket, disconnectWebSocket } from "../redux/thunk";
 
 function Banner() {
   const { Search } = Input;
@@ -43,24 +44,14 @@ function Banner() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo = cookies.get("user");
-  const [socketUrl, setSocketUrl] = useState(
-    "wss://capstoneb.azurewebsites.net/notification-hub"
-  );
-  const authHeader = { Authorization: `Bearer ${userInfo?.token}` };
-
-  const { sendMessage, readyState } = useWebSocket(socketUrl, {
-    Authorization: authHeader,
-  });
-  useEffect(() => {
-    if (readyState === ReadyState.OPEN) {
-    }
-  }, [readyState]);
 
   const idUser = userInfo?.id;
   const userProfile = useState(cookies.get("userData"));
   const handleLogout = () => {
     cookies.remove("user", { path: "/" });
     cookies.remove("userData", { path: "/" });
+    // socketRef.current.close();
+    dispatch(disconnectWebSocket());
   };
 
   useEffect(() => {
@@ -124,6 +115,45 @@ function Banner() {
     fetchCartFromCookie();
     // setCountCart()
   }, [userInfo]);
+
+  ////websocket
+  // const socketRef = useRef(null);
+
+  // useEffect(() => {
+  //   const socketUrl = `wss://localhost:5001/notification-hub?access_token=${userInfo?.token}`;
+  //   const handshakeData = { protocol: "json", version: 1 };
+  //   const handshakeRequest =
+  //     JSON.stringify(handshakeData) + String.fromCharCode(0x1e);
+  //   socketRef.current = new WebSocket(socketUrl);
+
+  //   socketRef.current.onopen = () => {
+  //     console.log("WebSocket connection opened");
+  //     socketRef.current.send(handshakeRequest);
+  //   };
+
+  //   socketRef.current.onerror = (error) => {
+  //     console.error("WebSocket error:", error);
+  //   };
+
+  //   socketRef.current.onmessage = (event) => {
+  //     console.log("Received message:", event.data);
+  //   };
+  //   return () => {
+  //     socketRef.current.close();
+  //   };
+  // }, []);
+
+  //done  ////websocket
+  const webSocket = useSelector((state) => state.webSocket);
+
+  useEffect(() => {
+    dispatch(connectWebSocket());
+    return () => {
+      if (webSocket) {
+        webSocket.close();
+      }
+    };
+  }, [dispatch, webSocket]);
   const countItemsInCart = useSelector((state) => state?.bonsai?.itemCount);
   return (
     <div className={`banner ${isSticky ? "sticky" : ""}`}>

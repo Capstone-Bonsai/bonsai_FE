@@ -8,6 +8,7 @@ import Loading from "../../components/Loading";
 import MinHeight from "../../components/MinHeight";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
+import { connectWebSocket, resetWebsocket } from "../../redux/thunk";
 function Login() {
   const [form] = Form.useForm();
   const [username, setUsername] = useState("");
@@ -30,6 +31,7 @@ function Login() {
   const searchParams = new URLSearchParams(location.search);
   const userId = searchParams.get("userId");
   const code = searchParams.get("code");
+  const dispatch = useDispatch();
 
   // useEffect(() => {
   //   console.log("User ID:", userId);
@@ -66,6 +68,8 @@ function Login() {
         cookies.remove("user");
       }
       cookies.set("user", response, { path: "/" });
+      dispatch(resetWebsocket());
+      dispatch(connectWebSocket());
       if (response.role == "Customer") {
         navigate("/");
       } else if (response.role == "Manager") {
@@ -78,7 +82,7 @@ function Login() {
         navigate("/login");
       }
     } catch (error) {
-      //console.log(error);
+      console.log(error);
       toast.error(error.response.data);
     } finally {
       setIsLoading(false);
