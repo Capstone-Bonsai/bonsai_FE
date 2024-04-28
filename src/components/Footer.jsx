@@ -27,7 +27,7 @@ function Footer() {
             mình... để đáp ứng mọi nhu cầu của khách hàng. của khách hàng.
           </div>
         </div>
-        <div className="w-[400px]">
+        {/* <div className="w-[400px]">
           <div className="font-bold text-[#000000] text-[20px]">
             Hỗ trợ khách hàng
           </div>
@@ -40,7 +40,7 @@ function Footer() {
               ))}
             </ul>
           </div>
-        </div>
+        </div> */}
         <div className="w-[400px]">
           <div className="font-bold text-[#000000] text-[20px]">Địa chỉ</div>
           <div className=" mt-5 text-[14px]">
