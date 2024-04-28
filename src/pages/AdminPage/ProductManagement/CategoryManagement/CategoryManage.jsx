@@ -89,7 +89,7 @@ function CategoryManage() {
   };
   const columns = [
     {
-      title: "Tên loại cây",
+      title: "Tên phân loại",
       dataIndex: "name",
       key: "name",
     },
@@ -139,7 +139,7 @@ function CategoryManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[80%]">
-          <div className="font-semibold mb-6">Quản lý loại cây</div>
+          <div className="font-semibold text-lg mb-6">Quản lý phân loại</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
               <div>
@@ -147,7 +147,7 @@ function CategoryManage() {
                   className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
                   onClick={showCreateModal}
                 >
-                  <PlusCircleOutlined /> Thêm loại cây
+                  <PlusCircleOutlined /> Thêm phân loại
                 </button>
               </div>
             </div>
@@ -181,16 +181,16 @@ function CategoryManage() {
           category={selectedCareStepCategory}
         />
         <Modal
-          title="Xóa loại cây"
+          title="Xóa phân loại"
           open={openDelete}
           onOk={handleDelete}
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
-          okText={confirmLoadingDelete ? "Đang xóa" : "Xóa loại cây"}
+          okText={confirmLoadingDelete ? "Đang xóa" : "Xóa phân loại"}
           cancelText="Hủy"
         >
-          <div>Bạn có muốn xóa loại cây này không?</div>
+          <div>Bạn có muốn xóa phân loại này không?</div>
         </Modal>
       </div>
     </>

@@ -73,7 +73,7 @@ function Login() {
         dispatch(connectWebSocket());
         navigate("/");
       } else if (response.role == "Manager") {
-        navigate("/admin/bonsai");
+        navigate("/admin/dashboard");
       } else if (response.role == "Staff") {
         navigate("/admin/serviceOrder");
       } else if (response.role == "Gardener") {

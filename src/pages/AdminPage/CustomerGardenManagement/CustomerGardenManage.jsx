@@ -61,7 +61,7 @@ function CustomerGardenManage() {
       {
         title: "Năm trồng",
         key: "yearOfPlanting",
-        render: (record) => <div>{record.bonsai?.yearOfPlanting} năm</div>,
+        render: (record) => <div>Năm {record.bonsai?.yearOfPlanting}</div>,
       },
       {
         title: "Hoành cây",
@@ -77,20 +77,6 @@ function CustomerGardenManage() {
         title: "Số thân",
         key: "numberOfTrunk",
         render: (record) => <div>{record.bonsai?.numberOfTrunk}</div>,
-      },
-      {
-        title: "Giá tiền",
-        key: "price",
-        render: (record) => (
-          <>
-            <p>
-              {new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "VND",
-              }).format(record.bonsai?.price)}
-            </p>
-          </>
-        ),
       },
       {
         title: "Ngày tạo",
@@ -199,7 +185,9 @@ function CustomerGardenManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Sân vườn của khách hàng</div>
+          <div className="font-semibold text-lg mb-6">
+            Sân vườn của khách hàng
+          </div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="mb-12">
               <Table

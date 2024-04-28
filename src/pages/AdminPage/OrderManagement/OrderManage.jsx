@@ -288,14 +288,18 @@ function OrderManage() {
           <>
             {record?.orderDetails != null ||
             record?.orderTransaction != null ? (
-              <a
-                onClick={() => {
-                  setSelectedOrder(record);
-                  showModalDetail();
-                }}
-              >
-                Xem chi tiết
-              </a>
+              <Space size="middle">
+                <Tooltip title="Xem chi tiết">
+                  <Button
+                    type="text"
+                    icon={<EyeOutlined style={{ color: "blue" }} />}
+                    onClick={() => {
+                      setSelectedOrder(record);
+                      showModalDetail();
+                    }}
+                  />
+                </Tooltip>
+              </Space>
             ) : (
               <></>
             )}
@@ -357,7 +361,7 @@ function OrderManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">Quản lý Đơn hàng</div>
+          <div className="font-semibold text-lg mb-6">Quản lý Đơn hàng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="mb-12">
               <Table

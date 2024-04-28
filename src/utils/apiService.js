@@ -29,6 +29,14 @@ const getListRole = () => {
 const getListDeliveryFee = () => {
   return axios.get(`/DeliveryFee`);
 };
+const putListDeliveryFee = (postData) => {
+  console.log(postData);
+  return axios.put(`/DeliveryFee`, postData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
 
 // const postLoginGoogle = (tokenId, provider) => {
 //   return axios.post(`/api/Auth/Login/Google`, {
@@ -40,6 +48,7 @@ export {
   postCreateNewUser,
   getListRole,
   getListDeliveryFee,
+  putListDeliveryFee,
   lockoutUser,
   putUser,
 };
