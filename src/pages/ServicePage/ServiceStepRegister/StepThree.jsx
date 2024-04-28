@@ -69,7 +69,7 @@ function StepThree(propsStepThree) {
       endDate: dateRange[1],
     };
     if (typeEnum == 1) {
-      payload.customerBonsaiId = "";
+      payload.customerBonsaiId = selectedGardenId;
     }
     if (typeEnum == 2) {
       payload.customerGardenId = selectedGardenId;
@@ -81,7 +81,7 @@ function StepThree(propsStepThree) {
       navigate("/ManageContractUser");
       console.log(res);
     } catch (error) {
-      console.error("Error:", error);
+      toast.error(error);
     }
   };
 

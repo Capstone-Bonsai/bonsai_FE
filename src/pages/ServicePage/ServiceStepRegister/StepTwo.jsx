@@ -121,7 +121,7 @@ function StepTwo(propsStepTwo) {
               <div className="p-3">
                 <div className="font-bold text-[30px]">{packageItem?.name}</div>
                 <div className="opacity-70">{packageItem?.description}</div>
-                <div className="flex gap-4 mt-5">
+                <div className="flex gap-4 mt-5                                                                         1111111">
                   <div className="opacity-70">Nhiệm vụ:</div>
                   <div className="font-bold text-[20px]">
                     {packageItem?.tasks?.map((task, index) => (
