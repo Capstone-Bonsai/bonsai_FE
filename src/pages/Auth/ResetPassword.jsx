@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Form, Input, Button } from "antd";
+import { resetPassword } from "../../redux/slice/authSlice";
+import { toast } from "react-toastify";
 
 function ResetPassword() {
   const location = useLocation();
   const email = location.state?.email;
   const codeOTP = location.state?.codeOTP;
   const [passwordError, setPasswordError] = useState("");
-
+  const navigate = useNavigate();
   const validatePassword = (password) => {
     // Biểu thức chính quy kiểm tra mật khẩu:
     // Ít nhất 1 ký tự đặc biệt, 1 số, 1 chữ hoa và có ít nhất 8 ký tự
@@ -15,7 +17,7 @@ function ResetPassword() {
     return passwordRegex.test(password);
   };
 
-  const handleResetPassword = (values) => {
+  const handleResetPassword = async (values) => {
     const { newPassword, newPasswordConfirm } = values;
     let isValid = true;
 
@@ -32,14 +34,19 @@ function ResetPassword() {
     if (!isValid) {
       return;
     }
-
-    // Tiến hành xử lý reset mật khẩu
-    // payload = {
-    //   email: email,
-    //   code: codeOTP,
-    //   newPassword: newPassword,
-    //   confirmPassword: newPasswordConfirm,
-    // };
+    const payload = {
+      email: email,
+      code: codeOTP,
+      newPassword: newPassword,
+      confirmPassword: newPasswordConfirm,
+    };
+    try {
+      const res = await resetPassword(payload);
+      toast.success(res);
+      navigate("/login");
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   return (

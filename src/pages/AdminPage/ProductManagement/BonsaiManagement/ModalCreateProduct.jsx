@@ -264,7 +264,7 @@ const ModalCreateProduct = (props) => {
               <div>
                 <div className="mt-1">
                   <Tag icon={<PlusOutlined />} onClick={showModalCreateStyle}>
-                    Thêm Kiểu mẫu
+                    Thêm Kiểu dáng
                   </Tag>
                 </div>
                 <div className="mt-3">
@@ -291,7 +291,10 @@ const ModalCreateProduct = (props) => {
             <Form.Item
               label="Tên bonsai"
               name="Name"
-              rules={[{ required: true, message: "Tên không được để trống!" }]}
+              rules={[
+                { required: true, message: "Tên không được để trống!" },
+                { max: 100, message: "Username không quá 100 ký tự!" },
+              ]}
             >
               <Input />
             </Form.Item>
@@ -300,6 +303,7 @@ const ModalCreateProduct = (props) => {
               name="Description"
               rules={[
                 { required: true, message: "Mô tả không được để trống!" },
+                { max: 2000, message: "Username không quá 2000 ký tự!" },
               ]}
             >
               <TextArea rows={10} />
@@ -310,7 +314,8 @@ const ModalCreateProduct = (props) => {
               rules={[
                 {
                   type: "number",
-                  message: "Năm trồng phải là một số!",
+                  min: 0,
+                  message: "Năm trồng phải là một số nguyên dương!",
                 },
               ]}
             >
@@ -323,7 +328,8 @@ const ModalCreateProduct = (props) => {
                 { required: true, message: "Đường kính không được để trống!" },
                 {
                   type: "number",
-                  message: "Đường kính phải là một số!",
+                  min: 0,
+                  message: "Đường kính phải là một số nguyên dương!",
                 },
               ]}
             >
@@ -335,7 +341,8 @@ const ModalCreateProduct = (props) => {
               rules={[
                 {
                   type: "number",
-                  message: "Chiều cao phải là một số!",
+                  min: 0,
+                  message: "Chiều cao phải là một số nguyên dương!",
                 },
               ]}
             >
@@ -356,7 +363,8 @@ const ModalCreateProduct = (props) => {
                 },
                 {
                   type: "number",
-                  message: "Số nhánh chính phải là một số!",
+                  min: 0,
+                  message: "Số nhánh chính phải là một số nguyên dương!",
                 },
               ]}
             >

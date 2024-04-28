@@ -15,7 +15,7 @@ function LoginNavigate() {
 }
 
 function ProductManagetNavigate() {
-  return <Navigate to={{ pathname: "/admin/bonsai" }} />;
+  return <Navigate to={{ pathname: "/admin/dashboard" }} />;
 }
 function ContractNavigate() {
   return <Navigate to={{ pathname: "/admin/serviceOrder" }} />;

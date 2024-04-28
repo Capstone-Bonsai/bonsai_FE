@@ -29,7 +29,7 @@ export default function ServiceOrderCircleGraphs({ height, color = [], data }) {
 
     series: [
       {
-        name: "Traffic Rate",
+        name: "Chưa có số liệu",
         type: "pie",
         radius: ["45%", "72.55%"],
         center: ["50%", "50%"],

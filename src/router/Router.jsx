@@ -24,8 +24,6 @@ import CustomerPrivateRoute from "./CustomerPrivateRoute";
 import CustomerGardenManage from "../pages/AdminPage/CustomerGardenManagement/CustomerGardenManage";
 import BaseTaskManage from "../pages/AdminPage/BaseTaskManagement/BaseTaskManage";
 import ManageService from "../pages/ServicePage/ManageService";
-import Contract from "../pages/AdminPage/StaffPage/Contract";
-import ServiceGardenChecking from "../pages/AdminPage/StaffPage/ServiceGardenChecking";
 import ContractUser from "../pages/ManageContractForUser/ContractUser";
 import ContractUserDetail from "../pages/ManageContractForUser/ContractUserDetail";
 import Cookies from "universal-cookie";
@@ -45,6 +43,7 @@ import ServiceStepMain from "../pages/ServicePage/ServiceStepRegister/ServiceSte
 import ResetPassword from "../pages/Auth/ResetPassword";
 import Dashboard from "../pages/AdminPage/Dashboard/Dashboard";
 import CustomerBonsai from "../pages/Garden/BonsaiInGarden/CustomerBonsai";
+import DeliveryFeeManage from "../pages/AdminPage/DeliveryFeeManagement/DeliveryFeeManage";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -211,8 +210,12 @@ function Router() {
                 element: <ServiceTypeManage />,
               },
               {
-                path: "/dashboard",
+                path: "/admin/dashboard",
                 element: <Dashboard />,
+              },
+              {
+                path: "/admin/deliveryFee",
+                element: <DeliveryFeeManage />,
               },
               {
                 path: "*",

@@ -75,7 +75,7 @@ function StyleManage() {
   };
   const columns = [
     {
-      title: "Tên kiểu mẫu",
+      title: "Tên kiểu dáng",
       dataIndex: "name",
       key: "name",
     },
@@ -114,7 +114,7 @@ function StyleManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[80%]">
-          <div className="font-semibold mb-6">Quản lý kiểu mẫu</div>
+          <div className="font-semibold text-lg mb-6">Quản lý kiểu dáng</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
               <div>
@@ -122,7 +122,7 @@ function StyleManage() {
                   className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
                   onClick={showCreateModal}
                 >
-                  <PlusCircleOutlined /> Thêm Kiểu mẫu
+                  <PlusCircleOutlined /> Thêm Kiểu dáng
                 </button>
               </div>
             </div>
@@ -148,16 +148,16 @@ function StyleManage() {
           style={selectedUpdateStyle}
         />
         <Modal
-          title="Xóa kiểu mẫu"
+          title="Xóa kiểu dáng"
           open={openDelete}
           onOk={handleDelete}
           okButtonProps={{ type: "default" }}
           confirmLoading={confirmLoadingDelete}
           onCancel={handleCancelDelete}
-          okText={confirmLoadingDelete ? "Đang xóa" : "Xóa kiểu mẫu"}
+          okText={confirmLoadingDelete ? "Đang xóa" : "Xóa kiểu dáng"}
           cancelText="Hủy"
         >
-          <div>Bạn có muốn xóa kiểu mẫu này không?</div>
+          <div>Bạn có muốn xóa kiểu dáng này không?</div>
         </Modal>
       </div>
     </>

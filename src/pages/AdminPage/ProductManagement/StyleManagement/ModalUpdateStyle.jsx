@@ -63,7 +63,7 @@ const ModalUpdateStyle = (props) => {
   const handleUpdateStyle = () => {
     putStyle(style.id, formData)
       .then((data) => {
-        toast.success("Cập nhật kiểu mẫu thành công!");
+        toast.success("Cập nhật kiểu dáng thành công!");
         dispatch(allStyle());
         handleClose();
       })
@@ -80,7 +80,7 @@ const ModalUpdateStyle = (props) => {
   return (
     <>
       <Modal
-        title="Cập nhật kiểu mẫu"
+        title="Cập nhật kiểu dáng"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
@@ -99,10 +99,11 @@ const ModalUpdateStyle = (props) => {
             disabled={formDisabled}
           >
             <Form.Item
-              label="Tên kiểu mẫu"
+              label="Tên kiểu dáng"
               name="name"
               rules={[
-                { required: true, message: "Kiểu mẫu không được để trống!" },
+                { required: true, message: "Kiểu dáng không được để trống!" },
+                { max: 100, message: "Kiểu dáng không quá 100 ký tự!" },
               ]}
             >
               <Input />

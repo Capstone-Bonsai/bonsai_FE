@@ -63,7 +63,7 @@ const ModalUpdateCategory = (props) => {
   const handleUpdateCategory = () => {
     putCategory(category.id, formData)
       .then((data) => {
-        toast.success("Cập nhật loại cây thành công!");
+        toast.success("Cập nhật phân loại thành công!");
         dispatch(allCategory());
         handleClose();
       })
@@ -80,7 +80,7 @@ const ModalUpdateCategory = (props) => {
   return (
     <>
       <Modal
-        title="Cập nhật kiểu mẫu"
+        title="Cập nhật phân loại"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
@@ -99,9 +99,12 @@ const ModalUpdateCategory = (props) => {
             disabled={formDisabled}
           >
             <Form.Item
-              label="Tên loại cây"
+              label="Tên phân loại"
               name="name"
-              rules={[{ required: true, message: "Tên không được để trống!" }]}
+              rules={[
+                { required: true, message: "Tên không được để trống!" },
+                { max: 100, message: "Tên không quá 100 ký tự!" },
+              ]}
             >
               <Input />
             </Form.Item>

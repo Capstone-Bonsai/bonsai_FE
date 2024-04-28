@@ -248,7 +248,7 @@ const ModalUpdateOrder = (props) => {
                 </>
               )}
             </div>
-            {order?.orderStatus === "Delivered" ? (
+            {order?.orderStatus == "Delivered" ? (
               <>
                 <div>
                   <div className="font-medium pl-8 my-3">

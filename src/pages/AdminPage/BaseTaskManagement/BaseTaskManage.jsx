@@ -144,7 +144,7 @@ function BaseTaskManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold mb-6">nhiệm vụ cơ bản</div>
+          <div className="font-semibold text-lg mb-6">Nhiệm vụ cơ bản</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
               <div>

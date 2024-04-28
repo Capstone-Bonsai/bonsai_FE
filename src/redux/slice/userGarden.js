@@ -45,7 +45,7 @@ export const fetchCustomerGardensManagers = createAsyncThunk(
 
 export const getBonsaiInGarden = createAsyncThunk(
   "bonsai/bonsaiDetailInGarden",
-  async ({ bonsaiInGardenId }) => {
+  async (bonsaiInGardenId) => {
     try {
       const response = await axios.get(`/CustomerBonsai/${bonsaiInGardenId}`);
       return response.data;
@@ -72,6 +72,28 @@ export const getListBonsaiInGarden = createAsyncThunk(
 export const addCustomerGarden = async (formData) => {
   try {
     const response = await axios.post(`/CustomerGarden`, formData);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const moveBonsai = async ({customerBonsaiId, customerGardenId}) => {
+  try {
+    const response = await axios.put(
+      `/CustomerBonsai/MoveBonsai?customerBonsaiId=${customerBonsaiId}&customerGardenId=${customerGardenId}`
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateCustomerGarden = async (formData, gardenId) => {
+  try {
+    const response = await axios.put(`/CustomerGarden`, formData, gardenId);
     console.log(response.data);
     return response.data;
   } catch (error) {

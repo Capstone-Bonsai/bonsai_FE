@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PlusOutlined } from "@ant-design/icons";
-import { Tag, Input, Modal, Form, InputNumber, Select, Upload } from "antd";
+import { Tag, Modal, Form, Select, Button, Input, Upload } from "antd";
 const { Search, TextArea } = Input;
-
+import { EditOutlined, PlusOutlined, InboxOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { listAllContract } from "../../../redux/slice/contractSlice";
-import { postContractImages } from "../../../utils/contractApi";
+import {
+  getListDeliveryFee,
+  putListDeliveryFee,
+} from "../../../utils/apiService";
+
+const { Dragger } = Upload;
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -14,70 +17,31 @@ const normFile = (e) => {
   }
   return [e.file];
 };
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_FILE_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/jpg",
-  "image/gif",
-];
 
-const ModalCreateContractImages = (props) => {
+const ModalUpdateDeliveryFee = (props) => {
   const [form] = Form.useForm();
-  const { show, setShow, contractImages, contractDetail } = props;
+  const { show, setShow, fetchDeliveryFee } = props;
   const handleClose = () => {
     setFormData({
-      image: "",
+      file: "",
     });
     form.resetFields();
-    setListImage([]);
     setShow(false);
   };
   const [formData, setFormData] = useState({
-    image: "",
+    file: "",
   });
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+  const [formDisabled, setFormDisabled] = useState(false);
   const [listImage, setListImage] = useState([]);
   const formRef = useRef(null);
-
-  // useEffect(() => {
-  //   if (contractImages != undefined) {
-  //     console.log(contractImages);
-  //     setFormData({
-  //       Image: fetchListImage(),
-  //     });
-  //   }
-  // }, [contractImages]);
-
-  useEffect(() => {
-    if (show === true) {
-      form.setFieldsValue(formData);
-    }
-  }, [form, formData]);
-  const handleCancelPreview = () => setPreviewOpen(false);
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-    setPreviewTitle(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    );
+  const handleChange = (i) => {
+    setListImage(i);
   };
-
-  const handleChange = (i) => setListImage(i);
 
   const uploadButton = (
     <button
@@ -93,32 +57,17 @@ const ModalCreateContractImages = (props) => {
           marginTop: 8,
         }}
       >
-        Cập nhật
+        Thêm ảnh
       </div>
     </button>
   );
 
-  // const fetchListImage = () => {
-  //   const image = bonsai?.bonsaiImages?.map((data) => ({
-  //     url: data.imageUrl,
-  //     uid: "",
-  //   }));
-  //   setListImage(image);
-  //   return image;
-  // };
-  const updateListImage = (data) => {
+  const updateDeliveryFee = (data) => {
     try {
-      console.log(data);
-      console.log(contractDetail);
-      postContractImages(contractDetail.id, data)
+      putListDeliveryFee(data)
         .then((data) => {
-          toast.success("Cập nhật thành công!");
-          dispatch(
-            listAllContract({
-              pageIndex: 0,
-              pageSize: 10,
-            })
-          );
+          toast.success(data.data);
+          fetchDeliveryFee();
           handleClose();
         })
         .catch((err) => {
@@ -127,31 +76,33 @@ const ModalCreateContractImages = (props) => {
         })
         .finally(() => {
           setConfirmLoading(false);
+          setFormDisabled(false);
         });
     } catch (err) {
-      console.log(err);
       toast.error(err.response.data);
     }
   };
+
   const onSubmit = (i) => {
-    formData.image = listImage?.map((image) => image?.originFileObj);
+    formData.file = listImage[0] ? listImage[0].originFileObj : null;
     const postData = new FormData();
-    formData.image?.map((image) => postData.append("Image", image));
-    console.log(formData);
+    postData.append("file", formData.file);
     formRef.current
       .validateFields()
       .then(() => {
+        setFormDisabled(true);
         setConfirmLoading(true);
-        updateListImage(postData);
+        updateDeliveryFee(postData);
       })
       .catch((errorInfo) => {
-        console.log(errorInfo);
         toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
       });
   };
+
   const handleFormChange = (changedValues, allValues) => {
     setFormData(allValues);
   };
+
   const beforeUpload = (file) => {
     const isFileSizeValid = file.size <= MAX_FILE_SIZE;
     const isFileTypeValid = ALLOWED_FILE_TYPES.includes(file.type);
@@ -172,17 +123,17 @@ const ModalCreateContractImages = (props) => {
     <>
       <Modal
         width={800}
-        title="Thêm ảnh"
+        title="Chỉnh sửa bảng giá"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
-        okText={confirmLoading ? "Đang tạo" : "Tạo mới"}
+        okText={confirmLoading ? "Đang sửa" : "Chỉnh sửa"}
         cancelText="Hủy"
         confirmLoading={confirmLoading}
         onCancel={handleClose}
         maskClosable={false}
       >
-        <div className="mt-9">
+        <div className="">
           <Form
             form={form}
             ref={formRef}
@@ -190,30 +141,38 @@ const ModalCreateContractImages = (props) => {
             labelCol={{ span: 5 }}
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
-            initialValues={formData}
+            disabled={formDisabled}
           >
             <Form.Item
-              label="Upload ảnh"
+              label="Thêm File"
               valuePropName="fileList"
               getValueFromEvent={normFile}
             >
-              <Upload
-                listType="picture-card"
+              <Dragger
+                maxCount={1}
+                accept="application/*"
                 fileList={listImage}
-                onPreview={handlePreview}
                 beforeUpload={beforeUpload}
                 onChange={(e) => {
-                  console.log(e.fileList);
                   handleChange(e.fileList);
                 }}
               >
-                {uploadButton}
-              </Upload>
+                <p className="ant-upload-drag-icon">
+                  <InboxOutlined />
+                </p>
+                <p className="ant-upload-text">
+                  Nhấp hoặc kéo tệp vào khu vực này để tải lên
+                </p>
+                <p className="ant-upload-hint">
+                  Hỗ trợ tải lên một lần hoặc hàng loạt. Nghiêm cấm tải lên dữ
+                  liệu công ty hoặc các tập tin bị cấm khác.
+                </p>
+              </Dragger>
             </Form.Item>
           </Form>
         </div>
       </Modal>
-      <Modal
+      {/* <Modal
         open={previewOpen}
         title={previewTitle}
         footer={null}
@@ -226,9 +185,9 @@ const ModalCreateContractImages = (props) => {
           }}
           src={previewImage}
         />
-      </Modal>
+      </Modal> */}
     </>
   );
 };
 
-export default ModalCreateContractImages;
+export default ModalUpdateDeliveryFee;

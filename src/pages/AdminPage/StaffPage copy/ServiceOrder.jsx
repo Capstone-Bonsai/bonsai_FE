@@ -21,7 +21,7 @@ import { allServiceOrder } from "../../../redux/slice/serviceOrderSlice";
 import ModalCreateServiceOrderImages from "./ModalCreateServiceOrderImages";
 import ModalUpateServiceOrderPrice from "./ModalUpateServiceOrderPrice";
 import ModalAddGardener from "./ModalAddGardener";
-import ServiceOrderDetail from "./ServiceOrderDetail";
+import ServiceOrderDetail from "./ServiceOrderDetail/ServiceOrderDetail";
 import { distance } from "framer-motion";
 
 function ServiceOrder() {
@@ -189,12 +189,30 @@ function ServiceOrder() {
       ),
     },
     {
+      title: "Tên dịch vụ",
+      dataIndex: "address",
+      key: "address",
+      render: (_, record) => (
+        <>
+          <p>{record?.service?.name}</p>
+        </>
+      ),
+    },
+    {
       title: "Tổng cộng",
       dataIndex: "temporaryTotalPrice",
       key: "temporaryTotalPrice",
       render: (_, record) => (
         <>
-          <p>{formatPrice(record?.totalPrice)}</p>
+          {record?.totalPrice === 0 ? (
+            <>
+              <p>Chưa có giá</p>
+            </>
+          ) : (
+            <>
+              <p>{formatPrice(record?.totalPrice)}</p>
+            </>
+          )}
         </>
       ),
     },
@@ -340,7 +358,7 @@ function ServiceOrder() {
             <ServiceOrderDetail {...props} />
           ) : (
             <>
-              <div className="font-semibold mb-6">Đơn hàng dịch vụ</div>
+              <div className="font-semibold text-lg mb-6">Đơn hàng dịch vụ</div>
               <div className="bg-[#ffffff] drop-shadow-2xl">
                 <div className="mb-12">
                   <Table
