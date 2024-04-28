@@ -128,7 +128,7 @@ function CustomerGarden() {
   const handleBonsaiInGarden = (bonsaiInGardenId) => {
     try {
       setLoadingBonsai(true);
-      dispatch(getBonsaiInGarden({ bonsaiInGardenId })).then(() => {
+      dispatch(getBonsaiInGarden(bonsaiInGardenId)).then(() => {
         setLoadingBonsai(false);
       });
     } catch (error) {

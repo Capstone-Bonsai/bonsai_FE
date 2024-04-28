@@ -19,7 +19,8 @@ import logo from "../assets/logoFinal.png";
 import { Dropdown, Layout, Menu, Button, theme } from "antd";
 import { profileUser } from "../redux/slice/authSlice";
 import Cookies from "universal-cookie";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { connectWebSocket } from "../redux/thunk";
 import { GardenSVG } from "../assets/garden-green-house-svgrepo-com";
 
 const { Header, Sider, Content } = Layout;
@@ -47,7 +48,18 @@ function PrivateRoute() {
   const handleLogout = () => {
     cookies.remove("user", { path: "/" });
     cookies.remove("user", { path: "/admin" });
+    dispatch(disconnectWebSocket());
   };
+  const webSocket = useSelector((state) => state.webSocket);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(connectWebSocket());
+    return () => {
+      if (webSocket) {
+        webSocket.close();
+      }
+    };
+  }, [dispatch, webSocket]);
   const NavBarItems = [
     {
       key: "1",
