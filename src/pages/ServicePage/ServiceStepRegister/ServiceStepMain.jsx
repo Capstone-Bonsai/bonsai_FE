@@ -68,6 +68,7 @@ function ServiceStepMain() {
     selectedGardenId,
     setSelectedGardenId,
     gardenDetail,
+    bonsaiDetail
   };
   const propsStepTwo = {
     setStepList,

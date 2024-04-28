@@ -185,7 +185,7 @@ function BonsaiDetail() {
               <div className="flex justify-between py-5 gap-5">
                 <div className="flex flex-col items-center">
                   <img src={carShip} className="w-[100px] " alt="" />
-                  <div className="text-[15px]">0934534534</div>
+                  <div className="text-[15px]">0909.045.444</div>
                 </div>
                 <div>
                   <div className="font-bold">

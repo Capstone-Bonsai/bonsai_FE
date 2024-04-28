@@ -96,7 +96,24 @@ function StepThree(propsStepThree) {
         </button>
       </div>
       <div className="w-full">
-        <div className="text-center font-bold text-[20px]">Đăng ký dịch vụ</div>
+        <div className="my-5">
+          <div>Ngày dự tính thực hiện: </div>
+          <RangePicker
+            size="large"
+            className={`border ${
+              errorDateRange != "" ? "border-[red]" : "border-black"
+            }`}
+            onChange={handleDateChange}
+            allowClear={false}
+            placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
+            disabledDate={disabledStartDate}
+          />
+          {errorDateRange != "" ? (
+            <div className="text-[red]">{errorDateRange}</div>
+          ) : (
+            ""
+          )}
+        </div>
         {typeEnum == 2 ? (
           <div className="border flex p-5 gap-3">
             <div className="w-[300px] h-[200px]">
@@ -180,27 +197,9 @@ function StepThree(propsStepThree) {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between my-2">
-          <div className="">
-            <div>Ngày dự tính thực hiện: </div>
-            <RangePicker
-              size="large"
-              className={`border ${
-                errorDateRange != "" ? "border-[red]" : "border-black"
-              }`}
-              onChange={handleDateChange}
-              allowClear={false}
-              placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
-              disabledDate={disabledStartDate}
-            />
-            {errorDateRange != "" ? (
-              <div className="text-[red]">{errorDateRange}</div>
-            ) : (
-              ""
-            )}
-          </div>
+        <div className="flex items-center justify-end my-2">
           <button
-            className="bg-gray-300 p-2 rounded-[10px] hover:text-[#fff] hover:bg-[#3a9943]"
+            className="bg-[#3a9943] p-2 rounded-[10px] text-[#fff] border hover:border-[green]"
             onClick={dateRange?.length > 1 ? showModal : dateVilidate}
           >
             Đăng ký

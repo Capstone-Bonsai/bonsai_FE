@@ -288,7 +288,7 @@ function Banner() {
               <img src={SPCus} alt="" />
               <div className="ml-3">
                 <div className="text-[#ffffff]">Chăm sóc khách hàng</div>
-                <div className="text-[#ffdd20]">0912345667</div>
+                <div className="text-[#ffdd20]">0909.045.444</div>
               </div>
             </div>
             <Link
