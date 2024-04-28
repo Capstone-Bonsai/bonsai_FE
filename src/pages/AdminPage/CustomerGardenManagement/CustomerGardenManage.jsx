@@ -61,7 +61,7 @@ function CustomerGardenManage() {
       {
         title: "Năm trồng",
         key: "yearOfPlanting",
-        render: (record) => <div>{record.bonsai?.yearOfPlanting} năm</div>,
+        render: (record) => <div>Năm {record.bonsai?.yearOfPlanting}</div>,
       },
       {
         title: "Hoành cây",
@@ -77,20 +77,6 @@ function CustomerGardenManage() {
         title: "Số thân",
         key: "numberOfTrunk",
         render: (record) => <div>{record.bonsai?.numberOfTrunk}</div>,
-      },
-      {
-        title: "Giá tiền",
-        key: "price",
-        render: (record) => (
-          <>
-            <p>
-              {new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "VND",
-              }).format(record.bonsai?.price)}
-            </p>
-          </>
-        ),
       },
       {
         title: "Ngày tạo",

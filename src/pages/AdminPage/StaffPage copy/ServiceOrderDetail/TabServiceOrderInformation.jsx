@@ -96,6 +96,18 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
               <div className="font-medium text-lg">- Thông tin dịch vụ:</div>
               <div className=" w-[100%] py-6 px-12">
                 <div className="font-medium grid grid-cols-3 m-4">
+                  <div>Tên dịch vụ:</div>
+                  <div className="col-span-2">
+                    {serviceOrderDetail?.service?.name}
+                  </div>
+                </div>
+                <div className="font-medium grid grid-cols-3 m-4">
+                  <div>Mô tả:</div>
+                  <div className="col-span-2">
+                    {serviceOrderDetail?.service?.description}
+                  </div>
+                </div>
+                <div className="font-medium grid grid-cols-3 m-4">
                   <div>Loại dịch vụ:</div>
                   <div className="col-span-2">
                     <Tag
@@ -109,14 +121,10 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
                     </Tag>
                   </div>
                 </div>
-                <div className="font-medium grid grid-cols-3 m-4">
-                  <div>Mô tả:</div>
-                  <div className="col-span-2">
-                    {serviceOrderDetail?.service?.serviceType?.description}
-                  </div>
-                </div>
               </div>
-              <div className="font-medium text-lg">- Thông tin sân vườn/bonsai:</div>
+              <div className="font-medium text-lg">
+                - Thông tin sân vườn/bonsai:
+              </div>
               <div className=" w-[100%] py-6 px-12">
                 {serviceOrderDetail?.service?.serviceType?.typeEnum === 2 ? (
                   <>

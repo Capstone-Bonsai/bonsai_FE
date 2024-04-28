@@ -189,12 +189,30 @@ function ServiceOrder() {
       ),
     },
     {
+      title: "Tên dịch vụ",
+      dataIndex: "address",
+      key: "address",
+      render: (_, record) => (
+        <>
+          <p>{record?.service?.name}</p>
+        </>
+      ),
+    },
+    {
       title: "Tổng cộng",
       dataIndex: "temporaryTotalPrice",
       key: "temporaryTotalPrice",
       render: (_, record) => (
         <>
-          <p>{formatPrice(record?.totalPrice)}</p>
+          {record?.totalPrice === 0 ? (
+            <>
+              <p>Chưa có giá</p>
+            </>
+          ) : (
+            <>
+              <p>{formatPrice(record?.totalPrice)}</p>
+            </>
+          )}
         </>
       ),
     },
