@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Table } from "antd";
+import { Button, Table, Tooltip } from "antd";
+import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+  DeleteOutlined,
+  EyeOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../../components/Loading";
 import { fetchCustomerGardensManagers } from "../../../redux/slice/userGarden";
@@ -173,9 +181,15 @@ function CustomerGardenManage() {
       key: "customerBonsai",
       render: (_, record) => {
         return (
-          <a onClick={() => expend(record.id)}>
-            {record.id === expended ? "Đóng" : "Thêm chi tiết"}
-          </a>
+          <div className="w-full flex justify-center items-center">
+            <Tooltip title={record.id === expended ? "Đóng" : "Thêm chi tiết"}>
+              <Button
+                type="text"
+                icon={<EyeOutlined style={{ color: "orange" }} />}
+                onClick={() => expend(record.id)}
+              />
+            </Tooltip>
+          </div>
         );
       },
     },
