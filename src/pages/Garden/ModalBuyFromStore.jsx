@@ -4,9 +4,14 @@ import { addBonsaiBuyFromStore } from "../../redux/slice/userGarden";
 import { toast } from "react-toastify";
 function ModalBuyFromStore(props) {
   const [selectBonsai, setSelectBonsai] = useState("");
+
   const handleBuyFromStore = async () => {
+    const payload = {
+      bonsaiId: selectBonsai,
+      customerGardenId: props.selectedGardenId,
+    };
     try {
-      await addBonsaiBuyFromStore(selectBonsai, props.selectedGardenId);
+      await addBonsaiBuyFromStore(payload);
       toast.success("Thêm cây thành công");
     } catch (error) {
       toast.error("Thêm cây không thành công", error);

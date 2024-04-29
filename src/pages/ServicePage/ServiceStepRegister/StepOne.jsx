@@ -18,8 +18,13 @@ import Loading from "../../../components/Loading";
 import { customerBonsai } from "../../../redux/slice/bonsaiSlice";
 import ModalCreateCustomerBonsai from "./ModalCreateCustomerBonsai";
 function StepOne(propsStepOne) {
-  const { setSelectedGardenId, gardenDetail, selectedGardenId, setStepList } =
-    propsStepOne;
+  const {
+    setSelectedGardenId,
+    gardenDetail,
+    selectedGardenId,
+    setStepList,
+    bonsaiDetail,
+  } = propsStepOne;
   const location = useLocation();
   const typeEnum = new URLSearchParams(location.search).get("typeEnum");
   const dispatch = useDispatch();
@@ -76,13 +81,16 @@ function StepOne(propsStepOne) {
             <span className="text-[18px] font-normal opacity-70">
               {typeEnum == 2 ? (
                 <>
-                  <span className="px-2">Địa chỉ</span>
                   {gardenDetail?.address
                     ? gardenDetail?.address
                     : "Vui lòng chọn vườn"}
                 </>
               ) : (
-                <></>
+                <>
+                  {bonsaiDetail
+                    ? bonsaiDetail?.bonsai?.name
+                    : "Vui lòng chọn cây"}
+                </>
               )}
             </span>
           </div>
@@ -141,7 +149,7 @@ function StepOne(propsStepOne) {
                     >
                       <button
                         onClick={() => {
-                          setSelectedGardenId(garden.id), handleToStepTwo();
+                          setSelectedGardenId(garden.id);
                         }}
                         className="absolute right-5 outline-none text-[20px]"
                       >
@@ -151,7 +159,7 @@ function StepOne(propsStepOne) {
                           <PlusCircleOutlined />
                         )}
                       </button>
-                      <div className="w-[30%] h-[300px] border rounded-tr-[30px]">
+                      <div className="w-[300px] h-[200px] border rounded-tr-[30px]">
                         <img
                           className="w-full h-full object-cover rounded-tr-[30px]"
                           src={
@@ -240,36 +248,42 @@ function StepOne(propsStepOne) {
           {bonsaiLoading ? (
             <Loading loading={loadingGarden} />
           ) : (
-            <div>
+            <div className="">
               {bonsais?.length > 0
                 ? bonsais?.map((bonsai) => (
-                    <div key={bonsai.id} className="flex gap-2 relative">
-                      <div className="w-[30%] h-[300px] border rounded-tr-[30px]">
+                    <div
+                      key={bonsai.id}
+                      className="border flex gap-2 relative my-2 p-3"
+                    >
+                      <div className="w-[300px] h-[200px] border rounded-tr-[30px]">
                         <img
                           className="w-full h-full object-cover rounded-tr-[30px]"
                           src={
-                            bonsai?.bonsaiImages?.length > 0
-                              ? bonsai?.bonsaiImages?.image
+                            bonsai?.bonsai?.bonsaiImages?.length > 0
+                              ? bonsai?.bonsai?.bonsaiImages[0]?.imageUrl
                               : noImage
                           }
                           alt=""
                         />
                       </div>
                       <div>
-                        <div className="">{bonsai?.bonsai?.name}</div>
-                        <div>Code :{bonsai?.bonsai?.code}</div>
-                        <div>Năm trông:{bonsai?.bonsai?.yearOfPlanting}</div>
-                        <div>
-                          Diện tích thân: {bonsai?.bonsai?.trunkDimenter}cm
-                          <sup>2</sup>
+                        <div className="font-bold text-[23px]">
+                          {bonsai?.bonsai?.name}
                         </div>
-                        <div>Chiều cao: {bonsai?.bonsai?.height}m</div>
+                        <div className="text-[16px] opacity-70">
+                          <div className="">Code :{bonsai?.bonsai?.code}</div>
+                          <div>Năm trồng: {bonsai?.bonsai?.yearOfPlanting}</div>
+                          <div>
+                            Kích thước thân: {bonsai?.bonsai?.trunkDimenter}cm
+                          </div>
+                          <div>Chiều cao: {bonsai?.bonsai?.height}m</div>
+                        </div>
                       </div>
                       <button
                         onClick={() => {
-                          setSelectedGardenId(bonsai.id), handleToStepTwo();
+                          setSelectedGardenId(bonsai.id);
                         }}
-                        className="absolute right-0 outline-none text-[20px]"
+                        className="absolute right-5 outline-none text-[20px]"
                       >
                         {selectedGardenId == bonsai.id ? (
                           <CheckCircleOutlined className="text-[#3a9943]" />

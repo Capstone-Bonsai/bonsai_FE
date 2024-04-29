@@ -24,11 +24,16 @@ export const connectWebSocket = () => {
     socket.onerror = (error) => {};
 
     socket.onmessage = (event) => {
-      var cleanedJsonString = event.data.replace(/[^\x20-\x7E]/g, "");
-      var jsonObject = JSON.parse(cleanedJsonString);
+      const jsonEndIndex = event.data.lastIndexOf("}") + 1;
+      const jsonOnly = event.data.substring(0, jsonEndIndex);
+      var jsonObject = JSON.parse(jsonOnly);
       if (jsonObject?.type == 1) toast.info(jsonObject.arguments[0]);
+      //
+      // var cleanedJsonString = event.data.replace(/[^\x20-\x7E]/g, "");
+      // var jsonObject = JSON.parse(cleanedJsonString);
+      // console.log(jsonObject);
+      // if (jsonObject?.type == 1) toast.info(jsonObject.arguments[0]);
     };
-
     socket.onclose = () => {};
   };
 };
@@ -37,7 +42,7 @@ export const disconnectWebSocket = () => {
     dispatch(getWebSocket());
     const webSocket = selectWebSocket(getState());
     if (webSocket) {
-      webSocket.close();
+      webSocket.onclose(1000);
     }
   };
 };

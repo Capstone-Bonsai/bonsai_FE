@@ -144,16 +144,16 @@ function Banner() {
   // }, []);
 
   //done  ////websocket
-  const webSocket = useSelector((state) => state.webSocket);
+  // const webSocket = useSelector((state) => state.webSocket);
 
-  useEffect(() => {
-    dispatch(connectWebSocket());
-    return () => {
-      if (webSocket) {
-        webSocket.close();
-      }
-    };
-  }, [dispatch, webSocket]);
+  // useEffect(() => {
+  //   dispatch(connectWebSocket());
+  //   return () => {
+  //     if (webSocket) {
+  //       webSocket.close();
+  //     }
+  //   };
+  // }, [dispatch, webSocket]);
   const countItemsInCart = useSelector((state) => state?.bonsai?.itemCount);
   return (
     <div className={`banner ${isSticky ? "sticky" : ""}`}>
@@ -288,7 +288,7 @@ function Banner() {
               <img src={SPCus} alt="" />
               <div className="ml-3">
                 <div className="text-[#ffffff]">Chăm sóc khách hàng</div>
-                <div className="text-[#ffdd20]">0912345667</div>
+                <div className="text-[#ffdd20]">0909.045.444</div>
               </div>
             </div>
             <Link

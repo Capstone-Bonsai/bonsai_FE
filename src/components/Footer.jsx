@@ -32,13 +32,8 @@ function Footer() {
             Hỗ trợ khách hàng
           </div>
           <div className=" mt-5 text-[14px]">
-            <ul>
-              {linksFooter.map((link) => (
-                <li key={link.id}>
-                  <a href={link.href}>{link.text}</a>
-                </li>
-              ))}
-            </ul>
+            <div>Số điện thoại: 0909.045.444</div>
+            <div>Email: caycanhlamdongTTS@gmail.com</div>
           </div>
         </div>
         <div className="w-[400px]">

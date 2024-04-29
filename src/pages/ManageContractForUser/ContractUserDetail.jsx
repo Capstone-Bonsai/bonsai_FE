@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavbarUser from "../Auth/NavbarUser";
 import MinHeight from "../../components/MinHeight";
 import { useDispatch, useSelector } from "react-redux";
-import { LeftCircleOutlined } from "@ant-design/icons";
+import { LeftCircleOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import {
   contractDetailById,
   listTask,
@@ -67,10 +67,10 @@ function ContractUserDetail(props) {
       ) : (
         <div className="w-full relative">
           <button
-            className="absolute top-[-10px] left-[-10px]"
+            className="text-[20px] ml-5 w-[30px] h-[30px] rounded-full hover:bg-[#3a9943] hover:text-[#fff] flex items-center justify-center"
             onClick={() => props.setSelectedDetail(false)}
           >
-            <LeftCircleOutlined className="text-[20px]" />
+            <ArrowLeftOutlined />
           </button>
           <div className="mt-3 h-full">
             <div className="text-center text-lg font-bold">Đơn dịch vụ</div>
@@ -141,9 +141,9 @@ function ContractUserDetail(props) {
                           Trạng thái:{" "}
                           <span
                             className={`${
-                              contractDetail?.contractStatus == 1 ||
-                              contractDetail?.contractStatus == 4 ||
-                              contractDetail?.contractStatus == 5
+                              contractDetail?.serviceOrderStatus == 1 ||
+                              contractDetail?.serviceOrderStatus == 4 ||
+                              contractDetail?.serviceOrderStatus == 5
                                 ? "text-[red]"
                                 : "text-[#3a9943]"
                             }`}
@@ -172,8 +172,7 @@ function ContractUserDetail(props) {
                       </div>
                     </div>
                     <div className="flex justify-end mt-2">
-                      {contractDetail.contractStatus == 1 ||
-                      contractDetail.contractStatus == 4 ? (
+                      {contractDetail.serviceOrderStatus == 2 ? (
                         <button
                           onClick={() =>
                             handlePaymentContract(contractDetail.id)
@@ -186,9 +185,9 @@ function ContractUserDetail(props) {
                         ""
                       )}
                     </div>
-                    {contractDetail.contractStatus == 1 ||
-                    contractDetail.contractStatus == 4 ||
-                    contractDetail.contractStatus == 5 ? (
+                    {contractDetail.serviceOrderStatus == 1 ||
+                    contractDetail.serviceOrderStatus == 4 ||
+                    contractDetail.serviceOrderStatus == 5 ? (
                       ""
                     ) : (
                       <>
@@ -218,7 +217,7 @@ function ContractUserDetail(props) {
                                         ? new Date(
                                             task?.completedTime
                                           ).toLocaleDateString()
-                                        : contractDetail.contractStatus == 9
+                                        : contractDetail.serviceOrderStatus == 9
                                         ? "Đang xử lý khiếu nại"
                                         : "Chưa hoàn thành"}
                                     </td>
@@ -316,7 +315,9 @@ function ContractUserDetail(props) {
                     )}
                   </div>
                 ) : (
-                  <div className="text-[30px] text-[red]">{contractDetail?.error}</div>
+                  <div className="text-[30px] text-[red]">
+                    {contractDetail?.error}
+                  </div>
                 )}
               </>
             )}
