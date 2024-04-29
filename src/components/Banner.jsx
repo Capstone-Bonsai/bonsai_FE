@@ -181,9 +181,9 @@ function Banner() {
                 <div className="dropdown">
                   <button className="bg-[#f2f2f2] hover:bg-gray-300 hover:text-[#fff] mx-3 relative rounded-full w-[30px] h-[30px] flex justify-center items-center">
                     <BellOutlined />
-                    <div className="absolute top-[-10px] right-[-5px] bg-[red] w-[20px] h-[20px] text-[14px] text-[#fff] rounded-full">
+                    {/* <div className="absolute top-[-10px] right-[-5px] bg-[red] w-[20px] h-[20px] text-[14px] text-[#fff] rounded-full">
                       0
-                    </div>
+                    </div> */}
                   </button>
                   <ul
                     tabIndex={0}

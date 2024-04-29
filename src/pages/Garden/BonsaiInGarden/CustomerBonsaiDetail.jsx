@@ -271,6 +271,21 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
                 }
               />
             </div>
+            <div className="flex items-center gap-2">
+              <div>Địa chỉ: </div>
+              <div className="w-[70%]">{bonsaiDetailById?.customerGarden?.address}</div>
+              <div>
+                <button
+                  className="outline-none bg-[#3a9943] text-[#fff] p-2 rounded-[8px]"
+                  onClick={() =>
+                    document.getElementById("modal_move_bonsai").showModal()
+                  }
+                >
+                  Đổi vườn
+                </button>
+                <ModalMoveBonsai {...propsModalMove} />
+              </div>
+            </div>
             <div className="text-[16px] flex items-center gap-3 my-2">
               <div className="w-[10%] text-end">Loại cây:</div>
               <select
@@ -413,17 +428,6 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
             >
               Cập nhật
             </button>
-          </div>
-          <div>
-            <button
-              className="outline-none"
-              onClick={() =>
-                document.getElementById("modal_move_bonsai").showModal()
-              }
-            >
-              Đổi vườn
-            </button>
-            <ModalMoveBonsai {...propsModalMove} />
           </div>
         </>
       )}

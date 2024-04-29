@@ -31,14 +31,21 @@ function StepOne(propsStepOne) {
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [fetchApi, setFetchApi] = useState(false);
+  const [gardenLoading, setGardenLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     dispatch(fetchCustomerGarden({ pageIndex: pageIndex - 1, pageSize }));
-    dispatch(customerBonsai({ pageIndex: pageIndex - 1, pageSize }));
-  }, [fetchApi, pageIndex, pageSize]);
-  const bonsaiLoading = useSelector(
-    (state) => state?.bonsai?.customerBonsai?.loading
-  );
+    dispatch(customerBonsai({ pageIndex: pageIndex - 1, pageSize }))
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching order data:", error);
+        setLoading(false);
+      });
+  }, [fetchApi, pageIndex, pageSize, gardenLoading]);
+  const [loading, setLoading] = useState(false);
   const bonsaiProps = {
     dispatch,
     customerBonsai,
@@ -46,6 +53,11 @@ function StepOne(propsStepOne) {
     pageSize,
     fetchApi,
     setFetchApi,
+  };
+  const props = {
+    setGardenLoading,
+    gardenLoading,
+    setLoading
   };
   const gardens = useSelector((state) => state.garden?.gardenDTO?.items);
   const bonsais = useSelector((state) => state.bonsai?.customerBonsai.items);
@@ -120,7 +132,7 @@ function StepOne(propsStepOne) {
           >
             + Thêm vườn
           </button>
-          <AddCustomerGarden />
+          <AddCustomerGarden {...props} />
         </div>
       ) : (
         <div className="">
@@ -245,7 +257,7 @@ function StepOne(propsStepOne) {
         </div>
       ) : (
         <div>
-          {bonsaiLoading ? (
+          {loading ? (
             <Loading loading={loadingGarden} />
           ) : (
             <div className="">
