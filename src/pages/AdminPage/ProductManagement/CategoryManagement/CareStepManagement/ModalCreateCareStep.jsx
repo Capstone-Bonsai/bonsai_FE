@@ -31,7 +31,7 @@ const ModalCreateCareStep = (props) => {
   const createCareStep = (input) => {
     try {
       console.log(input);
-      postCareStep(input)
+      postCareStep({ categoryId: categoryId, careSteps: input.careSteps })
         .then((data) => {
           toast.success("Thêm công việc thành công!");
           dispatch(allCareStep(categoryId));
