@@ -16,7 +16,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import { formatPrice } from "../../../components/formatPrice/FormatPrice";
-import { getStatusText } from "../../../components/status/contractStatus";
+import {
+  getStatusText,
+  getStatusColor,
+} from "../../../components/status/contractStatus";
 import { allServiceOrder } from "../../../redux/slice/serviceOrderSlice";
 import ModalCreateServiceOrderImages from "./ModalCreateServiceOrderImages";
 import ModalUpateServiceOrderPrice from "./ModalUpateServiceOrderPrice";
@@ -221,19 +224,7 @@ function ServiceOrder() {
       dataIndex: "serviceOrderStatus",
       key: "serviceOrderStatus",
       render: (_, record) => (
-        <Tag
-          className={`${
-            record?.serviceOrderStatus == 1 ||
-            record?.serviceOrderStatus == 2 ||
-            record?.serviceOrderStatus == 4 ||
-            record?.serviceOrderStatus == 5 ||
-            record?.serviceOrderStatus == 6 ||
-            record?.serviceOrderStatus == 9 ||
-            record?.serviceOrderStatus == 10
-              ? "text-[red]"
-              : "text-[#3a9943]"
-          }`}
-        >
+        <Tag color={getStatusColor(record?.serviceOrderStatus)}>
           {getStatusText(record?.serviceOrderStatus)}
         </Tag>
       ),
@@ -251,7 +242,7 @@ function ServiceOrder() {
     //   },
     // },
     {
-      title: "Số lượng gardener",
+      title: "Số người làm vườn",
       dataIndex: "numberOfGardener",
       key: "numberOfGardener",
       render: (_, record) => (

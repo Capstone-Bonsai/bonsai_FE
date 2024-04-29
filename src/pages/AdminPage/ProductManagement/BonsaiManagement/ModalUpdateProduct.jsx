@@ -160,7 +160,7 @@ const ModalUpdateProduct = (props) => {
         })
         .catch((err) => {
           console.log(err);
-          toast.error("Đã xảy ra sự cố!");
+          toast.error(err.response.data);
         })
         .finally(() => {
           setConfirmLoading(false);
@@ -172,15 +172,18 @@ const ModalUpdateProduct = (props) => {
     }
   };
   const onSubmit = (i) => {
+    console.log(formData);
     formData.Image = listImage?.map((image) => image);
     const postData = new FormData();
     postData.append("CategoryId", formData.CategoryId);
     postData.append("StyleId", formData.StyleId);
     postData.append("Name", formData.Name);
     postData.append("Description", formData.Description);
-    postData.append("YearOfPlanting", formData.YearOfPlanting);
+    formData.YearOfPlanting !== null
+      ? postData.append("YearOfPlanting", formData.YearOfPlanting)
+      : {};
     postData.append("TrunkDimenter", formData.TrunkDimenter);
-    postData.append("Height", formData.Height);
+    formData.Height !== null ? postData.append("Height", formData.Height) : {};
     postData.append("NumberOfTrunk", formData.NumberOfTrunk);
     postData.append("Price", formData.Price);
     postData.append("DeliverySize", formData.DeliverySize);
@@ -456,7 +459,7 @@ const ModalUpdateProduct = (props) => {
               </div>
             </Form.Item>
             <Form.Item
-              label="Upload ảnh"
+              label="Đăng tải ảnh"
               valuePropName="fileList"
               getValueFromEvent={normFile}
             >

@@ -136,9 +136,9 @@ const ModalCreateServiceOrderImages = (props) => {
     }
   };
   const onSubmit = (i) => {
-    formData.image = listImage?.map((image) => image?.originFileObj);
+    formData.image = listImage[0] ? listImage[0].originFileObj : null;
     const postData = new FormData();
-    formData.image?.map((image) => postData.append("Image", image));
+    postData.append("Contract", formData.image);
     console.log(formData);
     formRef.current
       .validateFields()
@@ -209,7 +209,7 @@ const ModalCreateServiceOrderImages = (props) => {
                   handleChange(e.fileList);
                 }}
               >
-                {uploadButton}
+                {listImage.length >= 1 ? null : uploadButton}
               </Upload>
             </Form.Item>
           </Form>

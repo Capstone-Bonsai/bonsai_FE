@@ -2,7 +2,7 @@ import axios from "./axiosCustomize";
 
 const postServieOrderImages = (serviceOrderId, postData) => {
   console.log(postData, serviceOrderId);
-  return axios.post(`/ServiceOrder/Image/${serviceOrderId}`, postData, {
+  return axios.post(`/ServiceOrder/AddContract/${serviceOrderId}`, postData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

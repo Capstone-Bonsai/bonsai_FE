@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Input, Modal, Form, Select } from "antd";
+import { Input, Modal, Form, Select, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { putComplaint } from "../../../utils/complaintApi";
 import { serviceOrderById } from "../../../redux/slice/serviceOrderSlice";
+import { getComplaintStatusText } from "../../../components/status/complaintStatus";
 
 const ModalUpdateComplaint = (props) => {
   const [form] = Form.useForm();
@@ -21,14 +22,14 @@ const ModalUpdateComplaint = (props) => {
 
   const handleClose = () => {
     setFormData({
-      complaintStatus: "",
+      //complaintStatus: "",
       cancelReason: "",
     });
     form.resetFields();
     setShow(false);
   };
   const [formData, setFormData] = useState({
-    complaintStatus: "",
+    //complaintStatus: "",
     cancelReason: "",
   });
   const dispatch = useDispatch();
@@ -54,8 +55,14 @@ const ModalUpdateComplaint = (props) => {
 
   const updateComplaint = (data) => {
     try {
-      console.log(data);
-      putComplaint(complaint?.id, data)
+      console.log({
+        complaintStatus: selectingStatus,
+        cancelReason: data,
+      });
+      putComplaint(complaint?.id, {
+        complaintStatus: selectingStatus,
+        cancelReason: data,
+      })
         .then((data) => {
           toast.success("Cập nhật thành công!");
           dispatch(serviceOrderById(serviceOrderId));
@@ -116,7 +123,11 @@ const ModalUpdateComplaint = (props) => {
             initialValues={formData}
             disabled={formDisabled}
           >
-            <Form.Item
+            <Button onClick={() => setSelectingStatus(2)}>
+              Xác nhận kiến nghị
+            </Button>
+            <Button onClick={() => setSelectingStatus(3)}>Hủy bỏ</Button>
+            {/* <Form.Item
               label="Trạng thái khiếu nại"
               rules={[
                 { required: true, message: "Trạng thái không được để trống!" },
@@ -134,17 +145,36 @@ const ModalUpdateComplaint = (props) => {
                   ))}
                 </Select>
               </Form.Item>
-            </Form.Item>
+            </Form.Item> */}
+            {selectingStatus ? (
+              <>
+                <Form.Item
+                  label="Trạng thái khiếu nại"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Trạng thái không được để trống!",
+                    },
+                  ]}
+                >
+                  <div> {getComplaintStatusText(selectingStatus)}</div>
+                </Form.Item>
+              </>
+            ) : (
+              <></>
+            )}
             {selectingStatus == 3 ? (
-              <Form.Item
-                label="Lý do"
-                name="cancelReason"
-                rules={[
-                  { required: true, message: "Lý do không được để trống!" },
-                ]}
-              >
-                <Input />
-              </Form.Item>
+              <>
+                <Form.Item
+                  label="Lý do"
+                  name="cancelReason"
+                  rules={[
+                    { required: true, message: "Lý do không được để trống!" },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </>
             ) : (
               <></>
             )}
