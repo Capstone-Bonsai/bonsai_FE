@@ -69,7 +69,8 @@ function AddCustomerGarden(props) {
       setLoading(false);
       toast.success("Thêm vườn thành công");
     } catch (error) {
-      toast.error("Thêm vườn không thành công", error);
+      toast.error(error.response.data);
+      setLoading(false);
     }
   };
 
