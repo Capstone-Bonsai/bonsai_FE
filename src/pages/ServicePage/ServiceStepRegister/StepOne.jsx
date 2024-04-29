@@ -274,8 +274,7 @@ function StepOne(propsStepOne) {
                           <div className="">Code :{bonsai?.bonsai?.code}</div>
                           <div>Năm trồng: {bonsai?.bonsai?.yearOfPlanting}</div>
                           <div>
-                            Diện tích thân: {bonsai?.bonsai?.trunkDimenter}cm
-                            <sup>2</sup>
+                            Kích thước thân: {bonsai?.bonsai?.trunkDimenter}cm
                           </div>
                           <div>Chiều cao: {bonsai?.bonsai?.height}m</div>
                         </div>

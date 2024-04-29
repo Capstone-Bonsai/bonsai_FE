@@ -51,7 +51,7 @@ function CustomerBonsai() {
               ) : (
                 <div className="flex flex-col gap-5">
                   {bonsais?.map((bonsai) => (
-                    <div key={bonsai?.id} className="border flex relative">
+                    <div key={bonsai?.id} className="border flex relative gap-3 p-3">
                       <div className="w-[200px] h-[200px]">
                         <img
                           className="w-full h-full object-cover"
@@ -72,10 +72,10 @@ function CustomerBonsai() {
                           Năm trồng: {bonsai?.bonsai?.yearOfPlanting}
                         </div>
                         <div className="text-[14px]">
-                          Kích thước thân: {bonsai?.bonsai?.trunkDimenter}
+                          Kích thước thân: {bonsai?.bonsai?.trunkDimenter}cm
                         </div>
                         <div className="text-[14px]">
-                          Chiều cao: {bonsai?.bonsai?.height}
+                          Chiều cao: {bonsai?.bonsai?.height}m
                         </div>
                         <div className="text-[14px]">
                           Số thân: {bonsai?.bonsai?.numberOfTrunk}

@@ -144,17 +144,19 @@ function BonsaiDetail() {
                 </div>
                 <div className="opacity-70 text-[15px]">
                   <div>
-                    <span className="">Hoành cây:</span>{" "}
-                    {bonsaiDetail.trunkDimenter}
+                    <span className="">Kích thước thân: </span>{" "}
+                    {bonsaiDetail.trunkDimenter}cm
                   </div>
                   <div>
                     Chiều cao:{" "}
-                    {bonsaiDetail.height != null
-                      ? bonsaiDetail.height
-                      : "Không có thông tin"}
+                    {bonsaiDetail.height != null ? (
+                      <> {bonsaiDetail.height}m</>
+                    ) : (
+                      "Không có thông tin"
+                    )}
                   </div>
                   <div>
-                    Năm tuổi:{" "}
+                    Trồng năm:
                     {bonsaiDetail.yearOfPlanting != null
                       ? bonsaiDetail.yearOfPlanting
                       : "Không có thông tin"}
