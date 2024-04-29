@@ -32,6 +32,7 @@ function ModalBonsaiCustomer(props) {
 
     setImgBonsai(updatedImageBonsai);
     setFile(updatedFiles);
+    e.target.value = null;
   };
   const handleRemoveImage = (index) => {
     const updatedImageBonsai = [...imgBonsai];
@@ -334,15 +335,15 @@ function ModalBonsaiCustomer(props) {
                 imgBonsai.map((imgBonsaiItem, index) => (
                   <div
                     key={index}
-                    className="relative p-10 border rounded-[10px]"
+                    className="relative rounded-[10px] w-[220px] h-[220px]"
                   >
                     <img
                       src={imgBonsaiItem.imageURL}
-                      className="object-cover w-[130px] h-[130px]"
+                      className="object-cover w-full h-full"
                       alt=""
                     />
                     <button
-                      className="absolute top-0 right-2 text-[#f2f2f2] text-[30px]"
+                      className="absolute top-0 right-2 text-[#f2f2f2] text-[30px] hover:text-[#3a9943]"
                       onClick={() => handleRemoveImage(index)}
                     >
                       <CloseCircleOutlined />

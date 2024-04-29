@@ -44,8 +44,11 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
   };
 
   return (
-    <div>
-      <button className="m-3" onClick={() => setBonsaiDetail(false)}>
+    <div className="mt-3">
+      <button
+        className="text-[20px] ml-5 w-[30px] h-[30px] rounded-full hover:bg-[#3a9943] hover:text-[#fff] flex items-center justify-center"
+        onClick={() => setBonsaiDetail(false)}
+      >
         <ArrowLeftOutlined />
       </button>
       {loading ? (

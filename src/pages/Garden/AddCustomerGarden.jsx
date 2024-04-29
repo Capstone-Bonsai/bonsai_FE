@@ -30,6 +30,8 @@ function AddCustomerGarden(props) {
 
     setImageGarden(updatedImageGarden);
     setFile(updatedFiles);
+
+    e.target.value = null;
   };
   const handleRemoveImage = (index) => {
     const updatedImageGarden = [...imageGarden];
@@ -80,7 +82,7 @@ function AddCustomerGarden(props) {
           </button>
         </form>
         <h3 className="font-bold text-lg">Thêm vườn của bạn</h3>
-        <div>
+        <div className="my-3">
           <div className="text-[#3a9943]">Địa chỉ</div>
           <div
             className={`w-full border ${
@@ -101,7 +103,7 @@ function AddCustomerGarden(props) {
             ""
           )}
         </div>
-        <div className="">
+        <div className="my-2">
           <div className="text-[#3a9943]">
             Diện tích/m<sup>2</sup>
           </div>
@@ -136,14 +138,17 @@ function AddCustomerGarden(props) {
         <div className="flex flex-wrap gap-5">
           {imageGarden?.length > 0 ? (
             imageGarden?.map((image, index) => (
-              <div key={index} className="relative p-10 border rounded-[10px]">
+              <div
+                key={index}
+                className="relative rounded-[10px] w-[220px] h-[220px]"
+              >
                 <img
                   src={image.imageURL}
-                  className="object-cover w-[130px] h-[130px]"
+                  className="object-cover w-full h-full"
                   alt=""
                 />
                 <button
-                  className="absolute top-0 right-2 text-[#f2f2f2] text-[30px]"
+                  className="absolute top-0 right-2 text-[#f2f2f2] text-[30px] hover:text-[#3a9943]"
                   onClick={() => handleRemoveImage(index)}
                 >
                   <CloseCircleOutlined />
