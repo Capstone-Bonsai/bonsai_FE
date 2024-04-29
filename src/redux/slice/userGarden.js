@@ -79,7 +79,7 @@ export const addCustomerGarden = async (formData) => {
   }
 };
 
-export const moveBonsai = async ({customerBonsaiId, customerGardenId}) => {
+export const moveBonsai = async ({ customerBonsaiId, customerGardenId }) => {
   try {
     const response = await axios.put(
       `/CustomerBonsai/MoveBonsai?customerBonsaiId=${customerBonsaiId}&customerGardenId=${customerGardenId}`
@@ -101,12 +101,22 @@ export const updateCustomerGarden = async (formData, gardenId) => {
   }
 };
 
-export const addBonsaiBuyFromStore = async (bonsaiId, customerGardenId) => {
+export const addBonsaiBuyFromStore = async (payload) => {
   try {
-    const response = await axios.post(`/CustomerBonsai/BoughtBonsai`, {
-      bonsaiId,
-      customerGardenId,
-    });
+    const response = await axios.post(`/CustomerBonsai/BoughtBonsai`, payload);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const newGardenForBought = async (formData) => {
+  try {
+    const response = await axios.post(
+      `/CustomerBonsai/NewGardenForBought`,
+      formData
+    );
     console.log(response.data);
     return response.data;
   } catch (error) {
