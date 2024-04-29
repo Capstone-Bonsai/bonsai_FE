@@ -70,7 +70,7 @@ function ContractUser() {
                         <div className="w-full relative" key={contract.id}>
                           <div className="">
                             <div className="flex justify-between">
-                              <div className="flex gap-2">
+                              <div className="flex gap-2 w-[35%] ">
                                 Thời gian làm:
                                 <div>
                                   {new Date(
@@ -84,8 +84,8 @@ function ContractUser() {
                                   ).toLocaleDateString()}
                                 </div>
                               </div>
-                              <div>{contract.address}</div>
-                              <div>
+                              <div className="w-[40%]">{contract.address}</div>
+                              <div className="w-[20%]">
                                 Tình trạng:{" "}
                                 <span
                                   className={`${
