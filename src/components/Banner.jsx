@@ -94,13 +94,13 @@ function Banner() {
     if (userInfo != null) {
       const cartIdUser = `cartId ${idUser}`;
       const cartItems = cookies.get(cartIdUser) || [];
-      const itemCount = cartItems.length;
+      const itemCount = cartItems?.length;
       // setCountCartItems(cartItems);
       setCountCart(itemCount);
       dispatch(setCartFromCookie({ itemCount }));
     } else {
       const cartItems = cookies.get("cartItems") || [];
-      const itemCount = cartItems.length;
+      const itemCount = cartItems?.length;
       // setCountCartItems(cartItems);
       setCountCart(itemCount);
       dispatch(setCartFromCookie({ itemCount }));

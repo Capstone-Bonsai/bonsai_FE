@@ -50,6 +50,7 @@ function Order() {
   const [deliveryFeeInfo, setDeliveryFeeInfo] = useState({});
 
   //validate
+  const [addressError, setAddressError] = useState("");
   const [otpError, setOtpError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [fullNameError, setFullNameError] = useState("");
@@ -134,7 +135,8 @@ function Order() {
     fetchDeliveryFee();
   }, [address]);
 
-  const handleOrder = async () => {
+  const handleOrder = async (e) => {
+    e.preventDefault();
     const dataOrder = {
       orderInfo: {
         fullname: userProfile ? userProfile.fullname : fullNameNoneLogin,
@@ -149,6 +151,10 @@ function Order() {
     };
     if (!userInfo) {
       dataOrder.otpCode = otpOrder;
+    }
+    if (address.trim() === "") {
+      setAddressError("Vui lòng nhập địa chỉ.");
+      return;
     }
     try {
       cookies.set("userTemp", {
@@ -165,10 +171,7 @@ function Order() {
       window.location.href = res;
     } catch (error) {
       setBarLoader(false);
-      if (address.trim() === "") {
-        toast.error("Vui lòng nhập địa chỉ.");
-        return;
-      }
+
       console.log(error);
       console.log(Array.isArray(error.data));
       if (Array.isArray(error.data)) {
@@ -420,9 +423,14 @@ function Order() {
                       <div className="text-[24px] font-bold text-[#3e9943]">
                         Địa chỉ
                       </div>
-                      <div className="border border-black py-2 rounded-[10px]">
+                      <div
+                        className={`border ${
+                          addressError != "" ? "border-[red]" : "border-black"
+                        } py-2 rounded-[10px]`}
+                      >
                         <CompletedAddress setAddress={setAddress} />
                       </div>
+                      {addressError != "" ? <div className="text-[red] text-[14px]">{addressError}</div> : ""}
                     </div>
                     <div className="mt-5">
                       <div className="text-[24px] font-bold  text-[#3e9943]">

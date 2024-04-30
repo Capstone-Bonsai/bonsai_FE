@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MinHeight from "../../components/MinHeight";
 import NavbarUser from "../Auth/NavbarUser";
-import { Pagination } from "antd";
+import { Pagination, Tag } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { listAllContract } from "../../redux/slice/contractSlice";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
@@ -9,7 +9,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import ContractUserDetail from "./ContractUserDetail";
 import Loading from "../../components/Loading";
 import { AuditOutlined } from "@ant-design/icons";
-import { getStatusText } from "../../components/status/contractStatus";
+import {
+  getStatusColor,
+  getStatusText,
+} from "../../components/status/contractStatus";
 function ContractUser() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -87,37 +90,37 @@ function ContractUser() {
                                   ).toLocaleDateString()}
                                 </div>
                               </div>
-                              <div className="w-[40%]">{contract.address}</div>
-                              <div className="w-[20%]">
-                                <span className="font-bold"> Tình trạng: </span>
-                                <span
-                                  className={`${
-                                    contract.contractStatus == 1 ||
-                                    contract.contractStatus == 4 ||
-                                    contract.contractStatus == 5
-                                      ? "text-[red]"
-                                      : "text-[#3a9943]"
-                                  }`}
-                                >
-                                  {getStatusText(contract?.serviceOrderStatus)}
-                                </span>
+                              <div className="text-[#3a9943] text-[20px] text-end">
+                                {contract?.totalPrice == 0
+                                  ? "Đang cập nhật"
+                                  : formatPrice(contract?.totalPrice)}
                               </div>
+                            </div>
+                            <div className="w-[30%]">
+                              <span className="font-bold"> Tình trạng: </span>
+                              <Tag
+                                color={getStatusColor(
+                                  contract?.serviceOrderStatus
+                                )}
+                              >
+                                {getStatusText(contract?.serviceOrderStatus)}
+                              </Tag>
                             </div>
                           </div>
                           <div className="w-full border-b flex items-center">
                             <div className="w-[75%]">
                               <div>
-                                Diện tích: {contract.gardenSquare}m<sup>2</sup>
+                                <span className="font-bold"> Diện tích:</span>{" "}
+                                {contract.gardenSquare}m<sup>2</sup>
+                              </div>
+                              <div className="">
+                                <span className="font-bold">Địa chỉ:</span>{" "}
+                                {contract.address}
                               </div>
                               <div>
-                                Quãng đường:{" "}
+                                <span className="font-bold">Quãng đường: </span>
                                 {contract?.distance?.toLocaleString("vi-VN")}km
                               </div>
-                            </div>
-                            <div className="text-[#3a9943] w-[15%]">
-                              {contract?.totalPrice == 0
-                                ? "Đang cập nhật"
-                                : formatPrice(contract?.totalPrice)}
                             </div>
                             <button
                               onClick={() => {

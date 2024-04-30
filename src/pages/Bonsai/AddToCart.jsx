@@ -19,15 +19,15 @@ export const addToCart = async (
   if (!Array.isArray(cartItems)) {
     cartItems = [];
   }
-  const isProductExist = cartItems.some((item) => item === bonsaiId);
+  const isProductExist = cartItems?.some((item) => item === bonsaiId);
   if (isProductExist) {
     toast.info("Sản phẩm đã có trong giỏ hàng!");
     return;
   }
-  cartItems.push(bonsaiId);
+  cartItems?.push(bonsaiId);
   toast.success("Đã thêm sản phẩm vào giỏ hàng!");
   const cartId = !idUser ? "cartItems" : `cartId ${idUser}`;
   await cookies.set(cartId, cartItems, { path: "/" });
-  const itemCount = cartItems.length;
+  const itemCount = cartItems?.length;
   dispatch(setCartFromCookie({ itemCount }));
 };

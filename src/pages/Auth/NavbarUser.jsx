@@ -11,24 +11,24 @@ function NavbarUser() {
   ];
   const location = useLocation();
   const [selectedItem, setSelectedItem] = useState(
-    menuItems.find((item) => item.path === location.pathname)
+    menuItems?.find((item) => item.path === location.pathname)
   );
   const navigate = useNavigate();
   useEffect(() => {
-    setSelectedItem(menuItems.find((item) => item.path === location.pathname));
+    setSelectedItem(menuItems?.find((item) => item.path === location.pathname));
   }, [location.pathname]);
 
   const handleNavigation = (path) => {
     navigate(path);
     if (selectedItem?.path !== path) {
-      setSelectedItem(menuItems.find((item) => item.path === path));
+      setSelectedItem(menuItems?.find((item) => item.path === path));
     }
   };
 
   return (
     <nav className="border w-[20%] h-[400px]">
       <ul className=" w-full">
-        {menuItems.map((item, index) => (
+        {menuItems?.map((item, index) => (
           <button
             key={index}
             className={`p-4 text-start border text-black w-full hover:bg-[#3e9943] hover:text-[#ffffff] ${

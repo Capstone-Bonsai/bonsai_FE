@@ -41,11 +41,11 @@ function ShoppingCart() {
   };
 
   const handleRemoveItem = async (bonsaiIdToRemove) => {
-    const updatedCartItems = cartItems.filter(
+    const updatedCartItems = cartItems?.filter(
       (bonsaiId) => bonsaiId !== bonsaiIdToRemove
     );
     await updateCartItems(updatedCartItems);
-    const itemCount = updatedCartItems.length;
+    const itemCount = updatedCartItems?.length;
     dispatch(setCartFromCookie({ itemCount }));
   };
   const subTotal = () => {
@@ -61,7 +61,7 @@ function ShoppingCart() {
       currency: "VND",
     }).format(price);
   };
-  const totalCountItems = cartItems.length;
+  const totalCountItems = cartItems?.length;
   useEffect(() => {
     const disabledItemExists = bonsais.some((item) => item.isDisable);
     setIsDisabledItem(disabledItemExists);
