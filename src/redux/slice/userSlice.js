@@ -30,7 +30,7 @@ export const fetchUserById = createAsyncThunk(
 
 export const notificationUser = createAsyncThunk(
   "bonsai/notification",
-  async ({pageIndex, pageSize}) => {
+  async ({ pageIndex, pageSize }) => {
     try {
       const response = await axios.get(
         `/Notification/Pagination?pageIndex=${pageIndex}&pageSize=${pageSize}`
@@ -43,10 +43,24 @@ export const notificationUser = createAsyncThunk(
   }
 );
 
+export const seenNotfi = createAsyncThunk(
+  "bonsai/seenNotfi",
+  async (notiId) => {
+    try {
+      const response = await axios.get(`/Notification/${notiId}`);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 const initialState = {
   listUser: {},
   userById: {},
   notification: {},
+  notiDetail: {},
   pagination: {},
   loading: false,
   msg: {},
@@ -109,6 +123,21 @@ const userSlice = createSlice({
         state.notification = {};
         state.notification.msg = "Error loading data";
         state.notification.loading = false;
+      })
+      .addCase(seenNotfi.pending, (state) => {
+        state.notiDetail.msg = "Loading...";
+        state.notiDetail.loading = true;
+      })
+
+      .addCase(seenNotfi.fulfilled, (state, action) => {
+        state.notiDetail = action.payload;
+        state.notiDetail.msg = "Data loaded successfully";
+        state.notiDetail.loading = false;
+      })
+      .addCase(seenNotfi.rejected, (state) => {
+        state.notiDetail = {};
+        state.notiDetail.msg = "Error loading data";
+        state.notiDetail.loading = false;
       });
   },
 });
