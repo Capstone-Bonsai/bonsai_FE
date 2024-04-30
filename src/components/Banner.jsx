@@ -34,7 +34,7 @@ function Banner() {
     { text: "Liên hệ", to: "/contact" },
   ];
   const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
-  const cookies = new Cookies(null, { expires: cookieExpires });
+  const cookies = new Cookies();
   const [countCart, setCountCart] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(5);
@@ -181,9 +181,9 @@ function Banner() {
                 <div className="dropdown">
                   <button className="bg-[#f2f2f2] hover:bg-gray-300 hover:text-[#fff] mx-3 relative rounded-full w-[30px] h-[30px] flex justify-center items-center">
                     <BellOutlined />
-                    <div className="absolute top-[-10px] right-[-5px] bg-[red] w-[20px] h-[20px] text-[14px] text-[#fff] rounded-full">
+                    {/* <div className="absolute top-[-10px] right-[-5px] bg-[red] w-[20px] h-[20px] text-[14px] text-[#fff] rounded-full">
                       0
-                    </div>
+                    </div> */}
                   </button>
                   <ul
                     tabIndex={0}
@@ -288,7 +288,7 @@ function Banner() {
               <img src={SPCus} alt="" />
               <div className="ml-3">
                 <div className="text-[#ffffff]">Chăm sóc khách hàng</div>
-                <div className="text-[#ffdd20]">0912345667</div>
+                <div className="text-[#ffdd20]">0909.045.444</div>
               </div>
             </div>
             <Link

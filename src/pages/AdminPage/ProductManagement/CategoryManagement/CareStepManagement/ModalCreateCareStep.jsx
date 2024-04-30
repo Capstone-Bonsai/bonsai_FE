@@ -20,7 +20,7 @@ const ModalCreateCareStep = (props) => {
   };
   const [formData, setFormData] = useState({
     categoryId: categoryId,
-    detail: "",
+    careSteps: [],
   });
   const dispatch = useDispatch();
   const [confirmLoading, setConfirmLoading] = useState(false);

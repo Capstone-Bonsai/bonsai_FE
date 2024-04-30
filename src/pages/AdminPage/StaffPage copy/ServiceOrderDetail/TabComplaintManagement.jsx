@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../../../components/Loading";
 import ModalUpdateComplaint from "../ModalUpdateComplaint";
+import { getComplaintStatusText } from "../../../../components/status/complaintStatus";
 
 function TabComplaintManagement({ serviceOrderDetail, serviceOrderId }) {
   const dispatch = useDispatch();

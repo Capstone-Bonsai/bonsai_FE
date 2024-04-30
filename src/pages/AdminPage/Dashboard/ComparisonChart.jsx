@@ -1,6 +1,6 @@
 import ReactEcharts from "echarts-for-react";
 
-export default function ComparisonChart({ height, color = [] }) {
+export default function ComparisonChart({ height, color = [], data }) {
 
   const option = {
     grid: { top: "10%", bottom: "10%", right: "5%" },

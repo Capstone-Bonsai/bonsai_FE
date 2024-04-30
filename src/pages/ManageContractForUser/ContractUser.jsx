@@ -9,7 +9,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import ContractUserDetail from "./ContractUserDetail";
 import Loading from "../../components/Loading";
 import { AuditOutlined } from "@ant-design/icons";
-import {getStatusText} from '../../components/status/contractStatus'
+import { getStatusText } from "../../components/status/contractStatus";
 function ContractUser() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -70,8 +70,11 @@ function ContractUser() {
                         <div className="w-full relative" key={contract.id}>
                           <div className="">
                             <div className="flex justify-between">
-                              <div className="flex gap-2">
-                                Thời gian làm:
+                              <div className="flex gap-2 w-[35%] ">
+                                <span className="font-bold">
+                                  {" "}
+                                  Thời gian làm:
+                                </span>
                                 <div>
                                   {new Date(
                                     contract.startDate
@@ -84,9 +87,9 @@ function ContractUser() {
                                   ).toLocaleDateString()}
                                 </div>
                               </div>
-                              <div>{contract.address}</div>
-                              <div>
-                                Tình trạng:{" "}
+                              <div className="w-[40%]">{contract.address}</div>
+                              <div className="w-[20%]">
+                                <span className="font-bold"> Tình trạng: </span>
                                 <span
                                   className={`${
                                     contract.contractStatus == 1 ||
@@ -104,14 +107,10 @@ function ContractUser() {
                           <div className="w-full border-b flex items-center">
                             <div className="w-[75%]">
                               <div>
-                                Diện tích: {contract.gardenSquare}m <sup>2</sup>
+                                Diện tích: {contract.gardenSquare}m<sup>2</sup>
                               </div>
                               <div>
-                                Số lượng người làm vườn:{" "}
-                                {contract.numberOfGardener} người
-                              </div>
-                              <div>
-                                Quãng đường{" "}
+                                Quãng đường:{" "}
                                 {contract?.distance?.toLocaleString("vi-VN")}km
                               </div>
                             </div>

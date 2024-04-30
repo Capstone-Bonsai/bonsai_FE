@@ -215,7 +215,7 @@ function OrderManage() {
       ),
     },
     {
-      title: "Ngày giao",
+      title: "Ngày dự kiến giao hàng giao",
       dataIndex: "expectedDeliveryDate",
       key: "expectedDeliveryDate",
       render: (_, record) => (

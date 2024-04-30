@@ -137,15 +137,20 @@ const ModalCreateProduct = (props) => {
     }
   };
   const onSubmit = (i) => {
+    console.log(formData);
     formData.Image = listImage?.map((image) => image.originFileObj);
     const postData = new FormData();
     postData.append("CategoryId", formData.CategoryId);
     postData.append("StyleId", formData.StyleId);
     postData.append("Name", formData.Name);
     postData.append("Description", formData.Description);
-    postData.append("YearOfPlanting", formData.YearOfPlanting);
+    formData.YearOfPlanting !== undefined
+      ? postData.append("YearOfPlanting", formData.YearOfPlanting)
+      : {};
     postData.append("TrunkDimenter", formData.TrunkDimenter);
-    postData.append("Height", formData.Height);
+    formData.Height !== undefined
+      ? postData.append("Height", formData.Height)
+      : {};
     postData.append("NumberOfTrunk", formData.NumberOfTrunk);
     postData.append("Price", formData.Price);
     postData.append("DeliverySize", formData.DeliverySize);

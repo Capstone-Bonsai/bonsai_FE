@@ -159,7 +159,7 @@ function CustomerGarden() {
                     >
                       + Thêm vườn của bạn
                     </button>
-                    {!gardens ? (
+                    {gardens?.length == 0 ? (
                       <div className="">
                         <img
                           className="w-[30%] m-auto my-5"
@@ -170,12 +170,7 @@ function CustomerGarden() {
                     ) : (
                       ""
                     )}
-                    <AddCustomerGarden
-                      setGardenLoading={setGardenLoading}
-                      gardenLoading={gardenLoading}
-                      setLoading={setLoading}
-                      loading={loading}
-                    />
+                    <AddCustomerGarden {...props} />
                     {gardens?.map((garden) => (
                       <div key={garden.id} className="flex p-4 gap-10">
                         <div className=" h-[250px] w-[45%]">
@@ -314,7 +309,7 @@ function CustomerGarden() {
             )}
           </div>
         </div>
-        {gardens && !gardenDetail ? (
+        {gardens?.length > 0 && !gardenDetail ? (
           <Pagination
             current={pageIndex}
             pageSize={pageSize}

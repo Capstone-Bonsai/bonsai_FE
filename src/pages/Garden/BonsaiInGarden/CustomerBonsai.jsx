@@ -38,7 +38,7 @@ function CustomerBonsai() {
     setBonsaiDetail,
     bonsaiId,
   };
- 
+
   return (
     <MinHeight>
       <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
@@ -50,47 +50,58 @@ function CustomerBonsai() {
                 <Loading loading={bonsaiLoading} isRelative={true} />
               ) : (
                 <div className="flex flex-col gap-5">
-                  {bonsais?.map((bonsai) => (
-                    <div key={bonsai?.id} className="border flex relative">
-                      <div className="w-[200px] h-[200px]">
-                        <img
-                          className="w-full h-full object-cover"
-                          src={
-                            bonsai?.bonsai?.bonsaiImages?.length > 0
-                              ? bonsai?.bonsai?.bonsaiImages[0]?.imageUrl
-                              : noImage
-                          }
-                          alt=""
-                        />
-                      </div>
-                      <div>
-                        <div className="font-bold">{bonsai?.bonsai?.name}</div>
-                        <div className="text-[14px]">
-                          Code: {bonsai?.bonsai?.code}
-                        </div>
-                        <div className="text-[14px]">
-                          Năm trồng: {bonsai?.bonsai?.yearOfPlanting}
-                        </div>
-                        <div className="text-[14px]">
-                          Kích thước thân: {bonsai?.bonsai?.trunkDimenter}
-                        </div>
-                        <div className="text-[14px]">
-                          Chiều cao: {bonsai?.bonsai?.height}
-                        </div>
-                        <div className="text-[14px]">
-                          Số thân: {bonsai?.bonsai?.numberOfTrunk}
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => {
-                          setBonsaiDetail(true), setBonsaiId(bonsai?.id);
-                        }}
-                        className="absolute right-5 bottom-5 hover:text-[#3a9943]"
+                  {bonsais?.length > 0 ? (
+                    bonsais?.map((bonsai) => (
+                      <div
+                        key={bonsai?.id}
+                        className="border flex relative gap-3 p-3"
                       >
-                        Xem chi tiết
-                      </button>
+                        <div className="w-[200px] h-[200px]">
+                          <img
+                            className="w-full h-full object-cover"
+                            src={
+                              bonsai?.bonsai?.bonsaiImages?.length > 0
+                                ? bonsai?.bonsai?.bonsaiImages[0]?.imageUrl
+                                : noImage
+                            }
+                            alt=""
+                          />
+                        </div>
+                        <div>
+                          <div className="font-bold">
+                            {bonsai?.bonsai?.name}
+                          </div>
+                          <div className="text-[14px]">
+                            Code: {bonsai?.bonsai?.code}
+                          </div>
+                          <div className="text-[14px]">
+                            Năm trồng: {bonsai?.bonsai?.yearOfPlanting}
+                          </div>
+                          <div className="text-[14px]">
+                            Hoành cây: {bonsai?.bonsai?.trunkDimenter}cm
+                          </div>
+                          <div className="text-[14px]">
+                            Chiều cao: {bonsai?.bonsai?.height}m
+                          </div>
+                          <div className="text-[14px]">
+                            Số thân: {bonsai?.bonsai?.numberOfTrunk}
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setBonsaiDetail(true), setBonsaiId(bonsai?.id);
+                          }}
+                          className="absolute right-5 bottom-5 hover:text-[#3a9943]"
+                        >
+                          Xem chi tiết
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-[30px] p-3 mt-[150px] text-center">
+                      Bạn chưa có bonsai nào
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </>
@@ -99,13 +110,17 @@ function CustomerBonsai() {
           )}
         </div>
       </div>
-      <Pagination
-        current={pageIndex}
-        pageSize={pageSize}
-        total={totalItemsCount}
-        onChange={handlePageChange}
-        className="text-center mt-5"
-      />
+      {bonsais?.length > 0 ? (
+        <Pagination
+          current={pageIndex}
+          pageSize={pageSize}
+          total={totalItemsCount}
+          onChange={handlePageChange}
+          className="text-center mt-5"
+        />
+      ) : (
+        ""
+      )}
     </MinHeight>
   );
 }

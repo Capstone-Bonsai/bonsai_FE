@@ -2,17 +2,22 @@ import React, { useRef, useState } from "react";
 import CompletedAddress from "../OrderProduct/CompletedAddress";
 import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
 import noImage from "../../assets/unImage.png";
-import { addCustomerGarden } from "../../redux/slice/userGarden";
+import {
+  addCustomerGarden,
+  fetchCustomerGarden,
+} from "../../redux/slice/userGarden";
 import { toast } from "react-toastify";
+import Loading from "../../components/Loading";
 
 function AddCustomerGarden(props) {
-  const { loading, setLoading } = props;
   const [imageGarden, setImageGarden] = useState([]);
   const [newAddress, setNewAddress] = useState("");
   const [newSquare, setNewSquare] = useState("");
   const [errorAddress, setErrorAddress] = useState("");
   const [errorSquare, setErrorSquare] = useState("");
-  const { setGardenLoading, gardenLoading } = props;
+  const [newLoading, setNewLoading] = useState(false);
+  const { setGardenLoading, gardenLoading, loading, setLoading } = props;
+  console.log(gardenLoading);
   const handleUploadClick = () => {
     document.getElementById("upload-input").click();
   };
@@ -30,6 +35,8 @@ function AddCustomerGarden(props) {
 
     setImageGarden(updatedImageGarden);
     setFile(updatedFiles);
+
+    e.target.value = null;
   };
   const handleRemoveImage = (index) => {
     const updatedImageGarden = [...imageGarden];
@@ -60,15 +67,26 @@ function AddCustomerGarden(props) {
     imageGarden.map((image) => {
       formData.append(`Image`, image.file);
     });
-    try {
+    setNewLoading(true);
+    if (setLoading) {
       setLoading(true);
-      await addCustomerGarden(formData);
-      setGardenLoading(!gardenLoading);
-      setLoading(false);
-      toast.success("Thêm vườn thành công");
-    } catch (error) {
-      toast.error("Thêm vườn không thành công", error);
     }
+    addCustomerGarden(formData)
+      .then(() => {
+        setGardenLoading(!gardenLoading);
+        toast.success("Thêm vườn thành công");
+        dispatch(fetchCustomerGarden({ pageIndex: 0, pageSize: 5 }));
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data);
+      })
+      .finally(() => {
+        if (setLoading) {
+          setLoading(true);
+        }
+        setNewLoading(false);
+        document.getElementById("my_modal_1").close();
+      });
   };
 
   return (
@@ -79,105 +97,111 @@ function AddCustomerGarden(props) {
             ✕
           </button>
         </form>
-        <h3 className="font-bold text-lg">Thêm vườn của bạn</h3>
-        <div>
-          <div className="text-[#3a9943]">Địa chỉ</div>
-          <div
-            className={`w-full border ${
-              errorAddress != "" ? "border-[red]" : ""
-            } `}
-          >
-            <input
-              type="hidden"
-              onChange={() => setErrorAddress("")}
-              name=""
-              id=""
-            />
-            <CompletedAddress className="" setAddress={setNewAddress} />
-          </div>
-          {errorAddress != "" ? (
-            <div className="text-[#ff4d4f] text-[14px]">{errorAddress}</div>
-          ) : (
-            ""
-          )}
-        </div>
-        <div className="">
-          <div className="text-[#3a9943]">
-            Diện tích/m<sup>2</sup>
-          </div>
-          <input
-            value={newSquare}
-            onChange={(e) => {
-              setNewSquare(e.target.value), setErrorSquare("");
-              setErrorAddress("");
-            }}
-            className={`border outline-none w-full px-2 h-[40px] ${
-              errorSquare != "" ? "border-[#ff4d4f]" : ""
-            }`}
-            type="number"
-            name=""
-            id=""
-          />
-          {errorSquare != "" ? (
-            <div className="text-[#ff4d4f] text-[14px]">{errorSquare}</div>
-          ) : (
-            ""
-          )}
-        </div>
-        <div className="my-2  ">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            style={{ display: "none" }}
-            id="upload-input"
-          />
-        </div>
-        <div className="flex flex-wrap gap-5">
-          {imageGarden?.length > 0 ? (
-            imageGarden?.map((image, index) => (
-              <div key={index} className="relative p-10 border rounded-[10px]">
-                <img
-                  src={image.imageURL}
-                  className="object-cover w-[130px] h-[130px]"
-                  alt=""
+        {newLoading ? (
+          <Loading loading={newLoading} isRelative={true} />
+        ) : (
+          <>
+            <h3 className="font-bold text-lg">Thêm vườn của bạn</h3>
+            <div className="my-3">
+              <div className="text-[#3a9943]">Địa chỉ</div>
+              <div
+                className={`w-full border ${
+                  errorAddress != "" ? "border-[red]" : ""
+                } `}
+              >
+                <input
+                  type="hidden"
+                  onChange={() => setErrorAddress("")}
+                  name=""
+                  id=""
                 />
+                <CompletedAddress className="" setAddress={setNewAddress} />
+              </div>
+              {errorAddress != "" ? (
+                <div className="text-[#ff4d4f] text-[14px]">{errorAddress}</div>
+              ) : (
+                ""
+              )}
+            </div>
+            <div className="my-2">
+              <div className="text-[#3a9943]">
+                Diện tích/m<sup>2</sup>
+              </div>
+              <input
+                value={newSquare}
+                onChange={(e) => {
+                  setNewSquare(e.target.value), setErrorSquare("");
+                  setErrorAddress("");
+                }}
+                className={`border outline-none w-full px-2 h-[40px] ${
+                  errorSquare != "" ? "border-[#ff4d4f]" : ""
+                }`}
+                type="number"
+                name=""
+                id=""
+              />
+              {errorSquare != "" ? (
+                <div className="text-[#ff4d4f] text-[14px]">{errorSquare}</div>
+              ) : (
+                ""
+              )}
+            </div>
+            <div className="my-2  ">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+                id="upload-input"
+              />
+            </div>
+            <div className="flex flex-wrap gap-5">
+              {imageGarden?.length > 0 ? (
+                imageGarden?.map((image, index) => (
+                  <div
+                    key={index}
+                    className="relative rounded-[10px] w-[220px] h-[220px]"
+                  >
+                    <img
+                      src={image.imageURL}
+                      className="object-cover w-full h-full"
+                      alt=""
+                    />
+                    <button
+                      className="absolute top-0 right-2 text-[#f2f2f2] text-[30px] hover:text-[#3a9943]"
+                      onClick={() => handleRemoveImage(index)}
+                    >
+                      <CloseCircleOutlined />
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <img
+                  src={noImage}
+                  className="object-cover w-[100px] h-[100px]"
+                  alt="No Image"
+                />
+              )}
+            </div>
+            {imageGarden?.length < 4 ? (
+              <div className="text-center">
                 <button
-                  className="absolute top-0 right-2 text-[#f2f2f2] text-[30px]"
-                  onClick={() => handleRemoveImage(index)}
+                  onClick={() => handleUploadClick()}
+                  className="border p-1 rounded-lg my-5 outline-none"
                 >
-                  <CloseCircleOutlined />
+                  <UploadOutlined />
+                  Thêm hình ảnh
                 </button>
               </div>
-            ))
-          ) : (
-            <img
-              src={noImage}
-              className="object-cover w-[100px] h-[100px]"
-              alt="No Image"
-            />
-          )}
-        </div>
-        {imageGarden?.length < 4 ? (
-          <div className="text-center">
-            <button
-              onClick={() => handleUploadClick()}
-              className="border p-1 rounded-lg my-5 outline-none"
-            >
-              <UploadOutlined />
-              Thêm hình ảnh
-            </button>
-          </div>
-        ) : (
-          "Bạn chỉ có thể thêm tối đa 4 ảnh"
-        )}
-        <div className="modal-action">
-          <form onSubmit={handleAddNewGarden} method="dialog">
-            <button type="submit" className="btn">
+            ) : (
+              "Bạn chỉ có thể thêm tối đa 4 ảnh"
+            )}
+
+            <button onClick={handleAddNewGarden} type="submit" className="btn">
               Thêm vườn
             </button>
-          </form>
-        </div>
+          </>
+        )}
       </div>
     </dialog>
   );

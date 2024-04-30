@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavbarUser from "../Auth/NavbarUser";
 import MinHeight from "../../components/MinHeight";
 import { useDispatch, useSelector } from "react-redux";
-import { LeftCircleOutlined } from "@ant-design/icons";
+import { LeftCircleOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import {
   contractDetailById,
   listTask,
@@ -67,10 +67,10 @@ function ContractUserDetail(props) {
       ) : (
         <div className="w-full relative">
           <button
-            className="absolute top-[-10px] left-[-10px]"
+            className="text-[20px] ml-5 w-[30px] h-[30px] rounded-full hover:bg-[#3a9943] hover:text-[#fff] flex items-center justify-center"
             onClick={() => props.setSelectedDetail(false)}
           >
-            <LeftCircleOutlined className="text-[20px]" />
+            <ArrowLeftOutlined />
           </button>
           <div className="mt-3 h-full">
             <div className="text-center text-lg font-bold">Đơn dịch vụ</div>
@@ -158,14 +158,16 @@ function ContractUserDetail(props) {
                           <div className="border-b">
                             <div>
                               Khoảng cách:
-                              {contractDetail.distance?.toLocaleString("vi-VN")}
+                              {contractDetail.distance?.toLocaleString("vi-VN")}km
                             </div>
                           </div>
                           <div>
                             Tổng:{" "}
                             <span className="text-[#3a9943]">
                               {" "}
-                              {formatPrice(contractDetail.totalPrice)}
+                              {contractDetail?.totalPrice != 0
+                                ? formatPrice(contractDetail.totalPrice)
+                                : "Đang cập nhật"}
                             </span>
                           </div>
                         </div>
@@ -315,7 +317,9 @@ function ContractUserDetail(props) {
                     )}
                   </div>
                 ) : (
-                  <div className="text-[30px] text-[red]">{contractDetail?.error}</div>
+                  <div className="text-[30px] text-[red]">
+                    {contractDetail?.error}
+                  </div>
                 )}
               </>
             )}

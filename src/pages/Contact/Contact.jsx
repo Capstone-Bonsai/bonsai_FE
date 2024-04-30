@@ -6,10 +6,14 @@ function Contact() {
   return (
     <MinHeight>
       <div className="my-5 m-auto w-[70%] flex justify-between px-10 ">
-        <div className="w-[50%] ">
-          <img src={bg_thanhson} className="w-full rounded-[10px] drop-shadow-lg" alt="" />
+        <div className="w-[58%] ">
+          <img
+            src={bg_thanhson}
+            className="w-full rounded-[10px] drop-shadow-lg"
+            alt=""
+          />
         </div>
-        <div className="bg-[#f2f2f2] w-[40%] p-10">
+        <div className="bg-[#f2f2f2] w-[40%] p-5">
           <div className="text-[32px] text-[#333333] font-[500] mb-5">
             Giới thiệu
           </div>
@@ -33,7 +37,7 @@ function Contact() {
             <div className="text-[20px] font-[500] text-[#222222] gap-2 flex items-center ">
               <PhoneOutlined /> Số điện thoại
             </div>
-            <div className="text-[15px] text-[#666666]">09234234</div>
+            <div className="text-[15px] text-[#666666]">0909.045.444</div>
           </div>
           <div>
             <div className="text-[20px] font-[500] text-[#222222] gap-2 flex items-center">
@@ -41,7 +45,7 @@ function Contact() {
               <MailOutlined /> Email
             </div>
             <div className="text-[15px] text-[#666666]">
-              thanhsonGarden@gmail.com
+              caycanhlamdongTTS@gmail.com
             </div>
           </div>
         </div>

@@ -22,7 +22,38 @@ export const getStatusText = (status) => {
       return "Đang xử lý khiếu nại";
     case 11:
       return "Hoàn thành xử lý khiếu nại";
+    case 12:
+      return "Từ chối khiếu nại";
     default:
       return "Trạng thái không xác định";
+  }
+};
+
+export const getStatusColor = (status) => {
+  switch (status) {
+    case 1:
+      return "blue";
+    case 2:
+      return "blue";
+    case 3:
+      return "green";
+    case 4:
+      return "yellow";
+    case 5:
+      return "red";
+    case 6:
+      return "red";
+    case 7:
+      return "green";
+    case 8:
+      return "green";
+    case 9:
+      return "yellow";
+    case 10:
+      return "yellow";
+    case 11:
+      return "green";
+    case 12:
+      return "red";
   }
 };

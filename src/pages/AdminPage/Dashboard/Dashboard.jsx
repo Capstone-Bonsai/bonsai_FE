@@ -143,7 +143,7 @@ export default function Dashboard() {
                     <div className="grid grid-cols-3 h-[100%]">
                       <div className="col-span-2">
                         <div className="font-semibold text-md pb-4 h-[70%]">
-                          Đơn hàng dịch đang diễn ra
+                          Đơn hàng dịch vụ đang diễn ra
                         </div>
                         <div className="font-semibold text-lg">
                           {dashboardDatas?.currentServiceOngoing} Đơn hàng
@@ -163,11 +163,11 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-4 gap-8">
+                <div className="grid grid-cols-4 gap-4a">
                   <div className="col-span-3 m-2 ">
                     <div className="bg-[#ffffff] drop-shadow-2xl rounded-md p-6 ">
                       <div className="font-bold text-xl">
-                        Tông doanh thu dịch vụ
+                        Tổng doanh thu dịch vụ
                       </div>
                       <div>
                         <LineChart

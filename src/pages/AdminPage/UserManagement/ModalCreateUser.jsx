@@ -371,7 +371,7 @@ const ModalCreateUser = (props) => {
                 onPreview={handlePreview}
                 beforeUpload={beforeUpload}
               >
-                {formData.avatar.length >= 1 ? null : uploadButton}
+                {formData.avatar?.length >= 1 ? null : uploadButton}
               </Upload>
             </Form.Item>
           </Form>

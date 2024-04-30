@@ -27,20 +27,15 @@ function Footer() {
             mình... để đáp ứng mọi nhu cầu của khách hàng. của khách hàng.
           </div>
         </div>
-        {/* <div className="w-[400px]">
+        <div className="w-[400px]">
           <div className="font-bold text-[#000000] text-[20px]">
             Hỗ trợ khách hàng
           </div>
           <div className=" mt-5 text-[14px]">
-            <ul>
-              {linksFooter.map((link) => (
-                <li key={link.id}>
-                  <a href={link.href}>{link.text}</a>
-                </li>
-              ))}
-            </ul>
+            <div>Số điện thoại: 0909.045.444</div>
+            <div>Email: caycanhlamdongTTS@gmail.com</div>
           </div>
-        </div> */}
+        </div>
         <div className="w-[400px]">
           <div className="font-bold text-[#000000] text-[20px]">Địa chỉ</div>
           <div className=" mt-5 text-[14px]">

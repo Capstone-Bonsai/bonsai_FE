@@ -53,8 +53,10 @@ function BonsaiDetail() {
 
     fetchData();
   }, [bonsaiDetail]);
-  const bonsaiListSameCategory = useSelector(
-    (state) => state?.bonsai?.bonsaiSameCategory?.items
+  const bonsaiListSameCategory = useSelector((state) =>
+    state?.bonsai?.bonsaiSameCategory?.items.filter(
+      (item) => item.id !== bonsaiId
+    )
   );
   const loading = useSelector((state) => state.bonsai.loading);
 
@@ -144,17 +146,19 @@ function BonsaiDetail() {
                 </div>
                 <div className="opacity-70 text-[15px]">
                   <div>
-                    <span className="">Hoành cây:</span>{" "}
-                    {bonsaiDetail.trunkDimenter}
+                    <span className="">Hoành cây: </span>{" "}
+                    {bonsaiDetail.trunkDimenter}cm
                   </div>
                   <div>
                     Chiều cao:{" "}
-                    {bonsaiDetail.height != null
-                      ? bonsaiDetail.height
-                      : "Không có thông tin"}
+                    {bonsaiDetail.height != null ? (
+                      <> {bonsaiDetail.height}m</>
+                    ) : (
+                      "Không có thông tin"
+                    )}
                   </div>
                   <div>
-                    Năm tuổi:{" "}
+                    Trồng năm:{" "}
                     {bonsaiDetail.yearOfPlanting != null
                       ? bonsaiDetail.yearOfPlanting
                       : "Không có thông tin"}
@@ -185,7 +189,7 @@ function BonsaiDetail() {
               <div className="flex justify-between py-5 gap-5">
                 <div className="flex flex-col items-center">
                   <img src={carShip} className="w-[100px] " alt="" />
-                  <div className="text-[15px]">0934534534</div>
+                  <div className="text-[15px]">0909.045.444</div>
                 </div>
                 <div>
                   <div className="font-bold">
