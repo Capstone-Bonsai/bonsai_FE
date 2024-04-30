@@ -17,7 +17,7 @@ import {
   Divider,
 } from "antd";
 const { Search, TextArea } = Input;
-
+import { Document, Page, pdfjs } from "react-pdf";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBonsaiPagination } from "../../../../redux/slice/bonsaiSlice";
@@ -41,19 +41,19 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
 
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
+
   const handleCancelPreview = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
-    const f = {
-      url: file,
-    };
-    if (!f.url && !f.preview) {
-      f.preview = await getBase64(f.originFileObj);
-    }
-    setPreviewImage(f.url || f.preview);
+    setPreviewImage(file);
     setPreviewOpen(true);
-    setPreviewTitle(f.name || f.url.substring(f.url.lastIndexOf("/") + 1));
   };
-
+  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   return (
     <>
       {serviceOrderDetail?.loading === true ? (
@@ -103,11 +103,6 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
                           }}
                         />
                       </Tooltip>
-                      {/* <ReactPDF
-                        file={{
-                          url: "http://www.example.com/sample.pdf",
-                        }}
-                      /> */}
                     </div>
                   </div>
                 </div>
@@ -224,18 +219,25 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
       )}
 
       <Modal
+        width={800}
+        className="h-["
         open={previewOpen}
-        title={previewTitle}
+        title={"Hợp đồng"}
         footer={null}
         onCancel={handleCancelPreview}
       >
-        <img
-          alt="example"
-          style={{
-            width: "100%",
-          }}
-          src={previewImage}
-        />
+        <div>
+          <Document
+            className="w-[100%]"
+            file={previewImage}
+            onLoadSuccess={onDocumentLoadSuccess}
+          >
+            <Page  pageNumber={pageNumber} />
+          </Document>
+          {/* <p>
+            Page {pageNumber} of {numPages}
+          </p> */}
+        </div>
       </Modal>
     </>
   );
