@@ -68,17 +68,6 @@ export const allRevenueServiceOrder = createAsyncThunk(
   }
 );
 
-export const exportPdfFile = createAsyncThunk(
-  "dashboard/exportPdfFile",
-  async () => {
-    try {
-      const response = await axios.get("/Revenue/download");
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-);
 const initialState = {
   allDashboardDTO: {},
   allLineDashboardDTO: {},
@@ -107,9 +96,6 @@ const dashboardSlice = createSlice({
     },
     setRevenue: (state, action) => {
       state.allRevenueDTO = action.payload;
-    },
-    setExportPdfFile: (state, action) => {
-      state.exportPdfFileDTO = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -197,20 +183,6 @@ const dashboardSlice = createSlice({
         state.msg = "Error loading data";
         state.allRevenueServiceOrderDTO.loading = false;
       });
-    builder
-      .addCase(exportPdfFile.pending, (state) => {
-        state.msg = "Loading...";
-        state.exportPdfFileDTO.loading = true;
-      })
-      .addCase(exportPdfFile.fulfilled, (state, action) => {
-        state.exportPdfFileDTO.data = action.payload;
-        state.msg = "Data loaded successfully";
-        state.exportPdfFileDTO.loading = false;
-      })
-      .addCase(exportPdfFile.rejected, (state) => {
-        state.msg = "Error loading data";
-        state.exportPdfFileDTO.loading = false;
-      });
   },
 });
 const { reducer: dashboardReducer, actions } = dashboardSlice;
@@ -219,6 +191,5 @@ export const {
   setLineDashboard,
   setDashboardForStaff,
   setRevenue,
-  setExportPdfFile,
 } = actions;
 export { dashboardReducer as default };

@@ -6,13 +6,12 @@ import {
   DeleteOutlined,
   MenuOutlined,
 } from "@ant-design/icons";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   allDashboard,
   allDashboardForStaff,
   allLineDashboard,
   allRevenue,
-  exportPdfFile,
 } from "../../../redux/slice/dashboardSlice";
 import { Button, Tabs, Tooltip } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +19,7 @@ import { formatPrice } from "../../../components/formatPrice/FormatPrice";
 import Loading from "../../../components/Loading";
 import OrderRevenue from "./OrderRevenue";
 import ServiceOrderRevenue from "./ServiceOrderRevenue";
+import { exportPdfFile } from "../../../utils/apiService";
 
 export default function RevenueManage() {
   const dispatch = useDispatch();
@@ -28,20 +28,28 @@ export default function RevenueManage() {
     (state) => state.dashboard.allRevenueDTO.data
   );
 
-  const revenueDatass = useSelector(
-    (state) => state.dashboard.exportPdfFileDTO.data
-  );
-
-  console.log(revenueDatass)
   const loading = useSelector((state) => state.dashboard.allRevenueDTO.loading);
   useEffect(() => {
     dispatch(allRevenue());
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(exportPdfFile());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(exportPdfFile());
+  // }, [dispatch]);
 
+  const downloadFile = async () => {
+    exportPdfFile()
+      .then((data) => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(data.data);
+        link.download = "Doanh thu.xlsx";
+        link.click();
+        URL.revokeObjectURL(link.href);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <>
       <div className="flex justify-center">
@@ -78,7 +86,7 @@ export default function RevenueManage() {
                     </div>
                   </div>
                 </div>
-                <Button>ssssss</Button>
+                <Button onClick={() => downloadFile()}>Tải doanh thu</Button>
                 <div className="flex justify-center">
                   <div className="w-[100%]">
                     <Tabs
