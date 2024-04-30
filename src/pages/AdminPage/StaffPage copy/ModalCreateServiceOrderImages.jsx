@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PlusOutlined } from "@ant-design/icons";
-import { Tag, Input, Modal, Form, InputNumber, Select, Upload } from "antd";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  Tag,
+  Input,
+  Modal,
+  Form,
+  InputNumber,
+  Select,
+  Upload,
+  Button,
+} from "antd";
 const { Search, TextArea } = Input;
 
 import { useDispatch, useSelector } from "react-redux";
@@ -81,24 +90,7 @@ const ModalCreateServiceOrderImages = (props) => {
 
   const handleChange = (i) => setListImage(i);
 
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-      }}
-      type="button"
-    >
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Thêm ảnh
-      </div>
-    </button>
-  );
+  const uploadButton = <Button className="w-[100%]" icon={<UploadOutlined />}>Tải file</Button>;
 
   // const fetchListImage = () => {
   //   const image = bonsai?.bonsaiImages?.map((data) => ({
@@ -155,30 +147,18 @@ const ModalCreateServiceOrderImages = (props) => {
     setFormData(allValues);
   };
   const beforeUpload = (file) => {
-    const isFileSizeValid = file.size <= MAX_FILE_SIZE;
-    const isFileTypeValid = ALLOWED_FILE_TYPES.includes(file.type);
-
-    if (!isFileSizeValid) {
-      message.error("Kích thước file quá lớn, vui lòng chọn file nhỏ hơn 10MB");
-    }
-
-    if (!isFileTypeValid) {
-      message.error(
-        "Định dạng file không hợp lệ, vui lòng chọn file ảnh (JPEG, PNG, GIF)"
-      );
-    }
     return false;
   };
 
   return (
     <>
       <Modal
-        width={800}
-        title="Thêm ảnh"
+        width={500}
+        title="Thêm file hợp đồng"
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
-        okText={confirmLoading ? "Đang tạo" : "Tạo mới"}
+        okText={confirmLoading ? "Đang tải" : "Thêm file hợp đồng"}
         cancelText="Hủy"
         confirmLoading={confirmLoading}
         onCancel={handleClose}
@@ -195,14 +175,14 @@ const ModalCreateServiceOrderImages = (props) => {
             initialValues={formData}
           >
             <Form.Item
-              label="Upload ảnh"
+              label="Đăng tải file"
               valuePropName="fileList"
               getValueFromEvent={normFile}
             >
               <Upload
-                listType="picture-card"
+                accept="application/pdf"
                 fileList={listImage}
-                onPreview={handlePreview}
+                //onPreview={handlePreview}
                 beforeUpload={beforeUpload}
                 onChange={(e) => {
                   console.log(e.fileList);
@@ -215,7 +195,7 @@ const ModalCreateServiceOrderImages = (props) => {
           </Form>
         </div>
       </Modal>
-      <Modal
+      {/* <Modal
         open={previewOpen}
         title={previewTitle}
         footer={null}
@@ -228,7 +208,7 @@ const ModalCreateServiceOrderImages = (props) => {
           }}
           src={previewImage}
         />
-      </Modal>
+      </Modal> */}
     </>
   );
 };

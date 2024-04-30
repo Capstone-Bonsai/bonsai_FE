@@ -110,7 +110,7 @@ function TabTaskInformation({ serviceOrderDetail, listTaskDTO }) {
           {record?.completedTime ? (
             <p>{new Date(record?.completedTime).toLocaleDateString()}</p>
           ) : (
-            <Tag>Chưa hoàn thành</Tag>
+            <Tag color="red">Chưa hoàn thành</Tag>
           )}
         </>
       ),
@@ -120,7 +120,7 @@ function TabTaskInformation({ serviceOrderDetail, listTaskDTO }) {
     <>
       <div className="p-6 ">
         <div className="p-4 w-[100%]"></div>
-        <div className="font-medium text-lg">- Thông tin người làm vườn:</div>
+        <div className="font-medium text-lg">1. Thông tin người làm vườn:</div>
         <div className="p-4 mb-6">
           <Table
             dataSource={serviceOrderDetail?.gardenersOfServiceOrder}
@@ -135,7 +135,7 @@ function TabTaskInformation({ serviceOrderDetail, listTaskDTO }) {
           />
         </div>
 
-        <div className="font-medium text-lg">- Tiến độ công việc:</div>
+        <div className="font-medium text-lg">2. Tiến độ công việc:</div>
         <div className="p-4 mb-6">
           <Table
             dataSource={listTaskDTO?.taskOfServiceOrders}

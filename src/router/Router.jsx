@@ -44,6 +44,9 @@ import ResetPassword from "../pages/Auth/ResetPassword";
 import Dashboard from "../pages/AdminPage/Dashboard/Dashboard";
 import CustomerBonsai from "../pages/Garden/BonsaiInGarden/CustomerBonsai";
 import DeliveryFeeManage from "../pages/AdminPage/DeliveryFeeManagement/DeliveryFeeManage";
+import ProfileAdmin from "../pages/AdminPage/Profile/ProfileAdmin";
+import DashboardStaff from "../pages/AdminPage/DashboardStaff/DashboardStaff";
+import RevenueManage from "../pages/AdminPage/RevenueManagement/RevenueManage";
 function Router() {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -218,6 +221,10 @@ function Router() {
                 element: <DeliveryFeeManage />,
               },
               {
+                path: "/admin/revenue",
+                element: <RevenueManage />,
+              },
+              {
                 path: "*",
                 element: <ProductManagetNavigate />,
               },
@@ -233,10 +240,10 @@ function Router() {
                 path: "/admin/serviceOrder",
                 element: <ServiceOrder />,
               },
-              // {
-              //   path: "/admin/serviceGardenChecking",
-              //   element: <ServiceGardenChecking />,
-              // },
+              {
+                path: "/admin/profile",
+                element: <ProfileAdmin />,
+              },
             ]
           : []),
         ...(userInfo?.role == "Staff"
@@ -248,6 +255,10 @@ function Router() {
               {
                 path: "*",
                 element: <ContractNavigate />,
+              },
+              {
+                path: "/admin/dashboard",
+                element: <DashboardStaff />,
               },
             ]
           : []),

@@ -27,8 +27,32 @@ import { allStyle } from "../../../../redux/slice/styleSlice";
 import { deleteBonsai } from "../../../../utils/bonsaiApi";
 import { getStatusText } from "../../../../components/status/contractStatus";
 
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 function TabServiceOrderInformation({ serviceOrderDetail }) {
   const dispatch = useDispatch();
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+
+  const handleCancelPreview = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    const f = {
+      url: file,
+    };
+    if (!f.url && !f.preview) {
+      f.preview = await getBase64(f.originFileObj);
+    }
+    setPreviewImage(f.url || f.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(f.name || f.url.substring(f.url.lastIndexOf("/") + 1));
+  };
 
   return (
     <>
@@ -38,19 +62,21 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
         <div className="p-6 ">
           <div className="flex justify-center w-[100%]">
             <div className="p-4 mb-6 w-[100%]">
-              <div className="font-medium text-lg">- Thông tin khách hàng:</div>
+              <div className="font-medium text-lg">
+                1. Thông tin khách hàng:
+              </div>
               <div className="grid grid-cols-2 w-[100%] p-6">
                 <div>
-                  <div className="font-medium grid grid-cols-2">
-                    <div>Tên khách hàng:</div>{" "}
+                  <div className=" grid grid-cols-2">
+                    <div className="font-medium">Tên khách hàng:</div>{" "}
                     <div>{serviceOrderDetail?.customerName}</div>
                   </div>
-                  <div className="font-medium grid grid-cols-2">
-                    <div>Số điện thoại:</div>
+                  <div className="grid grid-cols-2">
+                    <div className="font-medium">Số điện thoại:</div>
                     <div>{serviceOrderDetail?.customerPhoneNumber}</div>
                   </div>
-                  <div className="font-medium grid grid-cols-2">
-                    <div>Trạng thái:</div>{" "}
+                  <div className="grid grid-cols-2">
+                    <div className="font-medium">Trạng thái:</div>{" "}
                     <div
                       className={`${
                         serviceOrderDetail?.serviceOrderStatus == 1 ||
@@ -63,10 +89,31 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
                       {getStatusText(serviceOrderDetail?.serviceOrderStatus)}
                     </div>
                   </div>
+                  <div className="grid grid-cols-2">
+                    <div className="font-medium">Hợp đồng:</div>
+                    <div>
+                      <Tooltip title="Xem ảnh hợp đồng">
+                        <Button
+                          type="text"
+                          icon={<EyeOutlined style={{ color: "blue" }} />}
+                          onClick={() => {
+                            handlePreview(
+                              serviceOrderDetail?.contract[3]?.image
+                            );
+                          }}
+                        />
+                      </Tooltip>
+                      {/* <ReactPDF
+                        file={{
+                          url: "http://www.example.com/sample.pdf",
+                        }}
+                      /> */}
+                    </div>
+                  </div>
                 </div>
                 <div>
-                  <div className="font-medium grid grid-cols-2">
-                    <div>Tổng chi phí:</div>
+                  <div className="grid grid-cols-2">
+                    <div className="font-medium">Tổng chi phí:</div>
                     <div>
                       {new Intl.NumberFormat("en-US", {
                         style: "currency",
@@ -74,16 +121,16 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
                       }).format(serviceOrderDetail?.totalPrice)}
                     </div>
                   </div>
-                  <div className="font-medium grid grid-cols-2">
-                    <div>Ngày bắt đầu:</div>
+                  <div className="grid grid-cols-2">
+                    <div className="font-medium">Ngày bắt đầu:</div>
                     <div>
                       {new Date(
                         serviceOrderDetail?.startDate
                       ).toLocaleDateString()}
                     </div>
                   </div>
-                  <div className="font-medium grid grid-cols-2">
-                    <div>Ngày hết hạn:</div>
+                  <div className="grid grid-cols-2">
+                    <div className="font-medium">Ngày hết hạn:</div>
                     <div>
                       {new Date(
                         serviceOrderDetail?.endDate
@@ -92,8 +139,7 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
                   </div>
                 </div>
               </div>
-              <Divider type="vertical" />
-              <div className="font-medium text-lg">- Thông tin dịch vụ:</div>
+              <div className="font-medium text-lg">2. Thông tin dịch vụ:</div>
               <div className=" w-[100%] py-6 px-12">
                 <div className="font-medium grid grid-cols-3 m-4">
                   <div>Tên dịch vụ:</div>
@@ -123,7 +169,7 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
                 </div>
               </div>
               <div className="font-medium text-lg">
-                - Thông tin sân vườn/bonsai:
+                3. Thông tin sân vườn/bonsai:
               </div>
               <div className=" w-[100%] py-6 px-12">
                 {serviceOrderDetail?.service?.serviceType?.typeEnum === 2 ? (
@@ -176,6 +222,21 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
           </div>
         </div>
       )}
+
+      <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={handleCancelPreview}
+      >
+        <img
+          alt="example"
+          style={{
+            width: "100%",
+          }}
+          src={previewImage}
+        />
+      </Modal>
     </>
   );
 }

@@ -18,7 +18,7 @@ function ProductManagetNavigate() {
   return <Navigate to={{ pathname: "/admin/dashboard" }} />;
 }
 function ContractNavigate() {
-  return <Navigate to={{ pathname: "/admin/serviceOrder" }} />;
+  return <Navigate to={{ pathname: "/admin/dashboard" }} />;
 }
 
 export {
