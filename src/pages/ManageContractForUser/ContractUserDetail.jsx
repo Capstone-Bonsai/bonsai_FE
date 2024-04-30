@@ -158,14 +158,16 @@ function ContractUserDetail(props) {
                           <div className="border-b">
                             <div>
                               Khoảng cách:
-                              {contractDetail.distance?.toLocaleString("vi-VN")}
+                              {contractDetail.distance?.toLocaleString("vi-VN")}km
                             </div>
                           </div>
                           <div>
                             Tổng:{" "}
                             <span className="text-[#3a9943]">
                               {" "}
-                              {formatPrice(contractDetail.totalPrice)}
+                              {contractDetail?.totalPrice != 0
+                                ? formatPrice(contractDetail.totalPrice)
+                                : "Đang cập nhật"}
                             </span>
                           </div>
                         </div>

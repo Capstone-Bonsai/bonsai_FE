@@ -196,12 +196,16 @@ function Bonsai({ countCartItems }) {
           </div>
         </div>
       )}
-      <Pagination
-        current={pageIndex}
-        total={countPageBonsai}
-        onChange={handlePageChange}
-        className="text-center mt-5"
-      />
+      {allBonsai?.length > 0 ? (
+        <Pagination
+          current={pageIndex}
+          total={countPageBonsai}
+          onChange={handlePageChange}
+          className="text-center mt-5"
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 }

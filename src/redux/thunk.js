@@ -5,6 +5,7 @@ import {
   setWebSocket,
 } from "./slice/websocketReducer";
 import Cookies from "universal-cookie";
+import { notificationUser } from "./slice/userSlice";
 export const connectWebSocket = () => {
   const cookies = new Cookies();
   const userInfo = cookies.get("user");
@@ -28,11 +29,8 @@ export const connectWebSocket = () => {
       const jsonOnly = event.data.substring(0, jsonEndIndex);
       var jsonObject = JSON.parse(jsonOnly);
       if (jsonObject?.type == 1) toast.info(jsonObject.arguments[0]);
-      //
-      // var cleanedJsonString = event.data.replace(/[^\x20-\x7E]/g, "");
-      // var jsonObject = JSON.parse(cleanedJsonString);
-      // console.log(jsonObject);
-      // if (jsonObject?.type == 1) toast.info(jsonObject.arguments[0]);
+      console.log("dsfsdf");
+      dispatch(notificationUser({ pageIndex: 0, pageSize: 5 }));
     };
     socket.onclose = () => {};
   };

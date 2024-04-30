@@ -31,14 +31,21 @@ function StepOne(propsStepOne) {
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [fetchApi, setFetchApi] = useState(false);
+  const [gardenLoading, setGardenLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     dispatch(fetchCustomerGarden({ pageIndex: pageIndex - 1, pageSize }));
-    dispatch(customerBonsai({ pageIndex: pageIndex - 1, pageSize }));
-  }, [fetchApi, pageIndex, pageSize]);
-  const bonsaiLoading = useSelector(
-    (state) => state?.bonsai?.customerBonsai?.loading
-  );
+    dispatch(customerBonsai({ pageIndex: pageIndex - 1, pageSize }))
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching order data:", error);
+        setLoading(false);
+      });
+  }, [fetchApi, pageIndex, pageSize, gardenLoading]);
+  const [loading, setLoading] = useState(false);
   const bonsaiProps = {
     dispatch,
     customerBonsai,
@@ -46,6 +53,11 @@ function StepOne(propsStepOne) {
     pageSize,
     fetchApi,
     setFetchApi,
+  };
+  const props = {
+    setGardenLoading,
+    gardenLoading,
+    setLoading,
   };
   const gardens = useSelector((state) => state.garden?.gardenDTO?.items);
   const bonsais = useSelector((state) => state.bonsai?.customerBonsai.items);
@@ -106,7 +118,7 @@ function StepOne(propsStepOne) {
               selectedGardenId == ""
                 ? "hover:cursor-not-allowed"
                 : "hover:bg-[#3a9943] hover:text-[#fff]"
-            }  p-2 rounded-full flex items-center justify-center`}
+            }  p-2 rounded-full flex items-center justify-center text-[20px]`}
           >
             <ArrowRightOutlined />
           </button>
@@ -120,7 +132,7 @@ function StepOne(propsStepOne) {
           >
             + Thêm vườn
           </button>
-          <AddCustomerGarden />
+          <AddCustomerGarden {...props} />
         </div>
       ) : (
         <div className="">
@@ -145,7 +157,9 @@ function StepOne(propsStepOne) {
                 ? gardens?.map((garden) => (
                     <div
                       key={garden.id}
-                      className="flex gap-5 p-5 my-5 relative border rounded-[10px]"
+                      className={`flex border ${
+                        selectedGardenId == garden?.id ? "border-[#3a9943]" : ""
+                      } gap-5 p-5 my-5 relative rounded-[8px]`}
                     >
                       <button
                         onClick={() => {
@@ -159,9 +173,9 @@ function StepOne(propsStepOne) {
                           <PlusCircleOutlined />
                         )}
                       </button>
-                      <div className="w-[300px] h-[200px] border rounded-tr-[30px]">
+                      <div className="w-[300px] h-[200px] border rounded-[8px]">
                         <img
-                          className="w-full h-full object-cover rounded-tr-[30px]"
+                          className="w-full h-full object-cover rounded-[8px]"
                           src={
                             garden?.customerGardenImages?.length > 0
                               ? garden?.customerGardenImages[0]?.image
@@ -208,8 +222,7 @@ function StepOne(propsStepOne) {
                                       Năm trồng: {bonsai.bonsai.yearOfPlanting}
                                     </div>
                                     <div>
-                                      Kích thước thân:{" "}
-                                      {bonsai.bonsai.trunkDimenter}
+                                      Hoành cây: {bonsai.bonsai.trunkDimenter}
                                       cm
                                     </div>
                                     <div>
@@ -245,7 +258,7 @@ function StepOne(propsStepOne) {
         </div>
       ) : (
         <div>
-          {bonsaiLoading ? (
+          {loading ? (
             <Loading loading={loadingGarden} />
           ) : (
             <div className="">
@@ -253,11 +266,13 @@ function StepOne(propsStepOne) {
                 ? bonsais?.map((bonsai) => (
                     <div
                       key={bonsai.id}
-                      className="border flex gap-2 relative my-2 p-3"
+                      className={`border ${
+                        bonsai.id == selectedGardenId ? "border-[#3a9943]" : ""
+                      } flex gap-2 relative my-2 p-3 rounded-[8px]`}
                     >
-                      <div className="w-[300px] h-[200px] border rounded-tr-[30px]">
+                      <div className="w-[300px] h-[200px] border rounded-[8px]">
                         <img
-                          className="w-full h-full object-cover rounded-tr-[30px]"
+                          className="w-full h-full object-cover rounded-[8px]"
                           src={
                             bonsai?.bonsai?.bonsaiImages?.length > 0
                               ? bonsai?.bonsai?.bonsaiImages[0]?.imageUrl
@@ -274,7 +289,7 @@ function StepOne(propsStepOne) {
                           <div className="">Code :{bonsai?.bonsai?.code}</div>
                           <div>Năm trồng: {bonsai?.bonsai?.yearOfPlanting}</div>
                           <div>
-                            Kích thước thân: {bonsai?.bonsai?.trunkDimenter}cm
+                            Hoành cây: {bonsai?.bonsai?.trunkDimenter}cm
                           </div>
                           <div>Chiều cao: {bonsai?.bonsai?.height}m</div>
                         </div>

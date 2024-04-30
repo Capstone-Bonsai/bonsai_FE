@@ -72,32 +72,20 @@ function ManageOrder() {
                       key={order.id}
                       className="bg-[#ffffff] border drop-shadow-lg my-2 p-5 relative"
                     >
-                      <div className="flex justify-between my-2">
-                        <div>
-                          <div className="italic">
-                            {(() => {
-                              const dateString = order.orderDate;
-                              if (dateString) {
-                                const dateObject = new Date(dateString);
-                                const day = dateObject.getDate();
-                                const month = dateObject.getMonth() + 1;
-                                const year = dateObject.getFullYear();
-                                return `${day < 10 ? "0" : ""}${day}/${
-                                  month < 10 ? "0" : ""
-                                }${month}/${year}`;
-                              }
-                              return "";
-                            })()}
-                          </div>
+                      <div>
+                        <div className="italic">
+                          {new Date(order?.creationDate).toLocaleDateString()}
                         </div>
-                        <div className="w-[65%] text-end ">
-                          Đến địa chỉ:
+                      </div>
+                      <div className="flex justify-between my-2">
+                        <div className="w-[80%]">
+                          <span className="font-bold pr-2">Địa chỉ:</span>
                           <span className="text-[#26aa99]">
                             {order.address}
                           </span>
                         </div>
                         <div className="w-[20%] text-end border-l border-l-black">
-                          Tình trạng:
+                          <span className="font-bold pr-2">Tình trạng:</span>
                           <span
                             className={` ${getClassForStatus(
                               order.orderStatus

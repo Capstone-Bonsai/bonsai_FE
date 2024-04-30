@@ -13,12 +13,17 @@ import Loading from "../../../components/Loading";
 import { allCategory } from "../../../redux/slice/categorySlice";
 import { allStyle } from "../../../redux/slice/styleSlice";
 import { putCustomerBonsai } from "../../../utils/customerBonsaiApi";
+import { toast } from "react-toastify";
 function CustomerBonsaiDetail(propsBonsaiDetail) {
   const { setBonsaiDetail, bonsaiId } = propsBonsaiDetail;
   console.log(bonsaiId);
   const [loading, setFetchBonsaiDetail] = useState(false);
   const dispatch = useDispatch();
   const [fetchData, setFetchData] = useState(false);
+  const [file, setFile] = useState([]);
+  const [listImage, setListImage] = useState([]);
+  console.log(listImage);
+
   const [formData, setFormData] = useState({
     CategoryId: "",
     StyleId: "",
@@ -28,7 +33,6 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
     TrunkDimenter: 0,
     Height: 0,
     NumberOfTrunk: 0,
-    Price: 0,
     DeliverySize: 0,
     OldImage: [],
     Image: [],
@@ -60,6 +64,18 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
   const bonsaiDetailById = useSelector(
     (state) => state?.garden?.bonsaiInGarden
   );
+  const fetchListImage = () => {
+    const image = bonsaiDetailById?.bonsai?.bonsaiImages?.map(
+      (bonsaiImage) => ({
+        url: bonsaiImage.imageUrl,
+      })
+    );
+    setListImage(image);
+  };
+  useEffect(() => {
+    fetchListImage();
+    setFile([]);
+  }, [bonsaiDetailById]);
   const allCategories = useSelector(
     (state) => state.category?.allCategoryDTO?.items
   );
@@ -79,7 +95,6 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
         TrunkDimenter: bonsaiDetailById?.bonsai?.trunkDimenter,
         Height: bonsaiDetailById?.bonsai?.height,
         NumberOfTrunk: bonsaiDetailById?.bonsai?.numberOfTrunk,
-        Price: bonsaiDetailById?.bonsai?.price,
         DeliverySize: bonsaiDetailById?.bonsai?.deliverySize,
       });
     }
@@ -96,7 +111,6 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
     const heightRegex = /^\d+$/;
     const trunkDiameterRegex = /^\d+$/;
     const numberOfTrunkRegex = /^\d+$/;
-    const priceRegex = /^\d+(?:\.\d{1,2})?$/;
 
     if (!categoryIdRegex.test(formData.CategoryId)) {
       errors.CategoryId = "Vui lòng chọn loại cây!";
@@ -132,10 +146,6 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
         "Invalid NumberOfTrunk (positive number, max 2 decimals)";
     }
 
-    if (!priceRegex.test(formData.Price)) {
-      errors.Price = "Invalid Price (numbers only)"; // (Optional)
-    }
-
     // Kiểm tra các field khác nếu cần (OldImage, Image)
     if (errors != {}) {
       console.log(errors != {});
@@ -143,7 +153,34 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
     }
     return errors;
   };
+  const handleAddImage = (e) => {
+    const files = e.target.files;
+    const updatedListImage = [...listImage];
+    const updatedFile = [...file];
+    for (let i = 0; i < files.length; i++) {
+      const newFile = files[i];
+      const imageURL = URL.createObjectURL(newFile);
+      updatedListImage.push({ url: imageURL });
+      updatedFile.push(newFile);
+    }
+    setListImage(updatedListImage);
+    setFile(updatedFile);
+    // updateOldImages(updatedListImage);
+    e.target.value = null;
+  };
+  const handleUploadClick = () => {
+    document.getElementById("upload-bonsai-detail-image").click();
+  };
+  const handleRemoveImage = (index) => {
+    const updatedList = [...listImage];
+    updatedList.splice(index, 1);
+    setListImage(updatedList);
 
+    const updatedFile = [...file];
+    updatedFile.splice(index, 1);
+    setFile(updatedFile);
+    // updateOldImages(updatedList);
+  };
   const updateBonsai = (data) => {
     try {
       console.log(data);
@@ -151,43 +188,53 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
         .then((data) => {
           toast.success("Cập nhật thành công!");
           dispatch(getBonsaiInGarden(bonsaiId));
-          handleClose();
         })
         .catch((err) => {
-          console.log(err);
-          toast.error("Đã xảy ra sự cố!");
+          console.error(err);
+          toast.error(err.response.data);
         })
         .finally(() => {
-          setConfirmLoading(false);
-          setFormDisabled(false);
+          setFetchBonsaiDetail(false);
         });
     } catch (err) {
       console.log(err);
       toast.error(err.response.data);
     }
   };
-  const onSubmit = (i) => {
-    // formData.Image = listImage?.map((image) => image);
-    // const postData = new FormData();
-    // postData.append("CategoryId", formData.CategoryId);
-    // postData.append("StyleId", formData.StyleId);
-    // postData.append("Name", formData.Name);
-    // postData.append("Description", formData.Description);
-    // postData.append("YearOfPlanting", formData.YearOfPlanting);
-    // postData.append("TrunkDimenter", formData.TrunkDimenter);
-    // postData.append("Height", formData.Height);
-    // postData.append("NumberOfTrunk", formData.NumberOfTrunk);
-    // postData.append("Price", formData.Price);
-    // formData.Image?.map((image) =>
-    //   image.originFileObj
-    //     ? postData.append("Image", image.originFileObj)
-    //     : postData.append("OldImage", image.url)
-    // );
-    // console.log(formData);
-
+  const onSubmit = () => {
+    formData.Image = listImage?.map((image) => image);
+    const postData = new FormData();
+    postData.append("CategoryId", formData.CategoryId);
+    postData.append("StyleId", formData.StyleId);
+    postData.append("Name", formData.Name);
+    postData.append("Description", formData.Description);
+    postData.append("YearOfPlanting", formData.YearOfPlanting);
+    postData.append("TrunkDimenter", formData.TrunkDimenter);
+    postData.append("Height", formData.Height);
+    postData.append("NumberOfTrunk", formData.NumberOfTrunk);
+    postData.append("Price", formData.Price);
+    listImage
+      ?.filter((image) => image.url.startsWith("https"))
+      ?.map((image) => {
+        postData.append(`OldImage`, image.url);
+      });
+    file?.map((imageFile) => {
+      postData.append(`Image`, imageFile);
+    });
+    console.log(formData);
+    setFetchBonsaiDetail(true);
     if (validateForm != {}) {
-      console.log(true);
-      updateBonsai(postData);
+      updateBonsai(postData)
+        .then(() => {
+          setFetchBonsaiDetail(false);
+        })
+        .catch((error) => {
+          // Handle error
+          console.error("Error updating bonsai:", error);
+        })
+        .finally(() => {
+          setFetchBonsaiDetail(false);
+        });
     }
   };
   const propsModalMove = {
@@ -211,30 +258,7 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
         <Loading loading={loading} isRelative={true} />
       ) : (
         <>
-          <div className="">
-            <div className="">
-              {bonsaiDetailById?.bonsai?.bonsaiImages?.length > 0 ? (
-                <div className="">
-                  <Carousel autoplay className="">
-                    {bonsaiDetailById?.bonsai?.bonsaiImages?.map((image) => (
-                      <div className="w-[300px] h-[300px]" key={image?.id}>
-                        <img
-                          width="100%"
-                          height="100%"
-                          className="object-cover"
-                          src={image?.imageUrl}
-                          alt=""
-                        />
-                      </div>
-                    ))}
-                  </Carousel>
-                </div>
-              ) : (
-                <div className="w-[300px] h-[300px]">
-                  <img src={noImage} alt="" />
-                </div>
-              )}
-            </div>
+          <div className="w-[75%] m-auto">
             {/* <div>
               <div className="font-bold text-[20px]">
                 {bonsaiDetailById?.bonsai?.name}
@@ -244,15 +268,43 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
               </div>
               <div>Năm trồng: {bonsaiDetailById?.bonsai?.yearOfPlanting}</div>
               <div>
-                Kích thước thân: {bonsaiDetailById?.bonsai?.trunkDimenter}
+                 Hoành cây: {bonsaiDetailById?.bonsai?.trunkDimenter}
               </div>
               <div>Chiều cao: {bonsaiDetailById?.bonsai?.height}</div>
               <div>Số thân: {bonsaiDetailById?.bonsai?.numberOfTrunk}</div>
             </div> */}
-            <div className="font-bold text-[20px]">
+            <div className="font-bold text-[20px] flex justify-center my-2">
+              <input
+                className="border p-2 outline-none rounded-[8px]"
+                value={formData.Name}
+                onChange={(e) =>
+                  setFormData({ ...formData, Name: e.target.value })
+                }
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <div>Địa chỉ: </div>
+              <div className="w-[70%]">
+                {bonsaiDetailById?.customerGarden?.address}
+              </div>
+              <div>
+                <button
+                  className="outline-none bg-[#3a9943] text-[#fff] p-2 rounded-[8px]"
+                  onClick={() =>
+                    document.getElementById("modal_move_bonsai").showModal()
+                  }
+                >
+                  Đổi vườn
+                </button>
+                <ModalMoveBonsai {...propsModalMove} />
+              </div>
+            </div>
+            <div className="text-[16px] flex items-center gap-3 my-2">
+              <div className="w-[10%] text-end">Loại cây:</div>
               <select
+                className="border outline-none p-3 rounded-[8px]"
                 value={formData.CategoryId}
-                style={{ width: "80%" }}
+                style={{ width: "50%" }}
                 onChange={(e) =>
                   setFormData({ ...formData, CategoryId: e.target.value })
                 }
@@ -264,10 +316,12 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
                 ))}
               </select>
             </div>
-            <div className="font-bold text-[20px]">
+            <div className="text-[16px] flex gap-3 items-center my-2">
+              <div className="w-[10%] text-end">Dáng cây:</div>
               <select
+                className="border outline-none p-3 rounded-[8px]"
                 value={formData.StyleId}
-                style={{ width: "80%" }}
+                style={{ width: "50%" }}
                 onChange={(e) =>
                   setFormData({ ...formData, StyleId: e.target.value })
                 }
@@ -279,78 +333,114 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
                 ))}
               </select>
             </div>
-            <div className="font-bold text-[20px]">
-              <input
-                value={formData.Name}
-                onChange={(e) =>
-                  setFormData({ ...formData, Name: e.target.value })
-                }
-              />
-            </div>
-            <div className="font-bold text-[20px]">
+
+            <div className="text-[16px]">
+              <div>Mô tả: </div>
               <textarea
+                className="w-full h-[150px] border outline-none p-2"
                 value={formData.Description}
                 onChange={(e) =>
                   setFormData({ ...formData, Description: e.target.value })
                 }
               />
             </div>
-            <div className="font-bold text-[20px]">
+
+            <div className="text-[16px] flex items-center my-2">
+              <div className="w-[20%] text-end">Năm trồng: </div>
               <input
+                className="w-[40%] border outline-none p-2 rounded-[8px]"
                 value={formData.YearOfPlanting}
                 onChange={(e) =>
                   setFormData({ ...formData, YearOfPlanting: e.target.value })
                 }
               />
             </div>
-            <div className="font-bold text-[20px]">
+            <div className="text-[16px] flex items-center my-2">
+              <div className="w-[20%] text-end">Hoành cây: </div>
               <input
+                className="w-[40%] border outline-none p-2 rounded-[8px]"
                 value={formData.TrunkDimenter}
                 onChange={(e) =>
                   setFormData({ ...formData, TrunkDimenter: e.target.value })
                 }
               />
             </div>
-            <div className="font-bold text-[20px]">
+            <div className="text-[16px] flex items-center my-2">
+              <div className="w-[20%] text-end">Chiều cao: </div>
               <input
+                className="w-[40%] border outline-none p-2 rounded-[8px]"
                 value={formData.Height}
                 onChange={(e) =>
                   setFormData({ ...formData, Height: e.target.value })
                 }
               />
             </div>
-            <div className="font-bold text-[20px]">
+            <div className="text-[16px] flex items-center my-2">
+              <div className="w-[20%] text-end">Số thân: </div>
               <input
+                className="w-[40%] border outline-none p-2 rounded-[8px]"
                 value={formData.NumberOfTrunk}
                 onChange={(e) =>
                   setFormData({ ...formData, NumberOfTrunk: e.target.value })
                 }
               />
             </div>
-            <div className="font-bold text-[20px]">
-              <input
-                value={formData.Price}
-                onChange={(e) =>
-                  setFormData({ ...formData, Price: e.target.value })
-                }
-              />
+            <div className="">
+              {listImage?.length >= 0 ? (
+                <div className="">
+                  <div className="flex gap-5 flex-wrap py-3">
+                    {listImage?.map((image, index) => (
+                      <div
+                        className="relative rounded-[10px] w-[220px] h-[220px]"
+                        key={index}
+                      >
+                        <img
+                          className="object-cover w-full h-full"
+                          src={image?.url}
+                          alt=""
+                        />
+                        <button
+                          onClick={() => handleRemoveImage(index)}
+                          className="absolute top-0 right-2 text-[#f2f2f2] text-[30px] hover:text-[#3a9943]"
+                        >
+                          <CloseCircleOutlined />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      onChange={handleAddImage}
+                      id="upload-bonsai-detail-image"
+                    />
+                  </div>
+                  {listImage?.length < 4 ? (
+                    <button
+                      onClick={handleUploadClick}
+                      className="border p-1 rounded-lg my-5 outline-none"
+                    >
+                      <UploadOutlined />
+                      Thêm hình ảnh
+                    </button>
+                  ) : (
+                    "Bạn chỉ có thể thêm tối đa 4 ảnh"
+                  )}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
-          <div>
-            <button className="outline-none" onClick={onSubmit}>
+          <div className="m-2 flex justify-end">
+            <button
+              className="outline-none bg-[#3a9943] text-[#fff] border hover:border-[green] p-2 rounded-[8px]"
+              onClick={onSubmit}
+            >
               Cập nhật
             </button>
-          </div>
-          <div>
-            <button
-              className="outline-none"
-              onClick={() =>
-                document.getElementById("modal_move_bonsai").showModal()
-              }
-            >
-              Đổi vườn
-            </button>
-            <ModalMoveBonsai {...propsModalMove} />
           </div>
         </>
       )}

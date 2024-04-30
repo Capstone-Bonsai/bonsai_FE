@@ -53,8 +53,10 @@ function BonsaiDetail() {
 
     fetchData();
   }, [bonsaiDetail]);
-  const bonsaiListSameCategory = useSelector(
-    (state) => state?.bonsai?.bonsaiSameCategory?.items
+  const bonsaiListSameCategory = useSelector((state) =>
+    state?.bonsai?.bonsaiSameCategory?.items?.filter(
+      (item) => item.id !== bonsaiId
+    )
   );
   const loading = useSelector((state) => state.bonsai.loading);
 
@@ -144,7 +146,7 @@ function BonsaiDetail() {
                 </div>
                 <div className="opacity-70 text-[15px]">
                   <div>
-                    <span className="">Kích thước thân: </span>{" "}
+                    <span className="">Hoành cây: </span>{" "}
                     {bonsaiDetail.trunkDimenter}cm
                   </div>
                   <div>
@@ -156,7 +158,7 @@ function BonsaiDetail() {
                     )}
                   </div>
                   <div>
-                    Trồng năm:
+                    Trồng năm:{" "}
                     {bonsaiDetail.yearOfPlanting != null
                       ? bonsaiDetail.yearOfPlanting
                       : "Không có thông tin"}

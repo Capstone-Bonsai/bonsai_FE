@@ -20,7 +20,7 @@ import {
   setFullNameRedux,
 } from "../redux/slice/avatarSlice";
 import "./Banner.css";
-import { notificationUser } from "../redux/slice/userSlice";
+import { notificationUser, seenNotfi } from "../redux/slice/userSlice";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { connectWebSocket, disconnectWebSocket } from "../redux/thunk";
 
@@ -34,7 +34,7 @@ function Banner() {
     { text: "Liên hệ", to: "/contact" },
   ];
   const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
-  const cookies = new Cookies(null, { expires: cookieExpires });
+  const cookies = new Cookies();
   const [countCart, setCountCart] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(5);
@@ -106,15 +106,30 @@ function Banner() {
       dispatch(setCartFromCookie({ itemCount }));
     }
   };
-
+  const [fetchNoti, setFetchNoti] = useState(false);
+  console.log(fetchNoti);
   useEffect(() => {
     dispatch(notificationUser({ pageIndex, pageSize }));
-  }, []);
+  }, [fetchNoti]);
 
+  const handleSeenNoti = async (notiId) => {
+    try {
+      dispatch(seenNotfi(notiId));
+      document.getElementById("modal_noti").showModal();
+      dispatch(notificationUser({ pageIndex, pageSize }));
+    } catch (error) {
+      console.log("Đã có lỗi");
+    }
+  };
+  const notiDetail = useSelector((state) => state?.user?.notiDetail);
+  const notifications = useSelector((state) => state?.user?.notification);
   useEffect(() => {
     fetchCartFromCookie();
     // setCountCart()
   }, [userInfo]);
+  const countNoti = useSelector(
+    (state) => state?.user?.notification?.totalItemsCount
+  );
 
   ////websocket
   // const socketRef = useRef(null);
@@ -174,29 +189,57 @@ function Banner() {
             </div>
             {userInfo != null ? (
               <div
-                className={`flex items-center bannerContent ${
-                  isSticky ? "absolute top-[40%] right-[50%]" : ""
-                }`}
+                className={`flex items-center bannerContent top-[40%] right-[50%]`}
               >
                 <div className="dropdown">
-                  <button className="bg-[#f2f2f2] hover:bg-gray-300 hover:text-[#fff] mx-3 relative rounded-full w-[30px] h-[30px] flex justify-center items-center">
+                  <button
+                    onClick={() => setFetchNoti(!fetchNoti)}
+                    className="bg-[#f2f2f2] hover:bg-gray-300 hover:text-[#fff] mx-3 relative rounded-full w-[30px] h-[30px] flex justify-center items-center"
+                  >
                     <BellOutlined />
                     <div className="absolute top-[-10px] right-[-5px] bg-[red] w-[20px] h-[20px] text-[14px] text-[#fff] rounded-full">
-                      0
+                      {countNoti}
                     </div>
                   </button>
                   <ul
                     tabIndex={0}
-                    className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                    className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[300px]"
                   >
-                    <li>
-                      <a>Item 1</a>
-                    </li>
-                    <li>
-                      <a>Item 2</a>
-                    </li>
+                    <div className="font-bold text-[20px] my-2">Thông báo</div>
+                    {notifications?.items?.map((noti) => (
+                      <button
+                        onClick={() => handleSeenNoti(noti.id)}
+                        key={noti.id}
+                        className={`p-2 border-b text-start hover:bg-gray-300 hover:rounded-[8px] ${
+                          noti?.isRead ? "" : "bg-[red]"
+                        }`}
+                      >
+                        <div>
+                          {new Date(noti?.creationDate).toLocaleDateString()}
+                        </div>
+                        <div>{noti?.message}</div>
+                      </button>
+                    ))}
                   </ul>
                 </div>
+
+                <dialog id="modal_noti" className="modal">
+                  <div className="modal-box">
+                    <form method="dialog">
+                      <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                        ✕
+                      </button>
+                    </form>
+                    <h3 className="font-bold text-lg">{notiDetail?.title}</h3>
+                    <div className="italic">
+                      {new Date(notiDetail?.creationDate).toLocaleDateString()}
+                    </div>
+                    <p className="py-4">{notiDetail?.message}</p>
+                  </div>
+                  <form method="dialog" className="modal-backdrop">
+                    <button>close</button>
+                  </form>
+                </dialog>
                 <div className="bg-[#f2f2f2] w-[40px] h-[40px] flex justify-center rounded-full drop-shadow-lg text-[30px]">
                   {avatarUrl != null ? (
                     <div>
