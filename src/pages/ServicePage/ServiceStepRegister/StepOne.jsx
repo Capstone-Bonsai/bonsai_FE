@@ -118,7 +118,7 @@ function StepOne(propsStepOne) {
               selectedGardenId == ""
                 ? "hover:cursor-not-allowed"
                 : "hover:bg-[#3a9943] hover:text-[#fff]"
-            }  p-2 rounded-full flex items-center justify-center`}
+            }  p-2 rounded-full flex items-center justify-center text-[20px]`}
           >
             <ArrowRightOutlined />
           </button>
@@ -157,7 +157,9 @@ function StepOne(propsStepOne) {
                 ? gardens?.map((garden) => (
                     <div
                       key={garden.id}
-                      className="flex gap-5 p-5 my-5 relative border rounded-[10px]"
+                      className={`flex border ${
+                        selectedGardenId == garden?.id ? "border-[#3a9943]" : ""
+                      } gap-5 p-5 my-5 relative rounded-[8px]`}
                     >
                       <button
                         onClick={() => {
@@ -171,9 +173,9 @@ function StepOne(propsStepOne) {
                           <PlusCircleOutlined />
                         )}
                       </button>
-                      <div className="w-[300px] h-[200px] border rounded-tr-[30px]">
+                      <div className="w-[300px] h-[200px] border rounded-[8px]">
                         <img
-                          className="w-full h-full object-cover rounded-tr-[30px]"
+                          className="w-full h-full object-cover rounded-[8px]"
                           src={
                             garden?.customerGardenImages?.length > 0
                               ? garden?.customerGardenImages[0]?.image
@@ -264,11 +266,13 @@ function StepOne(propsStepOne) {
                 ? bonsais?.map((bonsai) => (
                     <div
                       key={bonsai.id}
-                      className="border flex gap-2 relative my-2 p-3"
+                      className={`border ${
+                        bonsai.id == selectedGardenId ? "border-[#3a9943]" : ""
+                      } flex gap-2 relative my-2 p-3 rounded-[8px]`}
                     >
-                      <div className="w-[300px] h-[200px] border rounded-tr-[30px]">
+                      <div className="w-[300px] h-[200px] border rounded-[8px]">
                         <img
-                          className="w-full h-full object-cover rounded-tr-[30px]"
+                          className="w-full h-full object-cover rounded-[8px]"
                           src={
                             bonsai?.bonsai?.bonsaiImages?.length > 0
                               ? bonsai?.bonsai?.bonsaiImages[0]?.imageUrl

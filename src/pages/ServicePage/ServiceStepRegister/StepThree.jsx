@@ -87,13 +87,15 @@ function StepThree(propsStepThree) {
 
   return (
     <div>
-      <div className="flex justify-between my-3">
+      <div className="flex items-center gap-3 my-3">
         <button
           onClick={() => handleBackStep()}
-          className="hover:bg-[#3a9943] hover:text-[#fff] w-[30px] h-[30px] rounded-full"
+          className="hover:bg-[#3a9943] hover:text-[#fff] text-[20px] w-[30px] h-[30px] rounded-full"
         >
           <ArrowLeftOutlined />
         </button>
+        <span className="font-bold text-[25px]">Bước 3: </span>
+        <span>Chọn ngày và xác nhận</span>
       </div>
       <div className="w-full">
         <div className="my-5">

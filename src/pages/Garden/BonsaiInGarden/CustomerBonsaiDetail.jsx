@@ -222,9 +222,19 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
       postData.append(`Image`, imageFile);
     });
     console.log(formData);
+    setFetchBonsaiDetail(true);
     if (validateForm != {}) {
-      console.log(true);
-      updateBonsai(postData);
+      updateBonsai(postData)
+        .then(() => {
+          setFetchBonsaiDetail(false);
+        })
+        .catch((error) => {
+          // Handle error
+          console.error("Error updating bonsai:", error);
+        })
+        .finally(() => {
+          setFetchBonsaiDetail(false);
+        });
     }
   };
   const propsModalMove = {
@@ -424,7 +434,7 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
               )}
             </div>
           </div>
-          <div>
+          <div className="m-2 flex justify-end">
             <button
               className="outline-none bg-[#3a9943] text-[#fff] border hover:border-[green] p-2 rounded-[8px]"
               onClick={onSubmit}
