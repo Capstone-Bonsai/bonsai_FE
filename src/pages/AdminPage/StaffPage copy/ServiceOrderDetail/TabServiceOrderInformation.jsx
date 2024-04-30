@@ -25,7 +25,10 @@ import Loading from "../../../../components/Loading";
 import { allCategory } from "../../../../redux/slice/categorySlice";
 import { allStyle } from "../../../../redux/slice/styleSlice";
 import { deleteBonsai } from "../../../../utils/bonsaiApi";
-import { getStatusText } from "../../../../components/status/contractStatus";
+import {
+  getStatusColor,
+  getStatusText,
+} from "../../../../components/status/contractStatus";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -77,16 +80,14 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="font-medium">Trạng thái:</div>{" "}
-                    <div
-                      className={`${
-                        serviceOrderDetail?.serviceOrderStatus == 1 ||
-                        serviceOrderDetail?.serviceOrderStatus == 4 ||
-                        serviceOrderDetail?.serviceOrderStatus == 5
-                          ? "text-[red]"
-                          : "text-[#3a9943]"
-                      }`}
-                    >
-                      {getStatusText(serviceOrderDetail?.serviceOrderStatus)}
+                    <div>
+                      <Tag
+                        color={getStatusColor(
+                          serviceOrderDetail?.serviceOrderStatus
+                        )}
+                      >
+                        {getStatusText(serviceOrderDetail?.serviceOrderStatus)}
+                      </Tag>
                     </div>
                   </div>
                   <div className="grid grid-cols-2">
@@ -232,7 +233,7 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
             file={previewImage}
             onLoadSuccess={onDocumentLoadSuccess}
           >
-            <Page  pageNumber={pageNumber} />
+            <Page pageNumber={pageNumber} />
           </Document>
           {/* <p>
             Page {pageNumber} of {numPages}
