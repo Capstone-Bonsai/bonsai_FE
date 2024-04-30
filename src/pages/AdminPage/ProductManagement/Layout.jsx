@@ -23,7 +23,7 @@ function BonsaiLayout() {
               },
               {
                 key: "2",
-                label: `Kiểu mẫu`,
+                label: `Kiểu dáng`,
                 children: <StyleManage />,
               },
               {

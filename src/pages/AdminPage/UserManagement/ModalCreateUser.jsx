@@ -32,6 +32,7 @@ import { getListRole } from "../../../utils/apiService";
 import { toast } from "react-toastify";
 import { postCreateNewUser } from "../../../utils/apiService";
 import { fetchAllUsers } from "../../../redux/slice/userSlice";
+import { getUserRole } from "../../../components/status/userRole";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -292,7 +293,7 @@ const ModalCreateUser = (props) => {
               <Input />
             </Form.Item>
             <Form.Item
-              label="Username"
+              label="Tên đăng nhập"
               name="userName"
               rules={[
                 {
@@ -350,7 +351,7 @@ const ModalCreateUser = (props) => {
               <Select>
                 {listRole.map((role, index) => (
                   <Select.Option key={index} value={role}>
-                    {role}
+                    {getUserRole(role)}
                   </Select.Option>
                 ))}
               </Select>

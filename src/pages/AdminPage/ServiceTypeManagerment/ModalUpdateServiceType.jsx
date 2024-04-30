@@ -207,7 +207,7 @@ const ModalUpdateServiceType = (props) => {
               <TextArea rows={10} />
             </Form.Item>
             <Form.Item
-              label="Upload ảnh"
+              label="Đăng tải ảnh"
               valuePropName="fileList"
               getValueFromEvent={normFile}
             >

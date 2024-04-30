@@ -145,7 +145,7 @@ const FormGardenCare = ({
           <TextArea rows={10} />
         </Form.Item>
         <Form.Item
-          label="Upload ảnh"
+          label="Đăng tải ảnh"
           valuePropName="fileList"
           getValueFromEvent={normFile}
         >
@@ -162,15 +162,15 @@ const FormGardenCare = ({
           </Upload>
         </Form.Item>
         <Form.Item
-          label="Kiểu dáng"
+          label="Nhiệm vụ cơ bản"
           rules={[
-            { required: true, message: "Phân loại không được để trống!" },
+            { required: true, message: "Nhiệm vụ cơ bản không được để trống!" },
           ]}
         >
           <div>
             <div className="mt-1">
               <Tag icon={<PlusOutlined />} onClick={showModalSelectBaseTask}>
-                Chọn task
+                Chọn nhiệm vụ cơ bản
               </Tag>
             </div>
 

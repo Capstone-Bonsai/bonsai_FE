@@ -24,9 +24,58 @@ export const allLineDashboard = createAsyncThunk(
     }
   }
 );
+
+export const allDashboardForStaff = createAsyncThunk(
+  "dashboard/allDashboardForStaff",
+  async () => {
+    try {
+      const response = await axios.get("/Dashboard/Staff");
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const allRevenue = createAsyncThunk("dashboard/allRevenue", async () => {
+  try {
+    const response = await axios.get("/Revenue");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+});
+export const allRevenueOrder = createAsyncThunk(
+  "dashboard/allRevenueOrder",
+  async () => {
+    try {
+      const response = await axios.get("/Revenue/Order");
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const allRevenueServiceOrder = createAsyncThunk(
+  "dashboard/allRevenueServiceOrder",
+  async () => {
+    try {
+      const response = await axios.get("/Revenue/ServiceOrder");
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 const initialState = {
   allDashboardDTO: {},
   allLineDashboardDTO: {},
+  allDashboardForStaffDTO: {},
+  allRevenueDTO: {},
+  allRevenueOrderDTO: {},
+  allRevenueServiceOrderDTO: {},
+  exportPdfFileDTO: {},
   loading: false,
   msg: "",
   token: null,
@@ -41,6 +90,12 @@ const dashboardSlice = createSlice({
     },
     setLineDashboard: (state, action) => {
       state.allLineDashboardDTO = action.payload;
+    },
+    setDashboardForStaff: (state, action) => {
+      state.allDashboardForStaffDTO = action.payload;
+    },
+    setRevenue: (state, action) => {
+      state.allRevenueDTO = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -72,8 +127,69 @@ const dashboardSlice = createSlice({
         state.msg = "Error loading data";
         state.allLineDashboardDTO.loading = false;
       });
+    builder
+      .addCase(allDashboardForStaff.pending, (state) => {
+        state.msg = "Loading...";
+        state.allDashboardForStaffDTO.loading = true;
+      })
+      .addCase(allDashboardForStaff.fulfilled, (state, action) => {
+        state.allDashboardForStaffDTO.data = action.payload;
+        state.msg = "Data loaded successfully";
+        state.allDashboardForStaffDTO.loading = false;
+      })
+      .addCase(allDashboardForStaff.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.allDashboardForStaffDTO.loading = false;
+      });
+    builder
+      .addCase(allRevenue.pending, (state) => {
+        state.msg = "Loading...";
+        state.allRevenueDTO.loading = true;
+      })
+      .addCase(allRevenue.fulfilled, (state, action) => {
+        state.allRevenueDTO.data = action.payload;
+        state.msg = "Data loaded successfully";
+        state.allRevenueDTO.loading = false;
+      })
+      .addCase(allRevenue.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.allRevenueDTO.loading = false;
+      });
+    builder
+      .addCase(allRevenueOrder.pending, (state) => {
+        state.msg = "Loading...";
+        state.allRevenueOrderDTO.loading = true;
+      })
+      .addCase(allRevenueOrder.fulfilled, (state, action) => {
+        state.allRevenueOrderDTO.data = action.payload;
+        state.msg = "Data loaded successfully";
+        state.allRevenueOrderDTO.loading = false;
+      })
+      .addCase(allRevenueOrder.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.allRevenueOrderDTO.loading = false;
+      });
+    builder
+      .addCase(allRevenueServiceOrder.pending, (state) => {
+        state.msg = "Loading...";
+        state.allRevenueServiceOrderDTO.loading = true;
+      })
+      .addCase(allRevenueServiceOrder.fulfilled, (state, action) => {
+        state.allRevenueServiceOrderDTO.data = action.payload;
+        state.msg = "Data loaded successfully";
+        state.allRevenueServiceOrderDTO.loading = false;
+      })
+      .addCase(allRevenueServiceOrder.rejected, (state) => {
+        state.msg = "Error loading data";
+        state.allRevenueServiceOrderDTO.loading = false;
+      });
   },
 });
 const { reducer: dashboardReducer, actions } = dashboardSlice;
-export const { setDashboard, setLineDashboard } = actions;
+export const {
+  setDashboard,
+  setLineDashboard,
+  setDashboardForStaff,
+  setRevenue,
+} = actions;
 export { dashboardReducer as default };

@@ -32,6 +32,7 @@ function ShoppingCart() {
   }, [cartItems]);
   const bonsais = useSelector((state) => state.bonsai?.bonsaiInCart);
 
+  console.log(bonsais);
   const [isDisabledItem, setIsDisabledItem] = useState(false);
   const updateCartItems = (newCartItems) => {
     const cartId = userInfo ? `cartId ${idUser}` : "cartItems";
@@ -104,6 +105,7 @@ function ShoppingCart() {
               <tr className="border-b bg-[#f2f2f2] h-[50px]">
                 <th className="uppercase">Hình Ảnh</th>
                 <th className="uppercase">Sản phẩm</th>
+                <th className="uppercase">Mã code</th>
                 <th className="uppercase">Kích thước vận chuyển</th>
                 <th className="uppercase">Giá</th>
                 <th></th>
@@ -133,6 +135,9 @@ function ShoppingCart() {
                   </td>
                   <td className={` ${item?.isDisable ? "opacity-30" : ""}`}>
                     <div className={`text-[16px] font-medium`}>{item.name}</div>
+                  </td>
+                  <td className={` ${item?.isDisable ? "opacity-30" : ""}`}>
+                    <div className={`text-[16px] font-medium`}>{item.code}</div>
                   </td>
                   <td
                     className={`font-medium  ${

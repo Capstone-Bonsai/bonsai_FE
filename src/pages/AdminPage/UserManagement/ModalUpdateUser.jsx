@@ -250,12 +250,12 @@ const ModalUpdateUser = (props) => {
             disabled={formDisabled}
           >
             <Form.Item
-              label="Username"
+              label="Tên đăng nhập"
               name="userName"
               rules={[
-                { required: true, message: "Username không được để trống!" },
+                { required: true, message: "Tên đăng nhập không được để trống!" },
                 { validator: validateUserName },
-                { max: 50, message: "Username không quá 50 ký tự!" },
+                { max: 50, message: "Tên đăng nhập không quá 50 ký tự!" },
               ]}
             >
               <Input />

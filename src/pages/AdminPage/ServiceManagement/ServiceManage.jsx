@@ -122,15 +122,6 @@ function ServiceManage() {
         key: "detail",
         render: (record) => <div>{record.baseTask?.detail}</div>,
       },
-      {
-        title: "Ngày tạo",
-        key: "creationDate",
-        render: (_, record) => (
-          <>
-            <p>{new Date(record?.creationDate).toLocaleDateString()}</p>
-          </>
-        ),
-      },
     ];
     return (
       <Table
@@ -179,28 +170,11 @@ function ServiceManage() {
       ),
     },
     {
-      title: "Xem nhiệm vụ",
-      key: "orderDetails",
-      render: (_, record) => {
-        return (
-          <>
-            {record?.serviceType?.typeEnum == 2 ? (
-              <a onClick={() => expend(record.id)}>
-                {record.id === expended ? "Đóng" : "Xem chi tiết"}
-              </a>
-            ) : (
-              <></>
-            )}
-          </>
-        );
-      },
-    },
-    {
       title: "Hành động",
       dataIndex: "hanhdong",
       key: "hanhdong",
       render: (_, record) => (
-        <Space size="middle">
+        <Space size="middle" className="flex justify-center">
           <Tooltip title="Xem thông tin">
             <Button
               type="text"
@@ -212,16 +186,25 @@ function ServiceManage() {
             />
           </Tooltip>
           {record?.serviceType?.typeEnum == 2 ? (
-            <Tooltip title="Xóa">
-              <Button
-                type="text"
-                icon={<DeleteOutlined style={{ color: "red" }} />}
-                onClick={() => {
-                  setSelectedService(record.id);
-                  showModalDelete();
-                }}  
-              />
-            </Tooltip>
+            <>
+              <Tooltip title={record.id === expended ? "Đóng" : "Xem nhiệm vụ"}>
+                <Button
+                  type="text"
+                  icon={<EyeOutlined style={{ color: "blue" }} />}
+                  onClick={() => expend(record.id)}
+                />
+              </Tooltip>
+              <Tooltip title="Xóa">
+                <Button
+                  type="text"
+                  icon={<DeleteOutlined style={{ color: "red" }} />}
+                  onClick={() => {
+                    setSelectedService(record.id);
+                    showModalDelete();
+                  }}
+                />
+              </Tooltip>
+            </>
           ) : (
             <></>
           )}

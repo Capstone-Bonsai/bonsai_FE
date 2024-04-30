@@ -8,7 +8,7 @@ import { getComplaintStatusText } from "../../../components/status/complaintStat
 
 const ModalUpdateComplaint = (props) => {
   const [form] = Form.useForm();
-  const { show, setShow, complaint, serviceOrderId } = props;
+  const { show, setShow, complaint, serviceOrderId, selectedStatus } = props;
   const complaintStatuses = [
     { key: 1, name: "Yêu cầu" },
     { key: 2, name: "Đang thực hiện" },
@@ -17,7 +17,6 @@ const ModalUpdateComplaint = (props) => {
     { key: 0, name: "Trạng thái không xác định" },
   ];
 
-  const [selectingStatus, setSelectingStatus] = useState();
   const [formDisabled, setFormDisabled] = useState(false);
 
   const handleClose = () => {
@@ -56,11 +55,11 @@ const ModalUpdateComplaint = (props) => {
   const updateComplaint = (data) => {
     try {
       console.log({
-        complaintStatus: selectingStatus,
+        complaintStatus: selectedStatus,
         cancelReason: data,
       });
       putComplaint(complaint?.id, {
-        complaintStatus: selectingStatus,
+        complaintStatus: selectedStatus,
         cancelReason: data,
       })
         .then((data) => {
@@ -101,8 +100,10 @@ const ModalUpdateComplaint = (props) => {
   return (
     <>
       <Modal
-        width={800}
-        title="Cập nhật khiếu nại"
+        width={500}
+        title={
+          selectedStatus === 2 ? "Xác nhận khiếu nại" : "Từ chối khiếu nại"
+        }
         open={show}
         onOk={onSubmit}
         okButtonProps={{ type: "default" }}
@@ -112,7 +113,11 @@ const ModalUpdateComplaint = (props) => {
         onCancel={handleClose}
         maskClosable={false}
       >
-        <div className="mt-9">
+        <div className="mt-6">
+          <div className="pl-12 pb-4">
+            Bạn có muốn {selectedStatus === 2 ? "xác nhận" : "từ chối"} khiếu
+            nại này không?
+          </div>
           <Form
             form={form}
             ref={formRef}
@@ -123,10 +128,6 @@ const ModalUpdateComplaint = (props) => {
             initialValues={formData}
             disabled={formDisabled}
           >
-            <Button onClick={() => setSelectingStatus(2)}>
-              Xác nhận kiến nghị
-            </Button>
-            <Button onClick={() => setSelectingStatus(3)}>Hủy bỏ</Button>
             {/* <Form.Item
               label="Trạng thái khiếu nại"
               rules={[
@@ -146,24 +147,7 @@ const ModalUpdateComplaint = (props) => {
                 </Select>
               </Form.Item>
             </Form.Item> */}
-            {selectingStatus ? (
-              <>
-                <Form.Item
-                  label="Trạng thái khiếu nại"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Trạng thái không được để trống!",
-                    },
-                  ]}
-                >
-                  <div> {getComplaintStatusText(selectingStatus)}</div>
-                </Form.Item>
-              </>
-            ) : (
-              <></>
-            )}
-            {selectingStatus == 3 ? (
+            {selectedStatus == 3 ? (
               <>
                 <Form.Item
                   label="Lý do"

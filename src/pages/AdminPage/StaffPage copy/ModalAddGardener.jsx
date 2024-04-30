@@ -71,7 +71,7 @@ function ModalAddGardener(props) {
       title="Thêm người làm vườn"
       open={show}
       onOk={handleAddGardeners}
-      width="60%"
+      width="40%"
       onCancel={setShow}
       // onOk={onSubmit}
       okButtonProps={{ type: "default" }}
@@ -87,7 +87,7 @@ function ModalAddGardener(props) {
           mode="multiple"
           value={selectedGardener}
           onChange={handleSelectChange}
-          style={{ width: "100%" }}
+          style={{ width: "80%" }}
           placeholder="Chọn người làm vườn"
         >
           {gardeners?.map((gardener) => (

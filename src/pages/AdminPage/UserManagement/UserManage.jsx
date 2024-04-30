@@ -37,6 +37,7 @@ import Loading from "../../../components/Loading";
 import { lockoutUser } from "../../../utils/apiService";
 import { toast } from "react-toastify";
 import ModalUpdateUser from "./ModalUpdateUser";
+import { getUserRole } from "../../../components/status/userRole";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -214,7 +215,7 @@ function UserManage() {
       key: "role",
       render: (_, record) => (
         <>
-          <Tag color={getColor(record.role)}>{record.role}</Tag>
+          <Tag color={getColor(record.role)}>{getUserRole(record.role)}</Tag>
         </>
       ),
     },
@@ -298,13 +299,6 @@ function UserManage() {
                 >
                   <PlusCircleOutlined /> Thêm người dùng
                 </button>
-              </div>
-              <div className="pr-0">
-                <Search
-                  placeholder="Địa chỉ email"
-                  onSearch={onSearch}
-                  allowClear
-                />
               </div>
             </div>
             <div className="mb-12">

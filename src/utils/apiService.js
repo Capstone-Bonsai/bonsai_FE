@@ -37,6 +37,11 @@ const putListDeliveryFee = (postData) => {
     },
   });
 };
+const exportPdfFile = () => {
+  return axios.get("/Revenue/download", {
+    responseType: "blob",
+  });
+};
 
 // const postLoginGoogle = (tokenId, provider) => {
 //   return axios.post(`/api/Auth/Login/Google`, {
@@ -51,6 +56,7 @@ export {
   putListDeliveryFee,
   lockoutUser,
   putUser,
+  exportPdfFile,
 };
 
 //$filter=TotalPrice eq 16800 and contains(Title,'')
