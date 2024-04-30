@@ -107,8 +107,7 @@ function ServiceOrderDetail(props) {
       <button onClick={() => props.setSelectedDetail(false)}>
         <LeftOutlined className="text-[15px]" /> Quay lại
       </button>
-      <div className="font-semibold text-center">Đơn hàng dịch vụ</div>
-      <div className="font-semibold mb-6 text-center">{serviceOrderId}</div>
+      <div className="font-semibold text-center text-lg">Đơn hàng dịch vụ</div>
       <div>
         <Tabs
           defaultActiveKey="1"

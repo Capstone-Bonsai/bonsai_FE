@@ -122,15 +122,6 @@ function ServiceManage() {
         key: "detail",
         render: (record) => <div>{record.baseTask?.detail}</div>,
       },
-      {
-        title: "Ngày tạo",
-        key: "creationDate",
-        render: (_, record) => (
-          <>
-            <p>{new Date(record?.creationDate).toLocaleDateString()}</p>
-          </>
-        ),
-      },
     ];
     return (
       <Table

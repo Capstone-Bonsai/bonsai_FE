@@ -6,6 +6,7 @@ import {
   DeleteOutlined,
   EyeOutlined,
   EditOutlined,
+  UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { Space, Tag, Table, Modal, Tooltip, Button } from "antd";
 
@@ -279,34 +280,6 @@ function OrderManage() {
     //       </a>
     //     );
     //   },
-    // },
-    {
-      title: "Xem đơn hàng",
-      key: "orderDetails",
-      render: (_, record) => {
-        return (
-          <>
-            {record?.orderDetails != null ||
-            record?.orderTransaction != null ? (
-              <Space size="middle">
-                <Tooltip title="Xem chi tiết">
-                  <Button
-                    type="text"
-                    icon={<EyeOutlined style={{ color: "blue" }} />}
-                    onClick={() => {
-                      setSelectedOrder(record);
-                      showModalDetail();
-                    }}
-                  />
-                </Tooltip>
-              </Space>
-            ) : (
-              <></>
-            )}
-          </>
-        );
-      },
-    },
     {
       title: "Trạng thái",
       dataIndex: "orderStatus",
@@ -330,16 +303,37 @@ function OrderManage() {
             key: "hanhdong",
             render: (_, record) => (
               <Space size="middle">
-                <Tooltip title="Xem thông tin">
-                  <Button
-                    type="text"
-                    icon={<EditOutlined style={{ color: "orange" }} />}
-                    onClick={() => {
-                      setSelectedUpdateOrder(record);
-                      showUpdateModal();
-                    }}
-                  />
-                </Tooltip>
+                {record?.orderDetails != null ||
+                record?.orderTransaction != null ? (
+                  <Space size="middle">
+                    <Tooltip title="Xem chi tiết">
+                      <Button
+                        type="text"
+                        icon={<EyeOutlined style={{ color: "blue" }} />}
+                        onClick={() => {
+                          setSelectedOrder(record);
+                          showModalDetail();
+                        }}
+                      />
+                    </Tooltip>
+                  </Space>
+                ) : (
+                  <></>
+                )}
+                {record.orderStatus == "Paid" ? (
+                  <Tooltip title="Thêm người làm vườn">
+                    <Button
+                      type="text"
+                      icon={<UsergroupAddOutlined style={{ color: "green" }} />}
+                      onClick={() => {
+                        setSelectedUpdateOrder(record);
+                        showUpdateModal();
+                      }}
+                    />
+                  </Tooltip>
+                ) : (
+                  <></>
+                )}
                 {/* <Tooltip title="Xóa">
                   <Button
                     type="text"
@@ -361,7 +355,9 @@ function OrderManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold text-lg mb-6">Quản lý Đơn hàng</div>
+          <div className="font-semibold text-lg mb-6">
+            Quản lý đơn hàng bonsai
+          </div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="mb-12">
               <Table

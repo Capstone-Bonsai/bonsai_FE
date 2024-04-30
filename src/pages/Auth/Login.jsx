@@ -76,7 +76,7 @@ function Login() {
         navigate("/admin/dashboard");
       } else if (response.role == "Staff") {
         dispatch(connectWebSocket());
-        navigate("/admin/serviceOrder");
+        navigate("/admin/dashboard");
       } else if (response.role == "Gardener") {
         cookies.remove("user");
         toast.error("Không được quyền truy cập vào web!");

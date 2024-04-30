@@ -4,6 +4,8 @@ import {
   EyeOutlined,
   DeleteOutlined,
   EditOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import {
   Space,
@@ -28,6 +30,7 @@ function TabComplaintManagement({ serviceOrderDetail, serviceOrderId }) {
   const dispatch = useDispatch();
 
   const [selectedComplaint, setSelectedComplaint] = useState();
+  const [selectedStatus, setSelectedStatus] = useState();
   const [openUpdateModal, setOpenUpdateModal] = useState();
 
   const columnsComplaints = [
@@ -75,14 +78,28 @@ function TabComplaintManagement({ serviceOrderDetail, serviceOrderId }) {
         <>
           {record?.complaintStatus === 1 || record?.complaintStatus === 2 ? (
             <Space size="middle">
-              <button
-                onClick={() => {
-                  setSelectedComplaint(record);
-                  showUpdateModal();
-                }}
-              >
-                Chỉnh sửa
-              </button>
+              <Tooltip title="Xác nhận khiếu nại">
+                <Button
+                  type="text"
+                  icon={<CheckCircleOutlined style={{ color: "green" }} />}
+                  onClick={() => {
+                    setSelectedComplaint(record);
+                    setSelectedStatus(2);
+                    showUpdateModal();
+                  }}
+                />
+              </Tooltip>
+              <Tooltip title="Từ chối khiếu nại">
+                <Button
+                  type="text"
+                  icon={<CloseCircleOutlined style={{ color: "red" }} />}
+                  onClick={() => {
+                    setSelectedComplaint(record);
+                    setSelectedStatus(3);
+                    showUpdateModal();
+                  }}
+                />
+              </Tooltip>
             </Space>
           ) : (
             <></>
@@ -120,6 +137,7 @@ function TabComplaintManagement({ serviceOrderDetail, serviceOrderId }) {
         setShow={handleCancelUpdate}
         complaint={selectedComplaint}
         serviceOrderId={serviceOrderId}
+        selectedStatus={selectedStatus}
       />
     </>
   );

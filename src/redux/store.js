@@ -16,6 +16,7 @@ import gardenerReducer from "./slice/gardener";
 import serviceOrderReducer from "./slice/serviceOrderSlice";
 import dashboardReducer from "./slice/dashboardSlice";
 import authReducer from "./slice/authSlice";
+import notificationReducer from "./slice/notificationSlice";
 
 const store = configureStore({
   reducer: {
@@ -34,6 +35,7 @@ const store = configureStore({
     gardener: gardenerReducer,
     serviceOrder: serviceOrderReducer,
     dashboard: dashboardReducer,
+    notification: notificationReducer,
   },
 });
 

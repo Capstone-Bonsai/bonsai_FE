@@ -4,6 +4,7 @@ import {
   EyeOutlined,
   DeleteOutlined,
   EditOutlined,
+  EyeInvisibleOutlined,
 } from "@ant-design/icons";
 import { Space, Table, Input, Modal, Select, Tooltip, Button, Tag } from "antd";
 const { Search, TextArea } = Input;
@@ -17,13 +18,17 @@ import ModalUpdateProduct from "./ModalUpdateProduct";
 import Loading from "../../../../components/Loading";
 import { allCategory } from "../../../../redux/slice/categorySlice";
 import { allStyle } from "../../../../redux/slice/styleSlice";
-import { deleteBonsai } from "../../../../utils/bonsaiApi";
+import { deleteBonsai, disableBonsai } from "../../../../utils/bonsaiApi";
 
 function ProductManage() {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.bonsai.loading);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openDisable, setOpenDisable] = useState(false);
+  const [openEnable, setOpenEnable] = useState(false);
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
+  const [confirmLoadingDisable, setConfirmLoadingDisable] = useState(false);
+  const [confirmLoadingEnable, setConfirmLoadingEnable] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [selectedBonsai, setSelectedBonsai] = useState();
@@ -83,6 +88,15 @@ function ProductManage() {
     console.log(openDelete);
   };
 
+  const showModalDisable = () => {
+    setOpenDisable(true);
+    console.log(openDisable);
+  };
+  const showModalEnable = () => {
+    setOpenEnable(true);
+    console.log(openEnable);
+  };
+
   const handleDelete = () => {
     setConfirmLoadingDelete(true);
     deleteBonsai(selectedBonsai)
@@ -105,6 +119,50 @@ function ProductManage() {
       });
   };
 
+  const handleDisable = () => {
+    setConfirmLoadingDisable(true);
+    disableBonsai(selectedBonsai)
+      .then((data) => {
+        toast.success("Vô hiệu hóa thành công!");
+        dispatch(
+          fetchAllBonsaiPagination({
+            pageIndex: currentPage - 1,
+            pageSize: pageSize,
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        toast.error(err.response.data);
+      })
+      .finally(() => {
+        setOpenDisable(false);
+        setConfirmLoadingDisable(false);
+      });
+  };
+
+  const handleEnable = () => {
+    setConfirmLoadingEnable(true);
+    disableBonsai(selectedBonsai)
+      .then((data) => {
+        toast.success("Hiệu hóa thành công!");
+        dispatch(
+          fetchAllBonsaiPagination({
+            pageIndex: currentPage - 1,
+            pageSize: pageSize,
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        toast.error(err.response.data);
+      })
+      .finally(() => {
+        setOpenEnable(false);
+        setConfirmLoadingEnable(false);
+      });
+  };
+
   const handleCancelCreate = () => {
     setOpenCreateModal(false);
   };
@@ -114,7 +172,19 @@ function ProductManage() {
     setOpenUpdateModal(false);
   };
 
+  const handleCancelDisable = () => {
+    setSelectedBonsai(undefined);
+    console.log("Clicked cancel button");
+    setOpenDisable(false);
+  };
+  const handleCancelEnable = () => {
+    setSelectedBonsai(undefined);
+    console.log("Clicked cancel button");
+    setOpenEnable(false);
+  };
+
   const handleCancelDelete = () => {
+    setSelectedBonsai(undefined);
     console.log("Clicked cancel button");
     setOpenDelete(false);
   };
@@ -250,28 +320,58 @@ function ProductManage() {
       dataIndex: "hanhdong",
       key: "hanhdong",
       render: (_, record) => (
-        <Space size="middle">
-          <Tooltip title="Xem thông tin">
-            <Button
-              type="text"
-              icon={<EditOutlined style={{ color: "orange" }} />}
-              onClick={() => {
-                setSelectedUpdateBonsai(record);
-                showUpdateModal();
-              }}
-            />
-          </Tooltip>
-          <Tooltip title="Xóa">
-            <Button
-              type="text"
-              icon={<DeleteOutlined style={{ color: "red" }} />}
-              onClick={() => {
-                setSelectedBonsai(record.id);
-                showModalDelete();
-              }}
-            />
-          </Tooltip>
-        </Space>
+        <>
+          {record?.isSold === false ? (
+            <Space size="middle">
+              <Tooltip title="Xem thông tin">
+                <Button
+                  type="text"
+                  icon={<EditOutlined style={{ color: "orange" }} />}
+                  onClick={() => {
+                    setSelectedUpdateBonsai(record);
+                    showUpdateModal();
+                  }}
+                />
+              </Tooltip>
+              {record.isDisable === false ? (
+                <Tooltip title="Vô hiệu hóa">
+                  <Button
+                    type="text"
+                    icon={<EyeInvisibleOutlined style={{ color: "red" }} />}
+                    onClick={() => {
+                      setSelectedBonsai(record.id);
+                      showModalDisable();
+                    }}
+                  />
+                </Tooltip>
+              ) : (
+                <Tooltip title="Hiệu hóa">
+                  <Button
+                    type="text"
+                    icon={<EyeOutlined style={{ color: "green" }} />}
+                    onClick={() => {
+                      setSelectedBonsai(record.id);
+                      showModalEnable();
+                    }}
+                  />
+                </Tooltip>
+              )}
+
+              <Tooltip title="Xóa">
+                <Button
+                  type="text"
+                  icon={<DeleteOutlined style={{ color: "red" }} />}
+                  onClick={() => {
+                    setSelectedBonsai(record.id);
+                    showModalDelete();
+                  }}
+                />
+              </Tooltip>
+            </Space>
+          ) : (
+            <></>
+          )}
+        </>
       ),
     },
   ];
@@ -364,6 +464,32 @@ function ProductManage() {
           listCategory={allCategories}
           listStyle={allStyles}
         />
+        <Modal
+          title="Vô hiệu hóa bonsai"
+          open={openDisable}
+          onOk={handleDisable}
+          okButtonProps={{ type: "default" }}
+          confirmLoading={confirmLoadingDisable}
+          onCancel={handleCancelDisable}
+          okText={
+            confirmLoadingDisable ? "Đang vô hiệu hóa" : "Vô hiệu hóa bonsai"
+          }
+          cancelText="Hủy"
+        >
+          <div>Bạn có muốn vô hiệu hóa bonsai này không?</div>
+        </Modal>
+        <Modal
+          title="Hiệu hóa bonsai"
+          open={openEnable}
+          onOk={handleEnable}
+          okButtonProps={{ type: "default" }}
+          confirmLoading={confirmLoadingEnable}
+          onCancel={handleCancelEnable}
+          okText={confirmLoadingEnable ? "Đang hiệu hóa" : "Hiệu hóa bonsai"}
+          cancelText="Hủy"
+        >
+          <div>Bạn có muốn hiệu hóa bonsai này không?</div>
+        </Modal>
         <Modal
           title="Xóa bonsai"
           open={openDelete}

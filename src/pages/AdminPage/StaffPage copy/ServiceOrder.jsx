@@ -167,21 +167,6 @@ function ServiceOrder() {
       ),
     },
     {
-      title: "Diện tích sân",
-      dataIndex: "gardenSquare",
-      key: "gardenSquare",
-      render: (_, record) => (
-        <>
-          <p>
-            {record?.gardenSquare.toLocaleString(undefined, {
-              maximumFractionDigits: 2,
-            })}{" "}
-            m<sup>2</sup>
-          </p>
-        </>
-      ),
-    },
-    {
       title: "Địa chỉ",
       dataIndex: "address",
       key: "address",
@@ -253,16 +238,16 @@ function ServiceOrder() {
     },
     userInfo.role == "Staff" ? (
       {
-        title: "Hình ảnh",
-        dataIndex: "image",
-        key: "image",
+        title: "Hành động",
+        dataIndex: "hanhdong",
+        key: "hanhdong",
         render: (_, record) => (
           <Space size="middle">
-            {record.serviceOrderStatus === 3 ? (
-              <Tooltip title="Thêm hình ảnh">
+            {record.contract === null ? (
+              <Tooltip title="Thêm file hợp đồng">
                 <Button
                   type="text"
-                  icon={<PlusSquareOutlined style={{ color: "black" }} />}
+                  icon={<PlusSquareOutlined style={{ color: "green" }} />}
                   onClick={() => {
                     setSelectedServiceOrderImages(record?.contractImages);
                     setSelectedServiceOrderDetail(record);
@@ -273,19 +258,6 @@ function ServiceOrder() {
             ) : (
               <></>
             )}
-          </Space>
-        ),
-      }
-    ) : (
-      <></>
-    ),
-    userInfo.role == "Staff" ? (
-      {
-        title: "Hành động",
-        dataIndex: "hanhdong",
-        key: "hanhdong",
-        render: (_, record) => (
-          <Space size="middle">
             {record.serviceOrderStatus === 1 ? (
               <Tooltip title="Xem thời gian thực hiện và giá cả">
                 <Button
@@ -300,7 +272,10 @@ function ServiceOrder() {
             ) : (
               <></>
             )}
-            {record.serviceOrderStatus === 3 ? (
+            {record.serviceOrderStatus > 3 &&
+            record.serviceOrderStatus != 5 &&
+            record.serviceOrderStatus != 6 &&
+            record.serviceOrderStatus != 8 ? (
               <Tooltip title="Thêm người làm vườn">
                 <Button
                   type="text"
@@ -318,7 +293,7 @@ function ServiceOrder() {
               <Tooltip title="Xem thông tin">
                 <Button
                   type="text"
-                  icon={<EditOutlined style={{ color: "orange" }} />}
+                  icon={<EyeOutlined style={{ color: "blue" }} />}
                   onClick={() => {
                     setSelectedDetail(true);
                     setSelectedServiceOrderDetail(record);
@@ -349,7 +324,9 @@ function ServiceOrder() {
             <ServiceOrderDetail {...props} />
           ) : (
             <>
-              <div className="font-semibold text-lg mb-6">Đơn hàng dịch vụ</div>
+              <div className="font-semibold text-lg mb-6">
+                Quản lý đơn hàng dịch vụ
+              </div>
               <div className="bg-[#ffffff] drop-shadow-2xl">
                 <div className="mb-12">
                   <Table

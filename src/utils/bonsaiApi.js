@@ -23,4 +23,13 @@ const deleteBonsai = (bonsaiId) => {
   }
 };
 
-export { deleteBonsai, putBonsai, postBonsai };
+const disableBonsai = (bonsaiId) => {
+  try {
+    console.log(bonsaiId);
+    return axios.put(`/Bonsai/Disable?bonsaiId=${bonsaiId}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { deleteBonsai, putBonsai, postBonsai, disableBonsai };

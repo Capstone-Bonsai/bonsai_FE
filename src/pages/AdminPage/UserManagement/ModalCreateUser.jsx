@@ -293,7 +293,7 @@ const ModalCreateUser = (props) => {
               <Input />
             </Form.Item>
             <Form.Item
-              label="Username"
+              label="Tên đăng nhập"
               name="userName"
               rules={[
                 {

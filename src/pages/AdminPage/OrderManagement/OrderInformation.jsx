@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
 import { Input, Modal, Form, Upload, Tag, Table } from "antd";
+import { getOrderStatusText } from "../../../components/status/orderStatus";
 const { TextArea } = Input;
 
 const OrderInformation = ({ order }) => {
@@ -59,6 +65,27 @@ const OrderInformation = ({ order }) => {
       ),
     },
   ];
+
+  const getColor = (orderStatus) => {
+    switch (orderStatus) {
+      case "Paid":
+        return { color: "success", icon: <CheckCircleOutlined /> };
+      case "Delivered":
+        return { color: "success", icon: <CheckCircleOutlined /> };
+      case "Waiting":
+        return { color: "warning", icon: <ClockCircleOutlined /> };
+      case "Preparing":
+        return { color: "warning", icon: <ClockCircleOutlined /> };
+      case "Delivering":
+        return { color: "warning", icon: <ClockCircleOutlined /> };
+      case "Failed":
+        return { color: "error", icon: <CloseCircleOutlined /> };
+      case "DeliveryFailed":
+        return { color: "error", icon: <CloseCircleOutlined /> };
+      default:
+        return "defaultColor";
+    }
+  };
   return (
     <>
       <Form
@@ -69,33 +96,48 @@ const OrderInformation = ({ order }) => {
         <div className="font-medium pl-12">1.Thông tin khách hàng</div>
         <div className="pl-12">
           <div className="grid grid-cols-3 gap-4 m-4">
-            <div className="flex justify-start">Email: </div>
+            <div className="font-semibold flex justify-start">Email: </div>
             <div className="flex justify-start col-span-2">
               {order?.customer?.applicationUser?.email}
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 m-4">
-            <div className="flex justify-start">Họ tên: </div>
+            <div className="font-semibold flex justify-start">Họ tên: </div>
             <div className="flex justify-start col-span-2">
               {order?.customer?.applicationUser?.fullname}
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 m-4">
-            <div className="flex justify-start">Tên đăng nhập: </div>
+            <div className="font-semibold flex justify-start">
+              Tên đăng nhập:{" "}
+            </div>
             <div className="flex justify-start col-span-2">
               {order?.customer?.applicationUser?.userName}
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 m-4">
-            <div className="flex justify-start">Số điện thoại: </div>
+            <div className="font-semibold flex justify-start">
+              Số điện thoại:{" "}
+            </div>
             <div className="flex justify-start col-span-2">
               {order?.customer?.applicationUser?.phoneNumber}
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 m-4">
-            <div className="flex justify-start">Địa chỉ: </div>
+            <div className="font-semibold flex justify-start">Địa chỉ: </div>
             <div className="flex justify-start col-span-2">
               {order?.address}
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4 m-4">
+            <div className="font-semibold flex justify-start">Trạng thái: </div>
+            <div className="flex justify-start col-span-2">
+              <Tag
+                color={getColor(order.orderStatus).color}
+                icon={getColor(order.orderStatus).icon}
+              >
+                {getOrderStatusText(order.orderStatus)}
+              </Tag>
             </div>
           </div>
         </div>
@@ -109,11 +151,50 @@ const OrderInformation = ({ order }) => {
           pagination={false}
         />
       </div>
+      <div>
+        <div className="font-medium pl-12">3.Thông tin người làm vườn</div>
+        {order?.gardenerId ? (
+          <div>
+            <div className="pl-12">
+              <div className="grid grid-cols-3 gap-4 m-4">
+                <div className="font-semibold flex justify-start">
+                  Email người làm vườn:
+                </div>
+                <div className="flex justify-start col-span-2">
+                  {order?.gardener?.applicationUser?.email}
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4 m-4">
+                <div className="font-semibold flex justify-start">
+                  Họ và tên:
+                </div>
+                <div className="flex justify-start col-span-2">
+                  {order?.gardener?.applicationUser?.fullname}
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4 m-4">
+                <div className="font-semibold flex justify-start">
+                  Số điện thoại:
+                </div>
+                <div className="flex justify-start col-span-2">
+                  {order?.gardener?.applicationUser?.phoneNumber}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="pl-12">
+              <div className="font-semibold text-[red]">Hiện không có người làm vườn</div>
+            </div>
+          </>
+        )}
+      </div>
       {order?.orderStatus == "Delivered" ? (
         <>
           <div>
             <div className="font-medium mt-6 pl-12">
-              3.Hình ảnh giao hàng thành công
+              4.Hình ảnh giao hàng thành công
             </div>
           </div>
           <div className="font-medium pl-12">
