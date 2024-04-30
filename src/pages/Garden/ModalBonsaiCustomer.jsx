@@ -79,7 +79,7 @@ function ModalBonsaiCustomer(props) {
       isValid = false;
     }
     if (!trunkDimeter.trim()) {
-      setTrunkDimenterError("Vui lòng nhập kích thước thân");
+      setTrunkDimenterError("Vui lòng nhập hoành cây");
       isValid = false;
     }
     if (!height.trim()) {
@@ -254,7 +254,7 @@ function ModalBonsaiCustomer(props) {
             </div>
             <div className="my-2">
               <div className="font-bold">
-                Kích thước thân <span className="text-[red]">*</span>
+                Hoành cây <span className="text-[red]">*</span>
               </div>
               <input
                 required

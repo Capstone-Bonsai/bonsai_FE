@@ -78,7 +78,7 @@ function CustomerBonsai() {
                             Năm trồng: {bonsai?.bonsai?.yearOfPlanting}
                           </div>
                           <div className="text-[14px]">
-                            Kích thước thân: {bonsai?.bonsai?.trunkDimenter}cm
+                            Hoành cây: {bonsai?.bonsai?.trunkDimenter}cm
                           </div>
                           <div className="text-[14px]">
                             Chiều cao: {bonsai?.bonsai?.height}m
@@ -98,7 +98,9 @@ function CustomerBonsai() {
                       </div>
                     ))
                   ) : (
-                    <div className="text-[30px] p-3 mt-[150px] text-center">Bạn chưa có bonsai nào</div>
+                    <div className="text-[30px] p-3 mt-[150px] text-center">
+                      Bạn chưa có bonsai nào
+                    </div>
                   )}
                 </div>
               )}

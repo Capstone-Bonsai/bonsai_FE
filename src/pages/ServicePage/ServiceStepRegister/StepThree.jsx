@@ -162,7 +162,7 @@ function StepThree(propsStepThree) {
                 Năm trồng: {bonsaiDetail?.bonsai?.yearOfPlanting}
               </div>
               <div className="">
-                Kích thước thân: {bonsaiDetail?.bonsai?.trunkDimenter}cm
+                Hoành cây: {bonsaiDetail?.bonsai?.trunkDimenter}cm
                 <sup>2</sup>
               </div>
               <div className="">Chiều cao: {bonsaiDetail?.bonsai?.height}m</div>

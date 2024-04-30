@@ -146,7 +146,7 @@ function BonsaiDetail() {
                 </div>
                 <div className="opacity-70 text-[15px]">
                   <div>
-                    <span className="">Kích thước thân: </span>{" "}
+                    <span className="">Hoành cây: </span>{" "}
                     {bonsaiDetail.trunkDimenter}cm
                   </div>
                   <div>

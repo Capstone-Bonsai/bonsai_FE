@@ -34,7 +34,7 @@ function Banner() {
     { text: "Liên hệ", to: "/contact" },
   ];
   const cookieExpires = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
-  const cookies = new Cookies(null, { expires: cookieExpires });
+  const cookies = new Cookies();
   const [countCart, setCountCart] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(5);

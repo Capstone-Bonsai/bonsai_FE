@@ -76,6 +76,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
   };
   const [newAddress, setNewAddress] = useState("");
   const [newSquare, setNewSquare] = useState("");
+  console.log(newSquare);
   const [bonsaiName, setBonsaiName] = useState("");
   const [description, setDescription] = useState("");
   const [yop, setYop] = useState("");
@@ -83,6 +84,8 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
   const [bonsaiHeight, setBonsaiHeight] = useState("");
   const [numTrunk, setNumTrunk] = useState("");
   //validate
+  const [oldAdressError, setOldAddress] = useState("");
+  const [oldBonsaiError, setOldBonsaiError] = useState("");
   const [categoryError, setCategoryError] = useState("");
   const [styleError, setStyleError] = useState("");
   const [addressError, setAddressError] = useState("");
@@ -93,7 +96,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
   const [trunkDemError, setTrunkDemError] = useState("");
   const [heightError, setHeightError] = useState("");
   const [numTrunkError, setNumTrunkError] = useState("");
-
+  const [imageError, setImageError] = useState("");
   //onChange
   const handleGardenChange = (e) => {
     setGardenId(e.target.value);
@@ -113,7 +116,12 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
   const handleSquareChange = (e) => {
     const squareValue = e.target.value;
     setNewSquare(squareValue);
-    setSquareError("");
+    if (squareValue <= 0) {
+      setSquareError("Diện tích phải lớn hơn 0");
+      e.target.value = null;
+    } else {
+      setSquareError("");
+    }
   };
   const handleNameChange = (e) => {
     const bonsaiName = e.target.value;
@@ -133,17 +141,32 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
   const handleTrunkDemChange = (e) => {
     const trunkDem = e.target.value;
     setTrunkDemeter(trunkDem);
-    setTrunkDemError("");
+    if (trunkDem <= 0) {
+      setTrunkDemError("Hoành cây phải lớn hơn 0");
+      e.target.value = null;
+    } else {
+      setTrunkDemError("");
+    }
   };
   const handleHeightChange = (e) => {
     const height = e.target.value;
     setBonsaiHeight(height);
-    setHeightError("");
+    if (height <= 0) {
+      setHeightError("Chiều cao phải lớn hơn 0");
+      e.target.value = null;
+    } else {
+      setHeightError("");
+    }
   };
   const handleNumTrunkChange = (e) => {
     const numTrunk = e.target.value;
     setNumTrunk(numTrunk);
-    setNumTrunkError("");
+    if (numTrunk <= 0) {
+      setNumTrunkError("Số thân phải lớn hơn 0");
+      e.target.value = null;
+    } else {
+      setNumTrunkError("");
+    }
   };
   const resetFormFields = () => {
     setNewGarden(false);
@@ -187,11 +210,16 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
       setAddressError("Vui lòng nhập địa chỉ!!");
       isValid = false;
     }
-    if (newGarden && !gardenId) {
-      setAddressError("Vui lòng nhập địa chỉ!!");
+    if (gardenId == "" && !newGarden) {
+      setOldAddress("Vui lòng chọn địa chỉ!!");
+      isValid = false;
     }
-    if (!newSquare.trim() && newGarden && !newBonsai) {
+    if (!newSquare.trim() && newGarden) {
       setSquareError("Vui lòng nhập kích thước vườn!!");
+      isValid = false;
+    }
+    if (boughtBonsaiId == "" && newBonsai) {
+      setOldBonsaiError("Vui lòng chọn cây!!");
       isValid = false;
     }
     if (!bonsaiName.trim() && !newBonsai) {
@@ -207,7 +235,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
       isValid = false;
     }
     if (!trunkDemeter.trim() && !newBonsai) {
-      setTrunkDemError("Vui lòng nhập kích thước thân cây bonsai!!");
+      setTrunkDemError("Vui lòng nhập hoành cây cây bonsai!!");
       isValid = false;
     }
     if (!bonsaiHeight.trim() && !newBonsai) {
@@ -216,6 +244,10 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
     }
     if (!numTrunk.trim() && !newBonsai) {
       setNumTrunkError("Vui lòng nhập số thân cây bonsai!!");
+      isValid = false;
+    }
+    if (file?.length <= 0) {
+      setImageError("Vui lòng thêm ảnh!!");
       isValid = false;
     }
     if (!isValid) {
@@ -359,6 +391,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
                 </div>
                 <div>
                   <input
+                    min={1}
                     onChange={handleSquareChange}
                     className={`border w-full p-3 rounded-[8px] outline-none ${
                       squareError != "" ? "border-[red]" : ""
@@ -395,11 +428,13 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
                   </option>
                 ))}
               </select>
-              {addressError != "" ? (
-                <div className="text-[red] text-[14px]">{addressError}</div>
-              ) : (
-                ""
-              )}
+              <>
+                {oldAdressError != "" ? (
+                  <div className="text-[red] text-[14px]">{oldAdressError}</div>
+                ) : (
+                  ""
+                )}
+              </>
             </div>
           )}
           {!newBonsai ? (
@@ -523,7 +558,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
               </div>
               <div className="my-3">
                 <div className="font-bold">
-                  Kích thước thân: <span className="text-red-500">*</span>
+                  Hoành cây: <span className="text-red-500">*</span>
                 </div>
                 <div>
                   <input
@@ -579,7 +614,14 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
                 )}
               </div>
               <div className="my-3">
-                <div className="font-bold">Hình ảnh</div>
+                <div className="font-bold">
+                  Hình ảnh <span className="text-red-500">*</span>
+                </div>
+                {imageError != "" ? (
+                  <div className="text-[red] text-[14px]">{imageError}</div>
+                ) : (
+                  ""
+                )}
                 <div>
                   <input
                     type="file"
@@ -651,6 +693,11 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
                   </option>
                 ))}
               </select>
+              {oldBonsaiError != "" ? (
+                <div className="text-[red] text-[14px]">{oldBonsaiError}</div>
+              ) : (
+                ""
+              )}
             </div>
           )}
         </div>

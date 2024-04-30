@@ -57,7 +57,7 @@ function StepOne(propsStepOne) {
   const props = {
     setGardenLoading,
     gardenLoading,
-    setLoading
+    setLoading,
   };
   const gardens = useSelector((state) => state.garden?.gardenDTO?.items);
   const bonsais = useSelector((state) => state.bonsai?.customerBonsai.items);
@@ -220,8 +220,7 @@ function StepOne(propsStepOne) {
                                       Năm trồng: {bonsai.bonsai.yearOfPlanting}
                                     </div>
                                     <div>
-                                      Kích thước thân:{" "}
-                                      {bonsai.bonsai.trunkDimenter}
+                                      Hoành cây: {bonsai.bonsai.trunkDimenter}
                                       cm
                                     </div>
                                     <div>
@@ -286,7 +285,7 @@ function StepOne(propsStepOne) {
                           <div className="">Code :{bonsai?.bonsai?.code}</div>
                           <div>Năm trồng: {bonsai?.bonsai?.yearOfPlanting}</div>
                           <div>
-                            Kích thước thân: {bonsai?.bonsai?.trunkDimenter}cm
+                            Hoành cây: {bonsai?.bonsai?.trunkDimenter}cm
                           </div>
                           <div>Chiều cao: {bonsai?.bonsai?.height}m</div>
                         </div>

@@ -13,6 +13,7 @@ import Loading from "../../../components/Loading";
 import { allCategory } from "../../../redux/slice/categorySlice";
 import { allStyle } from "../../../redux/slice/styleSlice";
 import { putCustomerBonsai } from "../../../utils/customerBonsaiApi";
+import { toast } from "react-toastify";
 function CustomerBonsaiDetail(propsBonsaiDetail) {
   const { setBonsaiDetail, bonsaiId } = propsBonsaiDetail;
   console.log(bonsaiId);
@@ -187,40 +188,40 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
         .then((data) => {
           toast.success("Cập nhật thành công!");
           dispatch(getBonsaiInGarden(bonsaiId));
-          handleClose();
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
           toast.error("Đã xảy ra sự cố!");
         })
         .finally(() => {
-          setConfirmLoading(false);
-          setFormDisabled(false);
+          setFetchBonsaiDetail(false);
         });
     } catch (err) {
       console.log(err);
       toast.error(err.response.data);
     }
   };
-  const onSubmit = (i) => {
-    // formData.Image = listImage?.map((image) => image);
-    // const postData = new FormData();
-    // postData.append("CategoryId", formData.CategoryId);
-    // postData.append("StyleId", formData.StyleId);
-    // postData.append("Name", formData.Name);
-    // postData.append("Description", formData.Description);
-    // postData.append("YearOfPlanting", formData.YearOfPlanting);
-    // postData.append("TrunkDimenter", formData.TrunkDimenter);
-    // postData.append("Height", formData.Height);
-    // postData.append("NumberOfTrunk", formData.NumberOfTrunk);
-    // postData.append("Price", formData.Price);
-    // formData.Image?.map((image) =>
-    //   image.originFileObj
-    //     ? postData.append("Image", image.originFileObj)
-    //     : postData.append("OldImage", image.url)
-    // );
-    // console.log(formData);
-
+  const onSubmit = () => {
+    formData.Image = listImage?.map((image) => image);
+    const postData = new FormData();
+    postData.append("CategoryId", formData.CategoryId);
+    postData.append("StyleId", formData.StyleId);
+    postData.append("Name", formData.Name);
+    postData.append("Description", formData.Description);
+    postData.append("YearOfPlanting", formData.YearOfPlanting);
+    postData.append("TrunkDimenter", formData.TrunkDimenter);
+    postData.append("Height", formData.Height);
+    postData.append("NumberOfTrunk", formData.NumberOfTrunk);
+    postData.append("Price", formData.Price);
+    listImage
+      ?.filter((image) => image.url.startsWith("https"))
+      ?.map((image) => {
+        postData.append(`OldImage`, image.url);
+      });
+    file?.map((imageFile) => {
+      postData.append(`Image`, imageFile);
+    });
+    console.log(formData);
     if (validateForm != {}) {
       console.log(true);
       updateBonsai(postData);
@@ -257,7 +258,7 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
               </div>
               <div>Năm trồng: {bonsaiDetailById?.bonsai?.yearOfPlanting}</div>
               <div>
-                Kích thước thân: {bonsaiDetailById?.bonsai?.trunkDimenter}
+                 Hoành cây: {bonsaiDetailById?.bonsai?.trunkDimenter}
               </div>
               <div>Chiều cao: {bonsaiDetailById?.bonsai?.height}</div>
               <div>Số thân: {bonsaiDetailById?.bonsai?.numberOfTrunk}</div>
@@ -273,7 +274,9 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
             </div>
             <div className="flex items-center gap-2">
               <div>Địa chỉ: </div>
-              <div className="w-[70%]">{bonsaiDetailById?.customerGarden?.address}</div>
+              <div className="w-[70%]">
+                {bonsaiDetailById?.customerGarden?.address}
+              </div>
               <div>
                 <button
                   className="outline-none bg-[#3a9943] text-[#fff] p-2 rounded-[8px]"
