@@ -54,7 +54,7 @@ function BonsaiDetail() {
     fetchData();
   }, [bonsaiDetail]);
   const bonsaiListSameCategory = useSelector((state) =>
-    state?.bonsai?.bonsaiSameCategory?.items.filter(
+    state?.bonsai?.bonsaiSameCategory?.items?.filter(
       (item) => item.id !== bonsaiId
     )
   );

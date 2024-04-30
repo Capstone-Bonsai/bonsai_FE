@@ -191,7 +191,7 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
         })
         .catch((err) => {
           console.error(err);
-          toast.error("Đã xảy ra sự cố!");
+          toast.error(err.response.data);
         })
         .finally(() => {
           setFetchBonsaiDetail(false);
@@ -386,7 +386,7 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
               />
             </div>
             <div className="">
-              {listImage?.length > 0 ? (
+              {listImage?.length >= 0 ? (
                 <div className="">
                   <div className="flex gap-5 flex-wrap py-3">
                     {listImage?.map((image, index) => (
