@@ -56,7 +56,7 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
     setPreviewImage(file);
     setPreviewOpen(true);
   };
-  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+  pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
   return (
     <>
       {serviceOrderDetail?.loading === true ? (
@@ -221,23 +221,27 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
 
       <Modal
         width={800}
-        className="h-["
         open={previewOpen}
         title={"Hợp đồng"}
         footer={null}
         onCancel={handleCancelPreview}
       >
-        <div>
+        <div className="h-[900px]">
           <Document
-            className="w-[100%]"
+            loading={<Loading loading={true} />}
             file={previewImage}
             onLoadSuccess={onDocumentLoadSuccess}
           >
-            <Page pageNumber={pageNumber} />
+            {Array.from(new Array(numPages), (el, index) => (
+              <Page
+                key={`page_${index + 1}`}
+                renderTextLayer={false}
+                renderAnnotationLayer={false}
+                customTextRenderer={false}
+                pageNumber={index + 1}
+              />
+            ))}
           </Document>
-          {/* <p>
-            Page {pageNumber} of {numPages}
-          </p> */}
         </div>
       </Modal>
     </>

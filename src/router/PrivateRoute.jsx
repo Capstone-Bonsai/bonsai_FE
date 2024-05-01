@@ -32,7 +32,7 @@ import {
   setAvatarUrlRedux,
   setFullNameRedux,
 } from "../redux/slice/avatarSlice";
-import { allNotification, seenNotfi } from "../redux/slice/notificationSlice";
+import { notificationUser, seenNotfi } from "../redux/slice/userSlice";
 
 const { Header, Sider, Content } = Layout;
 
@@ -60,9 +60,7 @@ function PrivateRoute() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const allNotifications = useSelector(
-    (state) => state.notification?.allNotificationDTO
-  );
+  const allNotifications = useSelector((state) => state.user?.notification);
 
   const [fetchNoti, setFetchNoti] = useState(false);
   console.log(fetchNoti);
@@ -71,15 +69,15 @@ function PrivateRoute() {
     try {
       dispatch(seenNotfi(notiId));
       document.getElementById("modal_noti").showModal();
-      dispatch(allNotification({ pageIndex: currentPage, pageSize: 5 }));
+      dispatch(notificationUser({ pageIndex: currentPage, pageSize: 5 }));
     } catch (error) {
       console.log(error);
     }
   };
-  const notiDetail = useSelector((state) => state?.notification?.notiDetail);
+  const notiDetail = useSelector((state) => state?.user?.notiDetail);
   console.log(notiDetail);
   useEffect(() => {
-    dispatch(allNotification({ pageIndex: currentPage, pageSize: 5 }));
+    dispatch(notificationUser({ pageIndex: currentPage, pageSize: 5 }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -107,7 +105,7 @@ function PrivateRoute() {
 
   const handleOnChangeList = (page) => {
     setCurrentPage(page);
-    dispatch(allNotification({ pageIndex: page, pageSize: 5 }));
+    dispatch(notificationUser({ pageIndex: page, pageSize: 5 }));
   };
 
   const NavBarItems = [
@@ -121,7 +119,7 @@ function PrivateRoute() {
               className="bg-[#f2f2f2] hover:bg-gray-300 hover:text-[#fff] mx-3 relative rounded-full w-[30px] h-[30px] flex justify-center items-center"
             >
               <BellOutlined />
-              <p className="absolute top-[-10px] right-[-5px] bg-[red] w-[20px] h-[20px] text-[14px] text-[#fff] rounded-full">
+              <p className="absolute top-[-10px] right-[-5px] bg-[red] w-[20px] h-[20px] text-[14px] text-[#fff] rounded-full leading-none flex items-center justify-center">
                 {allNotifications?.totalItemsCount}
               </p>
             </button>
@@ -165,6 +163,7 @@ function PrivateRoute() {
                     }}
                   />
                 </Tooltip>
+                <div>Trang {currentPage}/{allNotifications?.totalItemsCount}</div>
                 <Tooltip
                   title={
                     currentPage === allNotifications?.totalPagesCount - 1

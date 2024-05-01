@@ -106,6 +106,7 @@ const ModalCreateBaseTask = (props) => {
               name="detail"
               rules={[
                 { required: true, message: "Mô tả không được để trống!" },
+                { max: 200, message: "Mô tả không quá 2000 ký tự!" },
               ]}
             >
               <Input />

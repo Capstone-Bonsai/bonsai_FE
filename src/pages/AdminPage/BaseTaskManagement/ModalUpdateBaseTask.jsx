@@ -62,7 +62,7 @@ const ModalUpdateBaseTask = (props) => {
         })
         .finally(() => {
           setConfirmLoading(false);
-          setFormDisabled(false)
+          setFormDisabled(false);
         });
     } catch (err) {
       console.log(err);
@@ -73,7 +73,7 @@ const ModalUpdateBaseTask = (props) => {
     formRef.current
       .validateFields()
       .then(() => {
-        setFormDisabled(true)
+        setFormDisabled(true);
         setConfirmLoading(true);
         updateBaseTask(formData);
       })
@@ -123,6 +123,7 @@ const ModalUpdateBaseTask = (props) => {
               name="detail"
               rules={[
                 { required: true, message: "Mô tả không được để trống!" },
+                { max: 200, message: "Mô tả không quá 2000 ký tự!" },
               ]}
             >
               <Input />
