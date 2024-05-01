@@ -83,8 +83,8 @@ function DeliveryFeeManage() {
                   </thead>
                   <tbody className="bg-white">
                     {listDeliveryFee &&
-                      listDeliveryFee.length > 0 &&
-                      listDeliveryFee.map((item, index) => {
+                      listDeliveryFee?.length > 0 &&
+                      listDeliveryFee?.map((item, index) => {
                         return (
                           <tr key={index}>
                             {item?.items?.map((temp, index) => (

@@ -57,7 +57,7 @@ function Filter({ priceRange, setPriceRange }) {
         className="selectFilter w-full mb-5 h-[40px]"
         value={namePrice}
       >
-        {priceRangeSelect.map((prs, index) => (
+        {priceRangeSelect?.map((prs, index) => (
           <Option key={index} value={prs.name}>
             {prs.name}
           </Option>

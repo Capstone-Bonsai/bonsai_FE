@@ -110,14 +110,20 @@ function CustomerBonsai() {
           )}
         </div>
       </div>
-      {bonsais?.length > 0 ? (
-        <Pagination
-          current={pageIndex}
-          pageSize={pageSize}
-          total={totalItemsCount}
-          onChange={handlePageChange}
-          className="text-center mt-5"
-        />
+      {!bonsaiDetail ? (
+        <>
+          {bonsais?.length > 0 ? (
+            <Pagination
+              current={pageIndex}
+              pageSize={pageSize}
+              total={totalItemsCount}
+              onChange={handlePageChange}
+              className="text-center mt-5"
+            />
+          ) : (
+            ""
+          )}
+        </>
       ) : (
         ""
       )}

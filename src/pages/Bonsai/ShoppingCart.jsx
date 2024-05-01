@@ -16,7 +16,7 @@ function ShoppingCart() {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const location = useLocation();
-
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const userInfo = cookies.get("user");
 
@@ -113,7 +113,7 @@ function ShoppingCart() {
               </tr>
             </thead>
             <tbody>
-              {bonsais.map((item) => (
+              {bonsais?.map((item) => (
                 <tr
                   key={item.id}
                   className={`border-b ml-5 text-center relative h-[170px]`}

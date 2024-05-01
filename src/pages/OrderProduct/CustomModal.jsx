@@ -18,7 +18,7 @@ function CustomModal({ orderId, onClose, orderById }) {
             Phí vận chuyển:{" "}
             <span className="text-[#3e9943]">{orderById.deliveryPrice} ₫ </span>{" "}
           </div>
-          {orderDetails.map((orderDetail) => (
+          {orderDetails?.map((orderDetail) => (
             <>
               <div
                 className="border-y p-5 flex items-center"

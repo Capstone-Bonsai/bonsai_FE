@@ -63,7 +63,7 @@ function CodeOTP() {
           <h2 className="underline text-[20px] font-bold">Nhập OTP</h2>
         </div>
         <div className="flex justify-center my-2">
-          {otp.map((digit, index) => (
+          {otp?.map((digit, index) => (
             <input
               key={index}
               type="text"

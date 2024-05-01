@@ -96,8 +96,8 @@ function GardenDetail(propsDetail) {
       formData.append(`Image`, imageFile);
     });
     listImage
-      .filter((image) => image.url.startsWith("https"))
-      .map((image) => {
+      ?.filter((image) => image.url.startsWith("https"))
+      ?.map((image) => {
         formData.append(`OldImage`, image.url);
       });
     try {

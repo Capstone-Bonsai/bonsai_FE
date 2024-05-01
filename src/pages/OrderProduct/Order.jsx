@@ -271,7 +271,7 @@ function Order() {
                   </tr>
                 </thead>
                 <tbody>
-                  {bonsais.map((item) => (
+                  {bonsais?.map((item) => (
                     <tr
                       key={item.id}
                       className={`${
@@ -302,6 +302,7 @@ function Order() {
                         </div>
                       </td>
                       <td className="font-medium">{formatPrice(item.price)}</td>
+                      <td className="text-[20px] pr-5"></td>
                       <td className="text-[20px] pr-5"></td>
                     </tr>
                   ))}

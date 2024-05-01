@@ -349,7 +349,7 @@ const ModalCreateUser = (props) => {
               ]}
             >
               <Select>
-                {listRole.map((role, index) => (
+                {listRole?.map((role, index) => (
                   <Select.Option key={index} value={role}>
                     {getUserRole(role)}
                   </Select.Option>

@@ -131,7 +131,7 @@ function StepTwo(propsStepTwo) {
                   <div className="font-bold text-[20px]">Nhiệm vụ:</div>
                   <div className="opacity-70">
                     {packageItem?.tasks?.map((task, index) => (
-                      <div key={index}>_ {task}</div>
+                      <div key={index}>{task}</div>
                     ))}
                   </div>
                 </div>

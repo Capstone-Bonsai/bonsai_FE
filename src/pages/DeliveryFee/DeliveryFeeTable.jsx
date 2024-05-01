@@ -58,7 +58,7 @@ const DeliveryFeeTable = (props) => {
             <tbody className="bg-white">
               {listDeliveryFee &&
                 listDeliveryFee.length > 0 &&
-                listDeliveryFee.map((item, index) => {
+                listDeliveryFee?.map((item, index) => {
                   return (
                     <tr>
                       {item?.items?.map((temp, index) => (
