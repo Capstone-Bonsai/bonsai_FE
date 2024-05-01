@@ -137,10 +137,13 @@ function ModalUpateServiceOrderPrice(props) {
             </Form.Item>
             <Form.Item label="Khoảng cách:">
               <div>
-                {serviceOrderDetail?.distance?.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })}{" "}
-                m
+                {(serviceOrderDetail?.distance / 1000).toLocaleString(
+                  undefined,
+                  {
+                    maximumFractionDigits: 2,
+                  }
+                )}{" "}
+                km
               </div>
             </Form.Item>
             {/* <div className="my-2">

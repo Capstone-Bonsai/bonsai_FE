@@ -246,11 +246,11 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
       setNumTrunkError("Vui lòng nhập số thân cây bonsai!!");
       isValid = false;
     }
-    if (bonsaiHeight == 0) {
+    if (bonsaiHeight == 0 && !newBonsai) {
       setHeightError("Chiều cao phải lớn hơn 0!!");
       isValid = false;
     }
-    if (file?.length <= 0) {
+    if (file?.length <= 0 && !newBonsai) {
       setImageError("Vui lòng thêm ảnh!!");
       isValid = false;
     }
@@ -314,7 +314,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
       dispatch(customerBonsai({ pageIndex, pageSize }));
     } catch (error) {
       document.getElementById("modal_create_bonsai_garden").close();
-      toast.error(error);
+      toast.error(error.response.data);
     }
     0;
   };
@@ -331,11 +331,11 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
         <div className="flex items-center gap-2 my-2">
           <div>bạn đã có bonsai chưa? </div>
           <select
-            value={newBonsai ? "yes" : "no"}
+            value={newBonsai ? "yes" : "no"}  
             onChange={(e) => setNewBonsai(e.target.value === "yes")}
             className="outline-none border"
           >
-            <option value="yes">Có</option>
+            <option selected value="yes">Có</option>
             <option value="no">Chưa</option>
           </select>
         </div>

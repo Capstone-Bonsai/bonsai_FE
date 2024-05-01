@@ -113,6 +113,7 @@ function Order() {
   useEffect(() => {
     if (resultCode === "0") {
       cookies.remove(userInfo ? `cartId ${idUser}` : "cartItems");
+      toast.success("Thanh toán thành công");
       navigate("/ManageOrder");
     } else {
       const userTemp = cookies?.get("userTemp");

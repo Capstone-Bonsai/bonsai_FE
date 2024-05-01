@@ -89,6 +89,7 @@ function GardenDetail(propsDetail) {
     // updateOldImages(updatedList);
   };
   const handleUpdateGarden = async () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("Address", updateAddress);
     formData.append("Square", updateSquare);
@@ -106,6 +107,8 @@ function GardenDetail(propsDetail) {
     } catch (error) {
       console.log(error);
       toast.error("Thất bại");
+    } finally {
+      setLoading(false); 
     }
   };
   return (

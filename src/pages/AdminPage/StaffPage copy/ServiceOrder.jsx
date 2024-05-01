@@ -52,7 +52,6 @@ function ServiceOrder() {
   const allServiceOrders = useSelector(
     (state) => state.serviceOrder?.allServiceOrderDTO?.items
   );
-  console.log(allServiceOrders);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const paging = useSelector(
@@ -243,7 +242,7 @@ function ServiceOrder() {
         key: "hanhdong",
         render: (_, record) => (
           <Space size="middle">
-            {record.contract === null ? (
+            {record.contract === null || record.contract?.length == 0 ? (
               <Tooltip title="Thêm file hợp đồng">
                 <Button
                   type="text"

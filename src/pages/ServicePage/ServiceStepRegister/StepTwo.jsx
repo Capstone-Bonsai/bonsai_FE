@@ -116,13 +116,13 @@ function StepTwo(propsStepTwo) {
               key={packageItem.id}
               className={`border rounded-[8px] ${
                 serviceIdSelected == packageItem.id ? "border-[#3a9943]" : ""
-              } flex my-3 bg-[#fff] drop-shadow-md relative`}
+              } flex gap-3 my-3 bg-[#fff] drop-shadow-md relative`}
             >
-              <div className="w-[300px] h-[300px]">
+              <div className="w-[300px] h-[300px] p-3">
                 <Image
                   src={packageItem?.image}
-                  width="100%"
-                  height="100%"
+                  width={300}
+                  height={300}
                   className="object-cover"
                 />
               </div>

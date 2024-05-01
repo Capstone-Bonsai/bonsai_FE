@@ -131,7 +131,7 @@ function ContractUser() {
                               </div>
                               <div>
                                 <span className="font-bold">Quãng đường: </span>
-                                {contract?.distance?.toLocaleString("vi-VN")}km
+                                {Math.floor(contract?.distance / 1000)?.toLocaleString()}km
                               </div>
                             </div>
                             <button
@@ -146,7 +146,7 @@ function ContractUser() {
                     ) : (
                       <div className="opacity-70 text-[50px] text-center">
                         <AuditOutlined className="text-[100px]" />
-                        <div>Không có hợp đồng</div>
+                        <div>Không có đơn hàng dịch vụ</div>
                       </div>
                     )}
                   </div>

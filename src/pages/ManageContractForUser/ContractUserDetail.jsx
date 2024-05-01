@@ -37,9 +37,14 @@ function ContractUserDetail(props) {
   useEffect(() => {
     if (resultCode == 0) {
       toast.success("Thanh toán thành công");
-    } else if (resultCode != 0 && resultCode != undefined) {
-      toast.error("Thanh toán thất bại");
     }
+    // else if (
+    //   resultCode != 0 &&
+    //   resultCode != undefined &&
+    //   resultCode != null
+    // ) {
+    //   toast.error("Thanh toán thất bại");
+    // }
   }, [resultCode]);
   useEffect(() => {
     setLoading(true);
@@ -108,7 +113,7 @@ function ContractUserDetail(props) {
                     </div>
                     <div className="border p-3">
                       <div className="flex gap-2 border-b">
-                        Thời gian làm việc:
+                        2. Thời gian làm việc:
                         <div>
                           {new Date(
                             contractDetail.startDate
@@ -251,7 +256,7 @@ function ContractUserDetail(props) {
                           </table>
                         </div>
                         <div className="flex justify-between mt-3 items-center">
-                          <div className="font-bold">Khiếu nại: </div>
+                          <div className="font-bold">3. Khiếu nại: </div>
                           <button
                             onClick={() =>
                               document

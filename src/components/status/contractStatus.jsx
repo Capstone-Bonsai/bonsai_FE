@@ -1,7 +1,7 @@
 export const getStatusText = (status) => {
   switch (status) {
     case 1:
-      return "Đang chờ";
+      return "Đang chờ xử lí";
     case 2:
       return "Đang chờ thanh toán";
     case 3:

@@ -7,6 +7,7 @@ import { serviceOrder } from "../../../redux/slice/serviceOrderSlice";
 import { toast } from "react-toastify";
 import noImage from "../../../assets/unImage.png";
 import Loading from "../../../components/Loading";
+import "./modalServiceRegister.css"
 const { RangePicker } = DatePicker;
 function StepThree(propsStepThree) {
   const {
