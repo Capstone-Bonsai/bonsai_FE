@@ -24,9 +24,10 @@ function ModalComplain(props) {
       updatedImageCompain.push({ file: newFile, imageURL });
       updatedFiles.push(newFile);
     }
-
+    setErrorImageComplaint("");
     setImageComplain(updatedImageCompain);
     setFile(updatedFiles);
+    e.target.value = null;
   };
   const handleUploadClick = () => {
     document.getElementById("upload-input").click();
@@ -59,7 +60,7 @@ function ModalComplain(props) {
     const formData = new FormData();
     formData.append("ServiceOrderId", contractId);
     formData.append("Detail", textComplaint);
-    imageComplain.map((image) => {
+    imageComplain?.map((image) => {
       formData.append(`ListImage`, image.file);
     });
     try {
@@ -116,22 +117,22 @@ function ModalComplain(props) {
           />
           <div className={`flex flex-wrap gap-5 `}>
             {imageComplain?.length > 0 ? (
-              imageComplain.map((image, index) => (
+              imageComplain?.map((image, index) => (
                 <div
                   key={index}
-                  className={`relative p-10 border rounded-[10px] ${
+                  className={`relative border w-[220px] h-[220px] ${
                     errorImageComplaint != "" ? "border-[red]" : ""
                   }`}
                 >
                   <img
                     src={image.imageURL}
-                    className={`object-cover w-[130px] h-[130px] ${
+                    className={`object-cover w-full h-full ${
                       errorImageComplaint != "" ? "border-[red]" : ""
                     }`}
                     alt=""
                   />
                   <button
-                    className="absolute top-0 right-2 text-[#f2f2f2] text-[30px]"
+                    className="absolute top-0 right-2 text-[#f2f2f2] text-[30px] hover:text-[#3a9943]"
                     onClick={() => handleRemoveImage(index)}
                   >
                     <CloseCircleOutlined />

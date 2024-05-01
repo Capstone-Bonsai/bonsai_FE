@@ -102,7 +102,7 @@ function ModalBonsaiCustomer(props) {
     formData.append("TrunkDimenter", trunkDimeter);
     formData.append("NumberOfTrunk", numberOfTrunk);
     formData.append("Height", height);
-    imgBonsai.map((image) => {
+    imgBonsai?.map((image) => {
       formData.append(`Image`, image.file);
     });
     try {
@@ -332,7 +332,7 @@ function ModalBonsaiCustomer(props) {
             </div>
             <div className="flex flex-wrap gap-5">
               {imgBonsai.length > 0 ? (
-                imgBonsai.map((imgBonsaiItem, index) => (
+                imgBonsai?.map((imgBonsaiItem, index) => (
                   <div
                     key={index}
                     className="relative rounded-[10px] w-[220px] h-[220px]"

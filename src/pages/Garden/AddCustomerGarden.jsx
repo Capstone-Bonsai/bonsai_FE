@@ -64,7 +64,7 @@ function AddCustomerGarden(props) {
     const formData = new FormData();
     formData.append("Address", newAddress);
     formData.append("Square", newSquare);
-    imageGarden.map((image) => {
+    imageGarden?.map((image) => {
       formData.append(`Image`, image.file);
     });
     setNewLoading(true);

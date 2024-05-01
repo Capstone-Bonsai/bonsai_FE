@@ -22,7 +22,7 @@ function Carousel() {
   return (
     <div className="w-[70%] m-auto flex justify-end">
       <Slider {...settings} className="w-[700px] h-[500px]">
-        {bonsaiImages.map((image, index) => (
+        {bonsaiImages?.map((image, index) => (
           <div key={index} className="w-full h-full ">
             <img
               src={image}
