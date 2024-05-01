@@ -50,7 +50,6 @@ function BaseTaskManage() {
 
   const showModalDelete = () => {
     setOpenDelete(true);
-    console.log(openDelete);
   };
 
   const handleDelete = () => {
@@ -84,12 +83,10 @@ function BaseTaskManage() {
   };
 
   const handleCancelDelete = () => {
-    console.log("Clicked cancel button");
     setOpenDelete(false);
   };
 
   const handleTableChange = (pagination) => {
-    console.log(pagination);
     const index = Number(pagination.current) - 1;
     dispatch(
       allBaseTaskPagination({

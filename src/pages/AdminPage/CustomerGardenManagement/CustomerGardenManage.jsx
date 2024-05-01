@@ -38,7 +38,6 @@ function CustomerGardenManage() {
   }, [dispatch]);
 
   const handleTableChange = (pagination) => {
-    console.log(pagination);
     const index = Number(pagination.current) - 1;
     dispatch(
       fetchCustomerGardensManagers({

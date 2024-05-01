@@ -78,11 +78,9 @@ function OrderManage() {
   // };
 
   const handleCancelDelete = () => {
-    console.log("Clicked cancel button");
     setOpenDelete(false);
   };
   const handleCancelDetail = () => {
-    console.log("Clicked cancel button");
     setSelectedOrder(undefined);
     setOpenDetailModal(false);
   };
@@ -114,7 +112,6 @@ function OrderManage() {
   };
 
   const handleTableChange = (pagination) => {
-    console.log(pagination);
     const index = Number(pagination.current) - 1;
     dispatch(
       fetchAllOrders({

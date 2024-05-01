@@ -28,7 +28,6 @@ const ModalUpdateBaseTask = (props) => {
 
   useEffect(() => {
     if (baseTask != undefined) {
-      console.log(baseTask);
       setFormData({
         name: baseTask.name,
         detail: baseTask.detail,
@@ -44,7 +43,6 @@ const ModalUpdateBaseTask = (props) => {
 
   const updateBaseTask = (data) => {
     try {
-      console.log(data);
       putBaseTask(baseTask.id, data)
         .then((data) => {
           toast.success("Cập nhật thành công!");
@@ -57,7 +55,6 @@ const ModalUpdateBaseTask = (props) => {
           handleClose();
         })
         .catch((err) => {
-          console.log(err);
           toast.error(err.response.data);
         })
         .finally(() => {
@@ -65,7 +62,6 @@ const ModalUpdateBaseTask = (props) => {
           setFormDisabled(false);
         });
     } catch (err) {
-      console.log(err);
       toast.error(err.response.data);
     }
   };
@@ -78,7 +74,6 @@ const ModalUpdateBaseTask = (props) => {
         updateBaseTask(formData);
       })
       .catch((errorInfo) => {
-        console.log(errorInfo);
         toast.error("Vui lòng kiểm tra lại thông tin đầu vào!");
       });
   };

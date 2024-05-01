@@ -79,7 +79,6 @@ const ModalUpdateProduct = (props) => {
 
   useEffect(() => {
     if (bonsai != undefined) {
-      console.log(bonsai);
       setFormData({
         CategoryId: bonsai.categoryId,
         StyleId: bonsai.styleId,

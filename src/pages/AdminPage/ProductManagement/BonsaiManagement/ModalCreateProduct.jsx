@@ -111,7 +111,6 @@ const ModalCreateProduct = (props) => {
   );
   const createBonsai = (product) => {
     try {
-      console.log(product);
       postBonsai(product)
         .then((data) => {
           toast.success("Thêm bonsai thành công!");
@@ -125,7 +124,6 @@ const ModalCreateProduct = (props) => {
           handleClose();
         })
         .catch((err) => {
-          console.log(err);
           toast.error(err.response.data);
         })
         .finally(() => {
@@ -137,7 +135,6 @@ const ModalCreateProduct = (props) => {
     }
   };
   const onSubmit = (i) => {
-    console.log(formData);
     formData.Image = listImage?.map((image) => image.originFileObj);
     const postData = new FormData();
     postData.append("CategoryId", formData.CategoryId);
@@ -156,7 +153,6 @@ const ModalCreateProduct = (props) => {
     postData.append("DeliverySize", formData.DeliverySize);
     formData.Image?.map((image) => postData.append("Image", image));
 
-    console.log(formData);
     formRef.current
       .validateFields()
       .then(() => {
@@ -192,22 +188,18 @@ const ModalCreateProduct = (props) => {
   //modal create category
   const showModalCreateCategory = () => {
     setOpenCreateCategory(true);
-    console.log(openCreateCategory);
   };
 
   const handleCancelCreateCategory = () => {
-    console.log("Clicked cancel button");
     setOpenCreateCategory(false);
   };
 
   // modal create style
   const showModalCreateStyle = () => {
     setOpenCreateStyle(true);
-    console.log(openCreateStyle);
   };
 
   const handleCancelCreateStyle = () => {
-    console.log("Clicked cancel button");
     setOpenCreateStyle(false);
   };
   return (
