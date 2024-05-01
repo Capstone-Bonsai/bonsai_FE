@@ -79,13 +79,13 @@ function ManageOrder() {
                         </div>
                       </div>
                       <div className="flex justify-between my-2">
-                        <div className="w-[80%]">
+                        <div className="w-[70%]">
                           <span className="font-bold pr-2">Địa chỉ:</span>
                           <span className="text-[#26aa99]">
                             {order.address}
                           </span>
                         </div>
-                        <div className="w-[20%] text-end border-l border-l-black">
+                        <div className="w-[30%] text-start pl-5 border-l border-l-black">
                           <span className="font-bold pr-2">Tình trạng:</span>
                           <span
                             className={` ${getClassForStatus(
