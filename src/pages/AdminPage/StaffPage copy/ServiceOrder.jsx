@@ -81,7 +81,7 @@ function ServiceOrder() {
         pageSize: pageSize,
       })
     );
-  }, [currentPage]);
+  }, [currentPage, selectedDetail]);
 
   // const handleCancelDelete = () => {
   //   console.log("Clicked cancel button");
@@ -272,7 +272,7 @@ function ServiceOrder() {
             ) : (
               <></>
             )}
-            {record.serviceOrderStatus > 3 &&
+            {record.serviceOrderStatus >= 3 &&
             record.serviceOrderStatus != 5 &&
             record.serviceOrderStatus != 6 &&
             record.serviceOrderStatus != 8 ? (
@@ -289,7 +289,7 @@ function ServiceOrder() {
             ) : (
               <></>
             )}
-            {record.serviceOrderStatus >= 4 ? (
+            {record.serviceOrderStatus >= 0 ? (
               <Tooltip title="Xem thông tin">
                 <Button
                   type="text"
@@ -313,6 +313,7 @@ function ServiceOrder() {
 
   const props = {
     selectedServiceOrderDetail,
+    setSelectedServiceOrderDetail,
     setSelectedDetail,
   };
 

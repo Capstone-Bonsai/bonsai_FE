@@ -16,6 +16,7 @@ import { getComplaintStatusText } from "../../../../components/status/complaintS
 import TabServiceOrderInformation from "./TabServiceOrderInformation";
 import TabTaskInformation from "./TabTaskInformation";
 import TabComplaintManagement from "./TabComplaintManagement";
+import TabTransactionInfomation from "./TabTransactionInfomation";
 
 function ServiceOrderDetail(props) {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ function ServiceOrderDetail(props) {
   console.log(serviceOrderDetail);
 
   const [isTodayEndDatePlusFourDays, setIsTodayEndDatePlusFourDays] =
-    useState(false);
+    useState(true);
 
   useEffect(() => {
     if (
@@ -95,7 +96,7 @@ function ServiceOrderDetail(props) {
       })
       .catch((err) => {
         console.log(err);
-        toast.error(err.response.statusText);
+        toast.error(err.response.data);
       })
       .finally(() => {
         setOpenStatus(false);
@@ -104,7 +105,13 @@ function ServiceOrderDetail(props) {
   };
   return (
     <>
-      <button onClick={() => props.setSelectedDetail(false)}>
+      <button
+        onClick={() => (
+          props.setSelectedDetail(false),
+          props.setSelectedServiceOrderDetail(undefined),
+          setIsTodayEndDatePlusFourDays(true)
+        )}
+      >
         <LeftOutlined className="text-[15px]" /> Quay lại
       </button>
       <div className="font-semibold text-center text-lg">Đơn hàng dịch vụ</div>
@@ -142,13 +149,21 @@ function ServiceOrderDetail(props) {
                   serviceOrderId={serviceOrderId}
                 />
               ),
+            },{
+              key: "4",
+              label: `Quản lý giao dịch`,
+              children: (
+                <TabTransactionInfomation
+                  serviceOrderDetail={serviceOrderDetail}
+                />
+              ),
             },
           ]}
         />
         {(serviceOrderDetail?.serviceOrderStatus === 7 ||
           serviceOrderDetail?.serviceOrderStatus === 11) &&
         isTodayEndDatePlusFourDays === false ? (
-          <div className="p-8 flex justify-end">
+          <div className="p-8 flex justify-center">
             <button
               className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
               onClick={showModalStatus}
@@ -166,6 +181,8 @@ function ServiceOrderDetail(props) {
         open={openStatus}
         onOk={handleUpdateStatus}
         okButtonProps={{ type: "default" }}
+        cancelText="Hủy"
+        okText={confirmLoadingStatus ? "Đang cập nhật" : "Cập nhật"}
         confirmLoading={confirmLoadingStatus}
         onCancel={handleCancelStatus}
       >

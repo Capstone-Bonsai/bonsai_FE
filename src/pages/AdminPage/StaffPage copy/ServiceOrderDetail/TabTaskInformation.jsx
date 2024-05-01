@@ -110,7 +110,13 @@ function TabTaskInformation({ serviceOrderDetail, listTaskDTO }) {
           {record?.completedTime ? (
             <p>{new Date(record?.completedTime).toLocaleDateString()}</p>
           ) : (
-            <Tag color="red">Chưa hoàn thành</Tag>
+            <>
+              {serviceOrderDetail.serviceOrderStatus === 4 ? (
+                <Tag color="red">Chưa hoàn thành</Tag>
+              ) : (
+                <Tag color="red">Đang xử lí khiếu nại</Tag>
+              )}
+            </>
           )}
         </>
       ),
