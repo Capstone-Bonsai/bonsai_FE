@@ -117,7 +117,6 @@ function ServiceListPage() {
               </div>
             ))}
           </MinHeight>
-
           <Pagination
             current={currentPage}
             pageSize={pageSize}

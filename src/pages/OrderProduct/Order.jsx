@@ -247,6 +247,13 @@ function Order() {
       toast.error(error.response.data);
     }
   };
+  useEffect(() => {
+    const disabledBonsais = bonsais?.filter((item) => item?.isDisable);
+    if (disabledBonsais?.length > 0) {
+      toast.error("Có sản phẩm không khả dụng trong giỏ hàng");
+      navigate("/shoppingCart");
+    }
+  }, [bonsais]);
 
   return (
     <>
@@ -275,7 +282,7 @@ function Order() {
                   {bonsais?.map((item) => (
                     <tr
                       key={item.id}
-                      className={`${
+                      className={`border relative ${
                         item?.isDisable ? "opacity-30" : ""
                       } ml-5 text-center h-[70px] `}
                     >
@@ -303,7 +310,19 @@ function Order() {
                         </div>
                       </td>
                       <td className="font-medium">{formatPrice(item.price)}</td>
-                      <td className="text-[20px] pr-5"></td>
+                      <td className="text-[20px] pr-5">
+                        <td>
+                          <div className=" absolute bottom-0 right-5">
+                            {item?.isDisable ? (
+                              <div className="text-[red]">
+                                Sản phẩm không còn khả dụng{" "}
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </td>
+                      </td>
                       <td className="text-[20px] pr-5"></td>
                     </tr>
                   ))}
@@ -432,7 +451,13 @@ function Order() {
                       >
                         <CompletedAddress setAddress={setAddress} />
                       </div>
-                      {addressError != "" ? <div className="text-[red] text-[14px]">{addressError}</div> : ""}
+                      {addressError != "" ? (
+                        <div className="text-[red] text-[14px]">
+                          {addressError}
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
                     <div className="mt-5">
                       <div className="text-[24px] font-bold  text-[#3e9943]">

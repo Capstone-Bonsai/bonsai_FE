@@ -56,13 +56,6 @@ function ContractUser() {
     if (resultCode == 0) {
       toast.success("Thanh toán thành công");
     }
-    // else if (
-    //   resultCode != 0 &&
-    //   resultCode != undefined &&
-    //   resultCode != null
-    // ) {
-    //   toast.error("Thanh toán thất bại");
-    // }
   }, [resultCode]);
   const seenContractDetail = cookies.get("seenContractDetail", { path: "/" });
   console.log(seenContractDetail);

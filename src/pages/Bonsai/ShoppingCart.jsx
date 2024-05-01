@@ -161,7 +161,9 @@ function ShoppingCart() {
                   <td>
                     <div className="absolute bottom-0 right-5">
                       {item?.isDisable ? (
-                        <div className="text-[red]">Sản phẩm không còn khả dụng </div>
+                        <div className="text-[red]">
+                          Sản phẩm không còn khả dụng{" "}
+                        </div>
                       ) : (
                         ""
                       )}

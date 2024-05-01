@@ -71,6 +71,21 @@ function TabComplaintManagement({ serviceOrderDetail, serviceOrderId }) {
       ),
     },
     {
+      title: "Hình ảnh",
+      dataIndex: "image",
+      key: "image",
+      render: (_, record) => (
+        <>
+          <div className="h-[150px] w-[150px]">
+            <img
+              src={record.complaintImages[0]?.image}
+              style={{ width: "150px", height: "150px" }}
+            />
+          </div>
+        </>
+      ),
+    },
+    {
       title: "Hành động",
       dataIndex: "hanhdong",
       key: "hanhdong",

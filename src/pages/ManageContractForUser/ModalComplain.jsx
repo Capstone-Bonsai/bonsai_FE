@@ -188,9 +188,9 @@ function ModalComplain(props) {
             <button
               type="submit"
               // onClick={() => handleReport()}
-              className="btn"
+              className="btn hover:bg-[#3a9943] hover:text-[#fff]"
             >
-              Đăng
+              Tạo khiếu nại
             </button>
           </div>
         </form>
