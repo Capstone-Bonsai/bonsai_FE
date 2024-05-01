@@ -382,7 +382,7 @@ function ProductManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[100%]">
-          <div className="font-semibold text-lg mb-6">Quản lý Bonsai</div>
+          <div className="font-bold text-lg mb-6">Quản lý Bonsai</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="grid grid-cols-2 lg:grid-cols-2 p-6">
               <div>

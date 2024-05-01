@@ -109,96 +109,104 @@ function PrivateRoute() {
   };
 
   const NavBarItems = [
-    {
-      key: "2",
-      label: (
-        <>
-          <div className="dropdown dropdown-end dropdown-bottom">
-            <button
-              onClick={() => setFetchNoti(!fetchNoti)}
-              className="bg-[#f2f2f2] hover:bg-gray-300 hover:text-[#fff] mx-3 relative rounded-full w-[30px] h-[30px] flex justify-center items-center"
-            >
-              <BellOutlined />
-              <p className="absolute top-[-10px] right-[-5px] bg-[red] w-[20px] h-[20px] text-[14px] text-[#fff] rounded-full leading-none flex items-center justify-center">
-                {allNotifications?.totalItemsCount}
-              </p>
-            </button>
-            <ul
-              tabIndex={0}
-              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[500px] h-[370px] text-[black]"
-            >
-              <div className="font-bold text-[20px] my-2 ">Thông báo</div>
-              {allNotifications.loading === true ? (
-                <div className="h-[272px] flex justify-center items-center">
-                  <Spin
-                    indicator={
-                      <LoadingOutlined style={{ fontSize: 24 }} spin />
-                    }
-                  />
-                </div>
-              ) : (
-                allNotifications?.items?.map((message, index) => (
+    ...(userInfo?.role == "Staff"
+      ? [
+          {
+            key: "2",
+            label: (
+              <>
+                <div className="dropdown dropdown-end dropdown-bottom">
                   <button
-                    onClick={() => handleSeenNoti(message.id)}
-                    key={message.index}
-                    className={`p-2 border-b text-start hover:bg-gray-300 hover:rounded-[8px] ${
-                      message?.isRead ? "" : "bg-[gray]"
-                    }`}
+                    onClick={() => setFetchNoti(!fetchNoti)}
+                    className="bg-[#f2f2f2] hover:bg-gray-300 hover:text-[#fff] mx-3 relative rounded-full w-[30px] h-[30px] flex justify-center items-center"
                   >
-                    <div>
-                      {new Date(message?.creationDate).toLocaleDateString()}
-                    </div>
-                    <div>{message?.message}</div>
+                    <BellOutlined />
+                    <p className="absolute top-[-10px] right-[-5px] bg-[red] w-[20px] h-[20px] text-[14px] text-[#fff] rounded-full leading-none flex items-center justify-center">
+                      {allNotifications?.totalItemsCount}
+                    </p>
                   </button>
-                ))
-              )}
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[700px] h-[370px] text-[black]"
+                  >
+                    <div className="font-bold text-[20px] my-2 ">Thông báo</div>
+                    {allNotifications.loading === true ? (
+                      <div className="h-[272px] flex justify-center items-center">
+                        <Spin
+                          indicator={
+                            <LoadingOutlined style={{ fontSize: 24 }} spin />
+                          }
+                        />
+                      </div>
+                    ) : (
+                      allNotifications?.items?.map((message, index) => (
+                        <button
+                          onClick={() => handleSeenNoti(message.id)}
+                          key={message.index}
+                          className={`p-2 border-b text-start  hover:rounded-[8px] ${
+                            message?.isRead
+                              ? "hover:bg-gray-300"
+                              : "bg-gray-200 hover:bg-gray-100"
+                          }`}
+                        >
+                          <div>
+                            {new Date(
+                              message?.creationDate
+                            ).toLocaleDateString()}
+                          </div>
+                          <div>{message?.message}</div>
+                        </button>
+                      ))
+                    )}
 
-              <div class="flex justify-end items-center gap-4 h-[40px]">
-                <Tooltip title={"Trang trước"}>
-                  <Button
-                    disabled={currentPage === 0 ? true : false}
-                    type="text"
-                    icon={<LeftOutlined style={{ fontSize: "12px" }} />}
-                    onClick={() => {
-                      handleOnChangeList(currentPage - 1);
-                    }}
-                  />
-                </Tooltip>
-                <div>Trang {currentPage}</div>
-                <Tooltip title={"Trang sau"}>
-                  <Button
-                    disabled={allNotifications?.items < 5 ? true : false}
-                    type="text"
-                    icon={<RightOutlined style={{ fontSize: "12px" }} />}
-                    onClick={() => {
-                      handleOnChangeList(currentPage + 1);
-                    }}
-                  />
-                </Tooltip>
-              </div>
-            </ul>
-          </div>
+                    <div class="flex justify-end items-center gap-4 h-[40px]">
+                      <Tooltip title={"Trang trước"}>
+                        <Button
+                          disabled={currentPage === 0 ? true : false}
+                          type="text"
+                          icon={<LeftOutlined style={{ fontSize: "12px" }} />}
+                          onClick={() => {
+                            handleOnChangeList(currentPage - 1);
+                          }}
+                        />
+                      </Tooltip>
+                      <div>Trang {currentPage}</div>
+                      <Tooltip title={"Trang sau"}>
+                        <Button
+                          disabled={allNotifications?.items < 5 ? true : false}
+                          type="text"
+                          icon={<RightOutlined style={{ fontSize: "12px" }} />}
+                          onClick={() => {
+                            handleOnChangeList(currentPage + 1);
+                          }}
+                        />
+                      </Tooltip>
+                    </div>
+                  </ul>
+                </div>
 
-          <dialog id="modal_noti" className="modal">
-            <div className="modal-box">
-              <form method="dialog">
-                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                  ✕
-                </button>
-              </form>
-              <h3 className="font-bold text-lg">{notiDetail?.title}</h3>
-              <div className="italic">
-                {new Date(notiDetail?.creationDate).toLocaleDateString()}
-              </div>
-              <p className="py-4">{notiDetail?.message}</p>
-            </div>
-            <form method="dialog" className="modal-backdrop">
-              <button>close</button>
-            </form>
-          </dialog>
-        </>
-      ),
-    },
+                <dialog id="modal_noti" className="modal">
+                  <div className="modal-box">
+                    <form method="dialog">
+                      <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                        ✕
+                      </button>
+                    </form>
+                    <h3 className="font-bold text-lg">{notiDetail?.title}</h3>
+                    <div className="italic">
+                      {new Date(notiDetail?.creationDate).toLocaleDateString()}
+                    </div>
+                    <p className="py-4">{notiDetail?.message}</p>
+                  </div>
+                  <form method="dialog" className="modal-backdrop">
+                    <button>close</button>
+                  </form>
+                </dialog>
+              </>
+            ),
+          },
+        ]
+      : []),
     {
       key: "1",
       label: (
@@ -310,7 +318,7 @@ function PrivateRoute() {
           collapsed={collapsed}
           className="min-h-screen"
         >
-          <div className="demo-logo-vertical my-6 flex justify-center">
+          <div className="demo-logo-vertical my-6 flex justify-center" onClick={()=> navigate("/admin/dashboard")}>
             <img src={logo} width={70} />
           </div>
           <Menu

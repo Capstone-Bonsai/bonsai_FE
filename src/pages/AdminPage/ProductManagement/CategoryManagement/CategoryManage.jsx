@@ -139,7 +139,7 @@ function CategoryManage() {
     <>
       <div className="flex justify-center">
         <div className="w-[80%]">
-          <div className="font-semibold text-lg mb-6">Quản lý phân loại</div>
+          <div className="font-bold text-lg mb-6">Quản lý phân loại</div>
           <div className="bg-[#ffffff] drop-shadow-2xl">
             <div className="flex justify-between p-6">
               <div>

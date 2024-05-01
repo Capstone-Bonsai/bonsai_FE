@@ -32,7 +32,6 @@ const ModalCareStepManage = (props) => {
   useEffect(() => {
     if (category != undefined) {
       dispatch(allCareStep(category?.id));
-      console.log(allCareSteps);
     }
   }, [category, dispatch]);
 
@@ -90,35 +89,35 @@ const ModalCareStepManage = (props) => {
       dataIndex: "step",
       key: "step",
     },
-    {
-      title: "Hành động",
-      dataIndex: "hanhdong",
-      key: "hanhdong",
-      render: (_, record) => (
-        <Space size="middle">
-          <Tooltip title="Xem thông tin">
-            <Button
-              type="text"
-              icon={<EditOutlined style={{ color: "orange" }} />}
-              onClick={() => {
-                setSelectedUpdateCareStep(record);
-                showUpdateModal();
-              }}
-            />
-          </Tooltip>
-          <Tooltip title="Xóa">
-            <Button
-              type="text"
-              icon={<DeleteOutlined style={{ color: "red" }} />}
-              onClick={() => {
-                setSelectedCareStep(record.id);
-                showModalDelete();
-              }}
-            />
-          </Tooltip>
-        </Space>
-      ),
-    },
+    // {
+    //   title: "Hành động",
+    //   dataIndex: "hanhdong",
+    //   key: "hanhdong",
+    //   render: (_, record) => (
+    //     <Space size="middle">
+    //       <Tooltip title="Xem thông tin">
+    //         <Button
+    //           type="text"
+    //           icon={<EditOutlined style={{ color: "orange" }} />}
+    //           onClick={() => {
+    //             setSelectedUpdateCareStep(record);
+    //             showUpdateModal();
+    //           }}
+    //         />
+    //       </Tooltip>
+    //       <Tooltip title="Xóa">
+    //         <Button
+    //           type="text"
+    //           icon={<DeleteOutlined style={{ color: "red" }} />}
+    //           onClick={() => {
+    //             setSelectedCareStep(record.id);
+    //             showModalDelete();
+    //           }}
+    //         />
+    //       </Tooltip>
+    //     </Space>
+    //   ),
+    // },
   ];
 
   const handleClose = () => {
@@ -129,27 +128,31 @@ const ModalCareStepManage = (props) => {
     <>
       <div className="flex justify-center">
         <Modal
-          width={800}
+          width={700}
           title={`Bước chăm sóc của ${category?.name}`}
           open={show}
-          cancelText="Hủy"
           onCancel={handleClose}
           maskClosable={false}
+          footer={[
+            <Button key="back" onClick={handleClose}>
+              Trở lại
+            </Button>,
+          ]}
         >
-          <div className="mt-9">
+          <div className="mt-6">
             <div className="w-[100%]">
-              <div className="bg-[#ffffff] drop-shadow-2xl">
-                <div className="flex justify-between p-6">
-                  <div>
-                    <button
-                      className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
-                      onClick={showCreateModal}
-                    >
-                      <PlusCircleOutlined /> Thêm bước chăm sóc
-                    </button>
-                  </div>
+              <div className="flex justify-end pb-6">
+                <div>
+                  <button
+                    className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
+                    onClick={showCreateModal}
+                  >
+                    <PlusCircleOutlined /> Cập nhật các bước chăm sóc
+                  </button>
                 </div>
-                <div className="mb-12">
+              </div>
+              <div className="bg-[#ffffff] drop-shadow-2xl">
+                <div className="mb-6">
                   <Table
                     className="w-[100%]"
                     dataSource={allCareSteps}
