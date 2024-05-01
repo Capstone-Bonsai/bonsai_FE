@@ -2,7 +2,7 @@ export const setWebSocket = (socket) => ({
   type: "SET_WEBSOCKET",
   payload: socket,
 });
-export const getWebSocket = () => ({
+export const  getWebSocket = () => ({
   type: "GET_WEBSOCKET",
 });
 

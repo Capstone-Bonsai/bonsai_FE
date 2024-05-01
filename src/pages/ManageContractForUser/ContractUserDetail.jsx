@@ -18,16 +18,29 @@ import {
   getStatusText,
 } from "../../components/status/contractStatus";
 import { toast } from "react-toastify";
+import Cookies from "universal-cookie";
 function ContractUserDetail(props) {
   const dispatch = useDispatch();
-  const contractId = props.contractId;
+  const cookies = new Cookies();
+  const contractIdSession = cookies.get("seenContractDetail", { path: "/" });
+  const contractId = contractIdSession ? contractIdSession : props.contractId;
   const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const resultCode = searchParams.get("resultCode");
+  2;
   const [apiContractLoading, setApiContractLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const loadingContractDetail = useSelector(
     (state) => state.contract?.contractDetail?.loading
   );
-  console.log(loading);
+
+  useEffect(() => {
+    if (resultCode == 0) {
+      toast.success("Thanh toán thành công");
+    } else if (resultCode != 0 && resultCode != undefined) {
+      toast.error("Thanh toán thất bại");
+    }
+  }, [resultCode]);
   useEffect(() => {
     setLoading(true);
     try {
@@ -63,6 +76,10 @@ function ContractUserDetail(props) {
         return "Trạng thái không xác định";
     }
   };
+  const handleBackContract = () => {
+    props.setSelectedDetail(false);
+    cookies.remove("seenContractDetail", { path: "/" });
+  };
   return (
     <>
       {loading ? (
@@ -71,7 +88,7 @@ function ContractUserDetail(props) {
         <div className="w-full relative">
           <button
             className="text-[20px] ml-5 w-[30px] h-[30px] rounded-full hover:bg-[#3a9943] hover:text-[#fff] flex items-center justify-center"
-            onClick={() => props.setSelectedDetail(false)}
+            onClick={handleBackContract}
           >
             <ArrowLeftOutlined />
           </button>
@@ -129,12 +146,15 @@ function ContractUserDetail(props) {
                           </div>
                           <div>
                             Khoảng cách:{" "}
-                            {contractDetail?.distance?.toLocaleString("en")}m
+                            {Math.floor(
+                              contractDetail.distance / 1000
+                            ).toLocaleString()}{" "}
+                            km
                           </div>
                           <div>
                             Diện tích vườn:{" "}
-                            {contractDetail.gardenSquare?.toLocaleString("en")}m
-                            <sup>2</sup>
+                            {contractDetail.gardenSquare?.toLocaleString("en")}{" "}
+                            m<sup>2</sup>
                           </div>
                         </div>
                         <div>
@@ -153,8 +173,10 @@ function ContractUserDetail(props) {
                         <div className="border w-[30%] p-2  rounded-[10px]">
                           <div className="border-b">
                             <div>
-                              Khoảng cách:
-                              {contractDetail.distance?.toLocaleString("vi-VN")}
+                              <span className="font-bold">Khoảng cách:</span>
+                              {Math.floor(
+                                contractDetail.distance / 1000
+                              ).toLocaleString()}{" "}
                               km
                             </div>
                           </div>

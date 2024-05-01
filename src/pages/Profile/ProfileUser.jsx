@@ -45,8 +45,16 @@ function ProfileUser() {
       setUserNameError("Không được bỏ trống tên tài khoản!");
       isValid = false;
     }
+    if (userName.includes(" ")) {
+      setUserNameError("Tên tài khoản không được chứa khoảng trắng!");
+      isValid = false;
+    }
     if (!fullName.trim()) {
       setFullNameError("Không được bỏ trống họ tên!");
+      isValid = false;
+    }
+    if (fullName?.length > 50) {
+      setFullNameError("Họ tên không được quá 50 ký tự!");
       isValid = false;
     }
     if (!phoneNumber.trim()) {

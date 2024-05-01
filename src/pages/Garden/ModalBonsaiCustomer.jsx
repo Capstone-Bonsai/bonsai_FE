@@ -70,8 +70,16 @@ function ModalBonsaiCustomer(props) {
       setBonsaiNameError("Vui lòng nhập tên cây");
       isValid = false;
     }
+    if (bonsaiName.length > 50) {
+      setBonsaiNameError("Tên phải dưới 50 ký tự");
+      isValid = false;
+    }
     if (!bonsaiDescription.trim()) {
       setDescriptionError("Vui lòng nhập mô tả");
+      isValid = false;
+    }
+    if (bonsaiDescription?.length > 2000) {
+      setDescriptionError("Mô tả dưới 50 ký tự");
       isValid = false;
     }
     if (!yop.trim()) {

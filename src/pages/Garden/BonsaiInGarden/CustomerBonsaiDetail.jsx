@@ -168,6 +168,10 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
       setDesError("Mô tả không được bỏ trống!!");
       isValid = false;
     }
+    if (!formData.Description) {
+      setDesError("Mô tả không được bỏ trống!!");
+      isValid = false;
+    }
     if (!formData.YearOfPlanting) {
       setYopError("Năm trồng không được bỏ trống!!");
       isValid = false;

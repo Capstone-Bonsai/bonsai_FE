@@ -91,7 +91,7 @@ function CustomerBonsai() {
                           onClick={() => {
                             setBonsaiDetail(true), setBonsaiId(bonsai?.id);
                           }}
-                          className="absolute right-5 bottom-5 hover:text-[#3a9943]"
+                          className="absolute right-5 bottom-5 text-[#3a9943] hover:text-black"
                         >
                           Xem chi tiết
                         </button>
