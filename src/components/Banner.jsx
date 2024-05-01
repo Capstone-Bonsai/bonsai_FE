@@ -219,20 +219,28 @@ function Banner() {
                     className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[300px]"
                   >
                     <div className="font-bold text-[20px] my-2">Thông báo</div>
-                    {notifications?.items?.map((noti) => (
-                      <button
-                        onClick={() => handleSeenNoti(noti.id)}
-                        key={noti.id}
-                        className={`p-2 border-b text-start hover:bg-gray-300 hover:rounded-[8px] ${
-                          noti?.isRead ? "" : "font-bold"
-                        }`}
-                      >
-                        <div>
-                          {new Date(noti?.creationDate).toLocaleDateString()}
-                        </div>
-                        <div>{noti?.message}</div>
-                      </button>
-                    ))}
+                    {notifications?.items?.length > 0 ? (
+                      <>
+                        {notifications?.items?.map((noti) => (
+                          <button
+                            onClick={() => handleSeenNoti(noti.id)}
+                            key={noti.id}
+                            className={`p-2 border-b text-start hover:bg-gray-300 hover:rounded-[8px] ${
+                              noti?.isRead ? "" : "font-bold"
+                            }`}
+                          >
+                            <div>
+                              {new Date(
+                                noti?.creationDate
+                              ).toLocaleDateString()}
+                            </div>
+                            <div>{noti?.message}</div>
+                          </button>
+                        ))}
+                      </>
+                    ) : (
+                      "Đã hết thông báo"
+                    )}
                     <div className="flex items-center justify-end gap-3">
                       <button
                         disabled={!previous}
@@ -242,9 +250,9 @@ function Banner() {
                         <LeftOutlined />
                       </button>
                       <button
-                        disabled={notifications?.items.length == 0}
+                        disabled={notifications?.items?.length == 0}
                         className={
-                          notifications?.noti?.length == 0 ? "opacity-30" : ""
+                          notifications?.items?.length == 0 ? "opacity-30" : ""
                         }
                         onClick={() => handleNextPage()}
                       >
