@@ -18,6 +18,8 @@ import Loading from "../../../components/Loading";
 import { customerBonsai } from "../../../redux/slice/bonsaiSlice";
 import ModalCreateCustomerBonsai from "./ModalCreateCustomerBonsai";
 import MinHeight from "../../../components/MinHeight";
+import noTree from "../../../assets/noTree.png";
+import noGarden from "../../../assets/noGardener.png";
 function StepOne(propsStepOne) {
   const {
     setSelectedGardenId,
@@ -157,47 +159,45 @@ function StepOne(propsStepOne) {
               <Loading loading={loadingGarden} />
             ) : (
               <div className="">
-                {gardens?.length > 0
-                  ? gardens?.map((garden) => (
-                      <div
-                        key={garden.id}
-                        className={`flex border ${
-                          selectedGardenId == garden?.id
-                            ? "border-[#3a9943]"
-                            : ""
-                        } gap-5 p-5 my-5 relative rounded-[8px]`}
+                {gardens?.length > 0 ? (
+                  gardens?.map((garden) => (
+                    <div
+                      key={garden.id}
+                      className={`flex border ${
+                        selectedGardenId == garden?.id ? "border-[#3a9943]" : ""
+                      } gap-5 p-5 my-5 relative rounded-[8px]`}
+                    >
+                      <button
+                        onClick={() => {
+                          setSelectedGardenId(garden.id);
+                        }}
+                        className="absolute right-5 outline-none text-[20px]"
                       >
-                        <button
-                          onClick={() => {
-                            setSelectedGardenId(garden.id);
-                          }}
-                          className="absolute right-5 outline-none text-[20px]"
-                        >
-                          {selectedGardenId == garden.id ? (
-                            <CheckCircleOutlined className="text-[#3a9943]" />
-                          ) : (
-                            <PlusCircleOutlined />
-                          )}
-                        </button>
-                        <div className="w-[300px] h-[200px] border rounded-[8px]">
-                          <img
-                            className="w-full h-full object-cover rounded-[8px]"
-                            src={
-                              garden?.customerGardenImages?.length > 0
-                                ? garden?.customerGardenImages[0]?.image
-                                : noImage
-                            }
-                            alt=""
-                          />
+                        {selectedGardenId == garden.id ? (
+                          <CheckCircleOutlined className="text-[#3a9943]" />
+                        ) : (
+                          <PlusCircleOutlined />
+                        )}
+                      </button>
+                      <div className="w-[300px] h-[200px] border rounded-[8px]">
+                        <img
+                          className="w-full h-full object-cover rounded-[8px]"
+                          src={
+                            garden?.customerGardenImages?.length > 0
+                              ? garden?.customerGardenImages[0]?.image
+                              : noImage
+                          }
+                          alt=""
+                        />
+                      </div>
+                      <div className="w-[70%]">
+                        <div className="text-[25px] w-[90%]">
+                          {garden.address}
                         </div>
-                        <div className="w-[70%]">
-                          <div className="text-[25px] w-[90%]">
-                            {garden.address}
-                          </div>
-                          <div>
-                            Diện tích: {garden?.square}m<sup>2</sup>
-                          </div>
-                          {/* <div className="">
+                        <div>
+                          Diện tích: {garden?.square}m<sup>2</sup>
+                        </div>
+                        {/* <div className="">
                           <div className="w-full">Bonsai đang trồng:</div>
                           {garden.customerBonsais.length > 0 ? (
                             garden.customerBonsais?.map((bonsai) => (
@@ -244,10 +244,19 @@ function StepOne(propsStepOne) {
                             </div>
                           )}
                         </div> */}
-                        </div>
                       </div>
-                    ))
-                  : "Bạn chưa có vườn nào"}
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center text-[20px]">
+                    <img
+                      src={noGarden}
+                      className="w-[200px] h-[200px] object-cover"
+                      alt=""
+                    />
+                    Bạn chưa có vườn nào
+                  </div>
+                )}
                 {gardens?.length > 0 ? (
                   <Pagination
                     current={pageIndex}
@@ -268,57 +277,62 @@ function StepOne(propsStepOne) {
               <Loading loading={loadingGarden} />
             ) : (
               <div className="">
-                {bonsais?.length > 0
-                  ? bonsais?.map((bonsai) => (
-                      <div
-                        key={bonsai.id}
-                        className={`border ${
-                          bonsai.id == selectedGardenId
-                            ? "border-[#3a9943]"
-                            : ""
-                        } flex gap-2 relative my-2 p-3 rounded-[8px]`}
-                      >
-                        <div className="w-[300px] h-[200px] border rounded-[8px]">
-                          <img
-                            className="w-full h-full object-cover rounded-[8px]"
-                            src={
-                              bonsai?.bonsai?.bonsaiImages?.length > 0
-                                ? bonsai?.bonsai?.bonsaiImages[0]?.imageUrl
-                                : noImage
-                            }
-                            alt=""
-                          />
-                        </div>
-                        <div>
-                          <div className="font-bold text-[23px]">
-                            {bonsai?.bonsai?.name}
-                          </div>
-                          <div className="text-[16px] opacity-70">
-                            <div className="">Code :{bonsai?.bonsai?.code}</div>
-                            <div>
-                              Năm trồng: {bonsai?.bonsai?.yearOfPlanting}
-                            </div>
-                            <div>
-                              Hoành cây: {bonsai?.bonsai?.trunkDimenter}cm
-                            </div>
-                            <div>Chiều cao: {bonsai?.bonsai?.height}m</div>
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => {
-                            setSelectedGardenId(bonsai.id);
-                          }}
-                          className="absolute right-5 outline-none text-[20px]"
-                        >
-                          {selectedGardenId == bonsai.id ? (
-                            <CheckCircleOutlined className="text-[#3a9943]" />
-                          ) : (
-                            <PlusCircleOutlined />
-                          )}
-                        </button>
+                {bonsais?.length > 0 ? (
+                  bonsais?.map((bonsai) => (
+                    <div
+                      key={bonsai.id}
+                      className={`border ${
+                        bonsai.id == selectedGardenId ? "border-[#3a9943]" : ""
+                      } flex gap-2 relative my-2 p-3 rounded-[8px]`}
+                    >
+                      <div className="w-[300px] h-[200px] border rounded-[8px]">
+                        <img
+                          className="w-full h-full object-cover rounded-[8px]"
+                          src={
+                            bonsai?.bonsai?.bonsaiImages?.length > 0
+                              ? bonsai?.bonsai?.bonsaiImages[0]?.imageUrl
+                              : noImage
+                          }
+                          alt=""
+                        />
                       </div>
-                    ))
-                  : "Bạn chưa có cây nào"}
+                      <div>
+                        <div className="font-bold text-[23px]">
+                          {bonsai?.bonsai?.name}
+                        </div>
+                        <div className="text-[16px] opacity-70">
+                          <div className="">Code :{bonsai?.bonsai?.code}</div>
+                          <div>Năm trồng: {bonsai?.bonsai?.yearOfPlanting}</div>
+                          <div>
+                            Hoành cây: {bonsai?.bonsai?.trunkDimenter}cm
+                          </div>
+                          <div>Chiều cao: {bonsai?.bonsai?.height}m</div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setSelectedGardenId(bonsai.id);
+                        }}
+                        className="absolute right-5 outline-none text-[20px]"
+                      >
+                        {selectedGardenId == bonsai.id ? (
+                          <CheckCircleOutlined className="text-[#3a9943]" />
+                        ) : (
+                          <PlusCircleOutlined />
+                        )}
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center text-[20px]">
+                    <img
+                      src={noTree}
+                      className="w-[200px] h-[200px] object-cover"
+                      alt=""
+                    />
+                    Bạn chưa có cây nào
+                  </div>
+                )}
                 {bonsais?.length > 0 ? (
                   <Pagination
                     current={pageIndex}

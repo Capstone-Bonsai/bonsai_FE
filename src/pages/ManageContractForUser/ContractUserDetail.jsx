@@ -24,7 +24,7 @@ function ContractUserDetail(props) {
   const cookies = new Cookies();
   const contractIdSession = cookies.get("seenContractDetail", { path: "/" });
   const contractId = contractIdSession ? contractIdSession : props.contractId;
- 
+
   const [apiContractLoading, setApiContractLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const loadingContractDetail = useSelector(
@@ -91,14 +91,32 @@ function ContractUserDetail(props) {
                 {contractDetail?.id ? (
                   <div>
                     <div className="font-bold">
-                      1. Thông tin dịch vụ:{" "}
+                      <span className="text-[20px]">1. Thông tin dịch vụ:</span>{" "}
                       <span className="font-normal">
                         {contractDetail?.service?.serviceType?.typeName}
                       </span>{" "}
                     </div>
+                    <div>
+                      <div>
+                        <span className="font-bold">Loại dịch vụ: </span>{" "}
+                        {contractDetail?.serviceType == 1
+                          ? "Chăm sóc cây cảnh"
+                          : "Chăm sóc sân vườn"}
+                      </div>
+                      <div>
+                        <span className="font-bold">Tên dịch vụ:</span>{" "}
+                        {contractDetail?.service?.name}
+                      </div>
+                      <div>
+                        <span className="font-bold"> Mô tả dịch vụ:</span>{" "}
+                        {contractDetail?.service?.description}
+                      </div>
+                    </div>
                     <div className="border p-3">
-                      <div className="flex gap-2 border-b">
-                        2. Thời gian làm việc:
+                      <div className="flex gap-2 border-b items-center">
+                        <span className="text-[20px] font-bold">
+                          2. Thời gian làm việc:
+                        </span>
                         <div>
                           {new Date(
                             contractDetail.startDate
@@ -129,21 +147,17 @@ function ContractUserDetail(props) {
                             {contractDetail?.address}
                           </div>
                           <div>
-                            <span className="font-bold">Loại dịch vụ: </span>{" "}
-                            {contractDetail?.serviceType == 1
-                              ? "Chăm sóc cây cảnh"
-                              : "Chăm sóc sân vườn"}
-                          </div>
-                          <div>
-                            Khoảng cách:{" "}
+                            <span className="font-bold">Khoảng cách: </span>
                             {Math.floor(
                               contractDetail.distance / 1000
                             ).toLocaleString()}{" "}
                             km
                           </div>
                           <div>
-                            Diện tích vườn:{" "}
-                            {contractDetail.gardenSquare?.toLocaleString("en")}{" "}
+                            <span className="font-bold">Diện tích vườn: </span>
+                            {contractDetail.gardenSquare?.toLocaleString(
+                              "en"
+                            )}{" "}
                             m<sup>2</sup>
                           </div>
                         </div>
@@ -230,7 +244,8 @@ function ContractUserDetail(props) {
                                         ? new Date(
                                             task?.completedTime
                                           ).toLocaleDateString()
-                                        : contractDetail.serviceOrderStatus == 9
+                                        : contractDetail.serviceOrderStatus ==
+                                          10
                                         ? "Đang xử lý khiếu nại"
                                         : "Chưa hoàn thành"}
                                     </td>

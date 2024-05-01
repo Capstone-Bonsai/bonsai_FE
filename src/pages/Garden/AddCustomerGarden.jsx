@@ -43,7 +43,11 @@ function AddCustomerGarden(props) {
     updatedImageGarden.splice(index, 1);
     setImageGarden(updatedImageGarden);
   };
-
+  const resetFieldGarden = () => {
+    setNewAddress("");
+    setNewSquare("");
+    setImageGarden([]);
+  };
   const handleAddNewGarden = async (e) => {
     e.preventDefault();
     let isValid = true;
@@ -75,6 +79,7 @@ function AddCustomerGarden(props) {
       .then(() => {
         setGardenLoading(!gardenLoading);
         toast.success("Thêm vườn thành công");
+        resetFieldGarden();
         dispatch(fetchCustomerGarden({ pageIndex: 0, pageSize: 5 }));
       })
       .catch((error) => {
