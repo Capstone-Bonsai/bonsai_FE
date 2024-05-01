@@ -144,11 +144,11 @@ const ModalCreateProduct = (props) => {
     postData.append("StyleId", formData.StyleId);
     postData.append("Name", formData.Name);
     postData.append("Description", formData.Description);
-    formData.YearOfPlanting !== undefined
+    formData.YearOfPlanting !== undefined && formData.YearOfPlanting !== null
       ? postData.append("YearOfPlanting", formData.YearOfPlanting)
       : {};
     postData.append("TrunkDimenter", formData.TrunkDimenter);
-    formData.Height !== undefined
+    formData.Height !== undefined && formData.Height !== null
       ? postData.append("Height", formData.Height)
       : {};
     postData.append("NumberOfTrunk", formData.NumberOfTrunk);
