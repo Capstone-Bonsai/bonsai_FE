@@ -90,7 +90,7 @@ function StepOne(propsStepOne) {
         <div className="flex items-center gap-3">
           <div className="font-bold text-[25px]">
             Bước 1:
-            <span className="text-[18px] font-normal opacity-70">
+            {/* <span className="text-[18px] font-normal opacity-70">
               {typeEnum == 2 ? (
                 <>
                   {gardenDetail?.address
@@ -104,7 +104,7 @@ function StepOne(propsStepOne) {
                     : "Vui lòng chọn cây"}
                 </>
               )}
-            </span>
+            </span> */}
           </div>
         </div>
         <div
@@ -191,7 +191,7 @@ function StepOne(propsStepOne) {
                         <div>
                           Diện tích: {garden?.square}m<sup>2</sup>
                         </div>
-                        <div className="">
+                        {/* <div className="">
                           <div className="w-full">Bonsai đang trồng:</div>
                           {garden.customerBonsais.length > 0 ? (
                             garden.customerBonsais?.map((bonsai) => (
@@ -237,7 +237,7 @@ function StepOne(propsStepOne) {
                               Không có bonsai đang trồng
                             </div>
                           )}
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   ))

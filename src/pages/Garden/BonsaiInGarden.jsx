@@ -32,8 +32,9 @@ function BonsaiInGarden(props) {
                 <div className="font-bold text-lg">{bonsaiDetail?.name}</div>
                 <div>Code: {bonsaiDetail?.code}</div>
                 <div>Năm trồng: {bonsaiDetail?.yearOfPlanting}</div>
-                <div>{bonsaiDetail?.trunkDimenter}cm</div>
-                <div>{bonsaiDetail?.height}m</div>
+                <div>Hoành cây: {bonsaiDetail?.trunkDimenter}cm</div>
+                <div>Chiều cao: {bonsaiDetail?.height}m</div>
+                <div>Số thân:  {bonsaiDetail?.numberOfTrunk}</div>
               </div>
             </div>
           </>

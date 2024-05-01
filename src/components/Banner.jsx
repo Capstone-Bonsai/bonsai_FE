@@ -314,11 +314,11 @@ function Banner() {
                           Hồ sơ cá nhân
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <Link className="text-black" to="/ManageOrder">
                           Đơn đã đặt
                         </Link>
-                      </li>
+                      </li> */}
                       <li>
                         <Link
                           to="/login"

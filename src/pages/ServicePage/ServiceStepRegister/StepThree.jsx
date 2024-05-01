@@ -6,6 +6,7 @@ import "./modalServiceRegister.css";
 import { serviceOrder } from "../../../redux/slice/serviceOrderSlice";
 import { toast } from "react-toastify";
 import noImage from "../../../assets/unImage.png";
+import Loading from "../../../components/Loading";
 const { RangePicker } = DatePicker;
 function StepThree(propsStepThree) {
   const {
@@ -15,8 +16,9 @@ function StepThree(propsStepThree) {
     gardenDetail,
     servicePackageDetail,
     bonsaiDetail,
-    setStep
+    setStep,
   } = propsStepThree;
+  const [loading, setLoading] = useState(false);
   const handleBackStep = () => {
     setStepList(2);
   };
@@ -77,20 +79,24 @@ function StepThree(propsStepThree) {
       payload.customerGardenId = selectedGardenId;
     }
     try {
+      setLoading(true);
       const res = await serviceOrder(payload);
+      setLoading(false);
       setIsModalOpen(false);
       toast.success("Gửi đơn thành công");
       navigate("/ManageContractUser");
       console.log(res);
     } catch (error) {
+      setLoading(false);
+      setIsModalOpen(false);
       toast.error(error);
     }
   };
   useEffect(() => {
-    if(dateRange?.length > 1){
-      setStep(3)
+    if (dateRange?.length > 1) {
+      setStep(3);
     }
-  }, [dateRange])
+  }, [dateRange]);
   return (
     <div>
       <div className="flex items-center gap-3 my-3">
@@ -102,6 +108,10 @@ function StepThree(propsStepThree) {
         </button>
         <span className="font-bold text-[25px]">Bước 3: </span>
         <span>Chọn ngày và xác nhận</span>
+      </div>
+      <div>
+        Chú ý <span className="text-[red]">*</span>: Ngày bắt đầu dịch vụ phải
+        sau thời gian đăng ký 5 ngày
       </div>
       <div className="w-full">
         <div className="my-5">
@@ -140,11 +150,12 @@ function StepThree(propsStepThree) {
                 {gardenDetail?.customer?.applicationUser?.fullname}
               </div>
               <div>
-                <span className="text-[20px]">Địa chỉ:</span>{" "}
+                <span className="text-[20px] font-bold">Địa chỉ:</span>{" "}
                 {gardenDetail?.address}
               </div>
               <div>
-                Diện tích: {gardenDetail?.square}m<sup>2</sup>
+                <span className="font-bold"> Diện tích:</span>{" "}
+                {gardenDetail?.square}m<sup>2</sup>
               </div>
             </div>
           </div>
@@ -223,7 +234,7 @@ function StepThree(propsStepThree) {
         okText="Đồng ý"
         onCancel={handleCancel}
       >
-        <div>{serviceIdSelected}</div>
+        {loading ? <Loading loading={loading} /> : ""}
       </Modal>
     </div>
   );
