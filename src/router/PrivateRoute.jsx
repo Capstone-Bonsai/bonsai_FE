@@ -74,7 +74,6 @@ function PrivateRoute() {
     }
   };
   const notiDetail = useSelector((state) => state?.user?.notiDetail);
-  console.log(notiDetail);
   useEffect(() => {
     dispatch(notificationUser({ pageIndex: currentPage, pageSize: 5 }));
   }, [dispatch]);
@@ -141,7 +140,7 @@ function PrivateRoute() {
                       allNotifications?.items?.map((message, index) => (
                         <button
                           onClick={() => handleSeenNoti(message.id)}
-                          key={message.index}
+                          key={index}
                           className={`p-2 border-b text-start  hover:rounded-[8px] ${
                             message?.isRead
                               ? "hover:bg-gray-300"

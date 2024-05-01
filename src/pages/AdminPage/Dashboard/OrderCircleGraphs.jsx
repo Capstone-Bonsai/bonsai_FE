@@ -2,7 +2,6 @@ import ReactEcharts from "echarts-for-react";
 import { values } from "lodash";
 
 export default function OrderCircleGraphs({ height, color = [], data }) {
-  console.log(data);
   const option = {
     legend: {
       show: true,
@@ -23,7 +22,7 @@ export default function OrderCircleGraphs({ height, color = [], data }) {
     yAxis: [{ axisLine: { show: false }, splitLine: { show: false } }],
 
     label: {
-      fontSize: 13,
+      fontSize: 10,
       color: "blue",
     },
 
@@ -55,7 +54,7 @@ export default function OrderCircleGraphs({ height, color = [], data }) {
           label: {
             show: true,
             formatter: "{b} \n{c} ({d}%)",
-            fontSize: 14,
+            fontSize: 10,
             color: "blue",
           },
         },

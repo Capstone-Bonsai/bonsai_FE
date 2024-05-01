@@ -183,7 +183,7 @@ export default function Dashboard() {
                       <div className="font-bold text-xl">Đơn hàng bonsai</div>
                       <div>
                         <OrderCircleGraphs
-                          height="300px"
+                          height="450px"
                           color={[
                             "#115293",
                             "#1976d2",
@@ -199,7 +199,7 @@ export default function Dashboard() {
                       <div className="font-bold text-xl">Đơn hàng dịch vụ chăm sóc</div>
                       <div>
                         <ServiceOrderCircleGraphs
-                          height="300px"
+                          height="450px"
                           color={[
                             "#ddebf8",
                             "#bfdaf2",
