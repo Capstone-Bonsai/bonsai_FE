@@ -69,7 +69,7 @@ const ModalCreateCareStep = (props) => {
   return (
     <>
       <Modal
-        width={800}
+        width={500}
         title="Thêm bước chăm sóc"
         open={show}
         onOk={onSubmit}
@@ -85,13 +85,21 @@ const ModalCreateCareStep = (props) => {
             form={form}
             ref={formRef}
             layout="horizontal"
-            labelCol={{ span: 5 }}
+            labelCol={{ span: 8 }}
             wrapperCol={{ span: 18 }}
             onValuesChange={handleFormChange}
             disabled={formDisabled}
           >
             <Form.Item label="Tên bước chăm sóc">
-              <Form.List name="careSteps">
+              <Form.List
+                name="careSteps"
+                rules={[
+                  {
+                    required: true,
+                    message: "Tên không được để trống!",
+                  },
+                ]}
+              >
                 {(fields, { add, remove }) => (
                   <div
                     style={{
@@ -103,7 +111,16 @@ const ModalCreateCareStep = (props) => {
                     {fields?.map((field, index) => (
                       <Space key={index}>
                         <div>
-                          <Form.Item name={[field.name]} noStyle>
+                          <Form.Item
+                            name={[field.name]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Không được để trống!",
+                              },
+                            ]}
+                            noStyle
+                          >
                             <Input />
                           </Form.Item>
                         </div>

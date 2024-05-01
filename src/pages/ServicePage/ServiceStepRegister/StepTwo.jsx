@@ -91,12 +91,12 @@ function StepTwo(propsStepTwo) {
               </button>
               <div className="font-bold text-[25px]">
                 Bước 2:{" "}
-                <span className="text-[18px] font-normal opacity-70">
+                {/* <span className="text-[18px] font-normal opacity-70">
                   {" "}
                   {servicePackageDetail?.name
                     ? servicePackageDetail?.name
                     : "Vui lòng chọn loại dịch vụ"}
-                </span>
+                </span> */}
               </div>
             </div>
             <button
@@ -114,7 +114,9 @@ function StepTwo(propsStepTwo) {
           {servicePackages?.items?.map((packageItem) => (
             <div
               key={packageItem.id}
-              className="border flex my-3 bg-[#fff] drop-shadow-md relative"
+              className={`border rounded-[8px] ${
+                serviceIdSelected == packageItem.id ? "border-[#3a9943]" : ""
+              } flex my-3 bg-[#fff] drop-shadow-md relative`}
             >
               <div className="w-[300px] h-[300px]">
                 <Image
@@ -140,7 +142,7 @@ function StepTwo(propsStepTwo) {
                 onClick={() => {
                   setServiceIdSelected(packageItem.id);
                 }}
-                className="absolute right-5 outline-none text-[20px]"
+                className="absolute right-5 top-5 outline-none text-[20px]"
               >
                 {serviceIdSelected == packageItem.id ? (
                   <CheckCircleOutlined className="text-[#3a9943]" />

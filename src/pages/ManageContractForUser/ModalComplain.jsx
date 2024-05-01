@@ -4,6 +4,7 @@ import noImage from "../../assets/unImage.png";
 import { addComplaint } from "../../redux/slice/contractSlice";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
+import Loading from "../../components/Loading";
 function ModalComplain(props) {
   const { contractId, contractDetailById, setApiContractLoading } = props;
   const [imageComplain, setImageComplain] = useState([]);
@@ -13,7 +14,7 @@ function ModalComplain(props) {
   console.log(textComplaint);
   const [file, setFile] = useState([]);
   const dispatch = useDispatch();
-
+  const [loading, setLoading] = useState(false);
   const handleImageChange = (e) => {
     const files = e.target.files;
     const updatedImageCompain = [...imageComplain];
@@ -57,21 +58,25 @@ function ModalComplain(props) {
     if (!isValid) {
       return;
     }
+    setLoading(true);
     const formData = new FormData();
     formData.append("ServiceOrderId", contractId);
     formData.append("Detail", textComplaint);
     imageComplain?.map((image) => {
       formData.append(`ListImage`, image.file);
     });
-    try {
-      await addComplaint(formData);
-      setApiContractLoading(true);
-      toast.success("Đã khiếu nại thành công");
-      closeModal();
-    } catch (error) {
-      toast.error(error);
-      closeModal();
-    }
+    addComplaint(formData)
+      .then(() => {
+        toast.success("Đã khiếu nại thành công");
+        setApiContractLoading(true);
+      })
+      .catch((error) => {
+        toast.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+        closeModal();
+      });
   };
 
   return (
@@ -85,89 +90,99 @@ function ModalComplain(props) {
         <h3 className="font-bold text-lg">
           Bạn cảm thấy không hài lòng với dịch vụ?
         </h3>
-        <div className="flex items-center gap-2">
-          <div>Chi tiết:</div>
-          <div className="w-[80%]">
-            <input
-              value={textComplaint}
-              onChange={(e) => {
-                setTextComplaint(e.target.value), setErrorTextComplaint("");
-              }}
-              className={`border p-2 rounded-[5px] w-full outline-none ${
-                errorTextComplaint != "" ? "border-[red]" : ""
-              }`}
-              type="text"
-              name=""
-              id=""
-            />
-            {errorTextComplaint != "" ? (
-              <div className="text-[red] font-[14px]">{errorTextComplaint}</div>
-            ) : (
-              ""
-            )}
-          </div>
-        </div>
-        <div className="mt-5">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            style={{ display: "none" }}
-            id="upload-input"
-          />
-          <div className={`flex flex-wrap gap-5 `}>
-            {imageComplain?.length > 0 ? (
-              imageComplain?.map((image, index) => (
-                <div
-                  key={index}
-                  className={`relative border w-[220px] h-[220px] ${
-                    errorImageComplaint != "" ? "border-[red]" : ""
+        {loading ? (
+          <Loading loading={loading} />
+        ) : (
+          <>
+            <div className="flex items-center gap-2">
+              <div>Chi tiết:</div>
+              <div className="w-[80%]">
+                <input
+                  value={textComplaint}
+                  onChange={(e) => {
+                    setTextComplaint(e.target.value), setErrorTextComplaint("");
+                  }}
+                  className={`border p-2 rounded-[5px] w-full outline-none ${
+                    errorTextComplaint != "" ? "border-[red]" : ""
                   }`}
-                >
+                  type="text"
+                  name=""
+                  id=""
+                />
+                {errorTextComplaint != "" ? (
+                  <div className="text-[red] font-[14px]">
+                    {errorTextComplaint}
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            </div>
+            <div className="mt-5">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+                id="upload-input"
+              />
+              <div className={`flex flex-wrap gap-5 `}>
+                {imageComplain?.length > 0 ? (
+                  imageComplain?.map((image, index) => (
+                    <div
+                      key={index}
+                      className={`relative border w-[220px] h-[220px] ${
+                        errorImageComplaint != "" ? "border-[red]" : ""
+                      }`}
+                    >
+                      <img
+                        src={image.imageURL}
+                        className={`object-cover w-full h-full ${
+                          errorImageComplaint != "" ? "border-[red]" : ""
+                        }`}
+                        alt=""
+                      />
+                      <button
+                        className="absolute top-0 right-2 text-[#f2f2f2] text-[30px] hover:text-[#3a9943]"
+                        onClick={() => handleRemoveImage(index)}
+                      >
+                        <CloseCircleOutlined />
+                      </button>
+                    </div>
+                  ))
+                ) : (
                   <img
-                    src={image.imageURL}
-                    className={`object-cover w-full h-full ${
+                    src={noImage}
+                    className={`object-cover border w-[100px] h-[100px] ${
                       errorImageComplaint != "" ? "border-[red]" : ""
                     }`}
-                    alt=""
+                    alt="No Image"
                   />
-                  <button
-                    className="absolute top-0 right-2 text-[#f2f2f2] text-[30px] hover:text-[#3a9943]"
-                    onClick={() => handleRemoveImage(index)}
-                  >
-                    <CloseCircleOutlined />
-                  </button>
+                )}
+              </div>
+              {imageComplain?.length < 4 ? (
+                <button
+                  onClick={() => handleUploadClick()}
+                  className={`border p-1 rounded-lg my-5 outline-none ${
+                    errorImageComplaint != "" ? "border-[red] " : ""
+                  }`}
+                >
+                  <UploadOutlined />
+                  Thêm hình ảnh
+                </button>
+              ) : (
+                "Bạn chỉ có thể thêm tối đa 4 ảnh"
+              )}
+              {errorImageComplaint != "" ? (
+                <div className="text-[14px] text-[red]">
+                  {errorImageComplaint}
                 </div>
-              ))
-            ) : (
-              <img
-                src={noImage}
-                className={`object-cover border w-[100px] h-[100px] ${
-                  errorImageComplaint != "" ? "border-[red]" : ""
-                }`}
-                alt="No Image"
-              />
-            )}
-          </div>
-          {imageComplain?.length < 4 ? (
-            <button
-              onClick={() => handleUploadClick()}
-              className={`border p-1 rounded-lg my-5 outline-none ${
-                errorImageComplaint != "" ? "border-[red] " : ""
-              }`}
-            >
-              <UploadOutlined />
-              Thêm hình ảnh
-            </button>
-          ) : (
-            "Bạn chỉ có thể thêm tối đa 4 ảnh"
-          )}
-          {errorImageComplaint != "" ? (
-            <div className="text-[14px] text-[red]">{errorImageComplaint}</div>
-          ) : (
-            ""
-          )}
-        </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </>
+        )}
         <form onSubmit={handleReport} method="dialog">
           <div className="flex justify-end">
             <button

@@ -4,6 +4,8 @@ import {
   EyeOutlined,
   DeleteOutlined,
   EditOutlined,
+  RightOutlined,
+  LeftOutlined,
 } from "@ant-design/icons";
 import {
   Space,
@@ -49,9 +51,25 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
+    setPageNumber(1);
   }
 
-  const handleCancelPreview = () => setPreviewOpen(false);
+  function changePage(offset) {
+    setPageNumber((prevPageNumber) => prevPageNumber + offset);
+  }
+
+  function previousPage() {
+    changePage(-1);
+  }
+
+  function nextPage() {
+    changePage(1);
+  }
+
+  const handleCancelPreview = () => {
+    setPreviewOpen(false);
+    setPreviewImage(undefined);
+  };
   const handlePreview = async (file) => {
     setPreviewImage(file);
     setPreviewOpen(true);
@@ -220,28 +238,46 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
       )}
 
       <Modal
-        width={800}
+        width={645}
         open={previewOpen}
         title={"Hợp đồng"}
         footer={null}
         onCancel={handleCancelPreview}
       >
-        <div className="h-[900px]">
+        <div className="h-[870px]">
           <Document
             loading={<Loading loading={true} />}
             file={previewImage}
             onLoadSuccess={onDocumentLoadSuccess}
           >
-            {Array.from(new Array(numPages), (el, index) => (
-              <Page
-                key={`page_${index + 1}`}
-                renderTextLayer={false}
-                renderAnnotationLayer={false}
-                customTextRenderer={false}
-                pageNumber={index + 1}
-              />
-            ))}
+            <Page
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
+              customTextRenderer={false}
+              pageNumber={pageNumber}
+            />
           </Document>
+        </div>
+        <div class="flex justify-end items-center gap-4 h-[40px]">
+          <Tooltip title={"Trang trước"}>
+            <Button
+              disabled={pageNumber <= 1}
+              type="text"
+              icon={<LeftOutlined style={{ fontSize: "12px" }} />}
+              onClick={previousPage}
+            />
+          </Tooltip>
+          <div>
+            Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
+          </div>
+          <Tooltip title={"Trang sau"}>
+            <Button
+              disabled={pageNumber >= numPages}
+              type="text"
+              icon={<RightOutlined style={{ fontSize: "12px" }} />}
+              onClick={nextPage}
+            />
+          </Tooltip>
         </div>
       </Modal>
     </>

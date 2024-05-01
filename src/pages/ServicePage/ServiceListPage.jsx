@@ -106,8 +106,8 @@ function ServiceListPage() {
                     <div className="text-center mt-5">
                       <Link
                         to={`/serviceDetail/${service.id}`}
-                        className="text-[20px] w-[100%] h-[40px] bg-[#f0f0f0] flex justify-center items-center rounded
-          hover:bg-[#3e9943] hover:text-[#ffffff]"
+                        className="text-[20px] w-[100%] h-[40px] bg-[#f0f0f0] text-[#3a9943] flex justify-center items-center rounded
+          hover:bg-[#3e9943] hover:text-black"
                       >
                         Xem chi tiết
                       </Link>

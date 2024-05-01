@@ -6,19 +6,16 @@ import {
   DeleteOutlined,
   MenuOutlined,
 } from "@ant-design/icons";
-import OrderCircleGraphs from "./OrderCircleGraphs";
 import { useEffect } from "react";
 import {
   allDashboard,
   allDashboardForStaff,
   allLineDashboard,
 } from "../../../redux/slice/dashboardSlice";
-import ServiceOrderCircleGraphs from "./ServiceOrderCircleGraphs";
 import { Button, Tooltip } from "antd";
 import { useNavigate } from "react-router-dom";
 import { formatPrice } from "../../../components/formatPrice/FormatPrice";
 import Loading from "../../../components/Loading";
-import LineChart from "./LineChart";
 
 export default function DashboardStaff() {
   const dispatch = useDispatch();
@@ -37,8 +34,8 @@ export default function DashboardStaff() {
         <div className="w-[100%]">
           <div className="font-bold text-lg mb-6">Bảng điều khiển</div>
           <div className="w-[100%]">
-            {dashboardForStaffDatas?.loading === true ? (
-              <Loading loading={dashboardForStaffDatas?.loading} isRelative={true} />
+            {loading === true ? (
+              <Loading loading={loading} isRelative={true} />
             ) : (
               <>
                 <div className="grid grid-cols-5 gap-6 mb-12">

@@ -10,6 +10,7 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import ModalUpdateDeliveryFee from "./ModalUpdateDeliveryFee";
+import { toast } from "react-toastify";
 
 function DeliveryFeeManage() {
   const [listDeliveryFee, setList] = useState({});
@@ -30,7 +31,7 @@ function DeliveryFeeManage() {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        toast.error("Tải dữ liệu không thành công!");
         setLoading(false);
       });
   };

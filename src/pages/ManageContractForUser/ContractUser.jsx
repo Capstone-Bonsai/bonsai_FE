@@ -13,11 +13,13 @@ import {
   getStatusColor,
   getStatusText,
 } from "../../components/status/contractStatus";
+import Cookies from "universal-cookie";
 function ContractUser() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const cookies = new Cookies();
   console.log(currentPage);
   const [pageSize, setPageSize] = useState(3);
   useEffect(() => {
@@ -45,7 +47,13 @@ function ContractUser() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  const [selectedDetail, setSelectedDetail] = useState(false);
+
+  const seenContractDetail = cookies.get("seenContractDetail", { path: "/" });
+  console.log(seenContractDetail);
+  const [selectedDetail, setSelectedDetail] = useState(
+    seenContractDetail ? true : false
+  );
+  console.log(selectedDetail);
   const [contractId, setContractId] = useState("");
   console.log(contractId);
 
@@ -53,7 +61,11 @@ function ContractUser() {
     contractId,
     setSelectedDetail,
   };
-
+  const handleSeenDetail = (contractId) => {
+    setSelectedDetail(true);
+    setContractId(contractId);
+    cookies.set("seenContractDetail", contractId);
+  };
   return (
     <MinHeight>
       <div className="m-auto w-[70%] flex mt-10 justify-between bg-[#ffffff] mb-5">
@@ -123,11 +135,8 @@ function ContractUser() {
                               </div>
                             </div>
                             <button
-                              onClick={() => {
-                                setSelectedDetail(true),
-                                  setContractId(contract.id);
-                              }}
-                              className="text-[12px] absolute bottom-0 right-0 pl-5 hover:text-[#3a9943]"
+                              onClick={() => handleSeenDetail(contract.id)}
+                              className="text-[12px] absolute bottom-0 right-0 pl-5 text-[#3a9943] hover:text-black"
                             >
                               Xem chi tiết
                             </button>

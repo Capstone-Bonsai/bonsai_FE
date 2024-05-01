@@ -293,7 +293,7 @@ function CustomerGarden() {
                                 setGardenDetail(true),
                                   setSelectedGardenId(garden.id);
                               }}
-                              className="text-[14px] hover:text-[#3a9943]"
+                              className="text-[14px] text-[#3a9943] hover:text-black"
                             >
                               Xem chi tiết
                             </button>
