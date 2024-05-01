@@ -22,45 +22,29 @@ function ServiceOrderDetail(props) {
   const dispatch = useDispatch();
   const [openStatus, setOpenStatus] = useState(false);
   const [confirmLoadingStatus, setConfirmLoadingStatus] = useState(false);
-  const serviceOrderId = props.selectedServiceOrderDetail.id;
+  const [isTrueDate, setIsTrueDate] = useState(false);
 
   const { serviceOrderDetail, listTaskDTO } = useSelector(
     (state) => state.serviceOrder
   );
-
-  console.log(dayjs(serviceOrderDetail.endDate).format("DD/MM/YY"));
   console.log(serviceOrderDetail);
 
-  const [isTodayEndDatePlusFourDays, setIsTodayEndDatePlusFourDays] =
-    useState(true);
+  console.log(isTrueDate);
 
   useEffect(() => {
-    if (
-      props.selectedServiceOrderDetail &&
-      props.selectedServiceOrderDetail.endDate
-    ) {
-      // Sử dụng dayjs để tính toán ngày cách endDate 4 ngày
-      const endDate = dayjs(serviceOrderDetail.endDate);
-
-      const endDatePlusFour = endDate.add(4, "day");
-
-      // Lấy ngày hôm nay
-      const today = dayjs().format("YYYY-MM-DD");
-
-      // So sánh với endDatePlusFourDays
-      setIsTodayEndDatePlusFourDays(
-        today >= endDatePlusFour.format("YYYY-MM-DD")
-      );
-    }
-  }, [props.selectedServiceOrderDetail]);
+    dispatch(serviceOrderById(props.selectedServiceOrderDetail?.id));
+  }, [props.selectedServiceOrderDetail?.id, dispatch]);
 
   useEffect(() => {
-    dispatch(serviceOrderById(serviceOrderId));
-  }, [serviceOrderId]);
+    dispatch(listTask(props.selectedServiceOrderDetail?.id));
+  }, [props.selectedServiceOrderDetail?.id, dispatch]);
 
   useEffect(() => {
-    dispatch(listTask(serviceOrderId));
-  }, [serviceOrderId]);
+    const endDate = dayjs(serviceOrderDetail.endDate);
+    const endDatePlusFour = endDate.add(3, "day");
+    const today = dayjs();
+    setIsTrueDate(today.isAfter(endDatePlusFour));
+  }, [serviceOrderDetail]);
 
   const showModalStatus = () => {
     setOpenStatus(true);
@@ -68,31 +52,22 @@ function ServiceOrderDetail(props) {
   };
 
   const handleCancelStatus = () => {
-    console.log("Clicked cancel button");
     setOpenStatus(false);
   };
 
-  // const getConplaintStatusText = (status) => {
-  //   switch (status) {
-  //     case 1:
-  //       return "Yêu cầu";
-  //     case 2:
-  //       return "Đang thực hiện";
-  //     case 3:
-  //       return "Đã hủy";
-  //     case 4:
-  //       return "Hoàn thành";
-  //     default:
-  //       return "Trạng thái không xác định";
-  //   }
-  // };
+  const handleCancel = () => {
+    console.log;
+    setIsTrueDate(false);
+    props.setSelectedDetail(false);
+    props.setSelectedServiceOrderDetail(undefined);
+  };
 
   const handleUpdateStatus = () => {
     setConfirmLoadingStatus(true);
-    putServiceOrderStatus(serviceOrderId)
+    putServiceOrderStatus(props.selectedServiceOrderDetail.id)
       .then((data) => {
         toast.success("Cập nhật thành công!");
-        dispatch(serviceOrderById(serviceOrderId));
+        dispatch(serviceOrderById(props.selectedServiceOrderDetail.id));
       })
       .catch((err) => {
         console.log(err);
@@ -105,19 +80,13 @@ function ServiceOrderDetail(props) {
   };
   return (
     <>
-      <button
-        onClick={() => (
-          props.setSelectedDetail(false),
-          props.setSelectedServiceOrderDetail(undefined),
-          setIsTodayEndDatePlusFourDays(true)
-        )}
-      >
+      <button onClick={handleCancel}>
         <LeftOutlined className="text-[15px]" /> Quay lại
       </button>
       {(serviceOrderDetail?.serviceOrderStatus === 7 ||
         serviceOrderDetail?.serviceOrderStatus === 11) &&
-      isTodayEndDatePlusFourDays === false ? (
-        <div className="p-8 flex justify-end">
+      isTrueDate == true ? (
+        <div className="flex justify-end">
           <button
             className="hover:bg-[#ffffff] hover:text-[#3A994A] bg-[#3A994A] text-[#ffffff] rounded-md py-2 px-2"
             onClick={showModalStatus}
@@ -160,7 +129,7 @@ function ServiceOrderDetail(props) {
               children: (
                 <TabComplaintManagement
                   serviceOrderDetail={serviceOrderDetail}
-                  serviceOrderId={serviceOrderId}
+                  serviceOrderId={props.selectedServiceOrderDetail.id}
                 />
               ),
             },

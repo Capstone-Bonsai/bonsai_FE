@@ -23,7 +23,9 @@ function ModalAddGardener(props) {
   const gardeners = useSelector(
     (state) => state?.gardener?.freeGardenerDTO?.items
   );
-  const loading = useSelector((state) => state?.gardener?.loading);
+  const loading = useSelector(
+    (state) => state?.gardener?.freeGardenerDTO.loading
+  );
   console.log(gardeners);
   console.log(loading);
   const [selectedGardener, setSelectedGardener] = useState([]);
@@ -33,7 +35,7 @@ function ModalAddGardener(props) {
   };
 
   const handleClose = () => {
-    setSelectedGardener([])
+    setSelectedGardener([]);
     setShow(false);
   };
 

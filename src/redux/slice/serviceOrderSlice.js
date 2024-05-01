@@ -163,6 +163,7 @@ const serviceOrderSlice = createSlice({
         state.allServiceOrderDTO.loading = false;
       })
       .addCase(serviceOrderById.pending, (state) => {
+        state.serviceOrderDetail = {};
         state.msg = "Loading...";
         state.serviceOrderDetail.loading = true;
       })
@@ -172,6 +173,7 @@ const serviceOrderSlice = createSlice({
         state.serviceOrderDetail.loading = false;
       })
       .addCase(serviceOrderById.rejected, (state) => {
+        state.serviceOrderDetail = {};
         state.msg = "Error loading data";
         state.serviceOrderDetail.loading = false;
       })
