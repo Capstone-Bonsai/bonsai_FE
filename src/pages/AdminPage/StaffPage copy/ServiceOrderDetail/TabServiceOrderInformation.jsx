@@ -99,7 +99,7 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
                           icon={<EyeOutlined style={{ color: "blue" }} />}
                           onClick={() => {
                             handlePreview(
-                              serviceOrderDetail?.contract[3]?.image
+                              serviceOrderDetail?.contract[0]?.image
                             );
                           }}
                         />

@@ -58,7 +58,7 @@ function PrivateRoute() {
   } = theme.useToken();
   const [logoutAdmin, setLogoutAdmin] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const allNotifications = useSelector((state) => state.user?.notification);
 
@@ -154,8 +154,9 @@ function PrivateRoute() {
               )}
 
               <div class="flex justify-end items-center gap-4 h-[40px]">
-                <Tooltip title={currentPage === 1 ? "" : "Trang trước"}>
+                <Tooltip title={"Trang trước"}>
                   <Button
+                    disabled={currentPage === 0 ? true : false}
                     type="text"
                     icon={<LeftOutlined style={{ fontSize: "12px" }} />}
                     onClick={() => {
@@ -163,15 +164,10 @@ function PrivateRoute() {
                     }}
                   />
                 </Tooltip>
-                <div>Trang {currentPage}/{allNotifications?.totalItemsCount}</div>
-                <Tooltip
-                  title={
-                    currentPage === allNotifications?.totalPagesCount - 1
-                      ? ""
-                      : "Trang sau"
-                  }
-                >
+                <div>Trang {currentPage}</div>
+                <Tooltip title={"Trang sau"}>
                   <Button
+                    disabled={allNotifications?.items < 5 ? true : false}
                     type="text"
                     icon={<RightOutlined style={{ fontSize: "12px" }} />}
                     onClick={() => {
