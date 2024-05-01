@@ -99,7 +99,8 @@ function ServiceStepMain() {
   useEffect(() => {
     if (step < 2) {
       setIsStepTwoDisabled(true);
-    } else if (step < 3) {
+    }
+    if (step < 3) {
       setIsStepThreeDisabled(true);
     }
   }, [step]);

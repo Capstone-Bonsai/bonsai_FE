@@ -44,7 +44,6 @@ function Banner() {
   const cookies = new Cookies();
   const [countCart, setCountCart] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
-  console.log(pageIndex + 1);
   const [pageSize, setPageSize] = useState(5);
   const [isSticky, setIsSticky] = useState(false);
   const avatarUrl = useSelector((state) => state.avatar.avatarUrlRedux);
@@ -211,7 +210,7 @@ function Banner() {
                   >
                     <BellOutlined />
                     <div className="absolute top-[-10px] right-[-5px] bg-[red] w-[20px] h-[20px] text-[14px] text-[#fff] rounded-full">
-                      {countNoti}
+                      {countNoti ? countNoti : 0}
                     </div>
                   </button>
                   <ul

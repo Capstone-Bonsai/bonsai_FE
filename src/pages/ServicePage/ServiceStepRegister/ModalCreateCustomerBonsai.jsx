@@ -75,6 +75,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
 
   const handleUploadClick = () => {
     document.getElementById("upload-bonsai-in-service").click();
+    setImageError("");
   };
   const [newAddress, setNewAddress] = useState("");
   const [newSquare, setNewSquare] = useState("");
@@ -262,9 +263,9 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
       setImageError("Vui lòng thêm ảnh!!");
       isValid = false;
     }
-    // if (!isValid) {
-    //   return;
-    // }
+    if (!isValid) {
+      return;
+    }
     const formData = new FormData();
     setLoading(true);
     if (!newGarden && !newBonsai) {
@@ -340,7 +341,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
               <select
                 value={newBonsai ? "yes" : "no"}
                 onChange={(e) => setNewBonsai(e.target.value === "yes")}
-                className="outline-none border"
+                className="outline-none border rounded-[8px] p-2"
               >
                 <option selected value="yes">
                   Có

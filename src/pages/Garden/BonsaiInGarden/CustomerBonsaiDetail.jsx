@@ -168,8 +168,8 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
       setDesError("Mô tả không được bỏ trống!!");
       isValid = false;
     }
-    if (!formData.Description) {
-      setDesError("Mô tả không được bỏ trống!!");
+    if (formData.Description?.length > 2000) {
+      setDesError("Mô tả phải ít hơn 2000!!");
       isValid = false;
     }
     if (!formData.YearOfPlanting) {
@@ -262,7 +262,7 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
   };
   const handleChangeNumTrunk = (e) => {
     const numTrunk = e.target.value;
-    if (numTrunk < 0) {
+    if (numTrunk > 0) {
       setFormData({ ...formData, NumberOfTrunk: numTrunk });
       setNumTrunkError("");
     } else {

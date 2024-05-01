@@ -7,6 +7,7 @@ import noImage from "../../../assets/unImage.png";
 import { Pagination } from "antd";
 import Loading from "../../../components/Loading";
 import CustomerBonsaiDetail from "./CustomerBonsaiDetail";
+import noTree from "../../../assets/noTree.png";
 function CustomerBonsai() {
   const dispatch = useDispatch();
   const [pageIndex, setPageIndex] = useState(1);
@@ -98,7 +99,10 @@ function CustomerBonsai() {
                       </div>
                     ))
                   ) : (
-                    <div className="text-[30px] p-3 mt-[150px] text-center">
+                    <div className="text-[30px] p-3 mt-[50px] text-center">
+                      <div className="flex justify-center">
+                        <img className="w-[200px] h-[200px] " src={noTree} alt="" />
+                      </div>
                       Bạn chưa có bonsai nào
                     </div>
                   )}
