@@ -29,7 +29,6 @@ const ModalCreateBaseTask = (props) => {
 
   const createBaseTask = (input) => {
     try {
-      console.log(input);
       postBaseTask(input)
         .then((data) => {
           toast.success("Thêm nhiệm vụ cơ bản thành công!");
@@ -53,7 +52,6 @@ const ModalCreateBaseTask = (props) => {
     }
   };
   const onSubmit = (i) => {
-    console.log(formData);
     formRef.current
       .validateFields()
       .then(() => {

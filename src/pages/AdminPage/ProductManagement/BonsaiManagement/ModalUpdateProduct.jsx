@@ -79,7 +79,6 @@ const ModalUpdateProduct = (props) => {
 
   useEffect(() => {
     if (bonsai != undefined) {
-      console.log(bonsai);
       setFormData({
         CategoryId: bonsai.categoryId,
         StyleId: bonsai.styleId,
@@ -420,9 +419,9 @@ const ModalUpdateProduct = (props) => {
                 {
                   type: "number",
                   min: 0,
-                  max: 100000000000,
+                  max: 100000000,
                   message:
-                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 100,000,000,000 Vnd!",
+                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 100,000,000 Vnd!",
                 },
               ]}
             >
