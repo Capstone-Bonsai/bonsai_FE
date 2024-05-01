@@ -24,28 +24,13 @@ function ContractUserDetail(props) {
   const cookies = new Cookies();
   const contractIdSession = cookies.get("seenContractDetail", { path: "/" });
   const contractId = contractIdSession ? contractIdSession : props.contractId;
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const resultCode = searchParams.get("resultCode");
-  2;
+ 
   const [apiContractLoading, setApiContractLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const loadingContractDetail = useSelector(
     (state) => state.contract?.contractDetail?.loading
   );
 
-  useEffect(() => {
-    if (resultCode == 0) {
-      toast.success("Thanh toán thành công");
-    }
-    // else if (
-    //   resultCode != 0 &&
-    //   resultCode != undefined &&
-    //   resultCode != null
-    // ) {
-    //   toast.error("Thanh toán thất bại");
-    // }
-  }, [resultCode]);
   useEffect(() => {
     setLoading(true);
     try {
