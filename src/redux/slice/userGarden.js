@@ -93,7 +93,7 @@ export const moveBonsai = async ({ customerBonsaiId, customerGardenId }) => {
 
 export const updateCustomerGarden = async (formData, gardenId) => {
   try {
-    const response = await axios.put(`/CustomerGarden`, formData, gardenId);
+    const response = await axios.put(`/CustomerGarden/${gardenId}`, formData);
     console.log(response.data);
     return response.data;
   } catch (error) {
