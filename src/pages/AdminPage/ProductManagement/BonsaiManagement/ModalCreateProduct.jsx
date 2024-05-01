@@ -383,9 +383,9 @@ const ModalCreateProduct = (props) => {
                 {
                   type: "number",
                   min: 0,
-                  max: 100000000000,
+                  max: 100000000,
                   message:
-                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 100,000,000,000 Vnd!",
+                    "Giá tiền phải có ít nhất 0 Vnd và nhiều nhất 100,000,000 Vnd!",
                 },
               ]}
             >
@@ -422,7 +422,7 @@ const ModalCreateProduct = (props) => {
               </div>
             </Form.Item>
             <Form.Item
-              label="Upload ảnh"
+              label="Đăng tải ảnh"
               valuePropName="fileList"
               getValueFromEvent={normFile}
             >

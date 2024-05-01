@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import Icon, {
   DollarOutlined,
   MenuFoldOutlined,
@@ -63,7 +63,6 @@ function PrivateRoute() {
   const allNotifications = useSelector((state) => state.user?.notification);
 
   const [fetchNoti, setFetchNoti] = useState(false);
-  console.log(fetchNoti);
 
   const handleSeenNoti = async (notiId) => {
     try {
@@ -71,7 +70,7 @@ function PrivateRoute() {
       document.getElementById("modal_noti").showModal();
       dispatch(notificationUser({ pageIndex: currentPage, pageSize: 5 }));
     } catch (error) {
-      console.log(error);
+      toast.error("Đã xảy ra lỗi!");
     }
   };
   const notiDetail = useSelector((state) => state?.user?.notiDetail);
@@ -184,24 +183,6 @@ function PrivateRoute() {
                     </div>
                   </ul>
                 </div>
-
-                <dialog id="modal_noti" className="modal">
-                  <div className="modal-box">
-                    <form method="dialog">
-                      <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                        ✕
-                      </button>
-                    </form>
-                    <h3 className="font-bold text-lg">{notiDetail?.title}</h3>
-                    <div className="italic">
-                      {new Date(notiDetail?.creationDate).toLocaleDateString()}
-                    </div>
-                    <p className="py-4">{notiDetail?.message}</p>
-                  </div>
-                  <form method="dialog" className="modal-backdrop">
-                    <button>close</button>
-                  </form>
-                </dialog>
               </>
             ),
           },
@@ -318,7 +299,10 @@ function PrivateRoute() {
           collapsed={collapsed}
           className="min-h-screen"
         >
-          <div className="demo-logo-vertical my-6 flex justify-center" onClick={()=> navigate("/admin/dashboard")}>
+          <div
+            className="demo-logo-vertical my-6 flex justify-center"
+            onClick={() => navigate("/admin/dashboard")}
+          >
             <img src={logo} width={70} />
           </div>
           <Menu
@@ -367,6 +351,23 @@ function PrivateRoute() {
           </Content>
         </Layout>
       </Layout>
+      <dialog id="modal_noti" className="modal">
+        <div className="modal-box">
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+          <h3 className="font-bold text-lg">{notiDetail?.title}</h3>
+          <div className="italic">
+            {new Date(notiDetail?.creationDate).toLocaleDateString()}
+          </div>
+          <p className="py-4">{notiDetail?.message}</p>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </>
   );
 }
