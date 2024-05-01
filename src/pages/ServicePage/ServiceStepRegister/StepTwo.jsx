@@ -121,8 +121,8 @@ function StepTwo(propsStepTwo) {
               <div className="w-[300px] h-[300px] p-3">
                 <Image
                   src={packageItem?.image}
-                  width={300}
-                  height={300}
+                  width={250}
+                  height={250}
                   className="object-cover"
                 />
               </div>

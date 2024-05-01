@@ -92,6 +92,17 @@ function ServiceStepMain() {
     bonsaiDetail,
     setStep,
   };
+  console.log(step);
+  const [isStepTwoDisabled, setIsStepTwoDisabled] = useState(false);
+  console.log();
+  const [isStepThreeDisabled, setIsStepThreeDisabled] = useState(false);
+  useEffect(() => {
+    if (step < 2) {
+      setIsStepTwoDisabled(true);
+    } else if (step < 3) {
+      setIsStepThreeDisabled(true);
+    }
+  }, [step]);
   return (
     <div className="my-12 pb-12 w-[70%] m-auto border rounded-[8px] p-5">
       <div className="text-center font-bold text-[20px]">
@@ -101,19 +112,20 @@ function ServiceStepMain() {
         <Steps
           size="small"
           current={step}
+          onChange={onChangeStep}
           items={[
             {
               title: typeEnum == 1 ? "Chọn cây" : "Chọn vườn",
             },
             {
               title: "Chọn gói dịch vụ",
+              disabled: isStepTwoDisabled,
             },
             {
               title: "Đăng ký mẫu",
-              disabled: false,
+              disabled: isStepThreeDisabled,
             },
           ]}
-          onChange={onChangeStep}
         />
       </div>
       {stepList == 1 ? (
