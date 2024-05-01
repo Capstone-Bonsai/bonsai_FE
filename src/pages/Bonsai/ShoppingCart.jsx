@@ -16,7 +16,7 @@ function ShoppingCart() {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const location = useLocation();
-
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const userInfo = cookies.get("user");
 
@@ -41,11 +41,11 @@ function ShoppingCart() {
   };
 
   const handleRemoveItem = async (bonsaiIdToRemove) => {
-    const updatedCartItems = cartItems.filter(
+    const updatedCartItems = cartItems?.filter(
       (bonsaiId) => bonsaiId !== bonsaiIdToRemove
     );
     await updateCartItems(updatedCartItems);
-    const itemCount = updatedCartItems.length;
+    const itemCount = updatedCartItems?.length;
     dispatch(setCartFromCookie({ itemCount }));
   };
   const subTotal = () => {
@@ -61,7 +61,7 @@ function ShoppingCart() {
       currency: "VND",
     }).format(price);
   };
-  const totalCountItems = cartItems.length;
+  const totalCountItems = cartItems?.length;
   useEffect(() => {
     const disabledItemExists = bonsais.some((item) => item.isDisable);
     setIsDisabledItem(disabledItemExists);
@@ -113,7 +113,7 @@ function ShoppingCart() {
               </tr>
             </thead>
             <tbody>
-              {bonsais.map((item) => (
+              {bonsais?.map((item) => (
                 <tr
                   key={item.id}
                   className={`border-b ml-5 text-center relative h-[170px]`}

@@ -61,12 +61,12 @@ function ProductDetail() {
       cartItems = [];
     }
 
-    const existingItem = cartItems.find((item) => item.bonsaiId === bonsaiId);
+    const existingItem = cartItems?.find((item) => item.bonsaiId === bonsaiId);
 
     if (existingItem) {
       existingItem.quantity += inputValue;
     } else {
-      cartItems.push({
+      cartItems?.push({
         bonsaiId,
         name: bonsaiDetail.name,
         price: bonsaiDetail.price,
@@ -81,7 +81,7 @@ function ProductDetail() {
 
     await cookies.set(cartId, cartItems, { path: "/" });
 
-    const itemCount = cartItems.length;
+    const itemCount = cartItems?.length;
     dispatch(setCartFromCookie({ cartItems, itemCount }));
   };
 

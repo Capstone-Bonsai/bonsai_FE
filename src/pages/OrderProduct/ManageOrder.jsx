@@ -12,6 +12,7 @@ import NavbarUser from "../Auth/NavbarUser";
 import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import cayTung from "../../assets/cay-tung.png";
 import noImage from "../../assets/unImage.png";
+import { getOrderStatusText } from "../../components/status/orderStatus";
 function ManageOrder() {
   const dispatch = useDispatch();
   const cookies = new Cookies();
@@ -91,30 +92,11 @@ function ManageOrder() {
                               order.orderStatus
                             )}`}
                           >
-                            {(() => {
-                              switch (order.orderStatus) {
-                                case "Paid":
-                                  return "Đã thanh toán";
-                                case "Failed":
-                                  return "Thất bại";
-                                case "Canceled":
-                                  return "Đã hủy";
-                                case "Waiting":
-                                  return "Đang chờ";
-                                case "Preparing":
-                                  return "Đang chuẩn bị";
-                                case "Delivering":
-                                  return "Đang giao hàng";
-                                case "Delivered":
-                                  return "Đã giao hàng";
-                                default:
-                                  return "";
-                              }
-                            })()}
+                            {getOrderStatusText(order.orderStatus)}
                           </span>
                         </div>
                       </div>
-                      {order.orderDetails.map((orderDetail) => (
+                      {order?.orderDetails?.map((orderDetail) => (
                         <div key={orderDetail.id} className="border-y p-3 flex">
                           <div className="w-[10%]">
                             <img
@@ -168,7 +150,7 @@ function ManageOrder() {
                   </div>
                 )}
               </div>
-              {totalItems?.length > 0 ? (
+              {totalItems > 0 ? (
                 <Pagination
                   current={currentPage}
                   pageSize={pageSize}

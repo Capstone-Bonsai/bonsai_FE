@@ -12,8 +12,11 @@ import { formatPrice } from "../../components/formatPrice/FormatPrice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import ModalComplain from "./ModalComplain";
-import { Image } from "antd";
-import { getStatusText } from "../../components/status/contractStatus";
+import { Image, Tag } from "antd";
+import {
+  getStatusColor,
+  getStatusText,
+} from "../../components/status/contractStatus";
 import { toast } from "react-toastify";
 function ContractUserDetail(props) {
   const dispatch = useDispatch();
@@ -80,9 +83,6 @@ function ContractUserDetail(props) {
               <>
                 {contractDetail?.id ? (
                   <div>
-                    <div className="text-center underline">
-                      {contractDetail.id}
-                    </div>
                     <div className="font-bold">
                       1. Thông tin dịch vụ:{" "}
                       <span className="font-normal">
@@ -139,18 +139,14 @@ function ContractUserDetail(props) {
                         </div>
                         <div>
                           Trạng thái:{" "}
-                          <span
-                            className={`${
-                              contractDetail?.serviceOrderStatus == 1 ||
-                              contractDetail?.serviceOrderStatus == 4 ||
-                              contractDetail?.serviceOrderStatus == 5
-                                ? "text-[red]"
-                                : "text-[#3a9943]"
-                            }`}
+                          <Tag
+                            color={getStatusColor(
+                              contractDetail?.serviceOrderStatus
+                            )}
                           >
                             {" "}
                             {getStatusText(contractDetail?.serviceOrderStatus)}
-                          </span>
+                          </Tag>
                         </div>
                       </div>
                       <div className="flex justify-end">
@@ -158,7 +154,8 @@ function ContractUserDetail(props) {
                           <div className="border-b">
                             <div>
                               Khoảng cách:
-                              {contractDetail.distance?.toLocaleString("vi-VN")}km
+                              {contractDetail.distance?.toLocaleString("vi-VN")}
+                              km
                             </div>
                           </div>
                           <div>
@@ -188,7 +185,9 @@ function ContractUserDetail(props) {
                       )}
                     </div>
                     {contractDetail.serviceOrderStatus == 1 ||
-                    contractDetail.serviceOrderStatus == 4 ||
+                    contractDetail.serviceOrderStatus == 2 ||
+                    contractDetail.serviceOrderStatus == 3 ||
+                    contractDetail.serviceOrderStatus == 6 ||
                     contractDetail.serviceOrderStatus == 5 ? (
                       ""
                     ) : (

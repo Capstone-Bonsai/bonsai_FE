@@ -2,7 +2,14 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 import logo from "../assets/logoFinal.png";
 import SPCus from "../assets/img-sp.webp";
 import { Image, Input, Space, notification } from "antd";
-import { SearchOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  UserOutlined,
+  DoubleLeftOutlined,
+  DoubleRightOutlined,
+  LeftOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
 import {
   ShoppingCartOutlined,
   FacebookOutlined,
@@ -37,6 +44,7 @@ function Banner() {
   const cookies = new Cookies();
   const [countCart, setCountCart] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
+  console.log(pageIndex + 1);
   const [pageSize, setPageSize] = useState(5);
   const [isSticky, setIsSticky] = useState(false);
   const avatarUrl = useSelector((state) => state.avatar.avatarUrlRedux);
@@ -94,23 +102,22 @@ function Banner() {
     if (userInfo != null) {
       const cartIdUser = `cartId ${idUser}`;
       const cartItems = cookies.get(cartIdUser) || [];
-      const itemCount = cartItems.length;
+      const itemCount = cartItems?.length;
       // setCountCartItems(cartItems);
       setCountCart(itemCount);
       dispatch(setCartFromCookie({ itemCount }));
     } else {
       const cartItems = cookies.get("cartItems") || [];
-      const itemCount = cartItems.length;
+      const itemCount = cartItems?.length;
       // setCountCartItems(cartItems);
       setCountCart(itemCount);
       dispatch(setCartFromCookie({ itemCount }));
     }
   };
   const [fetchNoti, setFetchNoti] = useState(false);
-  console.log(fetchNoti);
   useEffect(() => {
     dispatch(notificationUser({ pageIndex, pageSize }));
-  }, [fetchNoti]);
+  }, [pageIndex, pageSize, fetchNoti]);
 
   const handleSeenNoti = async (notiId) => {
     try {
@@ -123,14 +130,20 @@ function Banner() {
   };
   const notiDetail = useSelector((state) => state?.user?.notiDetail);
   const notifications = useSelector((state) => state?.user?.notification);
+  const { next } = useSelector((state) => state?.user?.notification);
+  const { previous } = useSelector((state) => state?.user?.notification);
   useEffect(() => {
     fetchCartFromCookie();
-    // setCountCart()
   }, [userInfo]);
   const countNoti = useSelector(
     (state) => state?.user?.notification?.totalItemsCount
   );
-
+  const handleBackPage = () => {
+    setPageIndex(pageIndex - 1);
+  };
+  const handleNextPage = () => {
+    setPageIndex(pageIndex + 1);
+  };
   ////websocket
   // const socketRef = useRef(null);
 
@@ -206,20 +219,46 @@ function Banner() {
                     className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[300px]"
                   >
                     <div className="font-bold text-[20px] my-2">Thông báo</div>
-                    {notifications?.items?.map((noti) => (
+                    {notifications?.items?.length > 0 ? (
+                      <>
+                        {notifications?.items?.map((noti) => (
+                          <button
+                            onClick={() => handleSeenNoti(noti.id)}
+                            key={noti.id}
+                            className={`p-2 border-b text-start hover:bg-gray-300 hover:rounded-[8px] ${
+                              noti?.isRead ? "" : "font-bold"
+                            }`}
+                          >
+                            <div>
+                              {new Date(
+                                noti?.creationDate
+                              ).toLocaleDateString()}
+                            </div>
+                            <div>{noti?.message}</div>
+                          </button>
+                        ))}
+                      </>
+                    ) : (
+                      "Đã hết thông báo"
+                    )}
+                    <div className="flex items-center justify-end gap-3">
                       <button
-                        onClick={() => handleSeenNoti(noti.id)}
-                        key={noti.id}
-                        className={`p-2 border-b text-start hover:bg-gray-300 hover:rounded-[8px] ${
-                          noti?.isRead ? "" : "bg-[red]"
-                        }`}
+                        disabled={!previous}
+                        className={!previous ? "opacity-30" : ""}
+                        onClick={() => handleBackPage()}
                       >
-                        <div>
-                          {new Date(noti?.creationDate).toLocaleDateString()}
-                        </div>
-                        <div>{noti?.message}</div>
+                        <LeftOutlined />
                       </button>
-                    ))}
+                      <button
+                        disabled={notifications?.items?.length == 0}
+                        className={
+                          notifications?.items?.length == 0 ? "opacity-30" : ""
+                        }
+                        onClick={() => handleNextPage()}
+                      >
+                        <RightOutlined />
+                      </button>
+                    </div>
                   </ul>
                 </div>
 
@@ -349,7 +388,7 @@ function Banner() {
       </div>
       <div className="drop-shadow-md bg-[#ffffff]">
         <div className="flex w-[70%] h-[50px] items-center font-medium m-auto uppercase ">
-          {navLinks.map((link, index) => (
+          {navLinks?.map((link, index) => (
             <div
               key={index}
               className="pr-10 montserrat hover:text-[#54a65b] text-[10px] md:text-base"

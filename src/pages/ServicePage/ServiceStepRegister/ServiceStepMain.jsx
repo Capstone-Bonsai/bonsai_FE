@@ -38,6 +38,10 @@ function ServiceStepMain() {
       navigate("/serviceOption");
     }
   }, [typeEnum, serviceTypeId]);
+  const onChangeStep = (index) => {
+    console.log("onChange:", index);
+    setStepList(index + 1);
+  };
   useEffect(() => {
     if (selectedGardenId != "") {
       setStep(1);
@@ -46,6 +50,7 @@ function ServiceStepMain() {
       setStep(2);
     }
   }, [selectedGardenId, serviceIdSelected]);
+
   useEffect(() => {
     dispatch(customerGardenDetail(selectedGardenId));
   }, [selectedGardenId]);
@@ -68,7 +73,7 @@ function ServiceStepMain() {
     selectedGardenId,
     setSelectedGardenId,
     gardenDetail,
-    bonsaiDetail
+    bonsaiDetail,
   };
   const propsStepTwo = {
     setStepList,
@@ -85,10 +90,13 @@ function ServiceStepMain() {
     gardenDetail,
     servicePackageDetail,
     bonsaiDetail,
+    setStep,
   };
   return (
     <div className="my-12 pb-12 w-[70%] m-auto border rounded-[8px] p-5">
-      <div className="text-center font-bold text-[20px]">Mẫu đăng ký dịch vụ</div>
+      <div className="text-center font-bold text-[20px]">
+        Mẫu đăng ký dịch vụ
+      </div>
       <div className="w-[70%] m-auto my-2">
         <Steps
           size="small"
@@ -102,8 +110,10 @@ function ServiceStepMain() {
             },
             {
               title: "Đăng ký mẫu",
+              disabled: false,
             },
           ]}
+          onChange={onChangeStep}
         />
       </div>
       {stepList == 1 ? (

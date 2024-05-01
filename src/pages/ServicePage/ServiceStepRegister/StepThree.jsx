@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { DatePicker, Modal, Space } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -15,6 +15,7 @@ function StepThree(propsStepThree) {
     gardenDetail,
     servicePackageDetail,
     bonsaiDetail,
+    setStep
   } = propsStepThree;
   const handleBackStep = () => {
     setStepList(2);
@@ -30,6 +31,7 @@ function StepThree(propsStepThree) {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
   const location = useLocation();
   const typeEnum = new URLSearchParams(location.search).get("typeEnum");
   const [dateRange, setDateRange] = useState([]);
@@ -84,7 +86,11 @@ function StepThree(propsStepThree) {
       toast.error(error);
     }
   };
-
+  useEffect(() => {
+    if(dateRange?.length > 1){
+      setStep(3)
+    }
+  }, [dateRange])
   return (
     <div>
       <div className="flex items-center gap-3 my-3">

@@ -161,7 +161,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
   const handleNumTrunkChange = (e) => {
     const numTrunk = e.target.value;
     setNumTrunk(numTrunk);
-    if (numTrunk <= 0) {
+    if (numTrunk < 0) {
       setNumTrunkError("Số thân phải lớn hơn 0");
       e.target.value = null;
     } else {
@@ -246,6 +246,10 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
       setNumTrunkError("Vui lòng nhập số thân cây bonsai!!");
       isValid = false;
     }
+    if (bonsaiHeight == 0) {
+      setHeightError("Chiều cao phải lớn hơn 0!!");
+      isValid = false;
+    }
     if (file?.length <= 0) {
       setImageError("Vui lòng thêm ảnh!!");
       isValid = false;
@@ -263,7 +267,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
       formData.append("TrunkDimenter", trunkDemeter);
       formData.append("Height", bonsaiHeight);
       formData.append("NumberOfTrunk", numTrunk);
-      imgBonsai.map((image) => {
+      imgBonsai?.map((image) => {
         formData.append(`Image`, image.file);
       });
     } else if (newGarden && !newBonsai) {
@@ -277,7 +281,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
       formData.append("TrunkDimenter", trunkDemeter);
       formData.append("Height", bonsaiHeight);
       formData.append("NumberOfTrunk", numTrunk);
-      imgBonsai.map((image) => {
+      imgBonsai?.map((image) => {
         formData.append(`Image`, image.file);
       });
     } else if (!newGarden && newBonsai) {
@@ -303,7 +307,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
         await newGardenForBought(formData);
       }
       toast.success("Tạo cây thành công");
-      // resetFormFields();
+      resetFormFields();
       dispatch(bonsaiBought());
       dispatch(getGardenNoPagination());
       setFetchApi(!fetchApi);
@@ -326,21 +330,14 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
         <h3 className="font-bold text-lg">Tạo bonsai của bạn</h3>
         <div className="flex items-center gap-2 my-2">
           <div>bạn đã có bonsai chưa? </div>
-          {newBonsai ? (
-            <button
-              className="bg-[#3a9943] p-2 text-[#fff] rounded-[8px]"
-              onClick={() => setNewBonsai(false)}
-            >
-              Chưa
-            </button>
-          ) : (
-            <button
-              className="bg-[#3a9943] p-2 text-[#fff] rounded-[8px]"
-              onClick={() => setNewBonsai(true)}
-            >
-              Có
-            </button>
-          )}
+          <select
+            value={newBonsai ? "yes" : "no"}
+            onChange={(e) => setNewBonsai(e.target.value === "yes")}
+            className="outline-none border"
+          >
+            <option value="yes">Có</option>
+            <option value="no">Chưa</option>
+          </select>
         </div>
         <div role="tablist" className="tabs tabs-lifted">
           <input
@@ -595,7 +592,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
                       </div>
                       <div className="flex flex-wrap gap-5">
                         {imgBonsai.length > 0 ? (
-                          imgBonsai.map((imgBonsaiItem, index) => (
+                          imgBonsai?.map((imgBonsaiItem, index) => (
                             <div
                               key={index}
                               className="relative rounded-[10px] w-[220px] h-[220px]"
@@ -938,7 +935,7 @@ function ModalCreateCustomerBonsai(bonsaiProps) {
                       </div>
                       <div className="flex flex-wrap gap-5">
                         {imgBonsai.length > 0 ? (
-                          imgBonsai.map((imgBonsaiItem, index) => (
+                          imgBonsai?.map((imgBonsaiItem, index) => (
                             <div
                               key={index}
                               className="relative rounded-[10px] w-[220px] h-[220px]"

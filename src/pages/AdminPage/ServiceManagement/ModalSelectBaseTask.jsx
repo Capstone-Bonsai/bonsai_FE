@@ -18,7 +18,7 @@ const TableTransfer = ({ leftColumns, rightColumns, ...restProps }) => (
 
       const rowSelection = {
         onSelectAll(selected, selectedRows) {
-          const treeSelectedKeys = selectedRows.map(({ key }) => key);
+          const treeSelectedKeys = selectedRows?.map(({ key }) => key);
           console.log(treeSelectedKeys);
           const diffKeys = selected
             ? difference(treeSelectedKeys, listSelectedKeys)
@@ -92,7 +92,7 @@ const ModalSelectBaseTask = (props) => {
 
   const onSubmit = (i) => {
     onSubmitForm(
-      listBaseTask.filter((baseTask) =>
+      listBaseTask?.filter((baseTask) =>
         listSelectedBaseTask?.includes(baseTask.id)
       )
     );

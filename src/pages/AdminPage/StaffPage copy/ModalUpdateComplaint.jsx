@@ -60,7 +60,7 @@ const ModalUpdateComplaint = (props) => {
       });
       putComplaint(complaint?.id, {
         complaintStatus: selectedStatus,
-        cancelReason: data,
+        cancelReason: data?.cancelReason,
       })
         .then((data) => {
           toast.success("Cập nhật thành công!");

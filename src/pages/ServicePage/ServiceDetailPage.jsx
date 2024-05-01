@@ -234,7 +234,7 @@ function ServiceDetailPage() {
                           <option value="" disabled={selectedCategoryId !== ""}>
                             Chọn loại cây
                           </option>
-                          {categories.map((category) => (
+                          {categories?.map((category) => (
                             <option key={category.id} value={category.id}>
                               {category.name}
                             </option>

@@ -194,7 +194,7 @@ function StepOne(propsStepOne) {
                         <div className="">
                           <div className="w-full">Bonsai đang trồng:</div>
                           {garden.customerBonsais.length > 0 ? (
-                            garden.customerBonsais.map((bonsai) => (
+                            garden.customerBonsais?.map((bonsai) => (
                               <div
                                 key={bonsai?.bonsaiId}
                                 className="w-full flex gap-2 border-y py-2"

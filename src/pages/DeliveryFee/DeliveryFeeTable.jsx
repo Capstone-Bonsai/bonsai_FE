@@ -45,7 +45,7 @@ const DeliveryFeeTable = (props) => {
             <thead>
               <tr className="bg-gray-100">
                 {listAll && listDeliveryFee.length > 0 ? (
-                  listAll[0].items.map((temp, index) => (
+                  listAll[0]?.items?.map((temp, index) => (
                     <th className="w-1/4 py-4 px-6 text-left text-[#3a9943] font-bold">
                       {temp}
                     </th>
@@ -58,10 +58,10 @@ const DeliveryFeeTable = (props) => {
             <tbody className="bg-white">
               {listDeliveryFee &&
                 listDeliveryFee.length > 0 &&
-                listDeliveryFee.map((item, index) => {
+                listDeliveryFee?.map((item, index) => {
                   return (
                     <tr>
-                      {item.items.map((temp, index) => (
+                      {item?.items?.map((temp, index) => (
                         <td className="py-4 px-6 border-b border-gray-200">
                           {temp}
                         </td>

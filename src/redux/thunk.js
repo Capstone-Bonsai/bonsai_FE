@@ -28,9 +28,10 @@ export const connectWebSocket = () => {
       const jsonEndIndex = event.data.lastIndexOf("}") + 1;
       const jsonOnly = event.data.substring(0, jsonEndIndex);
       var jsonObject = JSON.parse(jsonOnly);
-      if (jsonObject?.type == 1) toast.info(jsonObject.arguments[0]);
-      console.log("dsfsdf");
-      dispatch(notificationUser({ pageIndex: 0, pageSize: 5 }));
+      if (jsonObject?.type == 1) {
+        toast.info(jsonObject.arguments[0]);
+        dispatch(notificationUser({ pageIndex: 0, pageSize: 5 }));
+      }
     };
     socket.onclose = () => {};
   };

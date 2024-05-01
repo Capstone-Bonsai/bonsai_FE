@@ -308,7 +308,7 @@ const ModalCreateProduct = (props) => {
               name="Description"
               rules={[
                 { required: true, message: "Mô tả không được để trống!" },
-                { max: 2000, message: "Username không quá 2000 ký tự!" },
+                { max: 2000, message: "Mô tả không quá 2000 ký tự!" },
               ]}
             >
               <TextArea rows={10} />

@@ -37,6 +37,16 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
     OldImage: [],
     Image: [],
   });
+
+  //validate
+  const [errorMess, setErrorMess] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [desError, setDesError] = useState("");
+  const [yopError, setYopError] = useState("");
+  const [trunkDemError, setTrunkDemError] = useState("");
+  const [heightError, setHeightError] = useState("");
+  const [numTrunkError, setNumTrunkError] = useState("");
+
   const [validateMessage, setValidateMessage] = useState({});
   console.log(formData);
   console.log(validateMessage);
@@ -100,59 +110,6 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
     }
   }, [bonsaiDetailById]);
 
-  const validateForm = () => {
-    const errors = {};
-
-    const categoryIdRegex = /^\d+$/;
-    const styleIdRegex = /^\d+$/;
-    const nameRegex = /^[\p{L}\p{N}_\- ]{1,100}$/;
-    const descriptionRegex = /^[\p{L}\p{N}_\- ]{1,100}$/;
-    const yearOfPlantingRegex = /^\d+$/;
-    const heightRegex = /^\d+$/;
-    const trunkDiameterRegex = /^\d+$/;
-    const numberOfTrunkRegex = /^\d+$/;
-
-    if (!categoryIdRegex.test(formData.CategoryId)) {
-      errors.CategoryId = "Vui lòng chọn loại cây!";
-    }
-
-    if (!styleIdRegex.test(formData.StyleId)) {
-      errors.StyleId = "Vui lòng chọn phân loại!";
-    }
-
-    if (!nameRegex.test(formData.Name)) {
-      errors.Name = "Invalid Name (letters, numbers, spaces, - or _)";
-    }
-
-    if (!descriptionRegex.test(formData.Description)) {
-      errors.Description = "Invalid Description (various characters allowed)";
-    }
-
-    if (!yearOfPlantingRegex.test(formData.YearOfPlanting)) {
-      errors.YearOfPlanting = "Invalid Year of Planting (numbers only)";
-    }
-
-    if (!heightRegex.test(formData.Height)) {
-      errors.Height = "Invalid Height (positive number, max 2 decimals)";
-    }
-
-    if (!trunkDiameterRegex.test(formData.TrunkDiameter)) {
-      errors.TrunkDiameter =
-        "Invalid Trunk Diameter (positive number, max 2 decimals)";
-    }
-
-    if (!numberOfTrunkRegex.test(formData.NumberOfTrunk)) {
-      errors.NumberOfTrunk =
-        "Invalid NumberOfTrunk (positive number, max 2 decimals)";
-    }
-
-    // Kiểm tra các field khác nếu cần (OldImage, Image)
-    if (errors != {}) {
-      console.log(errors != {});
-      setValidateMessage(errors);
-    }
-    return errors;
-  };
   const handleAddImage = (e) => {
     const files = e.target.files;
     const updatedListImage = [...listImage];
@@ -202,6 +159,38 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
     }
   };
   const onSubmit = () => {
+    let isValid = true;
+    if (!formData.Name.trim()) {
+      setNameError("Tên không được bỏ trống!!");
+      isValid = false;
+    }
+    if (!formData.Description) {
+      setDesError("Mô tả không được bỏ trống!!");
+      isValid = false;
+    }
+    if (!formData.YearOfPlanting) {
+      setYopError("Năm trồng không được bỏ trống!!");
+      isValid = false;
+    }
+    if (!formData.TrunkDimenter) {
+      setTrunkDemError("Hoành cây không được bỏ trống!!");
+      isValid = false;
+    }
+    if (!formData.Height) {
+      setHeightError("Chiều cao không được bỏ trống!!");
+      isValid = false;
+    }
+    if (formData.Height == 0) {
+      setHeightError("Chiều cao phải lớn hơn 0!!");
+      isValid = false;
+    }
+    if (!formData.NumberOfTrunk) {
+      setNumTrunkError("Số thân không được bỏ trống!!");
+      isValid = false;
+    }
+    if (!isValid) {
+      return;
+    }
     formData.Image = listImage?.map((image) => image);
     const postData = new FormData();
     postData.append("CategoryId", formData.CategoryId);
@@ -212,7 +201,6 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
     postData.append("TrunkDimenter", formData.TrunkDimenter);
     postData.append("Height", formData.Height);
     postData.append("NumberOfTrunk", formData.NumberOfTrunk);
-    postData.append("Price", formData.Price);
     listImage
       ?.filter((image) => image.url.startsWith("https"))
       ?.map((image) => {
@@ -223,18 +211,60 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
     });
     console.log(formData);
     setFetchBonsaiDetail(true);
-    if (validateForm != {}) {
-      updateBonsai(postData)
-        .then(() => {
-          setFetchBonsaiDetail(false);
-        })
-        .catch((error) => {
-          // Handle error
-          console.error("Error updating bonsai:", error);
-        })
-        .finally(() => {
-          setFetchBonsaiDetail(false);
-        });
+    updateBonsai(postData)
+      .then(() => {
+        setFetchBonsaiDetail(false);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error updating bonsai:", error);
+      })
+      .finally(() => {
+        setFetchBonsaiDetail(false);
+      });
+  };
+  const handleChangeYop = (e) => {
+    const yop = e.target.value;
+    if (yop > 0) {
+      setFormData({ ...formData, YearOfPlanting: yop });
+      setYopError("");
+    } else {
+      setYopError("Giá trị phải lớn hơn 0");
+      e.target.value = null;
+      setFormData({ ...formData, YearOfPlanting: e.target.value });
+    }
+  };
+  const handleChangeTrunkDem = (e) => {
+    const trunkDem = e.target.value;
+    if (trunkDem > 0) {
+      setFormData({ ...formData, TrunkDimenter: trunkDem });
+      setTrunkDemError("");
+    } else {
+      setTrunkDemError("Giá trị phải lớn hơn 0");
+      e.target.value = null;
+      setFormData({ ...formData, TrunkDimenter: e.target.value });
+    }
+  };
+  const handleChangeHeight = (e) => {
+    const height = e.target.value;
+    if (height >= 0) {
+      setFormData({ ...formData, Height: height });
+      setHeightError("");
+    } else {
+      setHeightError("Giá trị phải lớn hơn 0");
+      e.target.value = null;
+      setFormData({ ...formData, Height: e.target.value });
+    }
+  };
+  const handleChangeNumTrunk = (e) => {
+    const numTrunk = e.target.value;
+    if (numTrunk < 0) {
+      setFormData({ ...formData, NumberOfTrunk: numTrunk });
+      setNumTrunkError("");
+    } else {
+      setNumTrunkError("Giá trị phải lớn hơn 0");
+      e.target.value = null;
+      setFormData({ ...formData, NumberOfTrunk: e.target.value });
     }
   };
   const propsModalMove = {
@@ -258,7 +288,7 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
         <Loading loading={loading} isRelative={true} />
       ) : (
         <>
-          <div className="w-[75%] m-auto">
+          <div className="w-[95%] m-auto">
             {/* <div>
               <div className="font-bold text-[20px]">
                 {bonsaiDetailById?.bonsai?.name}
@@ -273,15 +303,20 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
               <div>Chiều cao: {bonsaiDetailById?.bonsai?.height}</div>
               <div>Số thân: {bonsaiDetailById?.bonsai?.numberOfTrunk}</div>
             </div> */}
-            <div className="font-bold text-[20px] flex justify-center my-2">
+            <div className="font-bold text-[20px] flex items-center my-2">
+              <div className="font-normal">Tên: </div>
               <input
                 className="border p-2 outline-none rounded-[8px]"
                 value={formData.Name}
-                onChange={(e) =>
-                  setFormData({ ...formData, Name: e.target.value })
-                }
+                onChange={(e) => {
+                  setFormData({ ...formData, Name: e.target.value }),
+                    setNameError("");
+                }}
               />
             </div>
+            {nameError && (
+              <div className="text-[red] text-[14px]">{nameError}</div>
+            )}
             <div className="flex items-center gap-2">
               <div>Địa chỉ: </div>
               <div className="w-[70%]">
@@ -299,8 +334,8 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
                 <ModalMoveBonsai {...propsModalMove} />
               </div>
             </div>
-            <div className="text-[16px] flex items-center gap-3 my-2">
-              <div className="w-[10%] text-end">Loại cây:</div>
+            <div className="text-[16px] flex items-center my-2">
+              <div className="w-[20%] text-start">Loại cây:</div>
               <select
                 className="border outline-none p-3 rounded-[8px]"
                 value={formData.CategoryId}
@@ -316,8 +351,8 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
                 ))}
               </select>
             </div>
-            <div className="text-[16px] flex gap-3 items-center my-2">
-              <div className="w-[10%] text-end">Dáng cây:</div>
+            <div className="text-[16px] flex items-center my-2">
+              <div className="w-[20%] text-start">Dáng cây:</div>
               <select
                 className="border outline-none p-3 rounded-[8px]"
                 value={formData.StyleId}
@@ -339,52 +374,62 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
               <textarea
                 className="w-full h-[150px] border outline-none p-2"
                 value={formData.Description}
-                onChange={(e) =>
-                  setFormData({ ...formData, Description: e.target.value })
-                }
+                onChange={(e) => {
+                  setFormData({ ...formData, Description: e.target.value }),
+                    setDesError("");
+                }}
               />
             </div>
-
+            {desError && (
+              <div className="text-[red] text-[14px]">{desError}</div>
+            )}
             <div className="text-[16px] flex items-center my-2">
-              <div className="w-[20%] text-end">Năm trồng: </div>
+              <div className="w-[20%] text-start">Năm trồng: </div>
               <input
+                type="number"
                 className="w-[40%] border outline-none p-2 rounded-[8px]"
                 value={formData.YearOfPlanting}
-                onChange={(e) =>
-                  setFormData({ ...formData, YearOfPlanting: e.target.value })
-                }
+                onChange={handleChangeYop}
               />
             </div>
+            {yopError && (
+              <div className="text-[red] text-[14px]">{yopError}</div>
+            )}
             <div className="text-[16px] flex items-center my-2">
-              <div className="w-[20%] text-end">Hoành cây: </div>
+              <div className="w-[20%] text-start">Hoành cây(cm): </div>
               <input
+                type="number"
                 className="w-[40%] border outline-none p-2 rounded-[8px]"
                 value={formData.TrunkDimenter}
-                onChange={(e) =>
-                  setFormData({ ...formData, TrunkDimenter: e.target.value })
-                }
+                onChange={handleChangeTrunkDem}
               />
             </div>
+            {trunkDemError && (
+              <div className="text-[red] text-[14px]">{trunkDemError}</div>
+            )}
             <div className="text-[16px] flex items-center my-2">
-              <div className="w-[20%] text-end">Chiều cao: </div>
+              <div className="w-[20%] text-start">Chiều cao(m): </div>
               <input
+                type="number"
                 className="w-[40%] border outline-none p-2 rounded-[8px]"
                 value={formData.Height}
-                onChange={(e) =>
-                  setFormData({ ...formData, Height: e.target.value })
-                }
+                onChange={handleChangeHeight}
               />
             </div>
+            {heightError && (
+              <div className="text-[red] text-[14px]">{heightError}</div>
+            )}
             <div className="text-[16px] flex items-center my-2">
-              <div className="w-[20%] text-end">Số thân: </div>
+              <div className="w-[20%] text-start">Số thân: </div>
               <input
                 className="w-[40%] border outline-none p-2 rounded-[8px]"
                 value={formData.NumberOfTrunk}
-                onChange={(e) =>
-                  setFormData({ ...formData, NumberOfTrunk: e.target.value })
-                }
+                onChange={handleChangeNumTrunk}
               />
             </div>
+            {numTrunkError && (
+              <div className="text-[red] text-[14px]">{numTrunkError}</div>
+            )}
             <div className="">
               {listImage?.length >= 0 ? (
                 <div className="">
@@ -408,25 +453,31 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
                       </div>
                     ))}
                   </div>
-                  <div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      style={{ display: "none" }}
-                      onChange={handleAddImage}
-                      id="upload-bonsai-detail-image"
-                    />
-                  </div>
-                  {listImage?.length < 4 ? (
-                    <button
-                      onClick={handleUploadClick}
-                      className="border p-1 rounded-lg my-5 outline-none"
-                    >
-                      <UploadOutlined />
-                      Thêm hình ảnh
-                    </button>
+                  {formData?.DeliverySize == null ? (
+                    <>
+                      <div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          style={{ display: "none" }}
+                          onChange={handleAddImage}
+                          id="upload-bonsai-detail-image"
+                        />
+                      </div>
+                      {listImage?.length < 4 ? (
+                        <button
+                          onClick={handleUploadClick}
+                          className="border p-1 rounded-lg my-5 outline-none"
+                        >
+                          <UploadOutlined />
+                          Thêm hình ảnh
+                        </button>
+                      ) : (
+                        "Bạn chỉ có thể thêm tối đa 4 ảnh"
+                      )}
+                    </>
                   ) : (
-                    "Bạn chỉ có thể thêm tối đa 4 ảnh"
+                    ""
                   )}
                 </div>
               ) : (
@@ -434,14 +485,18 @@ function CustomerBonsaiDetail(propsBonsaiDetail) {
               )}
             </div>
           </div>
-          <div className="m-2 flex justify-end">
-            <button
-              className="outline-none bg-[#3a9943] text-[#fff] border hover:border-[green] p-2 rounded-[8px]"
-              onClick={onSubmit}
-            >
-              Cập nhật
-            </button>
-          </div>
+          {formData?.DeliverySize == null ? (
+            <div className="m-2 flex justify-end">
+              <button
+                className="outline-none bg-[#3a9943] text-[#fff] border hover:border-[green] p-2 rounded-[8px]"
+                onClick={onSubmit}
+              >
+                Cập nhật
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
         </>
       )}
     </div>

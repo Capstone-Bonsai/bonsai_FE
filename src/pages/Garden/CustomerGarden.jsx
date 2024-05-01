@@ -177,7 +177,7 @@ function CustomerGarden() {
                           <Carousel autoplay>
                             {garden.customerGardenImages.length > 0 ? (
                               <Carousel autoplay>
-                                {garden.customerGardenImages.map(
+                                {garden.customerGardenImages?.map(
                                   (imageGarden) => (
                                     <div key={imageGarden.id}>
                                       <img
@@ -219,7 +219,7 @@ function CustomerGarden() {
                             <div className="pr-2">Bonsai: </div>
                             <div className="text-start">
                               {garden.customerBonsais.length > 0 ? (
-                                garden.customerBonsais.map(
+                                garden.customerBonsais?.map(
                                   (cusBonsai, index) => (
                                     <div className="" key={cusBonsai.id}>
                                       <button

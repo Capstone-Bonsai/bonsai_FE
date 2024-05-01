@@ -17,7 +17,7 @@ import {
   Divider,
 } from "antd";
 const { Search, TextArea } = Input;
-
+import { Document, Page, pdfjs } from "react-pdf";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBonsaiPagination } from "../../../../redux/slice/bonsaiSlice";
@@ -25,7 +25,10 @@ import Loading from "../../../../components/Loading";
 import { allCategory } from "../../../../redux/slice/categorySlice";
 import { allStyle } from "../../../../redux/slice/styleSlice";
 import { deleteBonsai } from "../../../../utils/bonsaiApi";
-import { getStatusText } from "../../../../components/status/contractStatus";
+import {
+  getStatusColor,
+  getStatusText,
+} from "../../../../components/status/contractStatus";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -41,19 +44,19 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
 
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
+
   const handleCancelPreview = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
-    const f = {
-      url: file,
-    };
-    if (!f.url && !f.preview) {
-      f.preview = await getBase64(f.originFileObj);
-    }
-    setPreviewImage(f.url || f.preview);
+    setPreviewImage(file);
     setPreviewOpen(true);
-    setPreviewTitle(f.name || f.url.substring(f.url.lastIndexOf("/") + 1));
   };
-
+  pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
   return (
     <>
       {serviceOrderDetail?.loading === true ? (
@@ -77,16 +80,14 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="font-medium">Trạng thái:</div>{" "}
-                    <div
-                      className={`${
-                        serviceOrderDetail?.serviceOrderStatus == 1 ||
-                        serviceOrderDetail?.serviceOrderStatus == 4 ||
-                        serviceOrderDetail?.serviceOrderStatus == 5
-                          ? "text-[red]"
-                          : "text-[#3a9943]"
-                      }`}
-                    >
-                      {getStatusText(serviceOrderDetail?.serviceOrderStatus)}
+                    <div>
+                      <Tag
+                        color={getStatusColor(
+                          serviceOrderDetail?.serviceOrderStatus
+                        )}
+                      >
+                        {getStatusText(serviceOrderDetail?.serviceOrderStatus)}
+                      </Tag>
                     </div>
                   </div>
                   <div className="grid grid-cols-2">
@@ -98,16 +99,11 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
                           icon={<EyeOutlined style={{ color: "blue" }} />}
                           onClick={() => {
                             handlePreview(
-                              serviceOrderDetail?.contract[3]?.image
+                              serviceOrderDetail?.contract[0]?.image
                             );
                           }}
                         />
                       </Tooltip>
-                      {/* <ReactPDF
-                        file={{
-                          url: "http://www.example.com/sample.pdf",
-                        }}
-                      /> */}
                     </div>
                   </div>
                 </div>
@@ -224,18 +220,29 @@ function TabServiceOrderInformation({ serviceOrderDetail }) {
       )}
 
       <Modal
+        width={800}
         open={previewOpen}
-        title={previewTitle}
+        title={"Hợp đồng"}
         footer={null}
         onCancel={handleCancelPreview}
       >
-        <img
-          alt="example"
-          style={{
-            width: "100%",
-          }}
-          src={previewImage}
-        />
+        <div className="h-[900px]">
+          <Document
+            loading={<Loading loading={true} />}
+            file={previewImage}
+            onLoadSuccess={onDocumentLoadSuccess}
+          >
+            {Array.from(new Array(numPages), (el, index) => (
+              <Page
+                key={`page_${index + 1}`}
+                renderTextLayer={false}
+                renderAnnotationLayer={false}
+                customTextRenderer={false}
+                pageNumber={index + 1}
+              />
+            ))}
+          </Document>
+        </div>
       </Modal>
     </>
   );

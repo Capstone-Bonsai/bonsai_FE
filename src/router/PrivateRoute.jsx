@@ -17,9 +17,12 @@ import Icon, {
   TruckOutlined,
   InboxOutlined,
   BellOutlined,
+  RightOutlined,
+  LeftOutlined,
+  LoadingOutlined,
 } from "@ant-design/icons";
 import logo from "../assets/logoFinal.png";
-import { Dropdown, Layout, Menu, Button, theme } from "antd";
+import { Dropdown, Layout, Menu, Button, theme, Tooltip, Spin } from "antd";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { connectWebSocket, disconnectWebSocket } from "../redux/thunk";
@@ -29,7 +32,7 @@ import {
   setAvatarUrlRedux,
   setFullNameRedux,
 } from "../redux/slice/avatarSlice";
-import { allNotification } from "../redux/slice/notificationSlice";
+import { notificationUser, seenNotfi } from "../redux/slice/userSlice";
 
 const { Header, Sider, Content } = Layout;
 
@@ -55,15 +58,26 @@ function PrivateRoute() {
   } = theme.useToken();
   const [logoutAdmin, setLogoutAdmin] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const allNotifications = useSelector(
-    (state) => state.notification?.allNotificationDTO
-  );
+  const allNotifications = useSelector((state) => state.user?.notification);
 
-  console.log(allNotifications);
+  const [fetchNoti, setFetchNoti] = useState(false);
+  console.log(fetchNoti);
+
+  const handleSeenNoti = async (notiId) => {
+    try {
+      dispatch(seenNotfi(notiId));
+      document.getElementById("modal_noti").showModal();
+      dispatch(notificationUser({ pageIndex: currentPage, pageSize: 5 }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const notiDetail = useSelector((state) => state?.user?.notiDetail);
+  console.log(notiDetail);
   useEffect(() => {
-    dispatch(allNotification({ pageIndex: currentPage, pageSize: 5 }));
+    dispatch(notificationUser({ pageIndex: currentPage, pageSize: 5 }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -91,56 +105,98 @@ function PrivateRoute() {
 
   const handleOnChangeList = (page) => {
     setCurrentPage(page);
-    dispatch(allNotification({ pageIndex: page, pageSize: 5 }));
+    dispatch(notificationUser({ pageIndex: page, pageSize: 5 }));
   };
 
   const NavBarItems = [
     {
       key: "2",
       label: (
-        <div className="dropdown dropdown-end dropdown-bottom">
-          <button className=" hover:text-[#2596be] rounded-full w-[50px] h-[50px] flex justify-center items-center">
-            <BellOutlined />
-          </button>
-          <div
-            tabIndex={0}
-            class="dropdown-content z-[1] bg-[#fff] w-[500px] h-[300px] text-[black] shadow"
-          >
-            <div className="h-[100%]">
-              <div class=" w-[100%] font-bold border-[black] border-b-[2px] h-[30px]">
-                Thông báo
+        <>
+          <div className="dropdown dropdown-end dropdown-bottom">
+            <button
+              onClick={() => setFetchNoti(!fetchNoti)}
+              className="bg-[#f2f2f2] hover:bg-gray-300 hover:text-[#fff] mx-3 relative rounded-full w-[30px] h-[30px] flex justify-center items-center"
+            >
+              <BellOutlined />
+              <p className="absolute top-[-10px] right-[-5px] bg-[red] w-[20px] h-[20px] text-[14px] text-[#fff] rounded-full leading-none flex items-center justify-center">
+                {allNotifications?.totalItemsCount}
+              </p>
+            </button>
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[500px] h-[370px] text-[black]"
+            >
+              <div className="font-bold text-[20px] my-2 ">Thông báo</div>
+              {allNotifications.loading === true ? (
+                <div className="h-[272px] flex justify-center items-center">
+                  <Spin
+                    indicator={
+                      <LoadingOutlined style={{ fontSize: 24 }} spin />
+                    }
+                  />
+                </div>
+              ) : (
+                allNotifications?.items?.map((message, index) => (
+                  <button
+                    onClick={() => handleSeenNoti(message.id)}
+                    key={message.index}
+                    className={`p-2 border-b text-start hover:bg-gray-300 hover:rounded-[8px] ${
+                      message?.isRead ? "" : "bg-[gray]"
+                    }`}
+                  >
+                    <div>
+                      {new Date(message?.creationDate).toLocaleDateString()}
+                    </div>
+                    <div>{message?.message}</div>
+                  </button>
+                ))
+              )}
+
+              <div class="flex justify-end items-center gap-4 h-[40px]">
+                <Tooltip title={"Trang trước"}>
+                  <Button
+                    disabled={currentPage === 0 ? true : false}
+                    type="text"
+                    icon={<LeftOutlined style={{ fontSize: "12px" }} />}
+                    onClick={() => {
+                      handleOnChangeList(currentPage - 1);
+                    }}
+                  />
+                </Tooltip>
+                <div>Trang {currentPage}</div>
+                <Tooltip title={"Trang sau"}>
+                  <Button
+                    disabled={allNotifications?.items < 5 ? true : false}
+                    type="text"
+                    icon={<RightOutlined style={{ fontSize: "12px" }} />}
+                    onClick={() => {
+                      handleOnChangeList(currentPage + 1);
+                    }}
+                  />
+                </Tooltip>
               </div>
-              <div class="h-[100%]">
-                {allNotifications?.items?.map((message, index) => (
-                  <p className="" key={index}>
-                    {message.message}
-                  </p>
-                ))}
-              </div>
-              <div class="flex gap-6">
-                <button
-                  class=""
-                  type="button"
-                  disabled={currentPage === 1 ? true : false}
-                  onClick={() => handleOnChangeList(currentPage - 1)}
-                >
-                  {"<"}
-                </button>
-                <button
-                  class=""
-                  disabled={
-                    currentPage === allNotifications?.totalPagesCount - 1
-                      ? true
-                      : false
-                  }
-                  onClick={() => handleOnChangeList(currentPage + 1)}
-                >
-                  {">"}
-                </button>
-              </div>
-            </div>
+            </ul>
           </div>
-        </div>
+
+          <dialog id="modal_noti" className="modal">
+            <div className="modal-box">
+              <form method="dialog">
+                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                  ✕
+                </button>
+              </form>
+              <h3 className="font-bold text-lg">{notiDetail?.title}</h3>
+              <div className="italic">
+                {new Date(notiDetail?.creationDate).toLocaleDateString()}
+              </div>
+              <p className="py-4">{notiDetail?.message}</p>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+            </form>
+          </dialog>
+        </>
       ),
     },
     {
