@@ -20,6 +20,9 @@ function ContractUser() {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const cookies = new Cookies();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const resultCode = searchParams.get("resultCode");
   console.log(currentPage);
   const [pageSize, setPageSize] = useState(3);
   useEffect(() => {
@@ -48,6 +51,18 @@ function ContractUser() {
     setCurrentPage(page);
   };
 
+  useEffect(() => {
+    if (resultCode == 0) {
+      toast.success("Thanh toán thành công");
+    }
+    // else if (
+    //   resultCode != 0 &&
+    //   resultCode != undefined &&
+    //   resultCode != null
+    // ) {
+    //   toast.error("Thanh toán thất bại");
+    // }
+  }, [resultCode]);
   const seenContractDetail = cookies.get("seenContractDetail", { path: "/" });
   console.log(seenContractDetail);
   const [selectedDetail, setSelectedDetail] = useState(
